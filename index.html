@@ -222,5 +222,105 @@
   </a>
 </div>
 <!-- END: Stripe size buttons -->
+  <!-- ======== AI GENERATOR (MVP) ======== -->
+<section id="generator" class="max-w-4xl mx-auto px-4 py-12">
+  <h2 class="text-2xl md:text-3xl font-bold mb-4">Create a preview</h2>
+  <p class="text-white/70 mb-6">
+    Describe what you want. We’ll generate a preview. Happy with it? Pick a size and checkout.
+  </p>
+
+  <form id="gen-form" class="grid gap-3 md:grid-cols-3 items-start">
+    <textarea
+      id="gen-prompt"
+      class="col-span-2 rounded-lg text-white p-4 min-h-[120px] outline-none ring-1 ring-white/10 focus:ring-2"
+      placeholder="e.g., Ultra-detailed photograph of a misty redwood forest at sunrise, soft golden light, 85mm lens, f/2.8, bokeh"
+      required></textarea>
+
+    <button
+      id="gen-btn"
+      type="submit"
+      class="rounded-md bg-[#6aa8ff] text-black font-semibold px-4 py-3 hover:opacity-90 transition-colors">
+      Generate preview
+    </button>
+  </form>
+
+  <div id="gen-status" class="text-white/70 mt-3 text-sm"></div>
+
+  <div id="gen-result" class="mt-6 hidden">
+    <img id="gen-img" alt="AI preview" class="rounded-xl w-full max-w-[640px] ring-1 ring-white/10" />
+    <div class="mt-6 space-y-2">
+      <p class="text-white/80">Like it? Choose your size:</p>
+
+      <!-- Your existing Stripe links (already on the page); keep or update as needed -->
+      <div class="grid gap-2 md:grid-cols-4">
+        <a class="size-btn" href="https://buy.stripe.com/test_3cI4gz5ZU0uV4Lz4lDcV203" target="_blank" rel="noopener noreferrer">Small</a>
+        <a class="size-btn" href="https://buy.stripe.com/test_3cI8wPfAu6Tj0vjg4lcV206" target="_blank" rel="noopener noreferrer">Medium</a>
+        <a class="size-btn" href="https://buy.stripe.com/test_4gMaEX9c60uVb9X5pHcV202" target="_blank" rel="noopener noreferrer">Large</a>
+        <a class="size-btn" href="https://buy.stripe.com/test_aFa6oHdsmcdDdi519rcV205" target="_blank" rel="noopener noreferrer">Extra Large</a>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* reuse your earlier “size button” style */
+    .size-btn {
+      display:block; text-align:center; text-decoration:none;
+      background:#0b0e18; color:#fff; padding:14px 18px;
+      border-radius:12px; font-weight:600; line-height:1.2;
+      transition:transform .06s ease, opacity .12s ease;
+    }
+    .size-btn:hover { opacity:.92; transform:translateY(-1px); box-shadow:0 6px 24px rgba(0,0,0,.35); }
+  </style>
+
+  <script>
+    const formEl   = document.getElementById('gen-form');
+    const btnEl    = document.getElementById('gen-btn');
+    const statusEl = document.getElementById('gen-status');
+    const imgWrap  = document.getElementById('gen-result');
+    const imgEl    = document.getElementById('gen-img');
+    const promptEl = document.getElementById('gen-prompt');
+
+    formEl.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const prompt = promptEl.value.trim();
+      if (!prompt) return;
+
+      btnEl.disabled = true;
+      btnEl.textContent = 'Generating…';
+      statusEl.textContent = 'Generating… this can take a few seconds.';
+      imgWrap.classList.add('hidden');
+
+      try {
+        const r = await fetch('/api/generate-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt })
+        });
+
+        const data = await r.json();
+
+        if (!r.ok || !data.ok || !data.image) {
+          statusEl.textContent = '⚠️ Provider error: ' + (data.error || 'Something went wrong.');
+          btnEl.disabled = false;
+          btnEl.textContent = 'Generate preview';
+          return;
+        }
+
+        // show preview
+        imgEl.src = data.image;     // webp data URL from the API
+        imgWrap.classList.remove('hidden');
+        statusEl.textContent = 'Preview generated. If you like it, choose a size and checkout.';
+
+      } catch (err) {
+        statusEl.textContent = '⚠️ Network error: ' + err.message;
+      } finally {
+        btnEl.disabled = false;
+        btnEl.textContent = 'Generate preview';
+      }
+    });
+  </script>
+</section>
+<!-- ======== /AI GENERATOR ======== -->
 </body>
 </html>
