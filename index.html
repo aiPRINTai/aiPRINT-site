@@ -186,11 +186,13 @@
   </p>
 
   <form id="gen-form" class="grid gap-3 md:grid-cols-3 items-start">
-    <textarea
-      id="gen-prompt"
-      class="col-span-2 rounded-lg text-white p-4 min-h-[120px] outline-none ring-1 ring-white/10 focus:ring-2"
-      placeholder="e.g., Ultra-detailed photograph of a misty redwood forest at sunrise, soft golden light, 85mm lens, f/2.8, bokeh"
-      required></textarea>
+  <textarea
+  id="gen-prompt"
+  class="col-span-2 rounded-lg bg-white text-black placeholder-black/60
+         p-4 min-h-[120px] outline-none ring-1 ring-black/10 focus:ring-2
+         focus:ring-indigo-400 border border-black/10"
+  placeholder="e.g., Ultra-detailed photograph of a misty redwood forest at sunrise, soft golden light, 85mm lens, f/2.8, bokeh"
+  required></textarea>
 
     <button
       id="gen-btn"
