@@ -185,5 +185,42 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear()
   </script>
+  <!-- START: Stripe size buttons -->
+<style>
+  /* Simple, self-contained styles so it looks clean without other CSS */
+  .size-grid { display:grid; grid-template-columns:1fr; gap:12px; max-width:720px; margin:24px auto; padding:0 12px; }
+  @media (min-width: 640px) { .size-grid { grid-template-columns:1fr 1fr; } }
+  .size-btn {
+    display:block; text-align:center; text-decoration:none;
+    background:#0a0a0a; color:#fff; padding:14px 18px;
+    border-radius:12px; font-weight:600; line-height:1.2;
+    transition:transform .06s ease, opacity .12s ease;
+  }
+  .size-btn small { display:block; font-weight:500; opacity:.7; margin-top:4px; }
+  .size-btn:hover { opacity:.92; transform:translateY(-1px); }
+</style>
+
+<div class="size-grid">
+  <a class="size-btn" href="https://buy.stripe.com/test_3cI4gz5ZU0uV4Lz4lDcV203" target="_blank" rel="noopener noreferrer">
+    Small — up to 216 sq in
+    <small>Great for desks & tight spaces</small>
+  </a>
+
+  <a class="size-btn" href="https://buy.stripe.com/test_3cI8wPfAu6Tj0vjg4lcV206" target="_blank" rel="noopener noreferrer">
+    Medium — 216–600 sq in
+    <small>Versatile wall size</small>
+  </a>
+
+  <a class="size-btn" href="https://buy.stripe.com/test_4gMaEX9c60uVb9X5pHcV202" target="_blank" rel="noopener noreferrer">
+    Large — 600–1500 sq in
+    <small>Bold statement piece</small>
+  </a>
+
+  <a class="size-btn" href="https://buy.stripe.com/test_aFa6oHdsmcdDdi519rcV205" target="_blank" rel="noopener noreferrer">
+    Extra Large — 1500–2400 sq in
+    <small>Gallery-scale impact</small>
+  </a>
+</div>
+<!-- END: Stripe size buttons -->
 </body>
 </html>
