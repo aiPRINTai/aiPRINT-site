@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>aiPRINT — AI-generated art prints, made to order</title>
+  <meta name="description" content="Turn any prompt into a museum-grade print. Fast, custom, and archival." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CDN for speed -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    .glass{backdrop-filter:saturate(180%) blur(12px); background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12)}
+    .grad{background: radial-gradient(1200px 600px at 10% -10%, rgba(147,197,253,.25), transparent 60%),
+                         radial-gradient(1000px 500px at 90% 10%, rgba(167,139,250,.25), transparent 60%),
+                         linear-gradient(180deg, #0b1020 0%, #0b0f1a 100%)}
+  </style>
+</head>
+<body class="grad text-white">
+  <header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-white/10 grid place-items-center font-extrabold">AI</div>
+      <span class="text-xl font-extrabold tracking-tight">ai<span class="text-indigo-300">PRINT</span>.ai</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-6 text-white/80">
+      <a href="#how" class="hover:text-white">How it works</a>
+      <a href="#materials" class="hover:text-white">Materials</a>
+      <a href="#order" class="hover:text-white">Order</a>
+    </nav>
+  </header>
+
+  <section class="max-w-6xl mx-auto px-4 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">Turn any idea into a <span class="text-indigo-300">gallery-worthy</span> print.</h1>
+      <p class="mt-5 text-white/80 text-lg md:text-xl">Type a prompt. We create the art with AI + a human artist’s eye. You pick size & finish. We ship an archival, limited-edition print to your door.</p>
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <a href="#order" class="px-5 py-3 rounded-2xl bg-white text-black font-semibold">Start your print</a>
+        <a href="#how" class="px-5 py-3 rounded-2xl glass">See how it works</a>
+      </div>
+      <div class="mt-6 text-xs text-white/60">Made in the USA · Archival inks · Limited editions · Certificate of Authenticity</div>
+    </div>
+    <div class="grid grid-cols-3 gap-3 md:gap-4">
+      <div class="col-span-2 row-span-2 aspect-[4/3] rounded-2xl overflow-hidden glass">
+        <img src="https://images.unsplash.com/photo-1535905496755-26ae35d0ae54?q=80&w=1600&auto=format&fit=crop" alt="Abstract AI artwork example" class="w-full h-full object-cover"/>
+      </div>
+      <div class="aspect-[1/1] rounded-2xl overflow-hidden glass">
+        <img src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=1200&auto=format&fit=crop" alt="Monochrome wave print" class="w-full h-full object-cover"/>
+      </div>
+      <div class="aspect-[1/1] rounded-2xl overflow-hidden glass">
+        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop" alt="Colorful abstract landscape" class="w-full h-full object-cover"/>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" class="max-w-6xl mx-auto px-4 py-12">
+    <h2 class="text-3xl md:text-4xl font-extrabold">How it works</h2>
+    <div class="mt-8 grid md:grid-cols-3 gap-6">
+      <div class="p-6 rounded-2xl glass">
+        <div class="text-sm uppercase tracking-wide text-white/60">Step 1</div>
+        <h3 class="text-xl font-bold mt-1">Describe your idea</h3>
+        <p class="text-white/80 mt-2">Share a prompt (style, mood, colors). Upload inspiration if you have it.</p>
+      </div>
+      <div class="p-6 rounded-2xl glass">
+        <div class="text-sm uppercase tracking-wide text-white/60">Step 2</div>
+        <h3 class="text-xl font-bold mt-1">We craft your artwork</h3>
+        <p class="text-white/80 mt-2">We generate and hand-curate options, then send you 2–3 proofs for approval.</p>
+      </div>
+      <div class="p-6 rounded-2xl glass">
+        <div class="text-sm uppercase tracking-wide text-white/60">Step 3</div>
+        <h3 class="text-xl font-bold mt-1">Printed. Signed. Shipped.</h3>
+        <p class="text-white/80 mt-2">Archival print with certificate ships ready to hang. Happiness guaranteed.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="materials" class="max-w-6xl mx-auto px-4 py-12">
+    <h2 class="text-3xl md:text-4xl font-extrabold">Materials & finishes</h2>
+    <div class="mt-8 grid md:grid-cols-3 gap-6">
+      <div class="p-6 rounded-2xl glass">
+        <h3 class="text-xl font-bold">Metal (Chromaluxe)</h3>
+        <p class="text-white/80 mt-2">Ultra-vivid, durable, float mount. Modern gallery look.</p>
+      </div>
+      <div class="p-6 rounded-2xl glass">
+        <h3 class="text-xl font-bold">Fine-Art Paper</h3>
+        <p class="text-white/80 mt-2">Archival cotton rag, rich tones, ready to frame.</p>
+      </div>
+      <div class="p-6 rounded-2xl glass">
+        <h3 class="text-xl font-bold">Canvas</h3>
+        <p class="text-white/80 mt-2">Textured, classic feel, gallery-wrapped or framed.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="order" class="max-w-4xl mx-auto px-4 py-16">
+    <div class="p-6 md:p-10 rounded-3xl glass">
+      <h2 class="text-3xl md:text-4xl font-extrabold">Start your custom print</h2>
+      <p class="text-white/80 mt-2">Fill this out— we’ll email proofs within 24–72 hours. Pay securely after you approve.</p>
+
+      <form action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST" enctype="multipart/form-data" class="mt-8 grid md:grid-cols-2 gap-4">
+        <div class="md:col-span-2">
+          <label class="block text-sm text-white/70">Your name</label>
+          <input name="name" required class="mt-1 w-full rounded-xl bg-white/10 border border-white/15 px-4 py-3" placeholder="Jane Doe" />
+        </div>
+        <div>
+          <label class="block text-sm text-white/70">Email</label>
+          <input type="email" name="email" required class="mt-1 w-full rounded-xl bg-white/10 border border-white/15 px-4 py-3" placeholder="jane@email.com" />
+        </div>
+        <div>
+          <label class="block text-sm text-white/70">Phone (optional)</label>
+          <input name="phone" class="mt-1 w-full rounded-xl bg-white/10 border border-white/15 px-4 py-3" placeholder="(555) 555-5555" />
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-white/70">Your prompt (style, mood, subject, colors)</label>
+          <textarea name="prompt" required rows="5" class="mt-1 w-full rounded-xl bg-white/10 border border-white/15 px-4 py-3" placeholder="e.g., ethereal ocean at sunrise, long-exposure feel, teal & gold palette, minimalist"></textarea>
+        </div>
+        <div>
+          <label class="block text-sm text-white/70">Size</label>
+          <select name="size" class="mt-1 w-full rounded-xl bg-white/10 border border-white/15 px-4 py-3">
+            <option>16×24</option>
+            <option>20×30</option>
+            <option>24×36</option>
+            <option>30×45</option>
+            <option>Custom</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-white/70">Finish</label>
+          <select name="finish" class="mt-1 w-full rounded-xl bg-white/10 border border-white/15 px-4 py-3">
+            <option>Metal (Chromaluxe)</option>
+            <option>Fine-Art Paper</option>
+            <option>Canvas</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-white/70">Aspect ratio</label>
+          <select name="ratio" class="mt-1 w-full rounded-xl bg-white/10 border border-white/15 px-4 py-3">
+            <option>3:2 (standard)</option>
+            <option>2:1 (panorama)</option>
+            <option>1:1 (square)</option>
+            <option>Custom</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-white/70">Reference image (optional)</label>
+          <input type="file" name="reference" accept="image/*" class="mt-1 w-full rounded-xl bg-white/10 border border-white/15 px-4 py-2" />
+        </div>
+        <div class="md:col-span-2 flex items-start gap-3 pt-2">
+          <input id="agree" type="checkbox" required class="mt-1" />
+          <label for="agree" class="text-sm text-white/80">I agree to the <a href="#policies" class="underline">terms</a> and understand I’ll receive proofs before payment.</label>
+        </div>
+        <div class="md:col-span-2 flex gap-3 pt-2">
+          <button class="px-5 py-3 rounded-2xl bg-white text-black font-semibold" type="submit">Submit request</button>
+          <a href="https://buy.stripe.com/your_payment_link" class="px-5 py-3 rounded-2xl glass">Pay deposit (Stripe)</a>
+        </div>
+      </form>
+
+      <p class="text-xs text-white/60 mt-4">Prefer email? Send details to info@aiPRINT.ai</p>
+    </div>
+  </section>
+
+  <section id="policies" class="max-w-5xl mx-auto px-4 pb-20">
+    <div class="rounded-3xl glass p-6 md:p-10">
+      <h2 class="text-2xl font-extrabold">Policies (MVP)</h2>
+      <ul class="list-disc pl-6 mt-4 text-white/80 space-y-2 text-sm">
+        <li><strong>Proofs:</strong> You’ll receive 2–3 low-res proofs. One round of refinements included.</li>
+        <li><strong>Turnaround:</strong> 3–7 business days after approval for printing + shipping.</li>
+        <li><strong>Editions:</strong> Limited runs, hand-signed certificate of authenticity.</li>
+        <li><strong>Refunds:</strong> If you don’t love your print, contact us within 14 days for a reprint or credit.</li>
+        <li><strong>Usage:</strong> Personal display only. Commercial licensing available on request.</li>
+        <li><strong>Privacy:</strong> We only use your info to fulfill your order. No spam, ever.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="border-t border-white/10">
+    <div class="max-w-6xl mx-auto px-4 py-10 text-sm text-white/70 grid md:grid-cols-3 gap-6">
+      <div>© <span id="year"></span> aiPRINT.ai — All rights reserved.</div>
+      <div class="md:text-center">Questions? <a href="mailto:info@aiPRINT.ai" class="underline">info@aiPRINT.ai</a></div>
+      <div class="md:text-right">IG: @aiPRINT.ai</div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear()
+  </script>
+</body>
+</html>
