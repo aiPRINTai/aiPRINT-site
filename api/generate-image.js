@@ -25,11 +25,13 @@ export default async function handler(req, res) {
     const data = await r.json();
 
     if (!r.ok) {
+      console.error("OpenAI API Error:", data);
       return res.status(500).json({ error: data.error?.message || 'OpenAI API error' });
     }
 
     return res.status(200).json({ ok: true, image: data.data?.[0]?.url });
   } catch (err) {
+    console.error("Server Error:", err);
     return res.status(500).json({ error: err.message });
   }
 }
