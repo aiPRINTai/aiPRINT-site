@@ -178,49 +178,135 @@
     document.getElementById('year').textContent = new Date().getFullYear()
   </script>
 
-  <!-- ======== AI GENERATOR (MVP) ======== -->
+<!-- ======== AI GENERATOR (MVP) ======== -->
 <section id="generator" class="max-w-4xl mx-auto px-4 py-12">
   <h2 class="text-2xl md:text-3xl font-bold mb-4">Create a preview</h2>
   <p class="text-white/70 mb-6">
-    Describe what you want. We’ll generate a preview. Happy with it? Pick a size and checkout.
+    Describe what you want or use the options below. We’ll generate a preview. Happy with it? Pick a size and checkout.
   </p>
 
+  <!-- ===== Prompt Builder UI ===== -->
   <form id="gen-form" class="grid gap-3 md:grid-cols-3 items-start">
-  <textarea
-  id="gen-prompt"
-  class="col-span-2 rounded-lg bg-white text-black placeholder-black/60
-         p-4 min-h-[120px] outline-none ring-1 ring-black/10 focus:ring-2
-         focus:ring-indigo-400 border border-black/10"
-  placeholder="e.g., Ultra-detailed photograph of a misty redwood forest at sunrise, soft golden light, 85mm lens, f/2.8, bokeh"
-  required></textarea>
+    <!-- Subject -->
+    <textarea id="subject"
+      class="col-span-2 rounded-lg text-white p-4 min-h-[120px] outline-none ring-1 ring-white/10 focus:ring-2 bg-white/5 placeholder-white/40"
+      placeholder="Describe the subject (e.g., sea turtle on a moonlit beach, gentle waves, stars visible)"
+      required></textarea>
 
-    <button
-      id="gen-btn"
-      type="submit"
-      class="rounded-md bg-[#6aa8ff] text-black font-semibold px-4 py-3 hover:opacity-90 transition-colors">
+    <!-- Aspect Ratio -->
+    <label class="block text-sm text-white/70">
+      Aspect Ratio
+      <select id="aspect" class="mt-1 w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2">
+        <option>Square (1:1)</option>
+        <option>Wide / Landscape (horizontal 3:2)</option>
+        <option>Tall / Portrait (vertical 2:3)</option>
+      </select>
+    </label>
+
+    <!-- Style -->
+    <label class="block text-sm text-white/70">
+      Style
+      <select id="style" class="mt-1 w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2">
+        <option>Realistic (photo-realistic, natural details)</option>
+        <option>Artistic (painterly, expressive brushstrokes)</option>
+        <option>Modern (minimalist, clean, contemporary)</option>
+        <option>Abstract (conceptual, surreal, geometric)</option>
+        <option>Vintage (film grain, retro tones, analog feel)</option>
+        <option>Futuristic (sci-fi, sleek, neon, cyberpunk)</option>
+        <option>Cartoon / Comic (bold lines, flat colors, exaggerated features)</option>
+        <option>3D Render (cinematic, hyper-detailed CGI look)</option>
+      </select>
+    </label>
+
+    <!-- Mood -->
+    <label class="block text-sm text-white/70">
+      Mood
+      <select id="mood" class="mt-1 w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2">
+        <option>Calm / Peaceful</option>
+        <option>Dreamy / Surreal</option>
+        <option>Energetic / Vibrant</option>
+        <option>Dark / Dramatic</option>
+        <option>Joyful / Bright</option>
+        <option>Mystical / Spiritual</option>
+        <option>Moody / Atmospheric</option>
+        <option>Elegant / Luxurious</option>
+      </select>
+    </label>
+
+    <!-- Lighting -->
+    <label class="block text-sm text-white/70">
+      Lighting
+      <select id="lighting" class="mt-1 w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2">
+        <option>Natural / Soft Light</option>
+        <option>Golden Hour (warm sunset glow)</option>
+        <option>Blue Hour (cool twilight tones)</option>
+        <option>Nighttime (moody, soft light)</option>
+        <option>Studio Lighting (controlled, professional)</option>
+        <option>Harsh Midday Sun</option>
+        <option>Spotlight / Dramatic Light</option>
+        <option>Neon / Colored Lights</option>
+      </select>
+    </label>
+
+    <!-- Medium -->
+    <label class="block text-sm text-white/70">
+      Medium
+      <select id="medium" class="mt-1 w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2">
+        <option>Photograph / Realistic</option>
+        <option>Oil Painting</option>
+        <option>Watercolor</option>
+        <option>Pencil Sketch</option>
+        <option>Digital Illustration</option>
+        <option>Charcoal Drawing</option>
+        <option>Mosaic / Stained Glass</option>
+        <option>Collage</option>
+        <option>Graffiti / Street Art</option>
+      </select>
+    </label>
+
+    <!-- Flavor checkboxes -->
+    <fieldset class="col-span-2 grid grid-cols-2 gap-2 text-sm text-white/80">
+      <label><input type="checkbox" class="flavor mr-2" value="Black & White">Black & White</label>
+      <label><input type="checkbox" class="flavor mr-2" value="Minimalist">Minimalist</label>
+      <label><input type="checkbox" class="flavor mr-2" value="Vibrant Colors">Vibrant Colors</label>
+      <label><input type="checkbox" class="flavor mr-2" value="Pastel Colors">Pastel Colors</label>
+      <label><input type="checkbox" class="flavor mr-2" value="Cinematic">Cinematic</label>
+      <label><input type="checkbox" class="flavor mr-2" value="Fantasy / Mythical">Fantasy / Mythical</label>
+      <label><input type="checkbox" class="flavor mr-2" value="Sci-Fi / Futuristic">Sci-Fi / Futuristic</label>
+      <label><input type="checkbox" class="flavor mr-2" value="Nature-Focused">Nature-Focused</label>
+      <label><input type="checkbox" class="flavor mr-2" value="Architecture-Focused">Architecture-Focused</label>
+    </fieldset>
+
+    <button id="gen-btn" type="submit"
+      class="rounded-md bg-white text-black font-semibold px-4 py-3 hover:opacity-90 transition-colors">
       Generate preview
     </button>
   </form>
+  <!-- ===== /Prompt Builder UI ===== -->
 
   <div id="gen-status" class="text-white/70 mt-3 text-sm"></div>
 
   <div id="gen-result" class="mt-6 hidden">
     <img id="gen-img" alt="AI preview" class="rounded-xl w-full max-w-[640px] ring-1 ring-white/10" />
-    <div class="mt-6 space-y-2">
-      <p class="text-white/80">Like it? Choose your size:</p>
 
-      <!-- Your existing Stripe links (already on the page); keep or update as needed -->
-      <div class="grid gap-2 md:grid-cols-4">
-        <a class="size-btn" href="https://buy.stripe.com/test_3cI4gz5ZU0uV4Lz4lDcV203" target="_blank" rel="noopener noreferrer">Small</a>
-        <a class="size-btn" href="https://buy.stripe.com/test_3cI8wPfAu6Tj0vjg4lcV206" target="_blank" rel="noopener noreferrer">Medium</a>
-        <a class="size-btn" href="https://buy.stripe.com/test_4gMaEX9c60uVb9X5pHcV202" target="_blank" rel="noopener noreferrer">Large</a>
-        <a class="size-btn" href="https://buy.stripe.com/test_aFa6oHdsmcdDdi519rcV205" target="_blank" rel="noopener noreferrer">Extra Large</a>
-      </div>
+    <!-- Actions shown only when we have a hosted (Blob) URL -->
+    <div id="gen-actions" class="hidden mt-3 flex flex-wrap items-center gap-3">
+      <input id="gen-url"
+             class="w-full md:w-auto flex-1 rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/80"
+             readonly value="" />
+      <button id="copy-link"
+              class="rounded-md bg-white text-black font-semibold px-4 py-2 hover:opacity-90 transition-colors">
+        Copy link
+      </button>
+      <a id="download-link" href="#" download="aiPRINT-preview.png"
+         class="rounded-md glass px-4 py-2 font-semibold">
+        Download
+      </a>
     </div>
   </div>
 
   <style>
-    /* reuse your earlier “size button” style */
+    /* Button style matching your site */
     .size-btn {
       display:block; text-align:center; text-decoration:none;
       background:#0b0e18; color:#fff; padding:14px 18px;
@@ -236,40 +322,97 @@
     const statusEl = document.getElementById('gen-status');
     const imgWrap  = document.getElementById('gen-result');
     const imgEl    = document.getElementById('gen-img');
-    const promptEl = document.getElementById('gen-prompt');
+
+    function mapAspect(option) {
+      switch (option) {
+        case 'Wide / Landscape (horizontal 3:2)': return '1536x1024';
+        case 'Tall / Portrait (vertical 2:3)':    return '1024x1536';
+        default:                                  return '1024x1024'; // Square
+      }
+    }
+
+    function buildPrompt({ subject, style, mood, lighting, medium, flavors }) {
+      const bits = [];
+      if (subject)  bits.push(subject);
+      if (mood)     bits.push(`${mood.toLowerCase()} mood`);
+      if (style)    bits.push(`${style.toLowerCase()}`);
+      if (lighting) bits.push(`${lighting.toLowerCase()}`);
+      if (medium)   bits.push(`${medium.toLowerCase()} medium`);
+      if (flavors?.length) bits.push(flavors.join(', ').toLowerCase());
+
+      return bits.join(', ')
+        .replace(/\s+/g, ' ')
+        .replace(/,+/g, ', ')
+        .replace(/\s, /g, ', ')
+        .trim();
+    }
+
+    async function copyToClipboard(text) {
+      try { await navigator.clipboard.writeText(text); return true; }
+      catch { return false; }
+    }
 
     formEl.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const prompt = promptEl.value.trim();
-      if (!prompt) return;
+      const subject  = document.getElementById('subject').value.trim();
+      const aspect   = document.getElementById('aspect').value;
+      const style    = document.getElementById('style').value;
+      const mood     = document.getElementById('mood').value;
+      const lighting = document.getElementById('lighting').value;
+      const medium   = document.getElementById('medium').value;
+      const flavors  = [...document.querySelectorAll('.flavor:checked')].map(i => i.value);
+
+      if (!subject) {
+        statusEl.textContent = 'Please enter a subject.';
+        return;
+      }
+
+      const size   = mapAspect(aspect);
+      const prompt = buildPrompt({ subject, style, mood, lighting, medium, flavors });
 
       btnEl.disabled = true;
       btnEl.textContent = 'Generating…';
-      statusEl.textContent = 'Generating… this can take a few seconds.';
+      statusEl.textContent = 'Generating preview…';
       imgWrap.classList.add('hidden');
+
+      // Actions UI
+      const actionsWrap = document.getElementById('gen-actions');
+      const urlInput    = document.getElementById('gen-url');
+      const copyBtn     = document.getElementById('copy-link');
+      const dlLink      = document.getElementById('download-link');
+      actionsWrap.classList.add('hidden'); // reset
 
       try {
         const r = await fetch('/api/generate-image', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt })
+          body: JSON.stringify({ prompt, size })
         });
 
         const data = await r.json();
 
         if (!r.ok || !data.ok || !data.image) {
-          statusEl.textContent = '⚠️ Provider error: ' + (data.error || 'Something went wrong.');
-          btnEl.disabled = false;
-          btnEl.textContent = 'Generate preview';
-          return;
+          statusEl.textContent = '⚠️ ' + (data.error || 'Provider error.');
+        } else {
+          imgEl.src = data.image;                // Blob URL or data: URL
+          imgWrap.classList.remove('hidden');
+          statusEl.textContent = 'Preview ready.';
+
+          if (data.hosted) {
+            const url = data.image;
+            urlInput.value = url;
+            dlLink.href = url;
+
+            copyBtn.onclick = async () => {
+              const ok = await copyToClipboard(url);
+              copyBtn.textContent = ok ? 'Copied!' : 'Copy failed';
+              setTimeout(() => (copyBtn.textContent = 'Copy link'), 1200);
+            };
+
+            actionsWrap.classList.remove('hidden');
+          }
         }
-
-        // show preview
-        imgEl.src = data.image;     // webp data URL from the API
-        imgWrap.classList.remove('hidden');
-        statusEl.textContent = 'Preview generated. If you like it, choose a size and checkout.';
-
       } catch (err) {
         statusEl.textContent = '⚠️ Network error: ' + err.message;
       } finally {
