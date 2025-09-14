@@ -5,28 +5,19 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>aiPRINT.ai — Preview</title>
 
-  <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Signature fonts (5 total; 3 cursive) -->
+  <!-- Signature fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Allura&family=Dancing+Script:wght@600&family=Playfair+Display:wght@600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
 
   <style>
-    /* Signature overlay */
-    .sig-overlay {
-      position:absolute; left:50%; top:85%;
-      transform:translate(-50%, -50%);
-      pointer-events:auto;
-      user-select:none;
-      white-space:nowrap;
-      text-shadow: 0 1px 2px rgba(0,0,0,.25);
-    }
-    .sig-editing { outline:1px dashed rgba(255,255,255,.5); outline-offset: 2px; }
-    .sig-gv  { font-family: 'Great Vibes', cursive; }
-    .sig-all { font-family: 'Allura', cursive; }
-    .sig-ds  { font-family: 'Dancing Script', cursive; }
-    .sig-pf  { font-family: 'Playfair Display', serif; }
-    .sig-ms  { font-family: 'Montserrat', sans-serif; }
+    .sig-overlay{position:absolute;left:50%;top:85%;transform:translate(-50%,-50%);pointer-events:auto;user-select:none;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+    .sig-editing{outline:1px dashed rgba(255,255,255,.5);outline-offset:2px}
+    .sig-gv{font-family:'Great Vibes',cursive}
+    .sig-all{font-family:'Allura',cursive}
+    .sig-ds{font-family:'Dancing Script',cursive}
+    .sig-pf{font-family:'Playfair Display',serif}
+    .sig-ms{font-family:'Montserrat',sans-serif}
   </style>
 </head>
 <body class="bg-neutral-900 text-white">
@@ -59,7 +50,6 @@
     <!-- Preview -->
     <div id="preview-wrap" class="relative mt-6 rounded-lg overflow-hidden border border-white/15 bg-black/30 min-h-[320px] flex items-center justify-center">
       <img id="preview" class="max-h-[70vh] w-auto object-contain" alt="Preview" />
-      <!-- Signature overlay (hidden until enabled) -->
       <div id="sig" class="sig-overlay hidden"></div>
     </div>
 
@@ -82,12 +72,11 @@
         <label class="flex flex-col">
           <span class="text-white/70 mb-1">Font</span>
           <select id="sig-font" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white">
-            <!-- 5 fonts (3 cursive) -->
             <option value="sig-gv">Great Vibes (cursive)</option>
             <option value="sig-all">Allura (cursive)</option>
             <option value="sig-ds">Dancing Script (cursive, bold)</option>
-            <option value="sig-pf">Playfair Display (elegant serif)</option>
-            <option value="sig-ms">Montserrat (modern sans)</option>
+            <option value="sig-pf">Playfair Display (serif)</option>
+            <option value="sig-ms">Montserrat (sans)</option>
           </select>
         </label>
 
@@ -102,12 +91,12 @@
         </label>
 
         <p class="md:col-span-4 text-white/60 text-sm">
-          Tip: drag your signature on the preview to place it. (This is shown for preview and can be baked into your download later.)
+          Tip: drag your signature on the preview to place it.
         </p>
       </div>
     </div>
 
-    <!-- Actions / URL -->
+    <!-- Actions -->
     <div id="gen-actions" class="hidden mt-4 flex flex-wrap items-center gap-3">
       <input id="gen-url" class="w-full md:w-auto flex-1 rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/80" readonly />
       <button id="copy-link" class="rounded-md bg-white text-black font-semibold px-4 py-2 hover:opacity-90">Copy link</button>
@@ -115,13 +104,12 @@
       <button id="toggle-prompt" class="rounded-md bg-white/10 border border-white/15 px-4 py-2">Show prompt</button>
     </div>
 
-    <!-- Collapsible generated prompt text -->
     <div id="prompt-wrap" class="hidden mt-3 rounded-lg border border-white/15 p-3 bg-white/5">
       <div class="text-sm text-white/60 mb-1">Prompt used:</div>
       <div id="prompt-text" class="text-white"></div>
     </div>
 
-    <!-- ORDER PANEL (Stripe links) -->
+    <!-- ORDER PANEL -->
     <div id="order-panel" class="mt-8 hidden">
       <h3 class="text-xl font-semibold text-white mb-3">Order your print</h3>
       <div class="grid gap-3 md:grid-cols-3">
@@ -154,19 +142,18 @@
   </main>
 
   <script>
-  // ---------- Helpers ----------
-  const $ = sel => document.querySelector(sel);
+  const $ = s => document.querySelector(s);
   const previewImg = $('#preview');
-  const genUrlEl   = $('#gen-url');
+  const genUrlEl = $('#gen-url');
   const downloadEl = $('#download-link');
-  const actionsEl  = $('#gen-actions');
+  const actionsEl = $('#gen-actions');
 
-  const promptEl   = $('#prompt');
-  const ratioEl    = $('#ratio');
-  const btnGen     = $('#btn-generate');
+  const promptEl = $('#prompt');
+  const ratioEl = $('#ratio');
+  const btnGen = $('#btn-generate');
 
   const togglePrompt = $('#toggle-prompt');
-  const promptWrap   = $('#prompt-wrap');
+  const promptWrap = $('#prompt-wrap');
   const promptTextEl = $('#prompt-text');
 
   // Signature elements
@@ -180,49 +167,72 @@
 
   // Order elements
   const elOrderPanel = $('#order-panel');
-  const elMaterial   = $('#sel-material');
-  const elOrient     = $('#sel-orientation');
-  const elSize       = $('#sel-size');
-  const elCheckout   = $('#btn-checkout');
-  const elNote       = $('#order-note');
+  const elMaterial = $('#sel-material');
+  const elOrient = $('#sel-orientation');
+  const elSize = $('#sel-size');
+  const elCheckout = $('#btn-checkout');
+  const elNote = $('#order-note');
 
-  // Stripe Payment Links — paste your 18 orange-row links here
+  // ---------- Your Stripe Payment Links ----------
   const PAYMENT_LINKS = {
     canvas: {
-      square:     { "18×18": "PASTE_CANVAS_SQ_18x18_URL", "30×30": "PASTE_CANVAS_SQ_30x30_URL" },
-      horizontal: { "24×16": "PASTE_CANVAS_H_24x16_URL",  "30×20": "PASTE_CANVAS_H_30x20_URL"  },
-      vertical:   { "16×24": "PASTE_CANVAS_V_16x24_URL",  "24×36": "PASTE_CANVAS_V_24x36_URL"  },
+      square: {
+        "24×24": "https://buy.stripe.com/test_6oU00jdsm2D32Dr2dvcV20o",
+        "30×30": "https://buy.stripe.com/test_4gM9AT2NI4Lb4Lzf0hcV20p"
+      },
+      horizontal: {
+        "24×16": "https://buy.stripe.com/test_dRmeVdfAua5va5T6tLcV20q",
+        "30×20": "https://buy.stripe.com/test_dRmaEXbkeelLfqdbO5cV20r"
+      },
+      vertical: {
+        "16×24": "https://buy.stripe.com/test_fZu3cvdsmfpP7XL9FXcV20s",
+        "20×30": "https://buy.stripe.com/test_5kQ28raga7Xn7XLbO5cV20t"
+      }
     },
     metal: {
-      square:     { "18×18": "PASTE_METAL_SQ_18x18_URL", "30×30": "PASTE_METAL_SQ_30x30_URL" },
-      horizontal: { "24×16": "PASTE_METAL_H_24x16_URL",  "30×20": "PASTE_METAL_H_30x20_URL"  },
-      vertical:   { "16×24": "PASTE_METAL_V_16x24_URL",  "24×36": "PASTE_METAL_V_24x36_URL"  },
+      square: {
+        "24×24": "https://buy.stripe.com/test_14A5kDewqgtT0vj9FXcV20u",
+        "30×30": "https://buy.stripe.com/test_dRm4gzagab9z4Lz3hzcV20v"
+      },
+      horizontal: {
+        "24×16": "https://buy.stripe.com/test_cNi4gz0FA3H7guh6tLcV20D",
+        "30×20": "https://buy.stripe.com/test_fZufZhbke2D31znaK1cV20C"
+      },
+      vertical: {
+        "16×24": "https://buy.stripe.com/test_14A28r9c61yZ2DraK1cV20G",
+        "20×30": "https://buy.stripe.com/test_3cI5kDagagtT0vj4lDcV20H"
+      }
     },
     acrylic: {
-      square:     { "24×24": "PASTE_ACRYLIC_SQ_24x24_URL", "30×30": "PASTE_ACRYLIC_SQ_30x30_URL" },
-      horizontal: { "24×16": "PASTE_ACRYLIC_H_24x16_URL",  "30×20": "PASTE_ACRYLIC_H_30x20_URL"  },
-      vertical:   { "16×24": "PASTE_ACRYLIC_V_16x24_URL",  "24×36": "PASTE_ACRYLIC_V_24x36_URL"  },
-    },
+      square: {
+        "24×24": "https://buy.stripe.com/test_5kQ28raga91r5PD8BTcV20B",
+        "30×30": "https://buy.stripe.com/test_aFa6oHaga6Tjdi54lDcV20A"
+      },
+      horizontal: {
+        "24×16": "https://buy.stripe.com/test_bJe14ndsma5v3Hv5pHcV20z",
+        "30×20": "https://buy.stripe.com/test_9B628r9c6dhH3Hvg4lcV20y"
+      },
+      vertical: {
+        "16×24": "https://buy.stripe.com/test_cNi28rfAu91rb9X9FXcV20x",
+        "20×30": "https://buy.stripe.com/test_eVqbJ1coi5PfguhaK1cV20w"
+      }
+    }
   };
 
-  // Map our UI ratio to OpenAI size
+  // ---------- Generation ----------
   function mapRatioToSize(r) {
-    if (r === 'horizontal') return '1536x1024'; // 3:2
-    if (r === 'vertical')   return '1024x1536'; // 2:3
-    return '1024x1024';                         // 1:1
+    if (r === 'horizontal') return '1536x1024';
+    if (r === 'vertical')   return '1024x1536';
+    return '1024x1024';
   }
 
-  // Generate
   btnGen.addEventListener('click', async () => {
     const base = (promptEl.value || '').trim();
-    if (!base) {
-      alert('Please add a description.');
-      return;
-    }
+    if (!base) { alert('Please add a description.'); return; }
 
     const ratio = ratioEl.value;
     const size = mapRatioToSize(ratio);
-    const prompt = base; // (Keep simple; you can expand later with style/mood controls)
+    const prompt = base;
 
     btnGen.disabled = true;
     btnGen.textContent = 'Generating…';
@@ -236,18 +246,13 @@
       const data = await r.json();
       if (!r.ok || !data?.ok) throw new Error(data?.error || 'Failed');
 
-      // Render
       previewImg.src = data.image;
       previewImg.onload = () => {
-        // Show actions
         genUrlEl.value = data.image;
         actionsEl.classList.remove('hidden');
         downloadEl.href = data.image;
 
-        // show order panel; infer orientation from ratio
         showOrderPanel(ratio);
-
-        // Prompt toggle content
         promptTextEl.textContent = prompt;
       };
     } catch (err) {
@@ -258,135 +263,72 @@
     }
   });
 
-  // Copy URL
   $('#copy-link').addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(genUrlEl.value || '');
-      alert('Link copied');
-    } catch {}
+    try { await navigator.clipboard.writeText(genUrlEl.value || ''); alert('Link copied'); } catch {}
   });
 
-  // Prompt show/hide
   togglePrompt.addEventListener('click', () => {
     const hidden = promptWrap.classList.contains('hidden');
     promptWrap.classList.toggle('hidden', !hidden);
     togglePrompt.textContent = hidden ? 'Hide prompt' : 'Show prompt';
   });
 
-  // ---------- Signature: enable/disable + controls ----------
-  function enableSigUI(enabled) {
+  // ---------- Signature ----------
+  function enableSigUI(enabled){
     sigControls.style.opacity = enabled ? '1' : '.5';
     sigControls.style.pointerEvents = enabled ? 'auto' : 'none';
     sigEl.classList.toggle('hidden', !enabled);
     sigEl.classList.toggle('sig-editing', enabled);
   }
-
-  function updateSignature() {
+  function updateSignature(){
     sigEl.textContent = sigText.value || '';
     sigEl.className = `sig-overlay ${sigFont.value}`;
     sigEl.style.color = sigColor.value;
     sigEl.style.fontSize = `${sigSize.value}px`;
   }
+  sigEnable.addEventListener('change', () => { enableSigUI(sigEnable.checked); if(sigEnable.checked) updateSignature(); });
+  [sigText, sigFont, sigColor, sigSize].forEach(el => el.addEventListener('input', updateSignature));
 
-  sigEnable.addEventListener('change', () => {
-    enableSigUI(sigEnable.checked);
-    if (sigEnable.checked) updateSignature();
-  });
-  [sigText, sigFont, sigColor, sigSize].forEach(el => {
-    el.addEventListener('input', updateSignature);
-  });
-
-  // Drag signature (mouse + touch)
-  (function makeDraggable(el) {
-    let dragging = false, startX=0, startY=0, startLeft=0, startTop=0;
-
-    function posFromEvt(evt) {
-      if (evt.touches && evt.touches[0]) return { x: evt.touches[0].clientX, y: evt.touches[0].clientY };
-      return { x: evt.clientX, y: evt.clientY };
-    }
-
-    function onDown(evt) {
-      if (el.classList.contains('hidden')) return;
-      dragging = true;
-      el.classList.add('sig-editing');
-      const p = posFromEvt(evt);
-      startX = p.x; startY = p.y;
-      const rect = el.getBoundingClientRect();
-      startLeft = rect.left; startTop = rect.top;
-      evt.preventDefault();
-    }
-    function onMove(evt) {
-      if (!dragging) return;
-      const p = posFromEvt(evt);
-      const dx = p.x - startX;
-      const dy = p.y - startY;
-
-      // position relative to preview container
-      const wrap = $('#preview-wrap').getBoundingClientRect();
-      const nx = startLeft + dx - wrap.left;
-      const ny = startTop + dy - wrap.top;
-
-      el.style.left = `${nx}px`;
-      el.style.top  = `${ny}px`;
-      el.style.transform = 'translate(0,0)';
-    }
-    function onUp() {
-      dragging = false;
-    }
-
-    el.addEventListener('mousedown', onDown);
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onUp);
-
-    el.addEventListener('touchstart', onDown, { passive:false });
-    window.addEventListener('touchmove', onMove, { passive:false });
-    window.addEventListener('touchend', onUp);
+  (function makeDraggable(el){
+    let dragging=false,startX=0,startY=0,startLeft=0,startTop=0;
+    const pos = e => (e.touches&&e.touches[0]) ? {x:e.touches[0].clientX,y:e.touches[0].clientY} : {x:e.clientX,y:e.clientY};
+    function down(e){ if(el.classList.contains('hidden'))return; dragging=true; el.classList.add('sig-editing');
+      const p=pos(e); startX=p.x; startY=p.y; const r=el.getBoundingClientRect(); startLeft=r.left; startTop=r.top; e.preventDefault(); }
+    function move(e){ if(!dragging)return; const p=pos(e); const dx=p.x-startX, dy=p.y-startY;
+      const wrap=$('#preview-wrap').getBoundingClientRect();
+      const nx=startLeft+dx-wrap.left, ny=startTop+dy-wrap.top;
+      el.style.left = `${nx}px`; el.style.top = `${ny}px`; el.style.transform='translate(0,0)'; }
+    function up(){ dragging=false; }
+    el.addEventListener('mousedown',down); window.addEventListener('mousemove',move); window.addEventListener('mouseup',up);
+    el.addEventListener('touchstart',down,{passive:false}); window.addEventListener('touchmove',move,{passive:false}); window.addEventListener('touchend',up);
   })(sigEl);
 
-  // ---------- Order panel / Stripe links ----------
-  function repopulateSizes() {
-    const material = elMaterial.value;
-    const orient   = elOrient.value;
-    const map      = PAYMENT_LINKS[material]?.[orient] || {};
+  // ---------- Order / Stripe ----------
+  function repopulateSizes(){
+    const material = elMaterial.value, orient = elOrient.value;
+    const map = PAYMENT_LINKS[material]?.[orient] || {};
     elSize.innerHTML = '';
     const sizes = Object.keys(map);
-
-    if (!sizes.length) {
-      elSize.disabled = true;
-      elCheckout.classList.add('opacity-60', 'pointer-events-none');
-      elCheckout.href = '#';
+    if(!sizes.length){
+      elSize.disabled = true; elCheckout.classList.add('opacity-60','pointer-events-none'); elCheckout.href='#';
       elNote.textContent = 'This combo isn’t available yet.';
-      const opt = document.createElement('option');
-      opt.value = ''; opt.textContent = 'Not available';
-      elSize.appendChild(opt);
+      const opt=document.createElement('option'); opt.value=''; opt.textContent='Not available'; elSize.appendChild(opt);
       return;
     }
-    elSize.disabled = false;
-    elCheckout.classList.remove('opacity-60', 'pointer-events-none');
-    elNote.textContent = 'All prints are ready to hang.';
-    sizes.forEach(size => {
-      const opt = document.createElement('option');
-      opt.value = size; opt.textContent = size;
-      elSize.appendChild(opt);
-    });
+    elSize.disabled=false; elCheckout.classList.remove('opacity-60','pointer-events-none'); elNote.textContent='All prints are ready to hang.';
+    sizes.forEach(s => { const o=document.createElement('option'); o.value=s; o.textContent=s; elSize.appendChild(o); });
   }
-  function updateCheckoutLink() {
+  function updateCheckoutLink(){
     const url = PAYMENT_LINKS[elMaterial.value]?.[elOrient.value]?.[elSize.value] || '#';
-    elCheckout.href = url;
-    elCheckout.target = url.startsWith('http') ? '_blank' : '_self';
+    elCheckout.href = url; elCheckout.target = url.startsWith('http') ? '_blank' : '_self';
   }
   [elMaterial, elOrient].forEach(el => el.addEventListener('change', () => { repopulateSizes(); updateCheckoutLink(); }));
   elSize.addEventListener('change', updateCheckoutLink);
 
-  function showOrderPanel(preferredOrientation) {
+  function showOrderPanel(preferredOrientation){
     if (preferredOrientation) elOrient.value = preferredOrientation;
-    elOrderPanel.classList.remove('hidden');
-    repopulateSizes();
-    updateCheckoutLink();
+    elOrderPanel.classList.remove('hidden'); repopulateSizes(); updateCheckoutLink();
   }
-
-  // Expose for generate flow (already called inside btnGen handler)
-  window.showOrderPanel = showOrderPanel;
   </script>
 </body>
 </html>
