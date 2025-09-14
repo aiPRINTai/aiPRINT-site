@@ -3,16 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Contact | aiPRINT.ai – Get in Touch</title>
+  <title>Contact | aiPRINT.ai — Say hello</title>
+  <meta name="description" content="Questions about materials, orders, or custom work? Contact aiPRINT.ai." />
   <link rel="icon" href="/favicon.ico" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { --bg:#0b0f1a; }
+    body { background:var(--bg); }
+    .card{ background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.12); }
+    .muted{ color:rgba(255,255,255,.7) }
+    .h1{ font-size:clamp(2rem,4vw,3rem); font-weight:800; line-height:1.05 }
+    .btn{ background:#fff; color:#000; font-weight:700; border-radius:.75rem; padding:.75rem 1rem }
+  </style>
 </head>
-<body class="bg-[#0b0b14] text-white/90">
+<body class="text-white/90">
+
   <!-- Header -->
   <header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
     <a href="/" class="font-bold tracking-tight text-white">aiPRINT.ai</a>
     <nav class="flex gap-6 text-sm">
+      <a href="/about.html" class="hover:text-white">How it works</a>
       <a href="/materials.html" class="hover:text-white">Materials</a>
       <a href="/faq.html" class="hover:text-white">FAQ</a>
       <a href="/policies.html" class="hover:text-white">Policies</a>
@@ -21,70 +31,59 @@
   </header>
 
   <main class="max-w-6xl mx-auto px-4 pb-24">
-    <!-- Hero -->
-    <section class="text-center mb-16">
-      <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">Get in touch</h1>
-      <p class="mt-4 text-white/70 max-w-2xl mx-auto">
-        Have questions about materials, orders, or custom requests? We’d love to hear from you.
-      </p>
-    </section>
+    <section class="mb-10 grid md:grid-cols-[.9fr_1.1fr] gap-8 items-start">
+      <div>
+        <h1 class="h1">Get in touch</h1>
+        <p class="muted mt-3">Have questions about materials, orders, or custom work? We’d love to help.</p>
 
-    <!-- Two column layout -->
-    <section class="grid md:grid-cols-2 gap-10">
-      <!-- Info -->
-      <div class="rounded-2xl bg-white/5 border border-white/10 p-6 space-y-6">
-        <div>
-          <h2 class="text-xl font-semibold">Email</h2>
-          <p class="mt-1 text-white/70">hello@aiprint.ai</p>
+        <div class="card rounded-xl p-5 mt-6 space-y-4">
+          <div>
+            <div class="font-semibold">Email</div>
+            <p class="muted">hello@aiprint.ai</p>
+          </div>
+          <div>
+            <div class="font-semibold">Studio hours</div>
+            <p class="muted">Mon–Fri, 10am–6pm ET</p>
+          </div>
+          <div>
+            <div class="font-semibold">Location</div>
+            <p class="muted">Based in Florida, shipping nationwide.</p>
+          </div>
         </div>
-        <div>
-          <h2 class="text-xl font-semibold">Studio hours</h2>
-          <p class="mt-1 text-white/70">Mon–Fri, 10am–6pm ET</p>
-        </div>
-        <div>
-          <h2 class="text-xl font-semibold">Turnaround</h2>
-          <p class="mt-1 text-white/70">Most prints ship within <strong>7–14 days</strong>.</p>
-        </div>
-        <div>
-          <h2 class="text-xl font-semibold">Location</h2>
-          <p class="mt-1 text-white/70">Based in Florida, shipping nationwide.</p>
-        </div>
+
+        <img
+          src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80"
+          alt="Studio vibe" class="rounded-xl card w-full h-64 object-cover mt-6" loading="lazy" />
       </div>
 
       <!-- Contact form -->
-      <form action="https://formspree.io/f/xrbadnbo" method="POST" class="space-y-6">
-        <!-- Name -->
-        <div>
-          <label class="text-sm text-white/70">Name</label>
-          <input name="name" required
-                 class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+      <form action="https://formspree.io/f/xrbadnbo" method="POST" class="card rounded-xl p-5 space-y-5">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-sm text-white/80">Name</label>
+            <input name="name" required
+              class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+          </div>
+          <div>
+            <label class="text-sm text-white/80">Email</label>
+            <input type="email" name="email" required
+              class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+          </div>
         </div>
 
-        <!-- Email -->
         <div>
-          <label class="text-sm text-white/70">Email</label>
-          <input type="email" name="email" required
-                 class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-        </div>
-
-        <!-- Message -->
-        <div>
-          <label class="text-sm text-white/70">Message</label>
+          <label class="text-sm text-white/80">Message</label>
           <textarea name="message" rows="6" required
-                    class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+            class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
         </div>
 
-        <!-- Hidden helpers -->
+        <!-- helpers -->
         <input type="hidden" name="_subject" value="New aiPRINT.ai contact message" />
-        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" /> <!-- honeypot -->
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
         <input type="hidden" name="_redirect" value="/thank-you.html" />
 
-        <button type="submit"
-                class="rounded-md bg-white text-black font-semibold px-4 py-2 hover:opacity-90">
-          Send message
-        </button>
-
-        <p class="text-xs text-white/50">
+        <button type="submit" class="btn">Send message</button>
+        <p class="text-xs text-white/60">
           By submitting, you agree to our <a href="/policies.html" class="underline">Policies</a>.
         </p>
       </form>
@@ -93,10 +92,29 @@
 
   <!-- Footer -->
   <footer class="border-t border-white/10">
-    <div class="max-w-6xl mx-auto px-4 py-10 text-sm text-white/60">
-      <span id="y"></span> © aiPRINT.ai – All rights reserved.
+    <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
+      <div>
+        <div class="font-semibold text-white">aiPRINT.ai</div>
+        <p class="mt-2">Archival, ready-to-hang prints from your ideas.</p>
+        <p class="mt-2">© <span id="y"></span> aiPRINT.ai</p>
+      </div>
+      <div>
+        <div class="font-semibold text-white">Explore</div>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/about.html" class="hover:text-white">How it works</a></li>
+          <li><a href="/materials.html" class="hover:text-white">Materials</a></li>
+          <li><a href="/faq.html" class="hover:text-white">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-semibold text-white">Company</div>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/policies.html" class="hover:text-white">Policies</a></li>
+          <li><a href="/contact.html" class="hover:text-white">Contact</a></li>
+        </ul>
+      </div>
     </div>
   </footer>
-  <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>
