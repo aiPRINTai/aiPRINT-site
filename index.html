@@ -28,48 +28,73 @@
 
 <!-- HEADER -->
 <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
-  <div class="max-w-7xl mx-auto px-5 h-14 flex items-center justify-between">
+  <div class="mx-auto max-w-7xl px-5 h-14 flex items-center justify-between">
+    <!-- Brand -->
     <a href="/" class="flex items-center gap-2">
       <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
       <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
     </a>
 
+    <!-- Desktop nav -->
     <nav class="hidden md:flex items-center gap-6 text-sm">
-      <a href="/about.html" class="hover:text-white">How it works</a>
+      <a href="/about.html"     class="hover:text-white">How it works</a>
       <a href="/materials.html" class="hover:text-white">Materials</a>
-      <a href="/faq.html" class="hover:text-white">FAQ</a>
-      <a href="/policies.html" class="hover:text-white">Policies</a>
-      <a href="/contact.html" class="hover:text-white">Contact</a>
+      <a href="/faq.html"       class="hover:text-white">FAQ</a>
+      <a href="/policies.html"  class="hover:text-white">Policies</a>
+      <a href="/contact.html"   class="hover:text-white">Contact</a>
     </nav>
 
-    <button id="navToggle"
+    <!-- Mobile hamburger -->
+    <button id="navOpen"
       class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10"
-      aria-expanded="false" aria-controls="mobileNav" aria-label="Toggle navigation">
-      <svg id="iconOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-      <svg id="iconClose" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"/></svg>
+      aria-label="Open navigation" aria-controls="navSheet" aria-expanded="false">
+      <!-- hamburger -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
     </button>
   </div>
 </header>
 
-<!-- MOBILE NAV OVERLAY (OUTSIDE HEADER!) -->
-<div id="mobileNav" class="md:hidden fixed inset-0 z-[100] hidden" aria-hidden="true">
-  <!-- backdrop -->
-  <div id="navBackdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
-  <!-- sheet -->
-  <nav class="absolute top-14 inset-x-0 px-4">
-    <div class="mx-auto max-w-7xl rounded-2xl border border-white/10 shadow-2xl bg-[#0b1020]/95">
-      <div class="p-4 grid gap-2 text-base">
-        <a href="/about.html"     class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">How it works</a>
-        <a href="/materials.html" class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">Materials</a>
-        <a href="/faq.html"       class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">FAQ</a>
-        <a href="/policies.html"  class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">Policies</a>
-        <a href="/contact.html"   class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">Contact</a>
-        <div class="h-px bg-white/10 my-1"></div>
-        <a href="#create" class="block px-4 py-3 rounded-lg bg-white text-black font-semibold text-center">Create a preview</a>
-        <a href="#order"  class="block px-4 py-3 rounded-lg border border-white/15 text-center hover:bg-white/5">Order</a>
+<!-- MOBILE NAV SHEET (outside header so it can overlay the whole page) -->
+<div id="navSheet" class="fixed inset-0 z-[100] hidden" aria-hidden="true">
+  <!-- Backdrop -->
+  <div id="navBackdrop" class="absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-200"></div>
+
+  <!-- Drawer -->
+  <aside id="navDrawer"
+         class="absolute right-0 top-0 h-full w-80 max-w-[88vw] bg-[#0b1020] border-l border-white/10
+                translate-x-full transition-transform duration-300 will-change-transform">
+    <div class="h-14 px-4 border-b border-white/10 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
+        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
       </div>
+      <button id="navClose" class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 hover:bg-white/10"
+              aria-label="Close navigation">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
     </div>
-  </nav>
+
+    <nav class="px-4 py-4">
+      <ul class="space-y-2 text-white/90 text-base">
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/about.html">How it works</a></li>
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/materials.html">Materials</a></li>
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/faq.html">FAQ</a></li>
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/policies.html">Policies</a></li>
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/contact.html">Contact</a></li>
+      </ul>
+
+      <div class="mt-6 space-y-2">
+        <a href="#create" class="block w-full text-center rounded-lg px-4 py-2 font-semibold bg-white text-black">Create a preview</a>
+        <a href="#order"  class="block w-full text-center rounded-lg px-4 py-2 border border-white/20 hover:bg-white/10">Order</a>
+      </div>
+    </nav>
+  </aside>
 </div>
 
 <!-- HERO -->
@@ -346,22 +371,50 @@
   window.addEventListener('mouseup',()=>drag=null);
 </script>
 
-<!-- MOBILE MENU LOGIC -->
 <script>
-(function(){
-  const btn=document.getElementById('navToggle');
-  const panel=document.getElementById('mobileNav');
-  const openI=document.getElementById('iconOpen');
-  const closeI=document.getElementById('iconClose');
-  const backdrop=document.getElementById('navBackdrop');
+(() => {
+  const sheet   = document.getElementById('navSheet');
+  const drawer  = document.getElementById('navDrawer');
+  const backdrop= document.getElementById('navBackdrop');
+  const openBtn = document.getElementById('navOpen');
+  const closeBtn= document.getElementById('navClose');
 
-  function openNav(){ panel.classList.remove('hidden'); btn.setAttribute('aria-expanded','true'); openI.classList.add('hidden'); closeI.classList.remove('hidden'); document.body.classList.add('overflow-hidden'); }
-  function closeNav(){ panel.classList.add('hidden'); btn.setAttribute('aria-expanded','false'); openI.classList.remove('hidden'); closeI.classList.add('hidden'); document.body.classList.remove('overflow-hidden'); }
+  const openSheet = () => {
+    sheet.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      drawer.classList.remove('translate-x-full');
+      backdrop.classList.remove('opacity-0');
+      document.body.classList.add('overflow-hidden');  // lock scroll
+      openBtn.setAttribute('aria-expanded', 'true');
+      sheet.setAttribute('aria-hidden', 'false');
+    });
+  };
 
-  btn?.addEventListener('click',()=> panel.classList.contains('hidden') ? openNav() : closeNav());
-  backdrop?.addEventListener('click',closeNav);
-  panel?.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeNav));
-  window.addEventListener('resize',()=>{ if(window.innerWidth>=768) closeNav(); });
+  const closeSheet = () => {
+    drawer.classList.add('translate-x-full');
+    backdrop.classList.add('opacity-0');
+    openBtn.setAttribute('aria-expanded', 'false');
+    sheet.setAttribute('aria-hidden', 'true');
+    setTimeout(() => {
+      sheet.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden'); // unlock scroll
+    }, 250);
+  };
+
+  openBtn?.addEventListener('click', openSheet);
+  closeBtn?.addEventListener('click', closeSheet);
+  backdrop?.addEventListener('click', closeSheet);
+
+  // Close on link click inside the drawer
+  sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSheet));
+
+  // Escape to close
+  window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !sheet.classList.contains('hidden')) closeSheet(); });
+
+  // Auto-close if resized up to desktop
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768 && !sheet.classList.contains('hidden')) closeSheet();
+  });
 })();
 </script>
 </body>
