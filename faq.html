@@ -1,78 +1,350 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FAQ | aiPRINT.ai</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-  :root { --bg:#0b1020; --ink:#dce6f3; --muted:#9fb3c8; }
-  body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-  .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
-  .muted{color:var(--muted)}
-  .btn{background:#fff;color:#000;font-weight:700;padding:.7rem 1rem;border-radius:.6rem}
-  a.navlink{color:rgba(255,255,255,.85)} a.navlink:hover{color:#fff}
-  summary{cursor:pointer}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FAQ | aiPRINT.ai — Questions & Answers</title>
+  <meta name="description" content="Answers about AI image generation, materials, sizing, shipping, returns, usage rights, signatures, and payments for aiPRINT.ai prints." />
+  <link rel="icon" href="/favicon.ico" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Simple page tone -->
+  <style>
+    :root { --bg:#0b0f1a; }
+    body { background:var(--bg); }
+    .card { background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.12); }
+    .muted { color: rgba(255,255,255,.70); }
+    .h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; line-height: 1.05; }
+    .h2 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); font-weight: 800; }
+    details[open] summary svg { transform: rotate(180deg); }
+    summary::-webkit-details-marker { display: none; }
+  </style>
 </head>
-<body>
-<header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
-  <a href="/" class="font-extrabold tracking-tight text-white flex items-center gap-2">
-    <span class="inline-grid place-items-center w-8 h-8 rounded-lg bg-white text-black">AI</span>
-    <span>aiPRINT.<span class="text-sky-300">ai</span></span>
-  </a>
-  <nav class="hidden md:flex items-center gap-6 text-sm">
-    <a href="/about.html" class="navlink">How it works</a>
-    <a href="/materials.html" class="navlink">Materials</a>
-    <a href="/faq.html" class="navlink">FAQ</a>
-    <a href="/policies.html" class="navlink">Policies</a>
-    <a href="/contact.html" class="navlink">Contact</a>
-  </nav>
-</header>
+<body class="text-white/90">
 
-<main class="max-w-6xl mx-auto px-4 pb-20">
-  <section class="py-6 text-center">
-    <h1 class="text-4xl md:text-5xl font-extrabold">Frequently asked questions</h1>
-    <p class="muted mt-3 max-w-2xl mx-auto">Everything you need to know before you order.</p>
-  </section>
+  <!-- Header -->
+  <header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+    <a href="/" class="font-bold tracking-tight text-white">aiPRINT.ai</a>
+    <nav class="flex gap-6 text-sm">
+      <a href="/about.html" class="hover:text-white">How it works</a>
+      <a href="/materials.html" class="hover:text-white">Materials</a>
+      <a href="/faq.html" class="text-white">FAQ</a>
+      <a href="/policies.html" class="hover:text-white">Policies</a>
+      <a href="/contact.html" class="hover:text-white">Contact</a>
+    </nav>
+  </header>
 
-  <section class="grid md:grid-cols-2 gap-6 mt-8">
-    <details class="glass rounded-xl p-5" open>
-      <summary class="font-semibold text-lg">How long does it take?</summary>
-      <p class="muted mt-2">Most orders ship within <strong>7–14 days</strong> depending on material and size. You’ll receive tracking as soon as your piece leaves the studio.</p>
-    </details>
-    <details class="glass rounded-xl p-5" open>
-      <summary class="font-semibold text-lg">Do I need to make an account?</summary>
-      <p class="muted mt-2">No account required. Order as a guest. We’ll email your receipt and tracking.</p>
-    </details>
-    <details class="glass rounded-xl p-5">
-      <summary class="font-semibold text-lg">Can I add my signature?</summary>
-      <p class="muted mt-2">Yes! Use the preview tool to place a signature. Choose from 5 font styles and position it anywhere.</p>
-    </details>
-    <details class="glass rounded-xl p-5">
-      <summary class="font-semibold text-lg">What sizes can I order?</summary>
-      <p class="muted mt-2">We currently support popular sizes up to 36″ on the long edge. Larger custom sizes are possible—just <a class="underline" href="/contact.html">contact us</a>.</p>
-    </details>
-    <details class="glass rounded-xl p-5">
-      <summary class="font-semibold text-lg">Are the prints archival?</summary>
-      <p class="muted mt-2">Yes. We use archival substrates and processes designed for long-term display.</p>
-    </details>
-    <details class="glass rounded-xl p-5">
-      <summary class="font-semibold text-lg">Can I reorder the same image?</summary>
-      <p class="muted mt-2">Absolutely. We save your generated image securely so you can reorder later.</p>
-    </details>
-  </section>
+  <main class="max-w-6xl mx-auto px-4 pb-24">
+    <!-- Hero -->
+    <section class="grid md:grid-cols-[1.15fr_.85fr] gap-8 items-center mb-10">
+      <div>
+        <h1 class="h1">Frequently asked questions</h1>
+        <p class="muted mt-3 max-w-2xl">
+          Everything you might want to know about generating your artwork, materials,
+          sizing, shipping, returns, and usage rights. If you don’t see your question,
+          <a href="/contact.html" class="underline">contact us</a>—we’re here to help.
+        </p>
+      </div>
+      <div class="rounded-xl overflow-hidden card">
+        <img
+          src="https://images.unsplash.com/photo-1520697222864-4c1d7943f4f1?auto=format&fit=crop&w=1400&q=80"
+          alt="Studio making fine-art prints"
+          class="w-full h-56 object-cover"
+          loading="lazy" />
+      </div>
+    </section>
 
-  <section class="text-center mt-12">
-    <a href="/#create" class="btn">Create your preview</a>
-  </section>
-</main>
+    <!-- FAQ groups -->
+    <section class="grid lg:grid-cols-2 gap-6">
+      <!-- Ordering & Pricing -->
+      <div class="card rounded-xl p-5">
+        <h2 class="h2 mb-3">Ordering & pricing</h2>
 
-<footer class="border-t border-white/10">
-  <div class="max-w-6xl mx-auto px-4 py-10 text-sm text-white/70">
-    © <span id="y"></span> aiPRINT.ai — All rights reserved.
-  </div>
-</footer>
-<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+        <details class="group border-t border-white/10 py-3" open>
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>How does the ordering flow work?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-2">
+            Create a preview → choose size & finish → pay via secure Stripe checkout.
+            We produce your piece and ship it ready to hang.
+          </p>
+        </details>
+
+        <details class="group border-t border-white/10 py-3">
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>Are your prices fixed?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-2">
+            Yes—each size/medium has a set price shown on the Order section. Taxes and
+            shipping (if applicable) are calculated at checkout.
+          </p>
+        </details>
+
+        <details class="group border-t border-white/10 py-3">
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>Do I need an account to order?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-2">
+            No. You can checkout as a guest. Later we may offer accounts to view order
+            history or re-order easily.
+          </p>
+        </details>
+      </div>
+
+      <!-- Image generation -->
+      <div class="card rounded-xl p-5">
+        <h2 class="h2 mb-3">Image generation</h2>
+
+        <details class="group border-t border-white/10 py-3" open>
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>Can I upload a reference image?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-2">
+            Yes—one reference image is supported today. We use it for direction,
+            while still crafting a unique image tailored to your prompt.
+          </p>
+        </details>
+
+        <details class="group border-t border-white/10 py-3">
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>Aspect ratios vs. sizes—how do they relate?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-2">
+            Choose 1:1 (Square), 3:2 (Horizontal), or 2:3 (Vertical) when generating.
+            At checkout you’ll see size options that match that aspect.
+          </p>
+        </details>
+
+        <details class="group border-t border-white/10 py-3">
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>Can I see multiple versions before ordering?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-2">
+            Our goal is to get you a polished preview in one pass using your options.
+            If you don’t love it, you can regenerate with new settings.
+          </p>
+        </details>
+      </div>
+
+      <!-- Materials & Quality -->
+      <div class="card rounded-xl p-5">
+        <h2 class="h2 mb-3">Materials & quality</h2>
+
+        <details class="group border-t border-white/10 py-3" open>
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>What are the three finishes?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <ul class="muted mt-2 list-disc pl-5">
+            <li><span class="text-white">Signature Series – Fine Art Canvas</span> (gallery-wrapped, classic texture)</li>
+            <li><span class="text-white">Gallery Edition – ChromaLuxe Metal</span> (sleek, ultra-vibrant, float-mounted)</li>
+            <li><span class="text-white">Museum Collection – Acrylic Facemount</span> (depth, clarity, polished edges)</li>
+          </ul>
+        </details>
+
+        <details class="group border-t border-white/10 py-3">
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>How large can you print with great quality?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-2">
+            For now we offer sizes up to 36" on the long side. Our pipeline
+            upscales intelligently for crisp, exhibition-quality results.
+          </p>
+        </details>
+
+        <details class="group border-t border-white/10 py-3">
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>Are pieces signed?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-2">
+            You can optionally place your artist signature on the preview (5 font
+            styles) so it prints with the art—because this is your piece.
+          </p>
+        </details>
+      </div>
+
+      <!-- Shipping & Returns -->
+      <div class="card rounded-xl p-5">
+        <h2 class="h2 mb-3">Shipping & returns</h2>
+
+        <details class="group border-t border-white/10 py-3" open>
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>When will my order ship?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-2">
+            Most orders ship within <strong>7–14 days</strong> depending on material
+            and size. You’ll receive tracking as soon as it leaves the studio.
+          </p>
+        </details>
+
+        <details class="group border-t border-white/10 py-3">
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>What if my print arrives damaged?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-2">
+            We’ll reprint or provide store credit—just email photos of the packaging
+            and the damage within 14 days so we can take care of you quickly.
+          </p>
+        </details>
+
+        <details class="group border-t border-white/10 py-3">
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>Do you ship outside the U.S.?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-2">
+            Not yet. We’ll announce international shipping when our packaging and
+            carrier partners meet our standards globally.
+          </p>
+        </details>
+      </div>
+
+      <!-- Usage & Rights -->
+      <div class="card rounded-xl p-5">
+        <h2 class="h2 mb-3">Usage & rights</h2>
+
+        <details class="group border-t border-white/10 py-3" open>
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>What rights do I get with my purchase?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-2">
+            You’re free to display or resell the physical piece. Commercial licensing
+            (e.g., packaging, ads, merchandise) is available on request.
+          </p>
+        </details>
+
+        <details class="group border-t border-white/10 py-3">
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>Is my image exclusive to me?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-2">
+            Yes—once ordered, we mark the image exclusive and do not resell or
+            reprint it for others. We safely store it for your future reorders.
+          </p>
+        </details>
+      </div>
+
+      <!-- Signature & Personalization -->
+      <div class="card rounded-xl p-5">
+        <h2 class="h2 mb-3">Signature & personalization</h2>
+
+        <details class="group border-t border-white/10 py-3" open>
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>Can I add my signature to the art?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+        <p class="muted mt-2">
+          Yes. Toggle “Show signature on preview,” choose one of five fonts
+          (including three cursive options), and drag the signature into place.
+        </p>
+        </details>
+
+        <details class="group border-t border-white/10 py-3">
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>Will the signature print exactly where I place it?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-2">
+            Yes—what you see on the preview is what goes to print.
+          </p>
+        </details>
+      </div>
+
+      <!-- Payments & Security -->
+      <div class="card rounded-xl p-5">
+        <h2 class="h2 mb-3">Payments & security</h2>
+
+        <details class="group border-t border-white/10 py-3" open>
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>How do you process payments?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-2">
+            We use Stripe for secure checkout (cards, Apple Pay, Google Pay, etc.).
+            aiPRINT.ai never stores your card details.
+          </p>
+        </details>
+
+        <details class="group border-t border-white/10 py-3">
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span>Is my personal information safe?</span>
+            <svg class="w-4 h-4 opacity-60 transition-transform mt-1" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-2">
+            We only use your info to fulfill your order and send essential updates.
+            No spam. See our <a href="/policies.html" class="underline">Policies</a>.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Visual break -->
+    <section class="mt-10">
+      <div class="rounded-xl overflow-hidden card">
+        <img
+          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1400&q=80"
+          alt="Finished piece ready to hang"
+          class="w-full h-64 object-cover"
+          loading="lazy" />
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/10 mt-16">
+    <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
+      <div>
+        <div class="font-semibold text-white">aiPRINT.ai</div>
+        <p class="mt-2">Archival, ready-to-hang prints from your ideas.</p>
+        <p class="mt-2">© <span id="y"></span> aiPRINT.ai</p>
+      </div>
+      <div>
+        <div class="font-semibold text-white">Explore</div>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/about.html" class="hover:text-white">How it works</a></li>
+          <li><a href="/materials.html" class="hover:text-white">Materials</a></li>
+          <li><a href="/faq.html" class="hover:text-white">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-semibold text-white">Company</div>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/policies.html" class="hover:text-white">Policies</a></li>
+          <li><a href="/contact.html" class="hover:text-white">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+
+  <!-- Optional FAQ schema for better SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"How does the ordering flow work?","acceptedAnswer":{"@type":"Answer","text":"Create a preview, choose size and finish, and checkout securely via Stripe. We produce your piece and ship it ready to hang."}},
+      {"@type":"Question","name":"Can I upload a reference image?","acceptedAnswer":{"@type":"Answer","text":"Yes—one reference image is supported to guide the look, while we still craft a unique image based on your prompt."}},
+      {"@type":"Question","name":"What are the three finishes?","acceptedAnswer":{"@type":"Answer","text":"Signature Series – Fine Art Canvas; Gallery Edition – ChromaLuxe Metal; Museum Collection – Acrylic Facemount."}},
+      {"@type":"Question","name":"When will my order ship?","acceptedAnswer":{"@type":"Answer","text":"Most orders ship within 7–14 days depending on material and size. Tracking is emailed when it ships."}},
+      {"@type":"Question","name":"What rights do I get with my purchase?","acceptedAnswer":{"@type":"Answer","text":"Display or resell the physical piece freely. Commercial licensing is available on request."}},
+      {"@type":"Question","name":"Can I add my signature?","acceptedAnswer":{"@type":"Answer","text":"Yes—turn on the signature overlay, choose a font, and drag it into place before ordering."}},
+      {"@type":"Question","name":"How do you process payments?","acceptedAnswer":{"@type":"Answer","text":"We use Stripe for secure checkout (cards, Apple Pay, Google Pay). We never store your card data."}}
+    ]
+  }
+  </script>
 </body>
 </html>
