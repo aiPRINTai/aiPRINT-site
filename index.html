@@ -5,16 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>aiPRINT.ai — Turn any idea into a gallery-worthy print</title>
   <meta name="description" content="Create premium, ready-to-hang fine art prints from your idea. AI + human curation, archival materials, Certificate of Authenticity." />
-
-  <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Signature fonts (5 total, 3 cursive) -->
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Allura&family=Sacramento&family=Playfair+Display:wght@600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
 
   <style>
     :root { --bg:#0a0f1d; --card:#131a2a; --muted:#9fb3c8; --ink:#e7eef8; }
-    body { background:var(--bg); color: var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+    body { background:var(--bg); color: var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; }
     .glass { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px); }
     .muted { color: var(--muted); }
     .h1 { font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight:800; line-height:1.05 }
@@ -22,32 +18,22 @@
     .btn { background:white; color:black; font-weight:700; padding:.7rem 1rem; border-radius:.6rem; }
     .btn-ghost { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); }
     .badge { font-size:.8rem; color:#b8c7d8 }
-    .sig-overlay {
-      position:absolute; pointer-events:auto; cursor:grab;
-      user-select:none; white-space:nowrap; mix-blend-mode:normal;
-    }
+    .sig-overlay { position:absolute; pointer-events:auto; cursor:grab; user-select:none; white-space:nowrap; mix-blend-mode:normal; }
     .sig-overlay:active { cursor:grabbing; }
-    .sig-GreatVibes { font-family: 'Great Vibes', cursive; }
-    .sig-Allura { font-family: 'Allura', cursive; }
-    .sig-Sacramento { font-family: 'Sacramento', cursive; }
-    .sig-Playfair { font-family: 'Playfair Display', serif; }
-    .sig-Montserrat { font-family: 'Montserrat', sans-serif; }
+    .sig-GreatVibes{font-family:'Great Vibes',cursive}.sig-Allura{font-family:'Allura',cursive}.sig-Sacramento{font-family:'Sacramento',cursive}.sig-Playfair{font-family:'Playfair Display',serif}.sig-Montserrat{font-family:'Montserrat',sans-serif}
     html { scroll-behavior: smooth; }
   </style>
 </head>
 <body>
 
-<!-- Header START -->
+<!-- HEADER -->
 <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
   <div class="max-w-7xl mx-auto px-5 h-14 flex items-center justify-between">
-
-    <!-- Brand -->
     <a href="/" class="flex items-center gap-2">
       <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
       <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
     </a>
 
-    <!-- Desktop nav -->
     <nav class="hidden md:flex items-center gap-6 text-sm">
       <a href="/about.html" class="hover:text-white">How it works</a>
       <a href="/materials.html" class="hover:text-white">Materials</a>
@@ -56,55 +42,41 @@
       <a href="/contact.html" class="hover:text-white">Contact</a>
     </nav>
 
-    <!-- Mobile hamburger -->
     <button id="navToggle"
-            class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10"
-            aria-expanded="false" aria-controls="mobileNav" aria-label="Toggle navigation">
-      <!-- open icon -->
-      <svg id="iconOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-      <!-- close icon -->
-      <svg id="iconClose" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24"
-           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 18L18 6M6 6l12 12"/>
-      </svg>
+      class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10"
+      aria-expanded="false" aria-controls="mobileNav" aria-label="Toggle navigation">
+      <svg id="iconOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg id="iconClose" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
   </div>
-
-  <!-- Mobile nav overlay (FULL SCREEN, SOLID SHEET) -->
-  <div id="mobileNav" class="md:hidden fixed inset-0 z-[60] hidden">
-    <!-- Dark backdrop -->
-    <div id="navBackdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
-
-    <!-- Sheet -->
-    <nav class="absolute top-14 inset-x-0 px-4">
-      <div class="mx-auto max-w-7xl rounded-2xl border border-white/10 shadow-2xl bg-[#0b1020]/95">
-        <div class="p-4 grid gap-2 text-base">
-          <a href="/about.html"     class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">How it works</a>
-          <a href="/materials.html" class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">Materials</a>
-          <a href="/faq.html"       class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">FAQ</a>
-          <a href="/policies.html"  class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">Policies</a>
-          <a href="/contact.html"   class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">Contact</a>
-          <div class="h-px bg-white/10 my-1"></div>
-          <a href="#create" class="block px-4 py-3 rounded-lg bg-white text-black font-semibold text-center">Create a preview</a>
-          <a href="#order"  class="block px-4 py-3 rounded-lg border border-white/15 text-center hover:bg-white/5">Order</a>
-        </div>
-      </div>
-    </nav>
-  </div>
 </header>
-<!-- Header END -->
+
+<!-- MOBILE NAV OVERLAY (OUTSIDE HEADER!) -->
+<div id="mobileNav" class="md:hidden fixed inset-0 z-[100] hidden" aria-hidden="true">
+  <!-- backdrop -->
+  <div id="navBackdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+  <!-- sheet -->
+  <nav class="absolute top-14 inset-x-0 px-4">
+    <div class="mx-auto max-w-7xl rounded-2xl border border-white/10 shadow-2xl bg-[#0b1020]/95">
+      <div class="p-4 grid gap-2 text-base">
+        <a href="/about.html"     class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">How it works</a>
+        <a href="/materials.html" class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">Materials</a>
+        <a href="/faq.html"       class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">FAQ</a>
+        <a href="/policies.html"  class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">Policies</a>
+        <a href="/contact.html"   class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">Contact</a>
+        <div class="h-px bg-white/10 my-1"></div>
+        <a href="#create" class="block px-4 py-3 rounded-lg bg-white text-black font-semibold text-center">Create a preview</a>
+        <a href="#order"  class="block px-4 py-3 rounded-lg border border-white/15 text-center hover:bg-white/5">Order</a>
+      </div>
+    </div>
+  </nav>
+</div>
 
 <!-- HERO -->
 <section class="max-w-7xl mx-auto px-5 pt-6 pb-12 grid lg:grid-cols-2 gap-10 items-center">
   <div>
     <h1 class="h1">Turn any idea into a <span class="text-indigo-300">gallery-worthy</span> print.</h1>
-    <p class="muted mt-4 max-w-xl">
-      Type a prompt. We create the art with AI + a human artist’s eye. You pick size &amp; finish.
-      We ship an archival, limited-edition print to your door.
-    </p>
+    <p class="muted mt-4 max-w-xl">Type a prompt. We create the art with AI + a human artist’s eye. You pick size &amp; finish. We ship an archival, limited-edition print to your door.</p>
     <div class="flex gap-3 mt-6">
       <a href="#create" class="btn">Create a preview</a>
       <a href="#how" class="btn btn-ghost">See how it works</a>
@@ -112,23 +84,16 @@
     <p class="badge mt-5">Made in the USA · Archival materials · Certificate of Authenticity · Ready to hang</p>
   </div>
 
-  <!-- Image cluster (3 distinct images) -->
   <div class="grid gap-4">
     <div class="h-64 rounded-2xl overflow-hidden glass">
-      <img
-        src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop"
-        alt="Milky Way over mountains" class="w-full h-full object-cover" />
+      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop" alt="Milky Way over mountains" class="w-full h-full object-cover"/>
     </div>
     <div class="grid grid-cols-2 gap-4">
       <div class="h-36 rounded-2xl overflow-hidden glass">
-        <img
-          src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop"
-          alt="Alpine lake" class="w-full h-full object-cover" />
+        <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop" alt="Alpine lake" class="w-full h-full object-cover"/>
       </div>
       <div class="h-36 rounded-2xl overflow-hidden glass">
-        <img
-          src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop"
-          alt="Sunset beach" class="w-full h-full object-cover" />
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop" alt="Sunset beach" class="w-full h-full object-cover"/>
       </div>
     </div>
   </div>
@@ -138,21 +103,9 @@
 <section id="how" class="max-w-7xl mx-auto px-5 py-12">
   <h2 class="h2 mb-6">How it works</h2>
   <div class="grid md:grid-cols-3 gap-5">
-    <div class="glass rounded-xl p-5">
-      <div class="font-bold">STEP 1</div>
-      <div class="mt-2 text-lg font-extrabold">Describe your idea</div>
-      <p class="muted mt-2">Share a prompt (style, mood, colors). Add an optional reference image.</p>
-    </div>
-    <div class="glass rounded-xl p-5">
-      <div class="font-bold">STEP 2</div>
-      <div class="mt-2 text-lg font-extrabold">We craft your artwork</div>
-      <p class="muted mt-2">Your prompt + creative options generate a preview with our human curation.</p>
-    </div>
-    <div class="glass rounded-xl p-5">
-      <div class="font-bold">STEP 3</div>
-      <div class="mt-2 text-lg font-extrabold">Printed. Signed. Shipped.</div>
-      <p class="muted mt-2">Premium materials, ready to hang. Certificate of Authenticity.</p>
-    </div>
+    <div class="glass rounded-xl p-5"><div class="font-bold">STEP 1</div><div class="mt-2 text-lg font-extrabold">Describe your idea</div><p class="muted mt-2">Share a prompt (style, mood, colors). Add an optional reference image.</p></div>
+    <div class="glass rounded-xl p-5"><div class="font-bold">STEP 2</div><div class="mt-2 text-lg font-extrabold">We craft your artwork</div><p class="muted mt-2">Your prompt + creative options generate a preview with our human curation.</p></div>
+    <div class="glass rounded-xl p-5"><div class="font-bold">STEP 3</div><div class="mt-2 text-lg font-extrabold">Printed. Signed. Shipped.</div><p class="muted mt-2">Premium materials, ready to hang. Certificate of Authenticity.</p></div>
   </div>
 </section>
 
@@ -181,14 +134,9 @@
 <!-- CREATE -->
 <section id="create" class="max-w-7xl mx-auto px-5 py-14">
   <h2 class="h2 mb-4">Create a preview</h2>
-
   <div class="glass rounded-xl p-5 md:p-6">
-    <!-- Prompt + ratio/button -->
     <div class="grid lg:grid-cols-[1fr_260px] gap-4">
-      <textarea id="promptInput"
-        class="rounded-lg bg-white/10 border border-white/15 px-3 py-3 text-white/90 min-h-[56px]"
-        placeholder="e.g., photographer under a moonlit pier with a nesting turtle nearby"></textarea>
-
+      <textarea id="promptInput" class="rounded-lg bg-white/10 border border-white/15 px-3 py-3 text-white/90 min-h-[56px]" placeholder="e.g., photographer under a moonlit pier with a nesting turtle nearby"></textarea>
       <div class="space-y-2">
         <label class="text-sm muted block">Aspect ratio</label>
         <select id="ratioSel" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2">
@@ -200,9 +148,7 @@
       </div>
     </div>
 
-    <!-- Creative options -->
     <div class="mt-5 grid md:grid-cols-2 gap-4">
-      <!-- Style -->
       <label class="flex flex-col gap-1">
         <span class="text-white/80 text-sm">Style</span>
         <select id="styleSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
@@ -217,7 +163,6 @@
         </select>
       </label>
 
-      <!-- Mood -->
       <label class="flex flex-col gap-1">
         <span class="text-white/80 text-sm">Mood / Atmosphere</span>
         <select id="moodSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
@@ -232,7 +177,6 @@
         </select>
       </label>
 
-      <!-- Lighting -->
       <label class="flex flex-col gap-1">
         <span class="text-white/80 text-sm">Lighting</span>
         <select id="lightSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
@@ -247,7 +191,6 @@
         </select>
       </label>
 
-      <!-- Camera & composition -->
       <label class="flex flex-col gap-1">
         <span class="text-white/80 text-sm">Camera & composition</span>
         <select id="compSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
@@ -263,7 +206,6 @@
       </label>
     </div>
 
-    <!-- Medium -->
     <label class="flex flex-col gap-1 mt-4">
       <span class="text-white/80 text-sm">Medium / Output</span>
       <select id="mediumSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
@@ -279,7 +221,6 @@
       </select>
     </label>
 
-    <!-- Theme add-ons -->
     <fieldset class="mt-4">
       <legend class="text-white/80 text-sm mb-2">Theme add-ons (optional)</legend>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-white/80">
@@ -295,20 +236,14 @@
       </div>
     </fieldset>
 
-    <!-- Preview + signature -->
     <div class="mt-6">
       <div id="previewWrap" class="relative w-full h-[420px] bg-black/40 rounded-xl overflow-hidden border border-white/10">
         <img id="previewImg" class="absolute inset-0 w-full h-full object-contain" alt="Preview" />
-        <!-- draggable signature overlay -->
-        <div id="sig" class="sig-overlay sig-GreatVibes hidden"
-             style="left: 12px; bottom: 10px; color: #ffffff; font-size: 24px;">Your Name</div>
+        <div id="sig" class="sig-overlay sig-GreatVibes hidden" style="left:12px; bottom:10px; color:#fff; font-size:24px;">Your Name</div>
       </div>
 
       <div class="mt-3 grid md:grid-cols-[1fr_220px_140px_1fr] gap-3 items-center">
-        <label class="flex items-center gap-2">
-          <input id="sigToggle" type="checkbox" />
-          <span class="muted text-sm">Show signature on preview</span>
-        </label>
+        <label class="flex items-center gap-2"><input id="sigToggle" type="checkbox"/><span class="muted text-sm">Show signature on preview</span></label>
         <input id="sigName" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2" placeholder="Type your name…" />
         <select id="sigFont" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2">
           <option value="GreatVibes">Great Vibes (cursive)</option>
@@ -319,10 +254,7 @@
         </select>
         <div class="flex items-center gap-3">
           <input id="sigColor" type="color" value="#ffffff" class="w-12 h-10 rounded" />
-          <div class="flex items-center gap-2">
-            <span class="muted text-sm">Size</span>
-            <input id="sigSize" type="range" min="14" max="64" value="24" />
-          </div>
+          <div class="flex items-center gap-2"><span class="muted text-sm">Size</span><input id="sigSize" type="range" min="14" max="64" value="24" /></div>
         </div>
       </div>
 
@@ -338,259 +270,98 @@
 <!-- ORDER -->
 <section id="order" class="max-w-7xl mx-auto px-5 py-14">
   <h2 class="h2 mb-6">Order your print</h2>
-
-  <!-- Tabs -->
   <div class="flex gap-2 mb-5">
     <button data-tab="canvas"  class="orderTab btn">Canvas</button>
     <button data-tab="metal"   class="orderTab btn btn-ghost">Metal</button>
     <button data-tab="acrylic" class="orderTab btn btn-ghost">Acrylic</button>
   </div>
-
-  <!-- Canvas -->
   <div id="tab-canvas" class="grid md:grid-cols-3 gap-5">
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Square (1:1)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_6oU00jdsm2D32Dr2dvcV20o" target="_blank" rel="noopener">24×24 — $155</a>
-      <a class="btn w-full"      href="https://buy.stripe.com/test_4gM9AT2NI4Lb4Lzf0hcV20p" target="_blank" rel="noopener">30×30 — $245</a>
-    </div>
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_dRmeVdfAua5va5T6tLcV20q" target="_blank" rel="noopener">24×16 — $105</a>
-      <a class="btn w-full"      href="https://buy.stripe.com/test_dRmaEXbkeelLfqdbO5cV20r" target="_blank" rel="noopener">30×20 — $165</a>
-    </div>
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Vertical (2:3)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_fZu3cvdsmfpP7XL9FXcV20s" target="_blank" rel="noopener">16×24 — $105</a>
-      <a class="btn w-full"      href="https://buy.stripe.com/test_5kQ28raga7Xn7XLbO5cV20t" target="_blank" rel="noopener">20×30 — $165</a>
-    </div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Square (1:1)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_6oU00jdsm2D32Dr2dvcV20o" target="_blank" rel="noopener">24×24 — $155</a><a class="btn w-full" href="https://buy.stripe.com/test_4gM9AT2NI4Lb4Lzf0hcV20p" target="_blank" rel="noopener">30×30 — $245</a></div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Horizontal (3:2)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_dRmeVdfAua5va5T6tLcV20q" target="_blank" rel="noopener">24×16 — $105</a><a class="btn w-full" href="https://buy.stripe.com/test_dRmaEXbkeelLfqdbO5cV20r" target="_blank" rel="noopener">30×20 — $165</a></div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Vertical (2:3)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_fZu3cvdsmfpP7XL9FXcV20s" target="_blank" rel="noopener">16×24 — $105</a><a class="btn w-full" href="https://buy.stripe.com/test_5kQ28raga7Xn7XLbO5cV20t" target="_blank" rel="noopener">20×30 — $165</a></div>
   </div>
 
-  <!-- Metal -->
   <div id="tab-metal" class="hidden grid md:grid-cols-3 gap-5">
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Square (1:1)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_14A5kDewqgtT0vj9FXcV20u" target="_blank" rel="noopener">24×24 — $275</a>
-      <a class="btn w-full"      href="https://buy.stripe.com/test_dRm4gzagab9z4Lz3hzcV20v" target="_blank" rel="noopener">30×30 — $445</a>
-    </div>
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_cNi4gz0FA3H7guh6tLcV20D" target="_blank" rel="noopener">24×16 — $195</a>
-      <a class="btn w-full"      href="https://buy.stripe.com/test_fZufZhbke2D31znaK1cV20C" target="_blank" rel="noopener">30×20 — $295</a>
-    </div>
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Vertical (2:3)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_14A28r9c61yZ2DraK1cV20G" target="_blank" rel="noopener">16×24 — $195</a>
-      <a class="btn w-full"      href="https://buy.stripe.com/test_3cI5kDagagtT0vj4lDcV20H" target="_blank" rel="noopener">20×30 — $295</a>
-    </div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Square (1:1)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_14A5kDewqgtT0vj9FXcV20u">24×24 — $275</a><a class="btn w-full" href="https://buy.stripe.com/test_dRm4gzagab9z4Lz3hzcV20v">30×30 — $445</a></div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Horizontal (3:2)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_cNi4gz0FA3H7guh6tLcV20D">24×16 — $195</a><a class="btn w-full" href="https://buy.stripe.com/test_fZufZhbke2D31znaK1cV20C">30×20 — $295</a></div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Vertical (2:3)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_14A28r9c61yZ2DraK1cV20G">16×24 — $195</a><a class="btn w-full" href="https://buy.stripe.com/test_3cI5kDagagtT0vj4lDcV20H">20×30 — $295</a></div>
   </div>
 
-  <!-- Acrylic -->
   <div id="tab-acrylic" class="hidden grid md:grid-cols-3 gap-5">
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Square (1:1)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_5kQ28raga91r5PD8BTcV20B" target="_blank" rel="noopener">24×24 — $475</a>
-      <a class="btn w-full"      href="https://buy.stripe.com/test_aFa6oHaga6Tjdi54lDcV20A" target="_blank" rel="noopener">30×30 — $745</a>
-    </div>
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_bJe14ndsma5v3Hv5pHcV20z" target="_blank" rel="noopener">24×16 — $315</a>
-      <a class="btn w-full"      href="https://buy.stripe.com/test_9B628r9c6dhH3Hvg4lcV20y" target="_blank" rel="noopener">30×20 — $495</a>
-    </div>
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Vertical (2:3)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_cNi28rfAu91rb9X9FXcV20x" target="_blank" rel="noopener">16×24 — $325</a>
-      <a class="btn w-full"      href="https://buy.stripe.com/test_eVqbJ1coi5PfguhaK1cV20w" target="_blank" rel="noopener">20×30 — $495</a>
-    </div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Square (1:1)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_5kQ28raga91r5PD8BTcV20B">24×24 — $475</a><a class="btn w-full" href="https://buy.stripe.com/test_aFa6oHaga6Tjdi54lDcV20A">30×30 — $745</a></div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Horizontal (3:2)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_bJe14ndsma5v3Hv5pHcV20z">24×16 — $315</a><a class="btn w-full" href="https://buy.stripe.com/test_9B628r9c6dhH3Hvg4lcV20y">30×20 — $495</a></div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Vertical (2:3)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_cNi28rfAu91rb9X9FXcV20x">16×24 — $325</a><a class="btn w-full" href="https://buy.stripe.com/test_eVqbJ1coi5PfguhaK1cV20w">20×30 — $495</a></div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer class="border-t border-white/10">
   <div class="max-w-7xl mx-auto px-5 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
-    <div>
-      <div class="font-semibold text-white">aiPRINT.ai</div>
-      <p class="mt-2">Archival, ready-to-hang prints from your ideas.</p>
-      <p class="mt-2">© <span id="y"></span> aiPRINT.ai</p>
-    </div>
-    <div>
-      <div class="font-semibold text-white">Explore</div>
-      <ul class="mt-2 space-y-1">
-        <li><a href="/about.html" class="hover:text-white">How it works</a></li>
-        <li><a href="/materials.html" class="hover:text-white">Materials</a></li>
-        <li><a href="/faq.html" class="hover:text-white">FAQ</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="font-semibold text-white">Company</div>
-      <ul class="mt-2 space-y-1">
-        <li><a href="/policies.html" class="hover:text-white">Policies</a></li>
-        <li><a href="/contact.html" class="hover:text-white">Contact</a></li>
-      </ul>
-    </div>
+    <div><div class="font-semibold text-white">aiPRINT.ai</div><p class="mt-2">Archival, ready-to-hang prints from your ideas.</p><p class="mt-2">© <span id="y"></span> aiPRINT.ai</p></div>
+    <div><div class="font-semibold text-white">Explore</div><ul class="mt-2 space-y-1"><li><a href="/about.html" class="hover:text-white">How it works</a></li><li><a href="/materials.html" class="hover:text-white">Materials</a></li><li><a href="/faq.html" class="hover:text-white">FAQ</a></li></ul></div>
+    <div><div class="font-semibold text-white">Company</div><ul class="mt-2 space-y-1"><li><a href="/policies.html" class="hover:text-white">Policies</a></li><li><a href="/contact.html" class="hover:text-white">Contact</a></li></ul></div>
   </div>
 </footer>
 
-<!-- App scripts -->
+<!-- APP SCRIPTS -->
 <script>
-  /* year */
   document.getElementById('y').textContent = new Date().getFullYear();
+  const $ = (q, el=document)=>el.querySelector(q), $$=(q,el=document)=>[...el.querySelectorAll(q)];
 
-  /* tiny helpers */
-  const $  = (q, el=document) => el.querySelector(q);
-  const $$ = (q, el=document) => [...el.querySelectorAll(q)];
-
-  /* build prompt */
-  function buildPrompt() {
-    const subject = $('#promptInput')?.value?.trim() || '';
-    const style   = $('#styleSel')?.value || '';
-    const mood    = $('#moodSel')?.value || '';
-    const light   = $('#lightSel')?.value || '';
-    const comp    = $('#compSel')?.value || '';
-    const medium  = $('#mediumSel')?.value || '';
-    const addons  = $$('.themeOpt:checked').map(i => i.value);
-    const addText = addons.length ? ', ' + addons.join(', ') : '';
-    return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}${addText}`.replace(/\s+/g, ' ').trim();
+  function buildPrompt(){
+    const subject=$('#promptInput')?.value?.trim()||'';
+    const style=$('#styleSel')?.value||'', mood=$('#moodSel')?.value||'';
+    const light=$('#lightSel')?.value||'', comp=$('#compSel')?.value||'';
+    const medium=$('#mediumSel')?.value||'';
+    const addons=$$('.themeOpt:checked').map(i=>i.value);
+    const addText=addons.length?', '+addons.join(', '):'';
+    return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}${addText}`.replace(/\s+/g,' ').trim();
   }
 
-  /* generate image */
-  const genBtn      = $('#genBtn');
-  const previewImg  = $('#previewImg');
-  const genUrlInput = $('#gen-url');
-  const genActions  = $('#gen-actions');
-  const ratioSel    = $('#ratioSel');
-
-  genBtn?.addEventListener('click', async () => {
-    const prompt = buildPrompt();
-    if (!prompt) { alert('Please describe what you want.'); return; }
-    const size = ratioSel?.value || '1024x1024';
-
-    genBtn.disabled = true;
-    genBtn.textContent = 'Generating…';
-    genActions?.classList.add('hidden');
-    if (previewImg) previewImg.src = '';
-
-    try {
-      const r = await fetch('/api/generate-image', {
-        method:'POST',
-        headers:{ 'Content-Type':'application/json' },
-        body: JSON.stringify({ prompt, size })
-      });
-      const data = await r.json();
-      if (!r.ok || !data?.image) throw new Error(data?.error || 'Generation failed');
-
-      if (previewImg) previewImg.src = data.image;
-      if (genUrlInput) genUrlInput.value = data.image;
-      const dl = $('#download-link');
-      if (dl) dl.href = data.image;
-      genActions?.classList.remove('hidden');
-    } catch (err) {
-      alert(err.message || String(err));
-    } finally {
-      genBtn.disabled = false;
-      genBtn.textContent = 'Generate preview';
-    }
+  const genBtn=$('#genBtn'), previewImg=$('#previewImg'), genUrlInput=$('#gen-url'), genActions=$('#gen-actions'), ratioSel=$('#ratioSel');
+  genBtn?.addEventListener('click',async()=>{
+    const prompt=buildPrompt(); if(!prompt){alert('Please describe what you want.');return;}
+    const size=ratioSel?.value||'1024x1024';
+    genBtn.disabled=true; genBtn.textContent='Generating…'; genActions?.classList.add('hidden'); if(previewImg) previewImg.src='';
+    try{
+      const r=await fetch('/api/generate-image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt,size})});
+      const data=await r.json(); if(!r.ok||!data?.image) throw new Error(data?.error||'Generation failed');
+      previewImg.src=data.image; genUrlInput.value=data.image; $('#download-link').href=data.image; genActions.classList.remove('hidden');
+    }catch(e){ alert(e.message||String(e)); }finally{ genBtn.disabled=false; genBtn.textContent='Generate preview'; }
   });
 
-  /* copy link */
-  $('#copy-link')?.addEventListener('click', async () => {
-    if (!genUrlInput?.value) return;
-    await navigator.clipboard.writeText(genUrlInput.value);
-    const btn = $('#copy-link');
-    btn.textContent = 'Copied!';
-    setTimeout(() => btn.textContent = 'Copy link', 1000);
-  });
+  $('#copy-link')?.addEventListener('click',async()=>{ if(!genUrlInput?.value) return; await navigator.clipboard.writeText(genUrlInput.value); const b=$('#copy-link'); b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy link',1000); });
 
-  /* order tabs */
-  const tabs = $$('.orderTab');
-  const views = { canvas: $('#tab-canvas'), metal: $('#tab-metal'), acrylic: $('#tab-acrylic') };
-  tabs.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const key = btn.dataset.tab;
-      Object.values(views).forEach(v => v?.classList.add('hidden'));
-      views[key]?.classList.remove('hidden');
-      tabs.forEach(b => b.classList.add('btn-ghost'));
-      btn.classList.remove('btn-ghost');
-    });
-  });
+  const tabs=$$('.orderTab'); const views={canvas:$('#tab-canvas'),metal:$('#tab-metal'),acrylic:$('#tab-acrylic')};
+  tabs.forEach(btn=>btn.addEventListener('click',()=>{const k=btn.dataset.tab; Object.values(views).forEach(v=>v?.classList.add('hidden')); views[k]?.classList.remove('hidden'); tabs.forEach(b=>b.classList.add('btn-ghost')); btn.classList.remove('btn-ghost');}));
 
-  /* signature overlay */
-  const sigEl   = $('#sig');
-  const sigOn   = $('#sigToggle');
-  const sigName = $('#sigName');
-  const sigFont = $('#sigFont');
-  const sigCol  = $('#sigColor');
-  const sigSize = $('#sigSize');
-  const wrap    = $('#previewWrap');
-
-  sigOn?.addEventListener('change', () => {
-    if (!sigEl) return;
-    sigEl.classList.toggle('hidden', !sigOn.checked);
-  });
-  sigName?.addEventListener('input', () => { if (sigEl) sigEl.textContent = sigName.value || ' '; });
-  sigFont?.addEventListener('change', () => {
-    if (!sigEl) return;
-    sigEl.classList.remove('sig-GreatVibes','sig-Allura','sig-Sacramento','sig-Playfair','sig-Montserrat');
-    sigEl.classList.add('sig-' + sigFont.value);
-  });
-  sigCol?.addEventListener('input', () => { if (sigEl) sigEl.style.color = sigCol.value; });
-  sigSize?.addEventListener('input', () => { if (sigEl) sigEl.style.fontSize = `${sigSize.value}px`; });
-
-  let drag = null;
-  sigEl?.addEventListener('mousedown', (e) => {
-    drag = { x:e.clientX, y:e.clientY, left:sigEl.offsetLeft, top:sigEl.offsetTop };
-    e.preventDefault();
-  });
-  window.addEventListener('mousemove', (e) => {
-    if (!drag || !sigEl || !wrap) return;
-    const dx = e.clientX - drag.x;
-    const dy = e.clientY - drag.y;
-    const maxX = wrap.clientWidth  - sigEl.clientWidth  - 6;
-    const maxY = wrap.clientHeight - sigEl.clientHeight - 6;
-    const left = Math.max(6, Math.min(maxX, drag.left + dx));
-    const top  = Math.max(6, Math.min(maxY, drag.top  + dy));
-    sigEl.style.left = left + 'px';
-    sigEl.style.top  = top  + 'px';
-  });
-  window.addEventListener('mouseup', () => drag = null);
+  const sigEl=$('#sig'), sigOn=$('#sigToggle'), sigName=$('#sigName'), sigFont=$('#sigFont'), sigCol=$('#sigColor'), sigSize=$('#sigSize'), wrap=$('#previewWrap');
+  sigOn?.addEventListener('change',()=>sigEl?.classList.toggle('hidden',!sigOn.checked));
+  sigName?.addEventListener('input',()=>{ if(sigEl) sigEl.textContent=sigName.value||' '; });
+  sigFont?.addEventListener('change',()=>{ if(!sigEl) return; sigEl.classList.remove('sig-GreatVibes','sig-Allura','sig-Sacramento','sig-Playfair','sig-Montserrat'); sigEl.classList.add('sig-'+sigFont.value); });
+  sigCol?.addEventListener('input',()=>{ if(sigEl) sigEl.style.color=sigCol.value; });
+  sigSize?.addEventListener('input',()=>{ if(sigEl) sigEl.style.fontSize=`${sigSize.value}px`; });
+  let drag=null; sigEl?.addEventListener('mousedown',e=>{drag={x:e.clientX,y:e.clientY,left:sigEl.offsetLeft,top:sigEl.offsetTop}; e.preventDefault();});
+  window.addEventListener('mousemove',e=>{ if(!drag||!sigEl||!wrap) return; const dx=e.clientX-drag.x, dy=e.clientY-drag.y; const maxX=wrap.clientWidth-sigEl.clientWidth-6, maxY=wrap.clientHeight-sigEl.clientHeight-6; sigEl.style.left=Math.max(6,Math.min(maxX,drag.left+dx))+'px'; sigEl.style.top=Math.max(6,Math.min(maxY,drag.top+dy))+'px';});
+  window.addEventListener('mouseup',()=>drag=null);
 </script>
 
-<!-- Mobile menu logic (backdrop, sheet, scroll lock) -->
+<!-- MOBILE MENU LOGIC -->
 <script>
-(function () {
-  const btn    = document.getElementById('navToggle');
-  const panel  = document.getElementById('mobileNav');
-  const openI  = document.getElementById('iconOpen');
-  const closeI = document.getElementById('iconClose');
-  const backd  = document.getElementById('navBackdrop');
+(function(){
+  const btn=document.getElementById('navToggle');
+  const panel=document.getElementById('mobileNav');
+  const openI=document.getElementById('iconOpen');
+  const closeI=document.getElementById('iconClose');
+  const backdrop=document.getElementById('navBackdrop');
 
-  function openNav() {
-    panel.classList.remove('hidden');
-    btn.setAttribute('aria-expanded', 'true');
-    openI?.classList.add('hidden');
-    closeI?.classList.remove('hidden');
-    document.body.style.overflow = 'hidden'; // lock scroll
-  }
-  function closeNav() {
-    panel.classList.add('hidden');
-    btn.setAttribute('aria-expanded', 'false');
-    openI?.classList.remove('hidden');
-    closeI?.classList.add('hidden');
-    document.body.style.overflow = ''; // unlock
-  }
+  function openNav(){ panel.classList.remove('hidden'); btn.setAttribute('aria-expanded','true'); openI.classList.add('hidden'); closeI.classList.remove('hidden'); document.body.classList.add('overflow-hidden'); }
+  function closeNav(){ panel.classList.add('hidden'); btn.setAttribute('aria-expanded','false'); openI.classList.remove('hidden'); closeI.classList.add('hidden'); document.body.classList.remove('overflow-hidden'); }
 
-  btn?.addEventListener('click', () => {
-    const isHidden = panel.classList.contains('hidden');
-    isHidden ? openNav() : closeNav();
-  });
-
-  // Close on backdrop click or any link click
-  backd?.addEventListener('click', closeNav);
-  panel?.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
-
-  // Auto-close if resized to desktop
-  window.addEventListener('resize', () => {
-    if (window.innerWidth >= 768) closeNav();
-  });
+  btn?.addEventListener('click',()=> panel.classList.contains('hidden') ? openNav() : closeNav());
+  backdrop?.addEventListener('click',closeNav);
+  panel?.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeNav));
+  window.addEventListener('resize',()=>{ if(window.innerWidth>=768) closeNav(); });
 })();
 </script>
 </body>
