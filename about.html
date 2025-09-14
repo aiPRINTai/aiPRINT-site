@@ -1,94 +1,113 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How it works | aiPRINT.ai</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Allura&family=Sacramento&family=Playfair+Display:wght@600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
-<style>
-  :root { --bg:#0b1020; --ink:#dce6f3; --muted:#9fb3c8; }
-  body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-  .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
-  .muted{color:var(--muted)}
-  .btn{background:#fff;color:#000;font-weight:700;padding:.7rem 1rem;border-radius:.6rem}
-  .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14)}
-  a.navlink{color:rgba(255,255,255,.85)} a.navlink:hover{color:#fff}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About | aiPRINT.ai</title>
+  <meta name="description" content="aiPRINT.ai blends AI with a photographer’s eye to create museum-grade fine art prints. Printed on archival materials, ready to hang." />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
-  <a href="/" class="font-extrabold tracking-tight text-white flex items-center gap-2">
-    <span class="inline-grid place-items-center w-8 h-8 rounded-lg bg-white text-black">AI</span>
-    <span>aiPRINT.<span class="text-sky-300">ai</span></span>
-  </a>
-  <nav class="hidden md:flex items-center gap-6 text-sm">
-    <a href="/about.html" class="navlink">How it works</a>
-    <a href="/materials.html" class="navlink">Materials</a>
-    <a href="/faq.html" class="navlink">FAQ</a>
-    <a href="/policies.html" class="navlink">Policies</a>
-    <a href="/contact.html" class="navlink">Contact</a>
-  </nav>
-</header>
+<body class="bg-[#0b0f1a] text-white/90">
+  <!-- Header -->
+  <header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+    <a href="/" class="font-bold tracking-tight text-white">aiPRINT.ai</a>
+    <nav class="flex gap-6 text-sm">
+      <a href="/about.html" class="hover:text-white">How it works</a>
+      <a href="/materials.html" class="hover:text-white">Materials</a>
+      <a href="/faq.html" class="hover:text-white">FAQ</a>
+      <a href="/policies.html" class="hover:text-white">Policies</a>
+      <a href="/contact.html" class="hover:text-white">Contact</a>
+    </nav>
+  </header>
 
-<main class="max-w-6xl mx-auto px-4 pb-20">
   <!-- Hero -->
-  <section class="grid md:grid-cols-2 gap-8 items-center py-8">
-    <div>
-      <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">From idea → <span class="text-indigo-300">museum-grade print</span></h1>
-      <p class="muted mt-4 max-w-xl">We blend AI with a photographer’s eye to create art that’s uniquely yours—then produce it on archival materials, ready to hang.</p>
-      <div class="mt-6 flex gap-3">
-        <a href="/#create" class="btn">Create a preview</a>
-        <a href="/#order" class="btn btn-ghost">Order now</a>
+  <main class="max-w-6xl mx-auto px-4 pb-24">
+    <section class="grid md:grid-cols-2 gap-10 items-center mb-20">
+      <div>
+        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">
+          From idea → <span class="text-indigo-300">museum-grade print</span>
+        </h1>
+        <p class="mt-4 text-white/70 max-w-xl">
+          We blend AI with a photographer’s eye to create art that’s uniquely yours—
+          then produce it on archival materials, ready to hang.
+        </p>
+        <div class="mt-6 flex gap-3">
+          <a href="/#create" class="rounded-lg bg-white text-black font-semibold px-5 py-2 hover:opacity-90">
+            Create a preview
+          </a>
+          <a href="/#order" class="rounded-lg bg-white/10 border border-white/20 font-semibold px-5 py-2 hover:opacity-80">
+            Order now
+          </a>
+        </div>
       </div>
+      <div>
+        <img src="https://images.unsplash.com/photo-1581091870622-8a5ee90fae5d?auto=format&fit=crop&w=1200&q=80"
+             alt="Studio"
+             class="w-full h-72 object-cover rounded-xl shadow-lg"
+             loading="lazy">
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="grid md:grid-cols-3 gap-8 mb-20">
+      <div class="bg-white/5 border border-white/10 rounded-xl p-6 space-y-4">
+        <h3 class="text-lg font-semibold">STEP 1</h3>
+        <h4 class="text-xl font-bold">Describe your idea</h4>
+        <p class="text-white/70">Tell us the subject, mood, and style. Add an optional reference image.</p>
+        <img src="https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=1200&q=80"
+             alt="Prompt UI"
+             class="w-full h-64 object-cover rounded-xl"
+             loading="lazy">
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-xl p-6 space-y-4">
+        <h3 class="text-lg font-semibold">STEP 2</h3>
+        <h4 class="text-xl font-bold">Preview & choose</h4>
+        <p class="text-white/70">We generate a polished preview based on your options—no back-and-forth required.</p>
+        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80"
+             alt="Preview"
+             class="w-full h-64 object-cover rounded-xl"
+             loading="lazy">
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-xl p-6 space-y-4">
+        <h3 class="text-lg font-semibold">STEP 3</h3>
+        <h4 class="text-xl font-bold">Printed. Signed. Shipped.</h4>
+        <p class="text-white/70">Produced on premium materials, ready to hang, with a Certificate of Authenticity.</p>
+        <img src="https://images.unsplash.com/photo-1549887534-4e4b5d64b02c?auto=format&fit=crop&w=1200&q=80"
+             alt="Packaging"
+             class="w-full h-64 object-cover rounded-xl"
+             loading="lazy">
+      </div>
+    </section>
+
+    <!-- Highlights -->
+    <section class="grid md:grid-cols-4 gap-6 text-center">
+      <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+        <p class="font-bold">Archival prints</p>
+        <p class="text-sm text-white/70">Museum-grade permanence</p>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+        <p class="font-bold">Color calibrated</p>
+        <p class="text-sm text-white/70">Consistent, vivid color</p>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+        <p class="font-bold">Ready to hang</p>
+        <p class="text-sm text-white/70">No framing required</p>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+        <p class="font-bold">COA included</p>
+        <p class="text-sm text-white/70">Certificate of Authenticity</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/10 mt-20">
+    <div class="max-w-6xl mx-auto px-4 py-10 text-sm text-white/60">
+      © <span id="y"></span> aiPRINT.ai — All rights reserved.
     </div>
-    <div class="rounded-2xl overflow-hidden glass">
-      <img alt="Studio" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1523419409543-075d3de84b19?q=80&w=1600&auto=format&fit=crop">
-    </div>
-  </section>
-
-  <!-- Steps -->
-  <section class="mt-10 grid md:grid-cols-3 gap-6">
-    <article class="glass rounded-xl p-6">
-      <div class="text-sm uppercase tracking-wide text-white/70">Step 1</div>
-      <h2 class="text-xl font-bold mt-1">Describe your idea</h2>
-      <p class="muted mt-2">Tell us the subject, mood, and style. Add an optional reference image. Our generator + curation brings it to life.</p>
-      <img class="mt-4 rounded-lg border border-white/10" alt="Prompt UI" src="https://images.unsplash.com/photo-1529868164271-04e29f64b2ae?q=80&w=1200&auto=format&fit=crop">
-    </article>
-
-    <article class="glass rounded-xl p-6">
-      <div class="text-sm uppercase tracking-wide text-white/70">Step 2</div>
-      <h2 class="text-xl font-bold mt-1">Preview & choose</h2>
-      <p class="muted mt-2">We generate a polished preview based on your options—no back-and-forth required. Like it? Pick size & finish.</p>
-      <img class="mt-4 rounded-lg border border-white/10" alt="Preview" src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1200&auto=format&fit=crop">
-    </article>
-
-    <article class="glass rounded-xl p-6">
-      <div class="text-sm uppercase tracking-wide text-white/70">Step 3</div>
-      <h2 class="text-xl font-bold mt-1">Printed. Signed. Shipped.</h2>
-      <p class="muted mt-2">We produce on premium materials with archival processes. Ready to hang, with a Certificate of Authenticity.</p>
-      <img class="mt-4 rounded-lg border border-white/10" alt="Packaging" src="https://images.unsplash.com/photo-1519336367661-eba9c1df9a49?q=80&w=1200&auto=format&fit=crop">
-    </article>
-  </section>
-
-  <!-- Trust band -->
-  <section class="mt-12 grid md:grid-cols-4 gap-4">
-    <div class="glass rounded-xl p-4 text-center"><div class="text-3xl">🖨️</div><div class="font-semibold mt-2">Archival prints</div><p class="muted text-sm">Museum-grade permanence</p></div>
-    <div class="glass rounded-xl p-4 text-center"><div class="text-3xl">🧪</div><div class="font-semibold mt-2">Color calibrated</div><p class="muted text-sm">Consistent, vivid color</p></div>
-    <div class="glass rounded-xl p-4 text-center"><div class="text-3xl">🧷</div><div class="font-semibold mt-2">Ready to hang</div><p class="muted text-sm">No framing required</p></div>
-    <div class="glass rounded-xl p-4 text-center"><div class="text-3xl">📜</div><div class="font-semibold mt-2">COA included</div><p class="muted text-sm">Certificate of Authenticity</p></div>
-  </section>
-
-  <section class="mt-12 text-center">
-    <a href="/#create" class="btn">Create your preview</a>
-  </section>
-</main>
-
-<footer class="border-t border-white/10">
-  <div class="max-w-6xl mx-auto px-4 py-10 text-sm text-white/70">
-    © <span id="y"></span> aiPRINT.ai — All rights reserved.
-  </div>
-</footer>
-<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+  </footer>
+  <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
 </body>
 </html>
