@@ -1,66 +1,65 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>aiPRINT.ai — Turn any idea into a gallery-worthy print</title>
-<meta name="description" content="Create premium, ready-to-hang fine art prints from your idea. AI + human curation, archival materials, Certificate of Authenticity." />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>aiPRINT.ai — Turn any idea into a gallery-worthy print</title>
+  <meta name="description" content="Create premium, ready-to-hang fine art prints from your idea. AI + human curation, archival materials, Certificate of Authenticity." />
 
-<!-- Tailwind CDN -->
-<script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- Signature fonts (5 total, 3 cursive) -->
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Allura&family=Sacramento&family=Playfair+Display:wght@600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+  <!-- Signature fonts (5 total, 3 cursive) -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Allura&family=Sacramento&family=Playfair+Display:wght@600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
 
-<style>
-  :root { --bg:#0b1020; --card:#131a2a; --muted:#9fb3c8; --ink:#dce6f3; }
-  body { background:var(--bg); color: var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
-  .glass { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px); }
-  .muted { color: var(--muted); }
-  .h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight:800; line-height:1.05 }
-  .h2 { font-size: clamp(1.3rem, 2.5vw, 2rem); font-weight:800; }
-  .btn { background:white; color:black; font-weight:700; padding:.7rem 1rem; border-radius:.6rem; }
-  .btn-ghost { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); }
-  .badge { font-size:.75rem; color:#b9c7d6 }
-  .sig-overlay { position:absolute; pointer-events:auto; cursor:grab; user-select:none; white-space:nowrap; mix-blend-mode:normal; }
-  .sig-overlay:active { cursor:grabbing; }
-  .sig-GreatVibes { font-family: 'Great Vibes', cursive; }
-  .sig-Allura { font-family: 'Allura', cursive; }
-  .sig-Sacramento { font-family: 'Sacramento', cursive; }
-  .sig-Playfair { font-family: 'Playfair Display', serif; }
-  .sig-Montserrat { font-family: 'Montserrat', sans-serif; }
-  a.navlink { color:rgba(255,255,255,.85) }
-  a.navlink:hover { color:#fff }
-</style>
+  <style>
+    :root { --bg:#0a0f1d; --card:#131a2a; --muted:#9fb3c8; --ink:#e7eef8; }
+    body { background:var(--bg); color: var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+    .glass { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px); }
+    .muted { color: var(--muted); }
+    .h1 { font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight:800; line-height:1.05 }
+    .h2 { font-size: clamp(1.4rem, 2.4vw, 2.1rem); font-weight:800; }
+    .btn { background:white; color:black; font-weight:700; padding:.7rem 1rem; border-radius:.6rem; }
+    .btn-ghost { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); }
+    .badge { font-size:.8rem; color:#b8c7d8 }
+    .sig-overlay {
+      position:absolute; pointer-events:auto; cursor:grab;
+      user-select:none; white-space:nowrap; mix-blend-mode:normal;
+    }
+    .sig-overlay:active { cursor:grabbing; }
+    .sig-GreatVibes { font-family: 'Great Vibes', cursive; }
+    .sig-Allura { font-family: 'Allura', cursive; }
+    .sig-Sacramento { font-family: 'Sacramento', cursive; }
+    .sig-Playfair { font-family: 'Playfair Display', serif; }
+    .sig-Montserrat { font-family: 'Montserrat', sans-serif; }
+  </style>
 </head>
 <body>
 
-<!-- HEADER (site pages + local anchors) -->
-<header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
-  <a href="/" class="font-extrabold tracking-tight text-white flex items-center gap-2">
-    <span class="inline-grid place-items-center w-8 h-8 rounded-lg bg-white text-black">AI</span>
-    <span>aiPRINT.<span class="text-sky-300">ai</span></span>
+<!-- Top mini-nav -->
+<header class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
+  <a href="/" class="flex items-center gap-2">
+    <span class="w-7 h-7 rounded-md bg-white text-black grid place-items-center font-black text-sm">AI</span>
+    <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
   </a>
-  <nav class="hidden md:flex items-center gap-6 text-sm">
-    <!-- Site pages -->
-    <a href="/about.html" class="navlink">How it works</a>
-    <a href="/materials.html" class="navlink">Materials</a>
-    <a href="/faq.html" class="navlink">FAQ</a>
-    <a href="/policies.html" class="navlink">Policies</a>
-    <a href="/contact.html" class="navlink">Contact</a>
-    <!-- In-page shortcuts -->
-    <a href="#create" class="navlink">Create</a>
-    <a href="#order" class="navlink">Order</a>
+  <nav class="hidden md:flex gap-6 text-sm">
+    <a href="/about.html"   class="hover:text-white">How it works</a>
+    <a href="/materials.html" class="hover:text-white">Materials</a>
+    <a href="/faq.html"     class="hover:text-white">FAQ</a>
+    <a href="/policies.html" class="hover:text-white">Policies</a>
+    <a href="/contact.html" class="hover:text-white">Contact</a>
+    <a href="#create" class="hover:text-white">Create</a>
+    <a href="#order"  class="hover:text-white">Order</a>
   </nav>
 </header>
 
 <!-- HERO -->
-<section class="max-w-6xl mx-auto px-4 py-10 md:py-16 grid md:grid-cols-2 gap-10 items-center">
+<section class="max-w-7xl mx-auto px-5 pt-6 pb-12 grid lg:grid-cols-2 gap-10 items-center">
   <div>
     <h1 class="h1">Turn any idea into a <span class="text-indigo-300">gallery-worthy</span> print.</h1>
-    <p class="muted mt-4 max-w-lg">
+    <p class="muted mt-4 max-w-xl">
       Type a prompt. We create the art with AI + a human artist’s eye. You pick size &amp; finish.
-      We ship an archival, ready-to-hang print to your door.
+      We ship an archival, limited-edition print to your door.
     </p>
     <div class="flex gap-3 mt-6">
       <a href="#create" class="btn">Create a preview</a>
@@ -69,36 +68,32 @@
     <p class="badge mt-5">Made in the USA · Archival materials · Certificate of Authenticity · Ready to hang</p>
   </div>
 
-<!-- image stack -->
-<div class="grid gap-4">
-  <!-- Large hero -->
-  <div class="h-60 rounded-2xl overflow-hidden glass">
-    <img
-      src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop"
-      class="w-full h-full object-cover"
-      alt="Starry sky over mountains" />
+  <!-- Image cluster (3 distinct images) -->
+  <div class="grid gap-4">
+    <div class="h-64 rounded-2xl overflow-hidden glass">
+      <img
+        src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop"
+        alt="Milky Way over mountains" class="w-full h-full object-cover" />
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="h-36 rounded-2xl overflow-hidden glass">
+        <img
+          src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop"
+          alt="Alpine lake" class="w-full h-full object-cover" />
+      </div>
+      <div class="h-36 rounded-2xl overflow-hidden glass">
+        <img
+          src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop"
+          alt="Sunset beach" class="w-full h-full object-cover" />
+      </div>
+    </div>
   </div>
+</section>
 
-  <!-- Two small thumbnails -->
-  <div class="grid grid-cols-2 gap-4">
-    <div class="h-36 rounded-2xl overflow-hidden glass">
-      <img
-        src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=800&auto=format&fit=crop"
-        class="w-full h-full object-cover"
-        alt="Alpine lake with boat" />
-    </div>
-    <div class="h-36 rounded-2xl overflow-hidden glass">
-      <img
-        src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop"
-        class="w-full h-full object-cover"
-        alt="Ocean wave at sunset" />
-    </div>
-  </div>
-</div>
 <!-- HOW IT WORKS -->
-<section id="how" class="max-w-6xl mx-auto px-4 py-14">
+<section id="how" class="max-w-7xl mx-auto px-5 py-12">
   <h2 class="h2 mb-6">How it works</h2>
-  <div class="grid md:grid-cols-3 gap-4">
+  <div class="grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-5">
       <div class="font-bold">STEP 1</div>
       <div class="mt-2 text-lg font-extrabold">Describe your idea</div>
@@ -112,55 +107,57 @@
     <div class="glass rounded-xl p-5">
       <div class="font-bold">STEP 3</div>
       <div class="mt-2 text-lg font-extrabold">Printed. Signed. Shipped.</div>
-      <p class="muted mt-2">Premium materials, ready to hang, Certificate of Authenticity.</p>
+      <p class="muted mt-2">Premium materials, ready to hang. Certificate of Authenticity.</p>
     </div>
   </div>
 </section>
 
-<!-- MATERIALS (uses your uploaded images in the repo root) -->
-<section id="materials" class="max-w-6xl mx-auto px-4 py-14">
+<!-- MATERIALS -->
+<section id="materials" class="max-w-7xl mx-auto px-5 py-12">
   <h2 class="h2 mb-6">Materials & finishes</h2>
-  <div class="grid md:grid-cols-3 gap-4">
-    <article class="glass rounded-xl p-5">
-      <img src="/Canvas.jpg" alt="Fine Art Canvas" class="w-full h-44 object-cover rounded-lg border border-white/10" />
-      <div class="text-lg font-extrabold mt-3">Signature Series – Fine Art Canvas</div>
+  <div class="grid md:grid-cols-3 gap-5">
+    <div class="glass rounded-xl p-5">
+      <img src="/Canvas.jpg" alt="Canvas example" class="w-full h-36 object-cover rounded-lg mb-4" />
+      <div class="text-lg font-extrabold">Signature Series – Fine Art Canvas</div>
       <p class="muted mt-2">Archival fine-art canvas with rich texture and deep color, gallery-wrapped and ready to hang.</p>
-    </article>
-    <article class="glass rounded-xl p-5">
-      <img src="/Metal.jpg" alt="ChromaLuxe Metal" class="w-full h-44 object-cover rounded-lg border border-white/10" />
-      <div class="text-lg font-extrabold mt-3">Gallery Edition – ChromaLuxe Metal</div>
+    </div>
+    <div class="glass rounded-xl p-5">
+      <img src="/Metal.jpg" alt="Metal example" class="w-full h-36 object-cover rounded-lg mb-4" />
+      <div class="text-lg font-extrabold">Gallery Edition – ChromaLuxe Metal</div>
       <p class="muted mt-2">Vibrant aluminum print with durable float mount. Sleek modern look, ready to hang.</p>
-    </article>
-    <article class="glass rounded-xl p-5">
-      <img src="/Acrylic.jpg" alt="Acrylic Facemount" class="w-full h-44 object-cover rounded-lg border border-white/10" />
-      <div class="text-lg font-extrabold mt-3">Museum Collection – Acrylic Facemount</div>
+    </div>
+    <div class="glass rounded-xl p-5">
+      <img src="/Acrylic.jpg" alt="Acrylic example" class="w-full h-36 object-cover rounded-lg mb-4" />
+      <div class="text-lg font-extrabold">Museum Collection – Acrylic Facemount</div>
       <p class="muted mt-2">Museum-grade acrylic facemount with brilliant clarity and depth, polished edges, ready to hang.</p>
-    </article>
+    </div>
   </div>
 </section>
 
-<!-- CREATE / GENERATOR -->
-<section id="create" class="max-w-6xl mx-auto px-4 py-14">
+<!-- CREATE -->
+<section id="create" class="max-w-7xl mx-auto px-5 py-14">
   <h2 class="h2 mb-4">Create a preview</h2>
 
-  <div class="glass rounded-xl p-4 md:p-5">
-    <div class="grid md:grid-cols-[1fr_240px] gap-3">
-      <textarea id="promptInput" class="rounded-lg bg-white/10 border border-white/15 px-3 py-3 text-white/90 min-h-[56px]"
+  <div class="glass rounded-xl p-5 md:p-6">
+    <!-- Prompt + ratio/button -->
+    <div class="grid lg:grid-cols-[1fr_260px] gap-4">
+      <textarea id="promptInput"
+        class="rounded-lg bg-white/10 border border-white/15 px-3 py-3 text-white/90 min-h-[56px]"
         placeholder="e.g., photographer under a moonlit pier with a nesting turtle nearby"></textarea>
 
-      <div>
-        <label class="text-sm muted block mb-1">Aspect ratio</label>
+      <div class="space-y-2">
+        <label class="text-sm muted block">Aspect ratio</label>
         <select id="ratioSel" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2">
           <option value="1024x1024" selected>Square (1:1)</option>
           <option value="1536x1024">Horizontal 3:2</option>
           <option value="1024x1536">Vertical 2:3</option>
         </select>
-        <button id="genBtn" class="btn w-full mt-2">Generate preview</button>
+        <button id="genBtn" class="btn w-full">Generate preview</button>
       </div>
     </div>
 
     <!-- Creative options -->
-    <div id="creative-options" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+    <div class="mt-5 grid md:grid-cols-2 gap-4">
       <!-- Style -->
       <label class="flex flex-col gap-1">
         <span class="text-white/80 text-sm">Style</span>
@@ -206,7 +203,7 @@
         </select>
       </label>
 
-      <!-- Camera & Composition -->
+      <!-- Camera & composition -->
       <label class="flex flex-col gap-1">
         <span class="text-white/80 text-sm">Camera & composition</span>
         <select id="compSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
@@ -220,50 +217,50 @@
           <option value="shallow depth of field (blurry background, sharp subject)">Depth of Field</option>
         </select>
       </label>
-
-      <!-- Medium / Output -->
-      <label class="flex flex-col gap-1 md:col-span-2">
-        <span class="text-white/80 text-sm">Medium / Output</span>
-        <select id="mediumSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
-          <option value="photograph / realistic" selected>Photograph / Realistic</option>
-          <option value="oil painting">Oil Painting</option>
-          <option value="watercolor">Watercolor</option>
-          <option value="pencil sketch">Pencil Sketch</option>
-          <option value="digital illustration">Digital Illustration</option>
-          <option value="charcoal drawing">Charcoal Drawing</option>
-          <option value="mosaic / stained glass">Mosaic / Stained Glass</option>
-          <option value="collage">Collage</option>
-          <option value="graffiti / street art">Graffiti / Street Art</option>
-        </select>
-      </label>
-
-      <!-- Theme add-ons -->
-      <fieldset class="md:col-span-2">
-        <legend class="text-white/80 text-sm mb-2">Theme add-ons (optional)</legend>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-white/80">
-          <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="black and white"> Black & White</label>
-          <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="minimalist"> Minimalist</label>
-          <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="vibrant colors"> Vibrant Colors</label>
-          <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="pastel colors"> Pastel Colors</label>
-          <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="cinematic"> Cinematic</label>
-          <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="fantasy / mythical"> Fantasy / Mythical</label>
-          <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="sci-fi / futuristic"> Sci-Fi / Futuristic</label>
-          <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="nature-focused"> Nature-Focused</label>
-          <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="architecture-focused"> Architecture-Focused</label>
-        </div>
-      </fieldset>
     </div>
 
-    <!-- PREVIEW + SIGNATURE -->
-    <div class="mt-5">
-      <div id="previewWrap" class="relative w-full aspect-[16/10] bg-black/40 rounded-xl overflow-hidden border border-white/10">
-        <img id="preview-img" class="w-full h-full object-contain" alt="Preview" />
+    <!-- Medium -->
+    <label class="flex flex-col gap-1 mt-4">
+      <span class="text-white/80 text-sm">Medium / Output</span>
+      <select id="mediumSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
+        <option value="photograph / realistic" selected>Photograph / Realistic</option>
+        <option value="oil painting">Oil Painting</option>
+        <option value="watercolor">Watercolor</option>
+        <option value="pencil sketch">Pencil Sketch</option>
+        <option value="digital illustration">Digital Illustration</option>
+        <option value="charcoal drawing">Charcoal Drawing</option>
+        <option value="mosaic / stained glass">Mosaic / Stained Glass</option>
+        <option value="collage">Collage</option>
+        <option value="graffiti / street art">Graffiti / Street Art</option>
+      </select>
+    </label>
+
+    <!-- Theme add-ons -->
+    <fieldset class="mt-4">
+      <legend class="text-white/80 text-sm mb-2">Theme add-ons (optional)</legend>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-white/80">
+        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="black and white"> Black & White</label>
+        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="minimalist"> Minimalist</label>
+        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="vibrant colors"> Vibrant Colors</label>
+        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="pastel colors"> Pastel Colors</label>
+        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="cinematic"> Cinematic</label>
+        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="fantasy / mythical"> Fantasy / Mythical</label>
+        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="sci-fi / futuristic"> Sci-Fi / Futuristic</label>
+        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="nature-focused"> Nature-Focused</label>
+        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="architecture-focused"> Architecture-Focused</label>
+      </div>
+    </fieldset>
+
+    <!-- Preview + signature -->
+    <div class="mt-6">
+      <div id="previewWrap" class="relative w-full h-[420px] bg-black/40 rounded-xl overflow-hidden border border-white/10">
+        <img id="previewImg" class="absolute inset-0 w-full h-full object-contain" alt="Preview" />
         <!-- draggable signature overlay -->
         <div id="sig" class="sig-overlay sig-GreatVibes hidden"
-             style="left: 16px; top: calc(100% - 56px); color: #ffffff; font-size: 24px;">Your Name</div>
+             style="left: 12px; bottom: 10px; color: #ffffff; font-size: 24px;">Your Name</div>
       </div>
 
-      <div class="mt-3 grid md:grid-cols-[1fr_220px_120px_1fr] gap-3 items-center">
+      <div class="mt-3 grid md:grid-cols-[1fr_220px_140px_1fr] gap-3 items-center">
         <label class="flex items-center gap-2">
           <input id="sigToggle" type="checkbox" />
           <span class="muted text-sm">Show signature on preview</span>
@@ -295,18 +292,18 @@
 </section>
 
 <!-- ORDER -->
-<section id="order" class="max-w-6xl mx-auto px-4 py-14">
+<section id="order" class="max-w-7xl mx-auto px-5 py-14">
   <h2 class="h2 mb-6">Order your print</h2>
 
   <!-- Tabs -->
-  <div class="flex gap-2 mb-4">
-    <button data-tab="canvas" class="orderTab btn">Canvas</button>
-    <button data-tab="metal" class="orderTab btn btn-ghost">Metal</button>
+  <div class="flex gap-2 mb-5">
+    <button data-tab="canvas"  class="orderTab btn">Canvas</button>
+    <button data-tab="metal"   class="orderTab btn btn-ghost">Metal</button>
     <button data-tab="acrylic" class="orderTab btn btn-ghost">Acrylic</button>
   </div>
 
   <!-- Canvas -->
-  <div id="tab-canvas" class="grid md:grid-cols-3 gap-4">
+  <div id="tab-canvas" class="grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Square (1:1)</div>
       <a class="btn w-full mb-2" href="https://buy.stripe.com/test_6oU00jdsm2D32Dr2dvcV20o" target="_blank" rel="noopener">24×24 — $155</a>
@@ -325,7 +322,7 @@
   </div>
 
   <!-- Metal -->
-  <div id="tab-metal" class="hidden grid md:grid-cols-3 gap-4">
+  <div id="tab-metal" class="hidden grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Square (1:1)</div>
       <a class="btn w-full mb-2" href="https://buy.stripe.com/test_14A5kDewqgtT0vj9FXcV20u" target="_blank" rel="noopener">24×24 — $275</a>
@@ -344,7 +341,7 @@
   </div>
 
   <!-- Acrylic -->
-  <div id="tab-acrylic" class="hidden grid md:grid-cols-3 gap-4">
+  <div id="tab-acrylic" class="hidden grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Square (1:1)</div>
       <a class="btn w-full mb-2" href="https://buy.stripe.com/test_5kQ28raga91r5PD8BTcV20B" target="_blank" rel="noopener">24×24 — $475</a>
@@ -365,7 +362,7 @@
 
 <!-- FOOTER -->
 <footer class="border-t border-white/10">
-  <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
+  <div class="max-w-7xl mx-auto px-5 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
     <div>
       <div class="font-semibold text-white">aiPRINT.ai</div>
       <p class="mt-2">Archival, ready-to-hang prints from your ideas.</p>
@@ -389,12 +386,12 @@
   </div>
 </footer>
 
-<!-- SCRIPTS -->
+<!-- App scripts -->
 <script>
   /* year */
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  /* helpers */
+  /* tiny helpers */
   const $  = (q, el=document) => el.querySelector(q);
   const $$ = (q, el=document) => [...el.querySelectorAll(q)];
 
@@ -408,14 +405,12 @@
     const medium  = $('#mediumSel')?.value || '';
     const addons  = $$('.themeOpt:checked').map(i => i.value);
     const addText = addons.length ? ', ' + addons.join(', ') : '';
-    return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}${addText}`
-      .replace(/\s+/g,' ')
-      .trim();
+    return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}${addText}`.replace(/\s+/g, ' ').trim();
   }
 
   /* generate image */
   const genBtn      = $('#genBtn');
-  const previewImg  = $('#preview-img');
+  const previewImg  = $('#previewImg');
   const genUrlInput = $('#gen-url');
   const genActions  = $('#gen-actions');
   const ratioSel    = $('#ratioSel');
@@ -441,10 +436,11 @@
 
       if (previewImg) previewImg.src = data.image;
       if (genUrlInput) genUrlInput.value = data.image;
-      const dl = $('#download-link'); if (dl) dl.href = data.image;
+      const dl = $('#download-link');
+      if (dl) dl.href = data.image;
       genActions?.classList.remove('hidden');
     } catch (err) {
-      alert(err.message || err);
+      alert(err.message || String(err));
     } finally {
       genBtn.disabled = false;
       genBtn.textContent = 'Generate preview';
@@ -462,51 +458,54 @@
 
   /* order tabs */
   const tabs = $$('.orderTab');
-  const tabViews = { canvas: $('#tab-canvas'), metal: $('#tab-metal'), acrylic: $('#tab-acrylic') };
+  const views = { canvas: $('#tab-canvas'), metal: $('#tab-metal'), acrylic: $('#tab-acrylic') };
   tabs.forEach(btn => {
     btn.addEventListener('click', () => {
       const key = btn.dataset.tab;
-      Object.values(tabViews).forEach(v => v?.classList.add('hidden'));
-      tabViews[key]?.classList.remove('hidden');
+      Object.values(views).forEach(v => v?.classList.add('hidden'));
+      views[key]?.classList.remove('hidden');
       tabs.forEach(b => b.classList.add('btn-ghost'));
       btn.classList.remove('btn-ghost');
     });
   });
 
   /* signature overlay */
-  const sigEl     = $('#sig');
-  const sigToggle = $('#sigToggle');
-  const sigName   = $('#sigName');
-  const sigFont   = $('#sigFont');
-  const sigColor  = $('#sigColor');
-  const sigSize   = $('#sigSize');
-  const previewWrap = $('#previewWrap');
+  const sigEl   = $('#sig');
+  const sigOn   = $('#sigToggle');
+  const sigName = $('#sigName');
+  const sigFont = $('#sigFont');
+  const sigCol  = $('#sigColor');
+  const sigSize = $('#sigSize');
+  const wrap    = $('#previewWrap');
 
-  sigToggle?.addEventListener('change', () => { if (sigEl) sigEl.classList.toggle('hidden', !sigToggle.checked); });
+  sigOn?.addEventListener('change', () => {
+    if (!sigEl) return;
+    sigEl.classList.toggle('hidden', !sigOn.checked);
+  });
   sigName?.addEventListener('input', () => { if (sigEl) sigEl.textContent = sigName.value || ' '; });
   sigFont?.addEventListener('change', () => {
     if (!sigEl) return;
     sigEl.classList.remove('sig-GreatVibes','sig-Allura','sig-Sacramento','sig-Playfair','sig-Montserrat');
     sigEl.classList.add('sig-' + sigFont.value);
   });
-  sigColor?.addEventListener('input', () => { if (sigEl) sigEl.style.color = sigColor.value; });
+  sigCol?.addEventListener('input', () => { if (sigEl) sigEl.style.color = sigCol.value; });
   sigSize?.addEventListener('input', () => { if (sigEl) sigEl.style.fontSize = `${sigSize.value}px`; });
 
   let drag = null;
   sigEl?.addEventListener('mousedown', (e) => {
-    drag = { startX: e.clientX, startY: e.clientY, startLeft: sigEl.offsetLeft, startTop: sigEl.offsetTop };
+    drag = { x:e.clientX, y:e.clientY, left:sigEl.offsetLeft, top:sigEl.offsetTop };
     e.preventDefault();
   });
   window.addEventListener('mousemove', (e) => {
-    if (!drag || !sigEl || !previewWrap) return;
-    const dx = e.clientX - drag.startX;
-    const dy = e.clientY - drag.startY;
-    const maxX = previewWrap.clientWidth - sigEl.clientWidth - 6;
-    const maxY = previewWrap.clientHeight - sigEl.clientHeight - 6;
-    const left = Math.max(6, Math.min(maxX, drag.startLeft + dx));
-    const top  = Math.max(6, Math.min(maxY, drag.startTop + dy));
+    if (!drag || !sigEl || !wrap) return;
+    const dx = e.clientX - drag.x;
+    const dy = e.clientY - drag.y;
+    const maxX = wrap.clientWidth  - sigEl.clientWidth  - 6;
+    const maxY = wrap.clientHeight - sigEl.clientHeight - 6;
+    const left = Math.max(6, Math.min(maxX, drag.left + dx));
+    const top  = Math.max(6, Math.min(maxY, drag.top  + dy));
     sigEl.style.left = left + 'px';
-    sigEl.style.top  = top + 'px';
+    sigEl.style.top  = top  + 'px';
   });
   window.addEventListener('mouseup', () => drag = null);
 </script>
