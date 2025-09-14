@@ -358,9 +358,8 @@
     <div>
       <div class="font-semibold text-white">aiPRINT.ai</div>
       <p class="mt-2">Archival, ready-to-hang prints from your ideas.</p>
-      <p class="mt-2"><span id="y"></span> © aiPRINT.ai</p>
+      <p class="mt-2">© <span id="y"></span> aiPRINT.ai</p>
     </div>
-
     <div>
       <div class="font-semibold text-white">Explore</div>
       <ul class="mt-2 space-y-1">
@@ -369,7 +368,6 @@
         <li><a href="/faq.html" class="hover:text-white">FAQ</a></li>
       </ul>
     </div>
-
     <div>
       <div class="font-semibold text-white">Company</div>
       <ul class="mt-2 space-y-1">
@@ -380,128 +378,141 @@
   </div>
 </footer>
 
-<!-- Year helper -->
+<!-- App scripts -->
 <script>
+  /* year */
   document.getElementById('y').textContent = new Date().getFullYear();
-</script>
 
-<!-- App script (generator + ordering). Make sure ALL the JS is inside this tag. -->
-<script>
-/* ---------- tiny helpers ---------- */
-const $ = (el, d=document) => d.querySelector(el);
-const $$ = (el, d=document) => [...d.querySelectorAll(el)];
-$('#y')!.textContent = new Date().getFullYear();
+  /* ---------- tiny helpers ---------- */
+  const $  = (q, el=document) => el.querySelector(q);
+  const $$ = (q, el=document) => [...el.querySelectorAll(q)];
 
-/* ---------- assemble prompt from selections ---------- */
-function buildPrompt() {
-  const subject = $('#promptInput').value.trim();
-  const aspect = $('#aspectSel').value;
-  const style = $('#styleSel').value;
-  const mood = $('#moodSel').value;
-  const light = $('#lightSel').value;
-  const medium = $('#mediumSel').value;
-  const addOns = $$('.themeOpt:checked').map(i => i.value);
-  const addStr = addOns.length ? ', ' + addOns.join(', ') : '';
-  return `${subject}, ${mood} mood, ${style}, ${light}, ${medium}${addStr}`.replace(/\s+/g,' ').trim();
-}
+  /* ---------- build prompt from options ---------- */
+  function buildPrompt() {
+    const subject = $('#promptInput')?.value?.trim() || '';
+    const style   = $('#styleSel')?.value || '';
+    const mood    = $('#moodSel')?.value || '';
+    const light   = $('#lightSel')?.value || '';
+    const comp    = $('#compSel')?.value || '';
+    const medium  = $('#mediumSel')?.value || '';
 
-/* ---------- generate image ---------- */
-const genBtn = $('#genBtn');
-const preview = $('#preview');
-const genErr = $('#genErr');
+    const addons  = $$('.themeOpt:checked').map(i => i.value);
+    const addText = addons.length ? ', ' + addons.join(', ') : '';
 
-async function generateImage() {
-  try {
+    return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}${addText}`
+      .replace(/\s+/g,' ')
+      .trim();
+  }
+
+  /* ---------- generate image ---------- */
+  const genBtn      = $('#genBtn');
+  const previewImg  = $('#preview-img');   // NOTE: if your <img> id is different, update this!
+  const genUrlInput = $('#gen-url');
+  const genActions  = $('#gen-actions');
+  const ratioSel    = $('#ratioSel');
+
+  genBtn?.addEventListener('click', async () => {
+    const prompt = buildPrompt();
+    if (!prompt) { alert('Please describe what you want.'); return; }
+
+    const size = ratioSel?.value || '1024x1024'; // 1024x1024 / 1536x1024 / 1024x1536
+
     genBtn.disabled = true;
     genBtn.textContent = 'Generating…';
-    genErr.textContent = '';
-    preview.classList.add('loading');
+    genActions?.classList.add('hidden');
+    if (previewImg) previewImg.src = '';
 
-    // aspect to size
-    const aspect = $('#aspectSel').value;
-    const sizeMap = { '1:1':'1024x1024', '3:2':'1536x1024', '2:3':'1024x1536' };
-    const size = sizeMap[aspect] || '1024x1024';
+    try {
+      const r = await fetch('/api/generate-image', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify({ prompt, size })
+      });
+      const data = await r.json();
+      if (!r.ok || !data?.image) throw new Error(data?.error || 'Generation failed');
 
-    const prompt = buildPrompt();
+      // Show the image
+      if (previewImg) previewImg.src = data.image;
 
-    const r = await fetch('/api/generate-image', {
-      method:'POST',
-      headers:{ 'Content-Type':'application/json' },
-      body: JSON.stringify({ prompt, size })
+      // Expose hosted URL + download link
+      if (genUrlInput) genUrlInput.value = data.image;
+      const dl = $('#download-link');
+      if (dl) dl.href = data.image;
+      genActions?.classList.remove('hidden');
+    } catch (err) {
+      alert(err.message || err);
+    } finally {
+      genBtn.disabled = false;
+      genBtn.textContent = 'Generate preview';
+    }
+  });
+
+  /* ---------- copy link ---------- */
+  $('#copy-link')?.addEventListener('click', async () => {
+    if (!genUrlInput?.value) return;
+    await navigator.clipboard.writeText(genUrlInput.value);
+    const btn = $('#copy-link');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy link', 1000);
+  });
+
+  /* ---------- order tabs ---------- */
+  const tabs = $$('.orderTab');
+  const tabViews = {
+    canvas:  $('#tab-canvas'),
+    metal:   $('#tab-metal'),
+    acrylic: $('#tab-acrylic')
+  };
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.tab;
+      Object.values(tabViews).forEach(v => v?.classList.add('hidden'));
+      tabViews[key]?.classList.remove('hidden');
+      tabs.forEach(b => b.classList.add('btn-ghost'));
+      btn.classList.remove('btn-ghost');
     });
+  });
 
-    const data = await r.json();
-    if (!r.ok || !data?.ok) throw new Error(data?.error || 'Generation failed');
+  /* ---------- Signature overlay ---------- */
+  const sigEl     = $('#sig');
+  const sigToggle = $('#sigToggle');
+  const sigName   = $('#sigName');
+  const sigFont   = $('#sigFont');
+  const sigColor  = $('#sigColor');
+  const sigSize   = $('#sigSize');
+  const previewWrap = $('#previewWrap');
 
-    // Show the image + expose hosted URL + download link
-    $('#preview-img').src = data.image;
-    $('#orderlink').classList.remove('hidden');
-    $('#genUrl').value = data.image;
-    $('#download-link').href = data.image;
+  sigToggle?.addEventListener('change', () => {
+    if (!sigEl) return;
+    sigEl.classList.toggle('hidden', !sigToggle.checked);
+  });
+  sigName?.addEventListener('input', () => { if (sigEl) sigEl.textContent = sigName.value || ' '; });
+  sigFont?.addEventListener('change', () => {
+    if (!sigEl) return;
+    sigEl.classList.remove('sig-GreatVibes','sig-Allura','sig-Sacramento','sig-Playfair','sig-Montserrat');
+    sigEl.classList.add('sig-' + sigFont.value);
+  });
+  sigColor?.addEventListener('input', () => { if (sigEl) sigEl.style.color = sigColor.value; });
+  sigSize?.addEventListener('input', () => { if (sigEl) sigEl.style.fontSize = `${sigSize.value}px`; });
 
-    // prompt toggle bits
-    $('#promptLabel').classList.remove('hidden');
-    $('#promptText').textContent = prompt;
-  } catch (err) {
-    genErr.textContent = String(err.message || err);
-  } finally {
-    genBtn.disabled = false;
-    genBtn.textContent = 'Generate preview';
-    preview.classList.remove('loading');
-  }
-}
-genBtn.addEventListener('click', generateImage);
-
-/* ---------- signature overlay ---------- */
-const sigToggle = $('#sigToggle');
-const sigWrap = $('#sigWrap');
-const sigInput = $('#sigName');
-const sigFont = $('#sigFont');
-const sigColor = $('#sigColor');
-const sigSize = $('#sigSize');
-const sig = $('#sig');
-
-function refreshSig() {
-  sig.textContent = sigInput.value || '';
-  sig.style.fontFamily = getComputedStyle(sigFont).getPropertyValue('--ff') || 'Great Vibes';
-  sig.style.color = sigColor.value;
-  sig.style.fontSize = sigSize.value + 'px';
-}
-sigInput.addEventListener('input', refreshSig);
-sigFont.addEventListener('change', refreshSig);
-sigColor.addEventListener('input', refreshSig);
-sigSize.addEventListener('input', refreshSig);
-
-sigToggle.addEventListener('change', () => {
-  sigWrap.classList.toggle('hidden', !sigToggle.checked);
-});
-
-/* ---------- drag signature on preview ---------- */
-let drag = false, sx=0, sy=0, startL=0, startT=0;
-sig.addEventListener('mousedown', e => {
-  drag = true; sx = e.clientX; sy = e.clientY;
-  const r = sig.getBoundingClientRect();
-  startL = r.left + window.scrollX; startT = r.top + window.scrollY;
-  e.preventDefault();
-});
-window.addEventListener('mousemove', e => {
-  if (!drag) return;
-  const dx = e.clientX - sx, dy = e.clientY - sy;
-  sig.style.left = (startL + dx) + 'px';
-  sig.style.top  = (startT + dy) + 'px';
-});
-window.addEventListener('mouseup', () => drag = false);
-
-/* ---------- order tabs ---------- */
-const tabs = $$('.order-tab');
-const tables = $$('.order-table');
-tabs.forEach(t => t.addEventListener('click', () => {
-  tabs.forEach(b => b.classList.remove('btn-active'));
-  t.classList.add('btn-active');
-  tables.forEach(T => T.classList.add('hidden'));
-  const id = t.dataset.target;
-  document.getElementById(id).classList.remove('hidden');
-}));
+  // Dragging
+  let drag = null;
+  sigEl?.addEventListener('mousedown', (e) => {
+    drag = { startX: e.clientX, startY: e.clientY, startLeft: sigEl.offsetLeft, startTop: sigEl.offsetTop };
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (!drag || !sigEl || !previewWrap) return;
+    const dx = e.clientX - drag.startX;
+    const dy = e.clientY - drag.startY;
+    const maxX = previewWrap.clientWidth - sigEl.clientWidth - 6;
+    const maxY = previewWrap.clientHeight - sigEl.clientHeight - 6;
+    const left = Math.max(6, Math.min(maxX, drag.startLeft + dx));
+    const top  = Math.max(6, Math.min(maxY, drag.startTop + dy));
+    sigEl.style.left = left + 'px';
+    sigEl.style.top  = top + 'px';
+  });
+  window.addEventListener('mouseup', () => drag = null);
 </script>
 
 </body>
