@@ -31,7 +31,6 @@ export default async function handler(req, res) {
   const safeSize = allowed.has(size) ? size : '1024x1024';
 
   try {
-    // 1) Ask OpenAI for Base64 PNG
     const upstream = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
       headers: {
@@ -43,7 +42,6 @@ export default async function handler(req, res) {
         model: 'gpt-image-1',
         prompt: prompt.trim(),
         size: safeSize
-        // default response (b64_json) is the most compatible
       })
     });
 
@@ -62,7 +60,6 @@ export default async function handler(req, res) {
     const b64 = data?.data?.[0]?.b64_json;
     if (!b64) return res.status(500).json({ ok: false, error: 'No image returned from provider' });
 
-    // 2) Save to Vercel Blob (permanent public URL)
     const buffer = Buffer.from(b64, 'base64');
     const key = `previews/${Date.now()}-${slugify(prompt)}.png`;
 
@@ -73,7 +70,6 @@ export default async function handler(req, res) {
       addRandomSuffix: true
     });
 
-    // 3) Return permanent URL
     return res.status(200).json({ ok: true, image: url, url });
   } catch (err) {
     return res.status(500).json({ ok: false, error: err.message || 'Server error' });
