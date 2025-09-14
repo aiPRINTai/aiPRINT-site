@@ -3,182 +3,205 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Materials | aiPRINT.ai — Canvas, ChromaLuxe Metal, Acrylic Facemount</title>
-  <meta name="description" content="Explore premium finishes: Signature Canvas, Gallery Edition ChromaLuxe Metal, and Museum Collection Acrylic Facemount. All ready to hang." />
+  <title>Materials | aiPRINT.ai — Canvas, Metal, Acrylic</title>
+  <meta name="description" content="Explore our archival materials and finishes: fine art canvas, ChromaLuxe metal, and museum-grade acrylic facemount prints." />
   <link rel="icon" href="/favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root { --bg:#0b0f1a; }
-    body { background:var(--bg); }
-    .card{ background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.12); }
-    .muted{ color:rgba(255,255,255,.7) }
-    .h1{ font-size:clamp(2rem,4vw,3rem); font-weight:800; line-height:1.05 }
-    .h2{ font-size:clamp(1.25rem,2.5vw,1.75rem); font-weight:800 }
-    .btn{ background:#fff; color:#000; font-weight:700; border-radius:.75rem; padding:.75rem 1rem }
+    :root { --bg:#0b1020; --card:#121a2a; --muted:#9fb3c8; --ink:#dce6f3; }
+    body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
+    .muted{color:var(--muted)}
+    .h1{font-size:clamp(2rem,4vw,3rem);font-weight:800;line-height:1.05}
+    .h2{font-size:clamp(1.4rem,2.6vw,2rem);font-weight:800}
+    .btn{background:#fff;color:#000;font-weight:700;border-radius:.6rem;padding:.7rem 1rem}
+    .badge{font-size:.8rem;color:#b9c7d6}
+    html { scroll-behavior: smooth; }
   </style>
 </head>
 <body class="text-white/90">
 
-  <!-- Header -->
-  <header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
-    <a href="/" class="font-bold tracking-tight text-white">aiPRINT.ai</a>
-    <nav class="flex gap-6 text-sm">
+<header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-5 h-14 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2">
+      <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
+      <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+    </a>
+    <nav class="hidden md:flex items-center gap-6 text-sm">
       <a href="/about.html" class="hover:text-white">How it works</a>
-      <a href="/materials.html" class="text-white">Materials</a>
+      <a href="/materials.html" class="hover:text-white">Materials</a>
       <a href="/faq.html" class="hover:text-white">FAQ</a>
       <a href="/policies.html" class="hover:text-white">Policies</a>
       <a href="/contact.html" class="hover:text-white">Contact</a>
     </nav>
-  </header>
+    <button id="navToggle"
+      class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10"
+      aria-expanded="false" aria-controls="mobileDrawer" aria-label="Open menu">
+      <svg id="iconOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg id="iconClose" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+</header>
 
-  <main class="max-w-6xl mx-auto px-4 pb-24">
-    <section class="mb-10">
-      <h1 class="h1">Materials & finishes</h1>
-      <p class="muted mt-3 max-w-2xl">
-        Three premium options — each archival and ready to hang. Pick the vibe that fits your space.
-      </p>
-    </section>
+<div id="navBackdrop" class="fixed inset-0 bg-black/60 opacity-0 pointer-events-none transition-opacity z-50"></div>
+<aside id="mobileDrawer"
+  class="fixed inset-y-0 left-0 w-[84%] max-w-sm bg-[#0b1020] border-r border-white/10 transform -translate-x-full transition-transform duration-300 z-[60]">
+  <div class="h-14 px-4 flex items-center justify-between border-b border-white/10">
+    <a href="/" class="flex items-center gap-2">
+      <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
+      <span class="font-extrabold tracking-tight text-white">aiPRINT.<span class="text-sky-300">ai</span></span>
+    </a>
+    <button id="drawerClose" class="p-2 rounded-lg hover:bg:white/10 hover:bg-white/10" aria-label="Close menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <nav class="p-4 grid gap-2 text-sm">
+    <a href="/about.html" class="block p-3 rounded-lg hover:bg-white/10">How it works</a>
+    <a href="/materials.html" class="block p-3 rounded-lg hover:bg-white/10">Materials</a>
+    <a href="/faq.html" class="block p-3 rounded-lg hover:bg-white/10">FAQ</a>
+    <a href="/policies.html" class="block p-3 rounded-lg hover:bg-white/10">Policies</a>
+    <a href="/contact.html" class="block p-3 rounded-lg hover:bg-white/10">Contact</a>
+    <a href="/#create" class="mt-2 block p-3 rounded-lg bg:white bg-white text-black font-semibold text-center">Create a preview</a>
+    <a href="/#order"  class="block p-3 rounded-lg border border-white/15 text-center hover:bg-white/10">Order</a>
+  </nav>
+</aside>
 
-    <!-- Cards -->
-    <section class="grid md:grid-cols-3 gap-6">
-      <!-- Canvas -->
-      <article class="card rounded-xl overflow-hidden">
-        <img src="/Canvas.jpg" alt="Fine Art Canvas"
-             onerror="this.src='https://images.unsplash.com/photo-1549880338-65ddcdfd017b?auto=format&fit=crop&w=1400&q=80'"
-             class="w-full h-48 object-cover" loading="lazy">
-        <div class="p-5">
-          <h2 class="h2">Signature Series — Fine Art Canvas</h2>
-          <ul class="muted mt-3 space-y-1 list-disc pl-5">
-            <li>Archival cotton/poly blend with rich texture</li>
-            <li>Gallery-wrapped edges, wired to hang</li>
-            <li>Classic, painterly feel; lightweight</li>
-          </ul>
-        </div>
-      </article>
-
-      <!-- Metal -->
-      <article class="card rounded-xl overflow-hidden">
-        <img src="/Metal.jpg" alt="ChromaLuxe Metal"
-             onerror="this.src='https://images.unsplash.com/photo-1517816428104-797678c7cf0d?auto=format&fit=crop&w=1400&q=80'"
-             class="w-full h-48 object-cover" loading="lazy">
-        <div class="p-5">
-          <h2 class="h2">Gallery Edition — ChromaLuxe Metal</h2>
-          <ul class="muted mt-3 space-y-1 list-disc pl-5">
-            <li>Ultra-vivid dyes infused into aluminum</li>
-            <li>Durable float mount for shadowed “hover” look</li>
-            <li>Sleek, modern, exceptionally crisp</li>
-          </ul>
-        </div>
-      </article>
-
-      <!-- Acrylic -->
-      <article class="card rounded-xl overflow-hidden">
-        <img src="/Acrylic.jpg" alt="Acrylic Facemount"
-             onerror="this.src='https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?auto=format&fit=crop&w=1400&q=80'"
-             class="w-full h-48 object-cover" loading="lazy">
-        <div class="p-5">
-          <h2 class="h2">Museum Collection — Acrylic Facemount</h2>
-          <ul class="muted mt-3 space-y-1 list-disc pl-5">
-            <li>Photo bonded to acrylic for glass-like depth</li>
-            <li>Polished edges, rigid aluminum backer</li>
-            <li>Luxurious, gallery-grade presence</li>
-          </ul>
-        </div>
-      </article>
-    </section>
-
-    <!-- Comparison -->
-    <section class="mt-12 card rounded-xl p-5 overflow-x-auto">
-      <h3 class="h2 mb-4">Quick comparison</h3>
-      <table class="w-full text-sm">
-        <thead class="text-white/80">
-          <tr class="border-b border-white/10">
-            <th class="text-left py-2 pr-4">Feature</th>
-            <th class="text-left py-2 pr-4">Canvas</th>
-            <th class="text-left py-2 pr-4">ChromaLuxe Metal</th>
-            <th class="text-left py-2">Acrylic Facemount</th>
-          </tr>
-        </thead>
-        <tbody class="text-white/70">
-          <tr class="border-b border-white/10">
-            <td class="py-3 pr-4">Look & feel</td>
-            <td class="py-3 pr-4">Textured, painterly</td>
-            <td class="py-3 pr-4">Sleek, ultra-vivid</td>
-            <td class="py-3">Deep, glass-like shine</td>
-          </tr>
-          <tr class="border-b border-white/10">
-            <td class="py-3 pr-4">Mounting</td>
-            <td class="py-3 pr-4">Gallery wrap, wired</td>
-            <td class="py-3 pr-4">Float mount</td>
-            <td class="py-3">Aluminum backer + hang kit</td>
-          </tr>
-          <tr class="border-b border-white/10">
-            <td class="py-3 pr-4">Weight</td>
-            <td class="py-3 pr-4">Light</td>
-            <td class="py-3 pr-4">Light–medium</td>
-            <td class="py-3">Medium</td>
-          </tr>
-          <tr>
-            <td class="py-3 pr-4">Best for</td>
-            <td class="py-3 pr-4">Warm, classic spaces</td>
-            <td class="py-3 pr-4">Modern, bold color</td>
-            <td class="py-3">High-impact statement walls</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- Care -->
-    <section class="mt-12 grid md:grid-cols-3 gap-6">
-      <div class="card rounded-xl p-5">
-        <h4 class="font-semibold text-white">Care: Canvas</h4>
-        <p class="muted mt-2">Dust gently with a soft, dry cloth. Avoid direct sunlight and moisture.</p>
-      </div>
-      <div class="card rounded-xl p-5">
-        <h4 class="font-semibold text-white">Care: Metal</h4>
-        <p class="muted mt-2">Wipe with microfiber and glass cleaner as needed. Don’t use abrasives.</p>
-      </div>
-      <div class="card rounded-xl p-5">
-        <h4 class="font-semibold text-white">Care: Acrylic</h4>
-        <p class="muted mt-2">Use acrylic-safe cleaner and microfiber. Avoid paper towels/chemicals.</p>
-      </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="mt-12 card rounded-2xl p-6 flex items-center justify-between gap-6">
-      <div>
-        <h3 class="h2">Have a favorite finish in mind?</h3>
-        <p class="muted mt-1">Jump back to the generator and see it on your preview.</p>
-      </div>
-      <a href="/#create" class="btn">Create your preview</a>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="border-t border-white/10">
-    <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
-      <div>
-        <div class="font-semibold text-white">aiPRINT.ai</div>
-        <p class="mt-2">Archival, ready-to-hang prints from your ideas.</p>
-        <p class="mt-2">© <span id="y"></span> aiPRINT.ai</p>
-      </div>
-      <div>
-        <div class="font-semibold text-white">Explore</div>
-        <ul class="mt-2 space-y-1">
-          <li><a href="/about.html" class="hover:text-white">How it works</a></li>
-          <li><a href="/materials.html" class="hover:text-white">Materials</a></li>
-          <li><a href="/faq.html" class="hover:text-white">FAQ</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="font-semibold text-white">Company</div>
-        <ul class="mt-2 space-y-1">
-          <li><a href="/policies.html" class="hover:text-white">Policies</a></li>
-          <li><a href="/contact.html" class="hover:text-white">Contact</a></li>
-        </ul>
-      </div>
+<!-- PAGE CONTENT -->
+<section class="max-w-7xl mx-auto px-4 pt-6 pb-10 grid lg:grid-cols-[1.1fr_.9fr] gap-8 items-start">
+  <div>
+    <h1 class="h1">From idea <span class="text-indigo-300">→ museum-grade print.</span></h1>
+    <p class="muted mt-4 max-w-2xl">
+      We blend AI with a photographer’s eye to develop artwork that’s uniquely yours—then
+      produce it on archival materials, ready to hang. Certificate of Authenticity included.
+    </p>
+    <div class="flex gap-3 mt-6">
+      <a href="/#create" class="btn">Create a preview</a>
+      <a href="/materials.html" class="btn" style="background:transparent;border:1px solid rgba(255,255,255,.18);color:#dce6f3">See materials</a>
     </div>
-  </footer>
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+    <p class="badge mt-5">Archival inks • ChromaLuxe metal • Acrylic facemount • Hand QC</p>
+  </div>
+  <div class="glass rounded-2xl overflow-hidden">
+    <img src="https://images.unsplash.com/photo-1581091870622-8a5ee90fae5d?auto=format&fit=crop&w=1600&q=80"
+         alt="Studio" class="w-full h-64 md:h-72 object-cover" loading="lazy">
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 pb-12">
+  <h2 class="h2 mb-6">Materials & finishes</h2>
+  <div class="grid md:grid-cols-3 gap-5">
+    <div class="glass rounded-2xl p-5">
+      <img src="/Canvas.jpg" alt="Canvas example" class="w-full h-36 object-cover rounded-lg mb-4" />
+      <div class="text-lg font-extrabold">Signature Series – Fine Art Canvas</div>
+      <p class="muted mt-2">Archival fine-art canvas with rich texture and deep color, gallery-wrapped and ready to hang.</p>
+    </div>
+    <div class="glass rounded-2xl p-5">
+      <img src="/Metal.jpg" alt="Metal example" class="w-full h-36 object-cover rounded-lg mb-4" />
+      <div class="text-lg font-extrabold">Gallery Edition – ChromaLuxe Metal</div>
+      <p class="muted mt-2">Vibrant aluminum print with durable float mount. Sleek modern look, ready to hang.</p>
+    </div>
+    <div class="glass rounded-2xl p-5">
+      <img src="/Acrylic.jpg" alt="Acrylic example" class="w-full h-36 object-cover rounded-lg mb-4" />
+      <div class="text-lg font-extrabold">Museum Collection – Acrylic Facemount</div>
+      <p class="muted mt-2">Museum-grade acrylic facemount with brilliant clarity and depth, polished edges, ready to hang.</p>
+    </div>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 pb-6">
+  <div class="grid md:grid-cols-4 gap-4">
+    <div class="glass rounded-xl p-4"><div class="font-semibold">Human-curated AI</div><p class="muted mt-1">Artist supervision for composition, light, and color.</p></div>
+    <div class="glass rounded-xl p-4"><div class="font-semibold">Archival materials</div><p class="muted mt-1">Canvas, ChromaLuxe metal, or acrylic facemount.</p></div>
+    <div class="glass rounded-xl p-4"><div class="font-semibold">Ready to hang</div><p class="muted mt-1">Float mounts, gallery wraps—no framing required.</p></div>
+    <div class="glass rounded-xl p-4"><div class="font-semibold">COA included</div><p class="muted mt-1">Each piece ships with a Certificate of Authenticity.</p></div>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 pb-14">
+  <h2 class="h2 mb-4">Recent previews</h2>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80" alt="Landscape 1" class="w-full h-40 object-cover rounded-xl glass" loading="lazy">
+    <img src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1200&q=80" alt="Landscape 2" class="w-full h-40 object-cover rounded-xl glass" loading="lazy">
+    <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80" alt="Landscape 3" class="w-full h-40 object-cover rounded-xl glass" loading="lazy">
+    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80" alt="Landscape 4" class="w-full h-40 object-cover rounded-xl glass" loading="lazy">
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 pb-16">
+  <div class="glass rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <h3 class="text-xl md:text-2xl font-extrabold">Ready to see your idea as a fine-art print?</h3>
+      <p class="muted mt-1">Generate a preview in seconds — then choose your materials.</p>
+    </div>
+    <a href="/#create" class="btn">Create your preview</a>
+  </div>
+</section>
+
+<footer class="border-t border-white/10">
+  <div class="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
+    <div>
+      <div class="font-semibold text-white">aiPRINT.ai</div>
+      <p class="mt-2">Archival, ready-to-hang prints from your ideas.</p>
+      <p class="mt-2">© <span id="y"></span> aiPRINT.ai</p>
+    </div>
+    <div>
+      <div class="font-semibold text-white">Explore</div>
+      <ul class="mt-2 space-y-1">
+        <li><a href="/about.html" class="hover:text-white">How it works</a></li>
+        <li><a href="/materials.html" class="hover:text-white">Materials</a></li>
+        <li><a href="/faq.html" class="hover:text-white">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="font-semibold text-white">Company</div>
+      <ul class="mt-2 space-y-1">
+        <li><a href="/policies.html" class="hover:text-white">Policies</a></li>
+        <li><a href="/contact.html" class="hover:text-white">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  (function(){
+    const btn = document.getElementById('navToggle');
+    const drawer = document.getElementById('mobileDrawer');
+    const closeBtn = document.getElementById('drawerClose');
+    const backdrop = document.getElementById('navBackdrop');
+    const openI = document.getElementById('iconOpen');
+    const closeI = document.getElementById('iconClose');
+
+    if(!btn || !drawer) return;
+
+    const open = () => {
+      drawer.classList.remove('-translate-x-full');
+      backdrop.classList.remove('pointer-events-none','opacity-0');
+      backdrop.classList.add('opacity-100');
+      document.body.classList.add('overflow-hidden');
+      btn.setAttribute('aria-expanded','true');
+      openI?.classList.add('hidden');
+      closeI?.classList.remove('hidden');
+    };
+    const close = () => {
+      drawer.classList.add('-translate-x-full');
+      backdrop.classList.add('pointer-events-none','opacity-0');
+      backdrop.classList.remove('opacity-100');
+      document.body.classList.remove('overflow-hidden');
+      btn.setAttribute('aria-expanded','false');
+      openI?.classList.remove('hidden');
+      closeI?.classList.add('hidden');
+    };
+
+    btn.addEventListener('click', () => drawer.classList.contains('-translate-x-full') ? open() : close());
+    closeBtn?.addEventListener('click', close);
+    backdrop?.addEventListener('click', close);
+    drawer.querySelectorAll('a')?.forEach(a => a.addEventListener('click', close));
+    window.addEventListener('resize', () => { if (window.innerWidth >= 768) close(); });
+  })();
+</script>
 </body>
 </html>
