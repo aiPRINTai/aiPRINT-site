@@ -9,6 +9,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root { --bg:#0b1020; --ink:#dce6f3; }
+    html { scroll-behavior: smooth; }
     body  { background:var(--bg); color:var(--ink); font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; }
     .glass { background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.14); backdrop-filter: blur(8px); }
     .field { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); }
@@ -16,19 +17,63 @@
     .btn-ghost{ background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); }
   </style>
 </head>
-<body>
+<body class="text-white/90">
 
-  <!-- Top nav -->
-  <header class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center relative z-30">
-    <a href="/" class="font-bold tracking-tight text-white">aiPRINT.ai</a>
-    <nav class="flex gap-6 text-sm">
-      <a href="/about.html" class="hover:text-white">How it works</a>
-      <a href="/materials.html" class="hover:text-white">Materials</a>
-      <a href="/faq.html" class="hover:text-white">FAQ</a>
-      <a href="/policies.html" class="hover:text-white">Policies</a>
-      <a href="/contact.html" class="text-white font-semibold">Contact</a>
-    </nav>
+  <!-- Header START (slide-out mobile menu) -->
+  <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-5 h-14 flex items-center justify-between">
+      <!-- Brand -->
+      <a href="/" class="flex items-center gap-2">
+        <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
+        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+      </a>
+
+      <!-- Desktop nav -->
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="/about.html"     class="hover:text-white">How it works</a>
+        <a href="/materials.html" class="hover:text-white">Materials</a>
+        <a href="/faq.html"       class="hover:text-white">FAQ</a>
+        <a href="/policies.html"  class="hover:text-white">Policies</a>
+        <a href="/contact.html"   class="text-white font-semibold">Contact</a>
+      </nav>
+
+      <!-- Mobile toggle -->
+      <button id="navToggle"
+              class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10"
+              aria-expanded="false" aria-controls="mobileNav" aria-label="Toggle navigation">
+        <!-- open -->
+        <svg id="iconOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        <!-- close -->
+        <svg id="iconClose" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile nav overlay (full screen) -->
+    <div id="mobileNav" class="md:hidden fixed inset-0 z-50 hidden">
+      <!-- Backdrop -->
+      <div id="navBackdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+
+      <!-- Panel -->
+      <nav class="absolute top-14 inset-x-0 px-4">
+        <div class="mx-auto max-w-7xl grid gap-3 text-sm">
+          <a href="/about.html"     class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">How it works</a>
+          <a href="/materials.html" class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Materials</a>
+          <a href="/faq.html"       class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">FAQ</a>
+          <a href="/policies.html"  class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Policies</a>
+          <a href="/contact.html"   class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Contact</a>
+          <a href="/#create"        class="block p-4 rounded-xl bg-white text-black font-semibold text-center">Create a preview</a>
+          <a href="/#order"         class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15 text-center">Order</a>
+        </div>
+      </nav>
+    </div>
   </header>
+  <!-- Header END -->
 
   <!-- HERO — big studio photo proves “in-house” -->
   <section class="relative">
@@ -130,7 +175,7 @@
     </section>
   </main>
 
-  <!-- Slim FAQ teaser (keeps the page lively) -->
+  <!-- Slim FAQ teaser -->
   <section class="max-w-6xl mx-auto px-6 pb-16">
     <div class="glass rounded-2xl p-6 md:p-8">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -196,5 +241,47 @@
   </footer>
 
   <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+
+  <!-- MOBILE MENU LOGIC (same as other pages) -->
+  <script>
+  (function(){
+    const btn      = document.getElementById('navToggle');
+    const panel    = document.getElementById('mobileNav');
+    const openI    = document.getElementById('iconOpen');
+    const closeI   = document.getElementById('iconClose');
+    const backdrop = document.getElementById('navBackdrop');
+
+    function openNav(){
+      panel.classList.remove('hidden');
+      btn.setAttribute('aria-expanded','true');
+      openI?.classList.add('hidden');
+      closeI?.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden'); // lock scroll
+    }
+    function closeNav(){
+      panel.classList.add('hidden');
+      btn.setAttribute('aria-expanded','false');
+      openI?.classList.remove('hidden');
+      closeI?.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden'); // unlock scroll
+    }
+
+    if (!btn || !panel) return;
+
+    // Toggle
+    btn.addEventListener('click', () => {
+      panel.classList.contains('hidden') ? openNav() : closeNav();
+    });
+
+    // Close on backdrop + link tap
+    backdrop?.addEventListener('click', closeNav);
+    panel.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+
+    // Auto-close when resizing up to desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) closeNav();
+    });
+  })();
+  </script>
 </body>
 </html>
