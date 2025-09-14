@@ -14,13 +14,16 @@
 </style>
 </head>
 <body>
-<!-- Header -->
+<!-- HEADER -->
 <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
-  <div class="max-w-7xl mx-auto px-5 h-14 flex items-center justify-between">
+  <div class="mx-auto max-w-7xl px-5 h-14 flex items-center justify-between">
+    <!-- Brand -->
     <a href="/" class="flex items-center gap-2">
       <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
       <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
     </a>
+
+    <!-- Desktop nav -->
     <nav class="hidden md:flex items-center gap-6 text-sm">
       <a href="/about.html"     class="hover:text-white">How it works</a>
       <a href="/materials.html" class="hover:text-white">Materials</a>
@@ -28,42 +31,59 @@
       <a href="/policies.html"  class="hover:text-white">Policies</a>
       <a href="/contact.html"   class="hover:text-white">Contact</a>
     </nav>
-    <button id="navToggle"
+
+    <!-- Mobile hamburger -->
+    <button id="navOpen"
       class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10"
-      aria-expanded="false" aria-controls="mobileDrawer" aria-label="Open menu">
-      <svg id="iconOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-      <svg id="iconClose" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"/></svg>
+      aria-label="Open navigation" aria-controls="navSheet" aria-expanded="false">
+      <!-- hamburger -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
     </button>
   </div>
 </header>
 
-<!-- Drawer + Backdrop -->
-<div id="navBackdrop" class="fixed inset-0 bg-black/60 opacity-0 pointer-events-none transition-opacity z-50"></div>
-<aside id="mobileDrawer"
-  class="fixed inset-y-0 left-0 w-[84%] max-w-sm bg-[#0b1020] border-r border-white/10 transform -translate-x-full transition-transform duration-300 z-[60]">
-  <div class="h-14 px-4 flex items-center justify-between border-b border-white/10">
-    <a href="/" class="flex items-center gap-2">
-      <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
-      <span class="font-extrabold tracking-tight text-white">aiPRINT.<span class="text-sky-300">ai</span></span>
-    </a>
-    <button id="drawerClose" class="p-2 rounded-lg hover:bg-white/10" aria-label="Close menu">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"/></svg>
-    </button>
-  </div>
-  <nav class="p-4 grid gap-2 text-sm">
-    <a href="/about.html"     class="block p-3 rounded-lg hover:bg-white/10">How it works</a>
-    <a href="/materials.html" class="block p-3 rounded-lg hover:bg-white/10">Materials</a>
-    <a href="/faq.html"       class="block p-3 rounded-lg hover:bg-white/10">FAQ</a>
-    <a href="/policies.html"  class="block p-3 rounded-lg hover:bg-white/10">Policies</a>
-    <a href="/contact.html"   class="block p-3 rounded-lg hover:bg-white/10">Contact</a>
-    <a href="/#create" class="mt-2 block p-3 rounded-lg bg-white text-black font-semibold text-center">Create a preview</a>
-    <a href="/#order"  class="block p-3 rounded-lg border border-white/15 text-center hover:bg-white/10">Order</a>
-  </nav>
-</aside>
+<!-- MOBILE NAV SHEET (outside header so it can overlay the whole page) -->
+<div id="navSheet" class="fixed inset-0 z-[100] hidden" aria-hidden="true">
+  <!-- Backdrop -->
+  <div id="navBackdrop" class="absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-200"></div>
 
+  <!-- Drawer -->
+  <aside id="navDrawer"
+         class="absolute right-0 top-0 h-full w-80 max-w-[88vw] bg-[#0b1020] border-l border-white/10
+                translate-x-full transition-transform duration-300 will-change-transform">
+    <div class="h-14 px-4 border-b border-white/10 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
+        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+      </div>
+      <button id="navClose" class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 hover:bg-white/10"
+              aria-label="Close navigation">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="px-4 py-4">
+      <ul class="space-y-2 text-white/90 text-base">
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/about.html">How it works</a></li>
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/materials.html">Materials</a></li>
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/faq.html">FAQ</a></li>
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/policies.html">Policies</a></li>
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/contact.html">Contact</a></li>
+      </ul>
+
+      <div class="mt-6 space-y-2">
+        <a href="#create" class="block w-full text-center rounded-lg px-4 py-2 font-semibold bg-white text-black">Create a preview</a>
+        <a href="#order"  class="block w-full text-center rounded-lg px-4 py-2 border border-white/20 hover:bg-white/10">Order</a>
+      </div>
+    </nav>
+  </aside>
+</div>
 <main class="max-w-6xl mx-auto px-4 pb-20">
   <section class="py-6">
     <h1 class="text-4xl md:text-5xl font-extrabold">Policies</h1>
