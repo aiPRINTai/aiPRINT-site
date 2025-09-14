@@ -22,10 +22,7 @@
     .btn { background:white; color:black; font-weight:700; padding:.7rem 1rem; border-radius:.6rem; }
     .btn-ghost { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); }
     .badge { font-size:.8rem; color:#b8c7d8 }
-    .sig-overlay {
-      position:absolute; pointer-events:auto; cursor:grab;
-      user-select:none; white-space:nowrap; mix-blend-mode:normal;
-    }
+    .sig-overlay { position:absolute; pointer-events:auto; cursor:grab; user-select:none; white-space:nowrap; mix-blend-mode:normal; }
     .sig-overlay:active { cursor:grabbing; }
     .sig-GreatVibes { font-family: 'Great Vibes', cursive; }
     .sig-Allura { font-family: 'Allura', cursive; }
@@ -33,6 +30,9 @@
     .sig-Playfair { font-family: 'Playfair Display', serif; }
     .sig-Montserrat { font-family: 'Montserrat', sans-serif; }
     html { scroll-behavior: smooth; }
+
+    /* Scroll lock for mobile drawer (iOS-friendly) */
+    body.nav-open { position: fixed; width: 100%; overflow: hidden; }
   </style>
 </head>
 <body>
@@ -72,25 +72,25 @@
       </svg>
     </button>
   </div>
-  
-<!-- Mobile nav overlay (FULL SCREEN) -->
-<div id="mobileNav" class="md:hidden fixed inset-0 z-50 hidden">
-  <!-- Backdrop -->
-  <div id="navBackdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
 
-  <!-- Panel -->
-  <nav class="absolute top-14 inset-x-0 px-4">
-    <div class="mx-auto max-w-7xl grid gap-3 text-sm">
-      <a href="/about.html"     class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">How it works</a>
-      <a href="/materials.html" class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Materials</a>
-      <a href="/faq.html"       class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">FAQ</a>
-      <a href="/policies.html"  class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Policies</a>
-      <a href="/contact.html"   class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Contact</a>
-      <a href="#create"         class="block p-4 rounded-xl bg-white text-black font-semibold text-center">Create a preview</a>
-      <a href="#order"          class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15 text-center">Order</a>
-    </div>
-  </nav>
-</div>
+  <!-- Mobile nav overlay (FULL SCREEN, above all) -->
+  <div id="mobileNav" class="md:hidden fixed inset-0 z-[100] hidden">
+    <!-- Backdrop -->
+    <div id="navBackdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+
+    <!-- Panel -->
+    <nav class="absolute top-14 inset-x-0 px-4">
+      <div class="mx-auto max-w-7xl grid gap-3 text-sm">
+        <a href="/about.html"     class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">How it works</a>
+        <a href="/materials.html" class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Materials</a>
+        <a href="/faq.html"       class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">FAQ</a>
+        <a href="/policies.html"  class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Policies</a>
+        <a href="/contact.html"   class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Contact</a>
+        <a href="#create"         class="block p-4 rounded-xl bg-white text-black font-semibold text-center">Create a preview</a>
+        <a href="#order"          class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15 text-center">Order</a>
+      </div>
+    </nav>
+  </div>
 </header>
 <!-- Header END -->
 
@@ -550,42 +550,65 @@
   });
   window.addEventListener('mouseup', () => drag = null);
 </script>
+
+<!-- Mobile nav logic (scroll-lock + backdrop + ESC) -->
 <script>
-(function () {
-  const btn   = document.getElementById('navToggle');
-  const panel = document.getElementById('mobileNav');
-  const openI = document.getElementById('iconOpen');
-  const closeI= document.getElementById('iconClose');
+(() => {
+  const btn      = document.getElementById('navToggle');
+  const panel    = document.getElementById('mobileNav');
+  const backdrop = document.getElementById('navBackdrop');
+  const iconOpen = document.getElementById('iconOpen');
+  const iconClose= document.getElementById('iconClose');
+
   if (!btn || !panel) return;
 
+  let scrollTop = 0;
+
+  function openNav() {
+    if (!panel.classList.contains('hidden')) return;
+
+    // lock scroll (iOS-friendly)
+    scrollTop = window.scrollY || document.documentElement.scrollTop;
+    document.body.style.top = `-${scrollTop}px`;
+    document.body.classList.add('nav-open');
+
+    panel.classList.remove('hidden');
+    btn.setAttribute('aria-expanded', 'true');
+    iconOpen?.classList.add('hidden');
+    iconClose?.classList.remove('hidden');
+  }
+
+  function closeNav() {
+    if (panel.classList.contains('hidden')) return;
+
+    panel.classList.add('hidden');
+    btn.setAttribute('aria-expanded', 'false');
+    iconOpen?.classList.remove('hidden');
+    iconClose?.classList.add('hidden');
+
+    // unlock scroll + restore position
+    document.body.classList.remove('nav-open');
+    document.body.style.top = '';
+    window.scrollTo(0, scrollTop);
+  }
+
   btn.addEventListener('click', () => {
-    const willShow = panel.classList.contains('hidden');
-    panel.classList.toggle('hidden', !willShow);
-    btn.setAttribute('aria-expanded', willShow ? 'true' : 'false');
-    openI?.classList.toggle('hidden', willShow);
-    closeI?.classList.toggle('hidden', !willShow);
+    panel.classList.contains('hidden') ? openNav() : closeNav();
   });
 
-  // Close when a mobile link is clicked
-  panel.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      panel.classList.add('hidden');
-      btn.setAttribute('aria-expanded', 'false');
-      openI?.classList.remove('hidden');
-      closeI?.classList.add('hidden');
-    });
-  });
+  // click backdrop to close
+  backdrop?.addEventListener('click', closeNav);
 
-  // Optional: auto-close if resized to desktop
-  window.addEventListener('resize', () => {
-    if (window.innerWidth >= 768) {
-      panel.classList.add('hidden');
-      btn.setAttribute('aria-expanded', 'false');
-      openI?.classList.remove('hidden');
-      closeI?.classList.add('hidden');
-    }
-  });
+  // close on link click
+  panel.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+
+  // close on ESC
+  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeNav(); });
+
+  // auto-close when switching to desktop
+  window.addEventListener('resize', () => { if (window.innerWidth >= 768) closeNav(); });
 })();
 </script>
+
 </body>
 </html>
