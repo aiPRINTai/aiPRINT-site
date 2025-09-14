@@ -3,23 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Contact | aiPRINT.ai — Say hello</title>
-  <meta name="description" content="Questions about materials, orders, or custom work? Contact aiPRINT.ai." />
+  <title>Contact | aiPRINT.ai — Get in touch</title>
+  <meta name="description" content="Questions about materials, orders, or custom requests? Contact aiPRINT.ai. We’ll get back within one business day." />
   <link rel="icon" href="/favicon.ico" />
+  <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root { --bg:#0b0f1a; }
-    body { background:var(--bg); }
-    .card{ background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.12); }
-    .muted{ color:rgba(255,255,255,.7) }
-    .h1{ font-size:clamp(2rem,4vw,3rem); font-weight:800; line-height:1.05 }
-    .btn{ background:#fff; color:#000; font-weight:700; border-radius:.75rem; padding:.75rem 1rem }
+    :root { --bg:#0b1020; --card:#121a2a; --ink:#dce6f3; --muted:#9fb3c8; }
+    body{ background:var(--bg); color:var(--ink); font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; }
+    .glass{ background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); backdrop-filter:blur(6px); }
+    .muted{ color:var(--muted); }
+    .btn{ background:#fff; color:#000; font-weight:700; border-radius:.65rem; padding:.7rem 1rem; }
+    .tag{ font-size:.75rem; padding:.25rem .5rem; border:1px solid rgba(255,255,255,.16); border-radius:.5rem; color:#cfe0f7; }
   </style>
 </head>
 <body class="text-white/90">
 
   <!-- Header -->
-  <header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+  <header class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
     <a href="/" class="font-bold tracking-tight text-white">aiPRINT.ai</a>
     <nav class="flex gap-6 text-sm">
       <a href="/about.html" class="hover:text-white">How it works</a>
@@ -30,69 +31,127 @@
     </nav>
   </header>
 
-  <main class="max-w-6xl mx-auto px-4 pb-24">
-    <section class="mb-10 grid md:grid-cols-[.9fr_1.1fr] gap-8 items-start">
-      <div>
-        <h1 class="h1">Get in touch</h1>
-        <p class="muted mt-3">Have questions about materials, orders, or custom work? We’d love to help.</p>
+  <!-- Hero -->
+  <section class="max-w-7xl mx-auto px-4 pt-2 pb-10 grid lg:grid-cols-[1.05fr_.95fr] gap-8 items-center">
+    <div>
+      <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">Get in touch</h1>
+      <p class="muted mt-4 max-w-xl">
+        Have questions about sizes, materials, shipping, or a custom idea?
+        We’ll get back within <strong>one business day</strong>.
+      </p>
+      <div class="flex flex-wrap gap-2 mt-6">
+        <span class="tag">Mon–Fri · 10am–6pm ET</span>
+        <span class="tag">Average reply: &lt; 24 hrs</span>
+        <span class="tag">USA studio</span>
+      </div>
+    </div>
 
-        <div class="card rounded-xl p-5 mt-6 space-y-4">
+    <!-- Your lab photo -->
+    <div class="glass rounded-2xl overflow-hidden">
+      <!-- Replace src with your uploaded path if different -->
+      <img src="/assets/printlab.jpg" alt="Fine-art print studio" class="w-full h-64 md:h-80 object-cover" loading="lazy" />
+    </div>
+  </section>
+
+  <!-- Content -->
+  <main class="max-w-7xl mx-auto px-4 pb-20 grid lg:grid-cols-[1.2fr_.8fr] gap-10">
+    <!-- Form card -->
+    <section class="glass rounded-2xl p-6 md:p-8">
+      <h2 class="text-2xl font-bold">Send us a message</h2>
+      <p class="muted mt-1">We’ll reply from <a class="underline" href="mailto:hello@aiprint.ai">hello@aiprint.ai</a>.</p>
+
+      <form action="https://formspree.io/f/xrbadnbo" method="POST" class="space-y-5 mt-6">
+        <div class="grid md:grid-cols-2 gap-4">
           <div>
-            <div class="font-semibold">Email</div>
-            <p class="muted">hello@aiprint.ai</p>
+            <label class="text-sm text-white/70">Name</label>
+            <input name="name" required
+                   class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
           <div>
-            <div class="font-semibold">Studio hours</div>
-            <p class="muted">Mon–Fri, 10am–6pm ET</p>
-          </div>
-          <div>
-            <div class="font-semibold">Location</div>
-            <p class="muted">Based in Florida, shipping nationwide.</p>
+            <label class="text-sm text-white/70">Email</label>
+            <input type="email" name="email" required
+                   class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
         </div>
 
-        <img
-          src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80"
-          alt="Studio vibe" class="rounded-xl card w-full h-64 object-cover mt-6" loading="lazy" />
-      </div>
-
-      <!-- Contact form -->
-      <form action="https://formspree.io/f/xrbadnbo" method="POST" class="card rounded-xl p-5 space-y-5">
         <div class="grid md:grid-cols-2 gap-4">
           <div>
-            <label class="text-sm text-white/80">Name</label>
-            <input name="name" required
-              class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+            <label class="text-sm text-white/70">Topic</label>
+            <select name="topic"
+                    class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option>Order question</option>
+              <option>Materials / sizing</option>
+              <option>Custom request</option>
+              <option>Shipping / returns</option>
+              <option>Other</option>
+            </select>
           </div>
           <div>
-            <label class="text-sm text-white/80">Email</label>
-            <input type="email" name="email" required
-              class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+            <label class="text-sm text-white/70">Order # (if applicable)</label>
+            <input name="order"
+                   class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
         </div>
 
         <div>
-          <label class="text-sm text-white/80">Message</label>
-          <textarea name="message" rows="6" required
-            class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+          <label class="text-sm text-white/70">Message</label>
+          <textarea name="message" rows="7" required
+                    class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
         </div>
 
-        <!-- helpers -->
+        <!-- Optional file link -->
+        <div>
+          <label class="text-sm text-white/70">Reference image link (optional)</label>
+          <input name="reference_url" placeholder="https://…"
+                 class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <!-- Hidden helpers -->
         <input type="hidden" name="_subject" value="New aiPRINT.ai contact message" />
-        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none" />
         <input type="hidden" name="_redirect" value="/thank-you.html" />
 
-        <button type="submit" class="btn">Send message</button>
-        <p class="text-xs text-white/60">
-          By submitting, you agree to our <a href="/policies.html" class="underline">Policies</a>.
-        </p>
+        <div class="flex items-center gap-3">
+          <button type="submit" class="btn">Send message</button>
+          <p class="text-xs text-white/60">
+            By submitting, you agree to our <a href="/policies.html" class="underline">Policies</a>.
+          </p>
+        </div>
       </form>
     </section>
+
+    <!-- Sidebar: details & trust -->
+    <aside class="space-y-6">
+      <div class="glass rounded-2xl p-6">
+        <h3 class="text-lg font-semibold">Studio</h3>
+        <ul class="mt-3 space-y-2 text-sm">
+          <li><span class="muted">Email:</span> <a class="underline" href="mailto:hello@aiprint.ai">hello@aiprint.ai</a></li>
+          <li><span class="muted">Hours:</span> Mon–Fri, 10am–6pm ET</li>
+          <li><span class="muted">Location:</span> Florida, USA (shipping nationwide)</li>
+          <li><span class="muted">Turnaround:</span> Most prints ship in <strong>7–14 days</strong></li>
+        </ul>
+      </div>
+
+      <div class="glass rounded-2xl p-6">
+        <h3 class="text-lg font-semibold">Why clients choose us</h3>
+        <ul class="mt-3 space-y-2 text-sm">
+          <li>Human-curated AI for composition, light, and color</li>
+          <li>Archival materials (Canvas, ChromaLuxe Metal, Acrylic)</li>
+          <li>Ready to hang — no framing required</li>
+          <li>Certificate of Authenticity included</li>
+        </ul>
+      </div>
+
+      <div class="glass rounded-2xl p-6">
+        <h3 class="text-lg font-semibold">Need quick answers?</h3>
+        <p class="muted mt-2 text-sm">Check our <a class="underline" href="/faq.html">FAQ</a> for shipping, sizing, and policies.</p>
+      </div>
+    </aside>
   </main>
 
   <!-- Footer -->
   <footer class="border-t border-white/10">
-    <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
+    <div class="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
       <div>
         <div class="font-semibold text-white">aiPRINT.ai</div>
         <p class="mt-2">Archival, ready-to-hang prints from your ideas.</p>
@@ -115,6 +174,7 @@
       </div>
     </div>
   </footer>
+
   <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>
