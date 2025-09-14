@@ -6,6 +6,7 @@
   <title>How it works | aiPRINT.ai — From idea to museum-grade print</title>
   <meta name="description" content="We blend AI with a photographer’s eye to craft archival, ready-to-hang fine-art prints. See how the process works—from your idea to the finished piece." />
   <link rel="icon" href="/favicon.ico" />
+  <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root { --bg:#0b1020; --card:#121a2a; --muted:#9fb3c8; --ink:#dce6f3; }
@@ -21,14 +22,13 @@
 </head>
 <body class="text-white/90">
 
-<!-- Header (shared) -->
+<!-- Header -->
 <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
   <div class="max-w-7xl mx-auto px-5 h-14 flex items-center justify-between">
     <a href="/" class="flex items-center gap-2">
       <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
       <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
     </a>
-
     <nav class="hidden md:flex items-center gap-6 text-sm">
       <a href="/about.html"     class="hover:text-white">How it works</a>
       <a href="/materials.html" class="hover:text-white">Materials</a>
@@ -36,23 +36,18 @@
       <a href="/policies.html"  class="hover:text-white">Policies</a>
       <a href="/contact.html"   class="hover:text-white">Contact</a>
     </nav>
-
     <button id="navToggle"
       class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10"
       aria-expanded="false" aria-controls="mobileDrawer" aria-label="Open menu">
       <svg id="iconOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       <svg id="iconClose" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 18L18 6M6 6l12 12"/>
-      </svg>
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
   </div>
 </header>
 
-<!-- Drawer + Backdrop (shared) -->
+<!-- Drawer + Backdrop -->
 <div id="navBackdrop" class="fixed inset-0 bg-black/60 opacity-0 pointer-events-none transition-opacity z-50"></div>
 <aside id="mobileDrawer"
   class="fixed inset-y-0 left-0 w-[84%] max-w-sm bg-[#0b1020] border-r border-white/10 transform -translate-x-full transition-transform duration-300 z-[60]">
@@ -77,14 +72,91 @@
   </nav>
 </aside>
 
-<!-- PAGE CONTENT (unchanged) -->
+<!-- PAGE CONTENT -->
 <section class="max-w-7xl mx-auto px-4 pt-6 pb-10 grid lg:grid-cols-[1.1fr_.9fr] gap-8 items-start">
-  <!-- … all your existing ABOUT content as you pasted … -->
-  <!-- (Keeping your hero, steps, proof of quality, gallery, CTA) -->
-  <!-- I’m not repeating here to keep this answer readable, but paste your same section blocks. -->
+  <div>
+    <h1 class="h1">From idea <span class="text-indigo-300">→ museum-grade print.</span></h1>
+    <p class="muted mt-4 max-w-2xl">
+      We blend AI with a photographer’s eye to develop artwork that’s uniquely yours—then
+      produce it on archival materials, ready to hang. Certificate of Authenticity included.
+    </p>
+    <div class="flex gap-3 mt-6">
+      <a href="/#create" class="btn">Create a preview</a>
+      <a href="/materials.html" class="btn" style="background:transparent;border:1px solid rgba(255,255,255,.18);color:#dce6f3">See materials</a>
+    </div>
+    <p class="badge mt-5">Archival inks • ChromaLuxe metal • Acrylic facemount • Hand QC</p>
+  </div>
+  <div class="glass rounded-2xl overflow-hidden">
+    <img src="https://images.unsplash.com/photo-1581091870622-8a5ee90fae5d?auto=format&fit=crop&w=1600&q=80"
+         alt="Studio" class="w-full h-64 md:h-72 object-cover" loading="lazy">
+  </div>
 </section>
-<!-- (Keep the rest of your about page content exactly as you had it) -->
 
+<section class="max-w-7xl mx-auto px-4 pb-12">
+  <div class="grid md:grid-cols-3 gap-6">
+    <div class="glass rounded-2xl p-5">
+      <div class="text-xs tracking-widest text-white/60">STEP 1</div>
+      <h3 class="mt-2 text-xl font-extrabold">Describe your idea</h3>
+      <p class="muted mt-2">Tell us the subject, style, mood, and colors. Add an optional reference image.
+        Our generator + human curation brings it to life.</p>
+      <div class="rounded-xl overflow-hidden mt-4">
+        <img src="https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=1200&q=80"
+             alt="Prompt UI" class="w-full h-60 object-cover" loading="lazy">
+      </div>
+    </div>
+    <div class="glass rounded-2xl p-5">
+      <div class="text-xs tracking-widest text-white/60">STEP 2</div>
+      <h3 class="mt-2 text-xl font-extrabold">Preview & choose</h3>
+      <p class="muted mt-2">We generate a polished preview based on your options—no back-and-forth required.
+        Like it? Pick size & finish.</p>
+      <div class="rounded-xl overflow-hidden mt-4">
+        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80"
+             alt="Generated art preview" class="w-full h-60 object-cover" loading="lazy">
+      </div>
+    </div>
+    <div class="glass rounded-2xl p-5">
+      <div class="text-xs tracking-widest text-white/60">STEP 3</div>
+      <h3 class="mt-2 text-xl font-extrabold">Printed. Signed. Shipped.</h3>
+      <p class="muted mt-2">We produce on premium materials with archival processes. Ready to hang, with
+        a Certificate of Authenticity.</p>
+      <div class="rounded-xl overflow-hidden mt-4">
+        <img src="https://images.unsplash.com/photo-1549887534-4e4b5d64b02c?auto=format&fit=crop&w=1200&q=80"
+             alt="Packaging" class="w-full h-60 object-cover" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 pb-6">
+  <div class="grid md:grid-cols-4 gap-4">
+    <div class="glass rounded-xl p-4"><div class="font-semibold">Human-curated AI</div><p class="muted mt-1">Artist supervision for composition, light, and color.</p></div>
+    <div class="glass rounded-xl p-4"><div class="font-semibold">Archival materials</div><p class="muted mt-1">Canvas, ChromaLuxe metal, or acrylic facemount.</p></div>
+    <div class="glass rounded-xl p-4"><div class="font-semibold">Ready to hang</div><p class="muted mt-1">Float mounts, gallery wraps—no framing required.</p></div>
+    <div class="glass rounded-xl p-4"><div class="font-semibold">COA included</div><p class="muted mt-1">Each piece ships with a Certificate of Authenticity.</p></div>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 pb-14">
+  <h2 class="h2 mb-4">Recent previews</h2>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80" alt="Landscape 1" class="w-full h-40 object-cover rounded-xl glass" loading="lazy">
+    <img src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1200&q=80" alt="Landscape 2" class="w-full h-40 object-cover rounded-xl glass" loading="lazy">
+    <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80" alt="Landscape 3" class="w-full h-40 object-cover rounded-xl glass" loading="lazy">
+    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80" alt="Landscape 4" class="w-full h-40 object-cover rounded-xl glass" loading="lazy">
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 pb-16">
+  <div class="glass rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <h3 class="text-xl md:text-2xl font-extrabold">Ready to see your idea as a fine-art print?</h3>
+      <p class="muted mt-1">Generate a preview in seconds — then choose your materials.</p>
+    </div>
+    <a href="/#create" class="btn">Create your preview</a>
+  </div>
+</section>
+
+<!-- Footer -->
 <footer class="border-t border-white/10">
   <div class="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
     <div>
