@@ -1,107 +1,94 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Materials | aiPRINT.ai</title>
-  <link rel="icon" href="/favicon.ico" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    /* Lightbox styles */
-    .lightbox {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.9);
-      justify-content: center;
-      align-items: center;
-    }
-    .lightbox img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 10px;
-    }
-    .lightbox:target {
-      display: flex;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Materials | aiPRINT.ai</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root { --bg:#0b1020; --ink:#dce6f3; --muted:#9fb3c8; }
+  body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+  .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
+  .muted{color:var(--muted)}
+  .btn{background:#fff;color:#000;font-weight:700;padding:.7rem 1rem;border-radius:.6rem}
+  a.navlink{color:rgba(255,255,255,.85)} a.navlink:hover{color:#fff}
+</style>
 </head>
-<body class="bg-[#0b0b14] text-white/90">
-  <!-- Header -->
-  <header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
-    <a href="/" class="font-bold tracking-tight text-white">aiPRINT.ai</a>
-    <nav class="flex gap-6 text-sm">
-      <a href="/materials.html" class="text-white">Materials</a>
-      <a href="/faq.html" class="hover:text-white">FAQ</a>
-      <a href="/policies.html" class="hover:text-white">Policies</a>
-      <a href="/contact.html" class="hover:text-white">Contact</a>
-    </nav>
-  </header>
+<body>
+<header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+  <a href="/" class="font-extrabold tracking-tight text-white flex items-center gap-2">
+    <span class="inline-grid place-items-center w-8 h-8 rounded-lg bg-white text-black">AI</span>
+    <span>aiPRINT.<span class="text-sky-300">ai</span></span>
+  </a>
+  <nav class="hidden md:flex items-center gap-6 text-sm">
+    <a href="/about.html" class="navlink">How it works</a>
+    <a href="/materials.html" class="navlink">Materials</a>
+    <a href="/faq.html" class="navlink">FAQ</a>
+    <a href="/policies.html" class="navlink">Policies</a>
+    <a href="/contact.html" class="navlink">Contact</a>
+  </nav>
+</header>
 
-  <main class="max-w-6xl mx-auto px-4 pb-24">
-    <section class="text-center mb-16">
-      <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">Materials & Finishes</h1>
-      <p class="mt-4 text-white/70 max-w-2xl mx-auto">
-        Choose from three premium finishes—each crafted to give your AI-generated art the perfect presentation.
-      </p>
-    </section>
+<main class="max-w-6xl mx-auto px-4 pb-20">
+  <section class="py-6 text-center">
+    <h1 class="text-4xl md:text-5xl font-extrabold">Premium materials, gallery finish</h1>
+    <p class="muted mt-3 max-w-2xl mx-auto">Every piece is produced with archival processes and arrives ready to hang.</p>
+  </section>
 
-    <div class="grid md:grid-cols-3 gap-10">
-      <!-- Canvas -->
-      <div class="rounded-2xl bg-white/5 border border-white/10 overflow-hidden">
-        <a href="#lightbox-canvas"><img src="/Canvas.jpg" alt="Canvas example – ocean waves" class="w-full h-64 object-cover cursor-pointer" /></a>
-        <div class="p-6">
-          <h2 class="text-xl font-semibold">Signature Series – Fine Art Canvas</h2>
-          <p class="mt-2 text-white/70">
-            Archival fine art canvas with rich texture and deep color, gallery-wrapped and ready to hang. Classic painterly feel for timeless presentation.
-          </p>
-        </div>
+  <section class="grid md:grid-cols-3 gap-6 mt-8">
+    <!-- Canvas -->
+    <article class="glass rounded-xl overflow-hidden">
+      <img src="/Canvas.jpg" alt="Fine Art Canvas" class="w-full h-56 object-cover border-b border-white/10">
+      <div class="p-5">
+        <h2 class="text-xl font-extrabold">Signature Series — Fine Art Canvas</h2>
+        <ul class="mt-3 space-y-2 text-sm text-white/80">
+          <li>• Archival cotton blend with subtle texture</li>
+          <li>• Deep color and rich tonal range</li>
+          <li>• Gallery-wrapped edges, ready to hang</li>
+          <li>• Protective coating for longevity</li>
+        </ul>
       </div>
+    </article>
 
-      <!-- Metal -->
-      <div class="rounded-2xl bg-white/5 border border-white/10 overflow-hidden">
-        <a href="#lightbox-metal"><img src="/Metal.jpg" alt="Metal print example – desert sand dunes" class="w-full h-64 object-cover cursor-pointer" /></a>
-        <div class="p-6">
-          <h2 class="text-xl font-semibold">Gallery Edition – ChromaLuxe Metal</h2>
-          <p class="mt-2 text-white/70">
-            Vibrant ChromaLuxe aluminum print with exceptional color depth, durability, and sleek modern style. Ready to hang with a floating mount.
-          </p>
-        </div>
+    <!-- Metal -->
+    <article class="glass rounded-xl overflow-hidden">
+      <img src="/Metal.jpg" alt="ChromaLuxe Metal" class="w-full h-56 object-cover border-b border-white/10">
+      <div class="p-5">
+        <h2 class="text-xl font-extrabold">Gallery Edition — ChromaLuxe Metal</h2>
+        <ul class="mt-3 space-y-2 text-sm text-white/80">
+          <li>• Vivid dye-infused aluminum panel</li>
+          <li>• Exceptional detail and durability</li>
+          <li>• Float mount for sleek, shadowed look</li>
+          <li>• Scratch-resistant, easy to clean</li>
+        </ul>
       </div>
+    </article>
 
-      <!-- Acrylic -->
-      <div class="rounded-2xl bg-white/5 border border-white/10 overflow-hidden">
-        <a href="#lightbox-acrylic"><img src="/Acrylic.jpg" alt="Acrylic facemount example – rainforest scene" class="w-full h-64 object-cover cursor-pointer" /></a>
-        <div class="p-6">
-          <h2 class="text-xl font-semibold">Museum Collection – Acrylic Facemount</h2>
-          <p class="mt-2 text-white/70">
-            Museum-grade acrylic facemount with brilliant clarity, polished edges, and luxurious depth effect that makes colors and details glow.
-          </p>
-        </div>
+    <!-- Acrylic -->
+    <article class="glass rounded-xl overflow-hidden">
+      <img src="/Acrylic.jpg" alt="Acrylic Facemount" class="w-full h-56 object-cover border-b border-white/10">
+      <div class="p-5">
+        <h2 class="text-xl font-extrabold">Museum Collection — Acrylic Facemount</h2>
+        <ul class="mt-3 space-y-2 text-sm text-white/80">
+          <li>• Photo print facemounted behind acrylic</li>
+          <li>• Incredible depth, clarity, and pop</li>
+          <li>• Polished edges, rigid backing, ready to hang</li>
+          <li>• Our most premium, gallery presentation</li>
+        </ul>
       </div>
-    </div>
-  </main>
+    </article>
+  </section>
 
-  <!-- Lightboxes -->
-  <div id="lightbox-canvas" class="lightbox">
-    <a href="#"><img src="/Canvas.jpg" alt="Canvas enlarged"></a>
-  </div>
-  <div id="lightbox-metal" class="lightbox">
-    <a href="#"><img src="/Metal.jpg" alt="Metal enlarged"></a>
-  </div>
-  <div id="lightbox-acrylic" class="lightbox">
-    <a href="#"><img src="/Acrylic.jpg" alt="Acrylic enlarged"></a>
-  </div>
+  <section class="text-center mt-12">
+    <a href="/#order" class="btn">Choose size & finish</a>
+  </section>
+</main>
 
-  <!-- Footer -->
-  <footer class="border-t border-white/10">
-    <div class="max-w-6xl mx-auto px-4 py-10 text-sm text-white/60">
-      <span id="y"></span> © aiPRINT.ai – All rights reserved.
-    </div>
-  </footer>
-  <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+<footer class="border-t border-white/10">
+  <div class="max-w-6xl mx-auto px-4 py-10 text-sm text-white/70">
+    © <span id="y"></span> aiPRINT.ai — All rights reserved.
+  </div>
+</footer>
+<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
 </body>
 </html>
