@@ -358,8 +358,9 @@
     <div>
       <div class="font-semibold text-white">aiPRINT.ai</div>
       <p class="mt-2">Archival, ready-to-hang prints from your ideas.</p>
-      <p class="mt-2">© <span id="y"></span> aiPRINT.ai</p>
+      <p class="mt-2"><span id="y"></span> © aiPRINT.ai</p>
     </div>
+
     <div>
       <div class="font-semibold text-white">Explore</div>
       <ul class="mt-2 space-y-1">
@@ -368,6 +369,7 @@
         <li><a href="/faq.html" class="hover:text-white">FAQ</a></li>
       </ul>
     </div>
+
     <div>
       <div class="font-semibold text-white">Company</div>
       <ul class="mt-2 space-y-1">
@@ -377,135 +379,130 @@
     </div>
   </div>
 </footer>
-<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
-// ---------- tiny helpers ----------
-const $ = (q, el=document) => el.querySelector(q);
-const $$ = (q, el=document) => [...el.querySelectorAll(q)];
-$('#yr').textContent = new Date().getFullYear();
 
-// ---------- assemble prompt from selections ----------
+<!-- Year helper -->
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+</script>
+
+<!-- App script (generator + ordering). Make sure ALL the JS is inside this tag. -->
+<script>
+/* ---------- tiny helpers ---------- */
+const $ = (el, d=document) => d.querySelector(el);
+const $$ = (el, d=document) => [...d.querySelectorAll(el)];
+$('#y')!.textContent = new Date().getFullYear();
+
+/* ---------- assemble prompt from selections ---------- */
 function buildPrompt() {
-  const subject = $('#promptInput').value?.trim() || '';
+  const subject = $('#promptInput').value.trim();
+  const aspect = $('#aspectSel').value;
   const style = $('#styleSel').value;
   const mood = $('#moodSel').value;
   const light = $('#lightSel').value;
-  const comp = $('#compSel').value;
   const medium = $('#mediumSel').value;
-
-  const addons = $$('.themeOpt:checked').map(i => i.value);
-  const addText = addons.length ? `, ${addons.join(', ')}` : '';
-
-  return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}${addText}`.replace(/\s+/g,' ').trim();
+  const addOns = $$('.themeOpt:checked').map(i => i.value);
+  const addStr = addOns.length ? ', ' + addOns.join(', ') : '';
+  return `${subject}, ${mood} mood, ${style}, ${light}, ${medium}${addStr}`.replace(/\s+/g,' ').trim();
 }
 
-// ---------- generate image ----------
+/* ---------- generate image ---------- */
 const genBtn = $('#genBtn');
-const previewImg = $('#previewImg');
-const genUrlInput = $('#gen-url');
-const genActions = $('#gen-actions');
-const ratioSel = $('#ratioSel');
+const preview = $('#preview');
+const genErr = $('#genErr');
 
-genBtn.onclick = async () => {
-  const prompt = buildPrompt();
-  if (!prompt) { alert('Please describe what you want.'); return; }
-
-  const size = ratioSel.value; // 1024x1024 / 1536x1024 / 1024x1536
-
-  genBtn.disabled = true;
-  genBtn.textContent = 'Generating…';
-  genActions.classList.add('hidden');
-  previewImg.src = '';
+async function generateImage() {
   try {
+    genBtn.disabled = true;
+    genBtn.textContent = 'Generating…';
+    genErr.textContent = '';
+    preview.classList.add('loading');
+
+    // aspect to size
+    const aspect = $('#aspectSel').value;
+    const sizeMap = { '1:1':'1024x1024', '3:2':'1536x1024', '2:3':'1024x1536' };
+    const size = sizeMap[aspect] || '1024x1024';
+
+    const prompt = buildPrompt();
+
     const r = await fetch('/api/generate-image', {
       method:'POST',
       headers:{ 'Content-Type':'application/json' },
       body: JSON.stringify({ prompt, size })
     });
+
     const data = await r.json();
-    if (!r.ok || !data?.image) throw new Error(data?.error || 'Generation failed');
+    if (!r.ok || !data?.ok) throw new Error(data?.error || 'Generation failed');
 
-    // Show the image
-    previewImg.src = data.image;
-
-    // Expose hosted URL + download link
-    genUrlInput.value = data.image;
+    // Show the image + expose hosted URL + download link
+    $('#preview-img').src = data.image;
+    $('#orderlink').classList.remove('hidden');
+    $('#genUrl').value = data.image;
     $('#download-link').href = data.image;
-    genActions.classList.remove('hidden');
+
+    // prompt toggle bits
+    $('#promptLabel').classList.remove('hidden');
+    $('#promptText').textContent = prompt;
   } catch (err) {
-    alert(err.message);
+    genErr.textContent = String(err.message || err);
   } finally {
     genBtn.disabled = false;
     genBtn.textContent = 'Generate preview';
+    preview.classList.remove('loading');
   }
-};
+}
+genBtn.addEventListener('click', generateImage);
 
-// ---------- copy link ----------
-$('#copy-link')?.addEventListener('click', async () => {
-  if (!genUrlInput.value) return;
-  await navigator.clipboard.writeText(genUrlInput.value);
-  const btn = $('#copy-link');
-  btn.textContent = 'Copied!';
-  setTimeout(() => btn.textContent = 'Copy link', 1000);
-});
-
-// ---------- tabs (order section) ----------
-const tabs = $$('.orderTab');
-const tabViews = { canvas: $('#tab-canvas'), metal: $('#tab-metal'), acrylic: $('#tab-acrylic') };
-tabs.forEach(btn => {
-  btn.onclick = () => {
-    const key = btn.dataset.tab;
-    Object.values(tabViews).forEach(v => v.classList.add('hidden'));
-    tabViews[key].classList.remove('hidden');
-
-    tabs.forEach(b => b.classList.add('btn-ghost'));
-    btn.classList.remove('btn-ghost');
-  };
-});
-
-// ---------- Signature overlay ----------
-const sigEl = $('#sig');
+/* ---------- signature overlay ---------- */
 const sigToggle = $('#sigToggle');
-const sigName = $('#sigName');
+const sigWrap = $('#sigWrap');
+const sigInput = $('#sigName');
 const sigFont = $('#sigFont');
 const sigColor = $('#sigColor');
 const sigSize = $('#sigSize');
-const previewWrap = $('#previewWrap');
+const sig = $('#sig');
 
-sigToggle.onchange = () => {
-  if (sigToggle.checked) sigEl.classList.remove('hidden');
-  else sigEl.classList.add('hidden');
-};
-sigName.oninput = () => { sigEl.textContent = sigName.value || ' '; };
-sigFont.onchange = () => {
-  sigEl.classList.remove('sig-GreatVibes','sig-Allura','sig-Sacramento','sig-Playfair','sig-Montserrat');
-  sigEl.classList.add('sig-' + sigFont.value);
-};
-sigColor.oninput = () => { sigEl.style.color = sigColor.value; };
-sigSize.oninput = () => { sigEl.style.fontSize = `${sigSize.value}px`; };
+function refreshSig() {
+  sig.textContent = sigInput.value || '';
+  sig.style.fontFamily = getComputedStyle(sigFont).getPropertyValue('--ff') || 'Great Vibes';
+  sig.style.color = sigColor.value;
+  sig.style.fontSize = sigSize.value + 'px';
+}
+sigInput.addEventListener('input', refreshSig);
+sigFont.addEventListener('change', refreshSig);
+sigColor.addEventListener('input', refreshSig);
+sigSize.addEventListener('input', refreshSig);
 
-// Dragging
-let drag = null;
-sigEl.addEventListener('mousedown', (e) => {
-  drag = {
-    startX: e.clientX,
-    startY: e.clientY,
-    startLeft: sigEl.offsetLeft,
-    startTop: sigEl.offsetTop
-  };
+sigToggle.addEventListener('change', () => {
+  sigWrap.classList.toggle('hidden', !sigToggle.checked);
+});
+
+/* ---------- drag signature on preview ---------- */
+let drag = false, sx=0, sy=0, startL=0, startT=0;
+sig.addEventListener('mousedown', e => {
+  drag = true; sx = e.clientX; sy = e.clientY;
+  const r = sig.getBoundingClientRect();
+  startL = r.left + window.scrollX; startT = r.top + window.scrollY;
   e.preventDefault();
 });
-window.addEventListener('mousemove', (e) => {
+window.addEventListener('mousemove', e => {
   if (!drag) return;
-  const dx = e.clientX - drag.startX;
-  const dy = e.clientY - drag.startY;
-  const maxX = previewWrap.clientWidth - sigEl.clientWidth - 6;
-  const maxY = previewWrap.clientHeight - sigEl.clientHeight - 6;
-  const left = Math.max(6, Math.min(maxX, drag.startLeft + dx));
-  const top  = Math.max(6, Math.min(maxY, drag.startTop + dy));
-  sigEl.style.left = left + 'px';
-  sigEl.style.top  = top + 'px';
+  const dx = e.clientX - sx, dy = e.clientY - sy;
+  sig.style.left = (startL + dx) + 'px';
+  sig.style.top  = (startT + dy) + 'px';
 });
-window.addEventListener('mouseup', () => drag = null);
+window.addEventListener('mouseup', () => drag = false);
+
+/* ---------- order tabs ---------- */
+const tabs = $$('.order-tab');
+const tables = $$('.order-table');
+tabs.forEach(t => t.addEventListener('click', () => {
+  tabs.forEach(b => b.classList.remove('btn-active'));
+  t.classList.add('btn-active');
+  tables.forEach(T => T.classList.add('hidden'));
+  const id = t.dataset.target;
+  document.getElementById(id).classList.remove('hidden');
+}));
 </script>
+
 </body>
 </html>
