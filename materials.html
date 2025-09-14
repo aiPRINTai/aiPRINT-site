@@ -1,94 +1,184 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Materials | aiPRINT.ai</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-  :root { --bg:#0b1020; --ink:#dce6f3; --muted:#9fb3c8; }
-  body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-  .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
-  .muted{color:var(--muted)}
-  .btn{background:#fff;color:#000;font-weight:700;padding:.7rem 1rem;border-radius:.6rem}
-  a.navlink{color:rgba(255,255,255,.85)} a.navlink:hover{color:#fff}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Materials | aiPRINT.ai — Canvas, ChromaLuxe Metal, Acrylic Facemount</title>
+  <meta name="description" content="Explore premium finishes: Signature Canvas, Gallery Edition ChromaLuxe Metal, and Museum Collection Acrylic Facemount. All ready to hang." />
+  <link rel="icon" href="/favicon.ico" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { --bg:#0b0f1a; }
+    body { background:var(--bg); }
+    .card{ background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.12); }
+    .muted{ color:rgba(255,255,255,.7) }
+    .h1{ font-size:clamp(2rem,4vw,3rem); font-weight:800; line-height:1.05 }
+    .h2{ font-size:clamp(1.25rem,2.5vw,1.75rem); font-weight:800 }
+    .btn{ background:#fff; color:#000; font-weight:700; border-radius:.75rem; padding:.75rem 1rem }
+  </style>
 </head>
-<body>
-<header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
-  <a href="/" class="font-extrabold tracking-tight text-white flex items-center gap-2">
-    <span class="inline-grid place-items-center w-8 h-8 rounded-lg bg-white text-black">AI</span>
-    <span>aiPRINT.<span class="text-sky-300">ai</span></span>
-  </a>
-  <nav class="hidden md:flex items-center gap-6 text-sm">
-    <a href="/about.html" class="navlink">How it works</a>
-    <a href="/materials.html" class="navlink">Materials</a>
-    <a href="/faq.html" class="navlink">FAQ</a>
-    <a href="/policies.html" class="navlink">Policies</a>
-    <a href="/contact.html" class="navlink">Contact</a>
-  </nav>
-</header>
+<body class="text-white/90">
 
-<main class="max-w-6xl mx-auto px-4 pb-20">
-  <section class="py-6 text-center">
-    <h1 class="text-4xl md:text-5xl font-extrabold">Premium materials, gallery finish</h1>
-    <p class="muted mt-3 max-w-2xl mx-auto">Every piece is produced with archival processes and arrives ready to hang.</p>
-  </section>
+  <!-- Header -->
+  <header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+    <a href="/" class="font-bold tracking-tight text-white">aiPRINT.ai</a>
+    <nav class="flex gap-6 text-sm">
+      <a href="/about.html" class="hover:text-white">How it works</a>
+      <a href="/materials.html" class="text-white">Materials</a>
+      <a href="/faq.html" class="hover:text-white">FAQ</a>
+      <a href="/policies.html" class="hover:text-white">Policies</a>
+      <a href="/contact.html" class="hover:text-white">Contact</a>
+    </nav>
+  </header>
 
-  <section class="grid md:grid-cols-3 gap-6 mt-8">
-    <!-- Canvas -->
-    <article class="glass rounded-xl overflow-hidden">
-      <img src="/Canvas.jpg" alt="Fine Art Canvas" class="w-full h-56 object-cover border-b border-white/10">
-      <div class="p-5">
-        <h2 class="text-xl font-extrabold">Signature Series — Fine Art Canvas</h2>
-        <ul class="mt-3 space-y-2 text-sm text-white/80">
-          <li>• Archival cotton blend with subtle texture</li>
-          <li>• Deep color and rich tonal range</li>
-          <li>• Gallery-wrapped edges, ready to hang</li>
-          <li>• Protective coating for longevity</li>
+  <main class="max-w-6xl mx-auto px-4 pb-24">
+    <section class="mb-10">
+      <h1 class="h1">Materials & finishes</h1>
+      <p class="muted mt-3 max-w-2xl">
+        Three premium options — each archival and ready to hang. Pick the vibe that fits your space.
+      </p>
+    </section>
+
+    <!-- Cards -->
+    <section class="grid md:grid-cols-3 gap-6">
+      <!-- Canvas -->
+      <article class="card rounded-xl overflow-hidden">
+        <img src="/Canvas.jpg" alt="Fine Art Canvas"
+             onerror="this.src='https://images.unsplash.com/photo-1549880338-65ddcdfd017b?auto=format&fit=crop&w=1400&q=80'"
+             class="w-full h-48 object-cover" loading="lazy">
+        <div class="p-5">
+          <h2 class="h2">Signature Series — Fine Art Canvas</h2>
+          <ul class="muted mt-3 space-y-1 list-disc pl-5">
+            <li>Archival cotton/poly blend with rich texture</li>
+            <li>Gallery-wrapped edges, wired to hang</li>
+            <li>Classic, painterly feel; lightweight</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Metal -->
+      <article class="card rounded-xl overflow-hidden">
+        <img src="/Metal.jpg" alt="ChromaLuxe Metal"
+             onerror="this.src='https://images.unsplash.com/photo-1517816428104-797678c7cf0d?auto=format&fit=crop&w=1400&q=80'"
+             class="w-full h-48 object-cover" loading="lazy">
+        <div class="p-5">
+          <h2 class="h2">Gallery Edition — ChromaLuxe Metal</h2>
+          <ul class="muted mt-3 space-y-1 list-disc pl-5">
+            <li>Ultra-vivid dyes infused into aluminum</li>
+            <li>Durable float mount for shadowed “hover” look</li>
+            <li>Sleek, modern, exceptionally crisp</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Acrylic -->
+      <article class="card rounded-xl overflow-hidden">
+        <img src="/Acrylic.jpg" alt="Acrylic Facemount"
+             onerror="this.src='https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?auto=format&fit=crop&w=1400&q=80'"
+             class="w-full h-48 object-cover" loading="lazy">
+        <div class="p-5">
+          <h2 class="h2">Museum Collection — Acrylic Facemount</h2>
+          <ul class="muted mt-3 space-y-1 list-disc pl-5">
+            <li>Photo bonded to acrylic for glass-like depth</li>
+            <li>Polished edges, rigid aluminum backer</li>
+            <li>Luxurious, gallery-grade presence</li>
+          </ul>
+        </div>
+      </article>
+    </section>
+
+    <!-- Comparison -->
+    <section class="mt-12 card rounded-xl p-5 overflow-x-auto">
+      <h3 class="h2 mb-4">Quick comparison</h3>
+      <table class="w-full text-sm">
+        <thead class="text-white/80">
+          <tr class="border-b border-white/10">
+            <th class="text-left py-2 pr-4">Feature</th>
+            <th class="text-left py-2 pr-4">Canvas</th>
+            <th class="text-left py-2 pr-4">ChromaLuxe Metal</th>
+            <th class="text-left py-2">Acrylic Facemount</th>
+          </tr>
+        </thead>
+        <tbody class="text-white/70">
+          <tr class="border-b border-white/10">
+            <td class="py-3 pr-4">Look & feel</td>
+            <td class="py-3 pr-4">Textured, painterly</td>
+            <td class="py-3 pr-4">Sleek, ultra-vivid</td>
+            <td class="py-3">Deep, glass-like shine</td>
+          </tr>
+          <tr class="border-b border-white/10">
+            <td class="py-3 pr-4">Mounting</td>
+            <td class="py-3 pr-4">Gallery wrap, wired</td>
+            <td class="py-3 pr-4">Float mount</td>
+            <td class="py-3">Aluminum backer + hang kit</td>
+          </tr>
+          <tr class="border-b border-white/10">
+            <td class="py-3 pr-4">Weight</td>
+            <td class="py-3 pr-4">Light</td>
+            <td class="py-3 pr-4">Light–medium</td>
+            <td class="py-3">Medium</td>
+          </tr>
+          <tr>
+            <td class="py-3 pr-4">Best for</td>
+            <td class="py-3 pr-4">Warm, classic spaces</td>
+            <td class="py-3 pr-4">Modern, bold color</td>
+            <td class="py-3">High-impact statement walls</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Care -->
+    <section class="mt-12 grid md:grid-cols-3 gap-6">
+      <div class="card rounded-xl p-5">
+        <h4 class="font-semibold text-white">Care: Canvas</h4>
+        <p class="muted mt-2">Dust gently with a soft, dry cloth. Avoid direct sunlight and moisture.</p>
+      </div>
+      <div class="card rounded-xl p-5">
+        <h4 class="font-semibold text-white">Care: Metal</h4>
+        <p class="muted mt-2">Wipe with microfiber and glass cleaner as needed. Don’t use abrasives.</p>
+      </div>
+      <div class="card rounded-xl p-5">
+        <h4 class="font-semibold text-white">Care: Acrylic</h4>
+        <p class="muted mt-2">Use acrylic-safe cleaner and microfiber. Avoid paper towels/chemicals.</p>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="mt-12 card rounded-2xl p-6 flex items-center justify-between gap-6">
+      <div>
+        <h3 class="h2">Have a favorite finish in mind?</h3>
+        <p class="muted mt-1">Jump back to the generator and see it on your preview.</p>
+      </div>
+      <a href="/#create" class="btn">Create your preview</a>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/10">
+    <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
+      <div>
+        <div class="font-semibold text-white">aiPRINT.ai</div>
+        <p class="mt-2">Archival, ready-to-hang prints from your ideas.</p>
+        <p class="mt-2">© <span id="y"></span> aiPRINT.ai</p>
+      </div>
+      <div>
+        <div class="font-semibold text-white">Explore</div>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/about.html" class="hover:text-white">How it works</a></li>
+          <li><a href="/materials.html" class="hover:text-white">Materials</a></li>
+          <li><a href="/faq.html" class="hover:text-white">FAQ</a></li>
         </ul>
       </div>
-    </article>
-
-    <!-- Metal -->
-    <article class="glass rounded-xl overflow-hidden">
-      <img src="/Metal.jpg" alt="ChromaLuxe Metal" class="w-full h-56 object-cover border-b border-white/10">
-      <div class="p-5">
-        <h2 class="text-xl font-extrabold">Gallery Edition — ChromaLuxe Metal</h2>
-        <ul class="mt-3 space-y-2 text-sm text-white/80">
-          <li>• Vivid dye-infused aluminum panel</li>
-          <li>• Exceptional detail and durability</li>
-          <li>• Float mount for sleek, shadowed look</li>
-          <li>• Scratch-resistant, easy to clean</li>
+      <div>
+        <div class="font-semibold text-white">Company</div>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/policies.html" class="hover:text-white">Policies</a></li>
+          <li><a href="/contact.html" class="hover:text-white">Contact</a></li>
         </ul>
       </div>
-    </article>
-
-    <!-- Acrylic -->
-    <article class="glass rounded-xl overflow-hidden">
-      <img src="/Acrylic.jpg" alt="Acrylic Facemount" class="w-full h-56 object-cover border-b border-white/10">
-      <div class="p-5">
-        <h2 class="text-xl font-extrabold">Museum Collection — Acrylic Facemount</h2>
-        <ul class="mt-3 space-y-2 text-sm text-white/80">
-          <li>• Photo print facemounted behind acrylic</li>
-          <li>• Incredible depth, clarity, and pop</li>
-          <li>• Polished edges, rigid backing, ready to hang</li>
-          <li>• Our most premium, gallery presentation</li>
-        </ul>
-      </div>
-    </article>
-  </section>
-
-  <section class="text-center mt-12">
-    <a href="/#order" class="btn">Choose size & finish</a>
-  </section>
-</main>
-
-<footer class="border-t border-white/10">
-  <div class="max-w-6xl mx-auto px-4 py-10 text-sm text-white/70">
-    © <span id="y"></span> aiPRINT.ai — All rights reserved.
-  </div>
-</footer>
-<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+    </div>
+  </footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>
