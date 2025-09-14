@@ -7,6 +7,27 @@
   <link rel="icon" href="/favicon.ico" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Lightbox styles */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+    .lightbox:target {
+      display: flex;
+    }
+  </style>
 </head>
 <body class="bg-[#0b0b14] text-white/90">
   <!-- Header -->
@@ -31,7 +52,7 @@
     <div class="grid md:grid-cols-3 gap-10">
       <!-- Canvas -->
       <div class="rounded-2xl bg-white/5 border border-white/10 overflow-hidden">
-        <img src="/Canvas.jpg" alt="Canvas example – ocean waves" class="w-full h-64 object-cover" />
+        <a href="#lightbox-canvas"><img src="/Canvas.jpg" alt="Canvas example – ocean waves" class="w-full h-64 object-cover cursor-pointer" /></a>
         <div class="p-6">
           <h2 class="text-xl font-semibold">Signature Series – Fine Art Canvas</h2>
           <p class="mt-2 text-white/70">
@@ -42,7 +63,7 @@
 
       <!-- Metal -->
       <div class="rounded-2xl bg-white/5 border border-white/10 overflow-hidden">
-        <img src="/Metal.jpg" alt="Metal print example – desert sand dunes" class="w-full h-64 object-cover" />
+        <a href="#lightbox-metal"><img src="/Metal.jpg" alt="Metal print example – desert sand dunes" class="w-full h-64 object-cover cursor-pointer" /></a>
         <div class="p-6">
           <h2 class="text-xl font-semibold">Gallery Edition – ChromaLuxe Metal</h2>
           <p class="mt-2 text-white/70">
@@ -53,7 +74,7 @@
 
       <!-- Acrylic -->
       <div class="rounded-2xl bg-white/5 border border-white/10 overflow-hidden">
-        <img src="/Acrylic.jpg" alt="Acrylic facemount example – rainforest scene" class="w-full h-64 object-cover" />
+        <a href="#lightbox-acrylic"><img src="/Acrylic.jpg" alt="Acrylic facemount example – rainforest scene" class="w-full h-64 object-cover cursor-pointer" /></a>
         <div class="p-6">
           <h2 class="text-xl font-semibold">Museum Collection – Acrylic Facemount</h2>
           <p class="mt-2 text-white/70">
@@ -63,6 +84,17 @@
       </div>
     </div>
   </main>
+
+  <!-- Lightboxes -->
+  <div id="lightbox-canvas" class="lightbox">
+    <a href="#"><img src="/Canvas.jpg" alt="Canvas enlarged"></a>
+  </div>
+  <div id="lightbox-metal" class="lightbox">
+    <a href="#"><img src="/Metal.jpg" alt="Metal enlarged"></a>
+  </div>
+  <div id="lightbox-acrylic" class="lightbox">
+    <a href="#"><img src="/Acrylic.jpg" alt="Acrylic enlarged"></a>
+  </div>
 
   <!-- Footer -->
   <footer class="border-t border-white/10">
