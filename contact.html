@@ -4,90 +4,142 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Contact | aiPRINT.ai — Get in touch</title>
+  <meta name="description" content="Contact aiPRINT.ai — museum-grade, in-house fine-art printing. Archival materials, ready to hang, Certificate of Authenticity." />
+  <link rel="icon" href="/favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root { --bg:#0b1020; --ink:#dce6f3; }
-    body { background:var(--bg); color:var(--ink); font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto; }
-    .glass { background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.15); backdrop-filter: blur(6px); }
+    body { background:var(--bg); color:var(--ink); font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; }
+    .glass { background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.14); backdrop-filter: blur(8px); }
+    .btn  { background:white; color:black; font-weight:700; padding:.7rem 1rem; border-radius:.6rem; }
+    .field{ background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); }
   </style>
 </head>
 <body class="text-white">
 
-<!-- Header -->
-<header class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center relative z-20">
-  <a href="/" class="font-bold text-white text-lg">aiPRINT.ai</a>
-  <nav class="flex gap-6 text-sm">
-    <a href="/about.html" class="hover:text-white">How it works</a>
-    <a href="/materials.html" class="hover:text-white">Materials</a>
-    <a href="/faq.html" class="hover:text-white">FAQ</a>
-    <a href="/policies.html" class="hover:text-white">Policies</a>
-    <a href="/contact.html" class="text-white font-semibold">Contact</a>
-  </nav>
-</header>
+  <!-- Header -->
+  <header class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center relative z-20">
+    <a href="/" class="font-bold tracking-tight text-white">aiPRINT.ai</a>
+    <nav class="flex gap-6 text-sm">
+      <a href="/about.html" class="hover:text-white">How it works</a>
+      <a href="/materials.html" class="hover:text-white">Materials</a>
+      <a href="/faq.html" class="hover:text-white">FAQ</a>
+      <a href="/policies.html" class="hover:text-white">Policies</a>
+      <a href="/contact.html" class="text-white font-semibold">Contact</a>
+    </nav>
+  </header>
 
-<!-- Hero -->
-<section class="relative">
-  <!-- Background studio photo -->
-  <img src="/assets/printlab.jpg" alt="aiPRINT.ai fine-art studio" class="w-full h-[420px] object-cover" />
+  <!-- HERO with in-house studio photo -->
+  <section class="relative">
+    <!-- Use your uploaded image path here -->
+    <img src="/assets/printlab.jpg" alt="aiPRINT.ai in-house fine-art print studio"
+         class="w-full h-[420px] object-cover">
+    <div class="absolute inset-0 bg-black/55"></div>
 
-  <!-- Overlay -->
-  <div class="absolute inset-0 bg-black/60"></div>
-  <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-    <h1 class="text-4xl md:text-5xl font-extrabold">Get in touch</h1>
-    <p class="mt-4 max-w-2xl text-lg text-white/80">
-      Every print is crafted in-house — designed, color-calibrated, and produced on archival materials.
-      Have a question? Our team is here to help.
-    </p>
-  </div>
-</section>
-
-<!-- Contact Content -->
-<main class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 px-6 py-16">
-  
-  <!-- Contact info -->
-  <div class="glass rounded-2xl p-8 space-y-4">
-    <h2 class="text-2xl font-bold mb-3">Our studio</h2>
-    <p class="text-white/80">We handle everything in-house: from color calibration to archival printing & finishing.</p>
-    <ul class="mt-6 space-y-3 text-white/90">
-      <li><strong>Email:</strong> hello@aiprint.ai</li>
-      <li><strong>Studio hours:</strong> Mon–Fri, 10am–6pm ET</li>
-      <li><strong>Turnaround:</strong> Most prints ship within 7–14 days</li>
-      <li><strong>Location:</strong> Florida, USA — shipping nationwide</li>
-    </ul>
-    <div class="mt-6 flex flex-wrap gap-3 text-sm text-white/70">
-      <span class="px-3 py-1 rounded-full border border-white/20">Archival prints</span>
-      <span class="px-3 py-1 rounded-full border border-white/20">Made in-house</span>
-      <span class="px-3 py-1 rounded-full border border-white/20">Certificate of Authenticity</span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+      <h1 class="text-4xl md:text-5xl font-extrabold">Get in touch</h1>
+      <p class="mt-4 max-w-3xl text-white/85">
+        We craft every piece in-house — design, color calibration, archival printing, and finishing.
+        Questions about materials, sizing, or orders? We’re happy to help.
+      </p>
     </div>
-  </div>
+  </section>
 
-  <!-- Form -->
-  <div class="glass rounded-2xl p-8">
-    <h2 class="text-2xl font-bold mb-4">Send us a message</h2>
-    <form action="https://formspree.io/f/xrbadnbo" method="POST" class="space-y-4">
+  <!-- CONTENT -->
+  <main class="max-w-6xl mx-auto px-6 py-12 md:py-16 grid md:grid-cols-2 gap-8">
+
+    <!-- Studio / Trust card -->
+    <div class="glass rounded-2xl p-8 space-y-5">
+      <h2 class="text-2xl font-bold">Our studio</h2>
+      <p class="text-white/80">
+        Everything is produced under one roof for museum-grade quality and consistency.
+      </p>
+      <dl class="mt-4 grid grid-cols-1 gap-4 text-white/90">
+        <div>
+          <dt class="font-semibold">Email</dt>
+          <dd>hello@aiprint.ai</dd>
+        </div>
+        <div>
+          <dt class="font-semibold">Studio hours</dt>
+          <dd>Mon–Fri, 10am–6pm ET</dd>
+        </div>
+        <div>
+          <dt class="font-semibold">Turnaround</dt>
+          <dd>Most prints ship within <strong>7–14 days</strong>.</dd>
+        </div>
+        <div>
+          <dt class="font-semibold">Location</dt>
+          <dd>Florida, USA — shipping nationwide.</dd>
+        </div>
+      </dl>
+
+      <div class="pt-3 flex flex-wrap gap-2 text-xs">
+        <span class="px-3 py-1 rounded-full border border-white/25">Archival prints</span>
+        <span class="px-3 py-1 rounded-full border border-white/25">In-house production</span>
+        <span class="px-3 py-1 rounded-full border border-white/25">COA included</span>
+        <span class="px-3 py-1 rounded-full border border-white/25">Ready to hang</span>
+      </div>
+    </div>
+
+    <!-- Form (Formspree) -->
+    <div class="glass rounded-2xl p-8">
+      <h2 class="text-2xl font-bold mb-4">Send us a message</h2>
+
+      <form action="https://formspree.io/f/xrbadnbo" method="POST" class="space-y-5">
+        <div>
+          <label class="text-sm">Name</label>
+          <input name="name" required
+                 class="field w-full rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
+        </div>
+        <div>
+          <label class="text-sm">Email</label>
+          <input type="email" name="email" required
+                 class="field w-full rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
+        </div>
+        <div>
+          <label class="text-sm">Message</label>
+          <textarea name="message" rows="6" required
+                    class="field w-full rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
+        </div>
+
+        <!-- Optional: redirect to thank-you page -->
+        <input type="hidden" name="_redirect" value="/thank-you.html" />
+
+        <button type="submit" class="btn w-full">Send message</button>
+        <p class="text-xs text-white/60">
+          By submitting, you agree to our <a href="/policies.html" class="underline">Policies</a>.
+        </p>
+      </form>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/10 text-sm text-white/60">
+    <div class="max-w-6xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-6">
       <div>
-        <label class="text-sm">Name</label>
-        <input name="name" required class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 mt-1" />
+        <div class="font-semibold text-white">aiPRINT.ai</div>
+        <p class="mt-2">Archival, ready-to-hang prints crafted in-house.</p>
+        <p class="mt-2">© <span id="y"></span> aiPRINT.ai</p>
       </div>
       <div>
-        <label class="text-sm">Email</label>
-        <input type="email" name="email" required class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 mt-1" />
+        <div class="font-semibold text-white">Explore</div>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/about.html" class="hover:text-white">How it works</a></li>
+          <li><a href="/materials.html" class="hover:text-white">Materials</a></li>
+          <li><a href="/faq.html" class="hover:text-white">FAQ</a></li>
+        </ul>
       </div>
       <div>
-        <label class="text-sm">Message</label>
-        <textarea name="message" rows="5" required class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 mt-1"></textarea>
+        <div class="font-semibold text-white">Company</div>
+        <ul class="mt-2 space-y-1">
+          <li><a href="/policies.html" class="hover:text-white">Policies</a></li>
+          <li><a href="/contact.html" class="hover:text-white">Contact</a></li>
+        </ul>
       </div>
-      <button type="submit" class="btn w-full mt-4">Send message</button>
-    </form>
-  </div>
+    </div>
+  </footer>
 
-</main>
-
-<!-- Footer -->
-<footer class="border-t border-white/10 text-center py-8 text-sm text-white/60">
-  © <span id="y"></span> aiPRINT.ai — All rights reserved.
-</footer>
-
-<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>
