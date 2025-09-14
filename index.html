@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>aiPRINT.ai — Turn any idea into a gallery-worthy print</title>
-<meta name="description" content="Create premium, ready-to-hang fine art prints from your idea. AI + human curation, archival materials, Certificate of Authenticity." />
+<title>aiPRINT.ai — Fine Art Prints from Your Imagination</title>
+<meta name="description" content="Transform your ideas into premium fine-art prints. AI + human artistry, archival inks, museum-grade materials, signed with a Certificate of Authenticity." />
 
 <!-- Tailwind (CDN) -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -14,18 +14,16 @@
 
 <style>
   :root { --bg:#0b1020; --card:#131a2a; --muted:#9fb3c8; --ink:#dce6f3; }
-  body { background:var(--bg); color: var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+  body { background:var(--bg); color: var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
   .glass { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px); }
   .muted { color: var(--muted); }
   .h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight:800; line-height:1.05 }
   .h2 { font-size: clamp(1.3rem, 2.5vw, 2rem); font-weight:800; }
   .btn { background:white; color:black; font-weight:700; padding:.7rem 1rem; border-radius:.6rem; }
   .btn-ghost { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); }
-  .badge { font-size:.75rem; color:#b9c7d6 }
-  .sig-overlay {
-    position:absolute; pointer-events:auto; cursor:grab;
-    user-select:none; white-space:nowrap; mix-blend-mode:normal;
-  }
+  .badge { font-size:.8rem; color:#b9c7d6 }
+  /* signature overlay */
+  .sig-overlay { position:absolute; pointer-events:auto; cursor:grab; user-select:none; white-space:nowrap; mix-blend-mode:normal; }
   .sig-overlay:active { cursor:grabbing; }
   .sig-GreatVibes { font-family: 'Great Vibes', cursive; }
   .sig-Allura { font-family: 'Allura', cursive; }
@@ -35,44 +33,29 @@
 </style>
 </head>
 <body>
-<!-- Header -->
+
+<!-- ===== Top Header ===== -->
 <header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
   <a href="/" class="font-bold tracking-tight text-white">aiPRINT.ai</a>
   <nav class="flex gap-6 text-sm">
-    <a href="/about.html" class="hover:text-white">How it works</a>
-    <a href="/materials.html" class="hover:text-white">Materials</a>
-    <a href="/faq.html" class="hover:text-white">FAQ</a>
-    <a href="/policies.html" class="hover:text-white">Policies</a>
-    <a href="/contact.html" class="hover:text-white">Contact</a>
-  </nav>
-</header>
-<!-- NAV -->
-<header class="max-w-6xl mx-auto px-4 py-5 flex items-center justify-between">
-  <div class="flex items-center gap-3">
-    <div class="w-8 h-8 rounded-lg bg-white text-black flex items-center justify-center font-black">AI</div>
-    <div class="font-extrabold">aiPRINT.<span class="text-sky-300">ai</span></div>
-  </div>
-  <nav class="hidden md:flex items-center gap-6 text-sm">
-    <a href="#how" class="muted hover:text-white">How it works</a>
-    <a href="#materials" class="muted hover:text-white">Materials</a>
-    <a href="#create" class="muted hover:text-white">Create</a>
-    <a href="#order" class="muted hover:text-white">Order</a>
+    <a href="#how" class="hover:text-white">How it works</a>
+    <a href="#materials" class="hover:text-white">Materials</a>
+    <a href="#create" class="hover:text-white">Create</a>
+    <a href="#order" class="hover:text-white">Order</a>
   </nav>
 </header>
 
-<!-- HERO -->
+<!-- ===== HERO ===== -->
 <section class="max-w-6xl mx-auto px-4 py-10 md:py-16 grid md:grid-cols-2 gap-10 items-center">
   <div>
-    <h1 class="h1">Turn any idea into a <span class="text-indigo-300">gallery-worthy</span> print.</h1>
-    <p class="muted mt-4 max-w-lg">Type a prompt. We create the art with AI + a human artist’s eye. You pick size &amp; finish. We ship an archival, limited-edition print to your door.</p>
+    <h1 class="h1">Transform your imagination into <span class="text-indigo-300">fine-art prints</span>.</h1>
+    <p class="muted mt-4 max-w-lg">We blend AI creativity with a human artist’s eye to craft museum-grade, archival prints. Every piece is limited edition, signed, and comes with a Certificate of Authenticity.</p>
     <div class="flex gap-3 mt-6">
       <a href="#create" class="btn">Create a preview</a>
       <a href="#how" class="btn btn-ghost">See how it works</a>
     </div>
     <p class="badge mt-5">Made in the USA · Archival inks · Limited editions · Certificate of Authenticity · Ready to hang</p>
   </div>
-
-  <!-- image stack -->
   <div class="grid gap-4">
     <div class="h-60 rounded-2xl overflow-hidden glass">
       <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover" alt="Gallery wall" />
@@ -88,53 +71,53 @@
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
+<!-- ===== HOW IT WORKS ===== -->
 <section id="how" class="max-w-6xl mx-auto px-4 py-14">
   <h2 class="h2 mb-6">How it works</h2>
   <div class="grid md:grid-cols-3 gap-4">
     <div class="glass rounded-xl p-5">
       <div class="font-bold">STEP 1</div>
       <div class="mt-2 text-lg font-extrabold">Describe your idea</div>
-      <p class="muted mt-2">Share a prompt (style, mood, colors). Upload inspiration if you have it.</p>
+      <p class="muted mt-2">Share your vision (style, mood, colors). Upload inspiration if you have it.</p>
     </div>
     <div class="glass rounded-xl p-5">
       <div class="font-bold">STEP 2</div>
       <div class="mt-2 text-lg font-extrabold">We craft your artwork</div>
-      <p class="muted mt-2">Your prompt + creative options generate a preview.</p>
+      <p class="muted mt-2">AI + human curation produces a preview of your fine-art piece.</p>
     </div>
     <div class="glass rounded-xl p-5">
       <div class="font-bold">STEP 3</div>
       <div class="mt-2 text-lg font-extrabold">Printed. Signed. Shipped.</div>
-      <p class="muted mt-2">Premium materials, ready to hang, Certificate of Authenticity.</p>
+      <p class="muted mt-2">Museum-grade materials, ready to hang, with Certificate of Authenticity.</p>
     </div>
   </div>
 </section>
 
-<!-- MATERIALS -->
+<!-- ===== MATERIALS ===== -->
 <section id="materials" class="max-w-6xl mx-auto px-4 py-14">
   <h2 class="h2 mb-6">Materials & finishes</h2>
   <div class="grid md:grid-cols-3 gap-4">
     <div class="glass rounded-xl p-5">
-      <div class="text-lg font-extrabold">Signature Series – Fine Art Canvas</div>
-      <p class="muted mt-2">Archival fine-art canvas with rich texture and deep color, gallery-wrapped and ready to hang.</p>
+      <div class="text-lg font-extrabold">Signature Series — Fine Art Canvas</div>
+      <p class="muted mt-2">Archival canvas with rich texture and deep color, gallery-wrapped and ready to hang.</p>
     </div>
     <div class="glass rounded-xl p-5">
-      <div class="text-lg font-extrabold">Gallery Edition – ChromaLuxe Metal</div>
-      <p class="muted mt-2">Vibrant aluminum print with durable float mount. Sleek modern look, ready to hang.</p>
+      <div class="text-lg font-extrabold">Gallery Edition — ChromaLuxe Metal</div>
+      <p class="muted mt-2">Vibrant aluminum print with a durable float mount. Sleek, modern, and bold.</p>
     </div>
     <div class="glass rounded-xl p-5">
-      <div class="text-lg font-extrabold">Museum Collection – Acrylic Facemount</div>
-      <p class="muted mt-2">Museum-grade acrylic facemount with brilliant clarity and depth, polished edges, ready to hang.</p>
+      <div class="text-lg font-extrabold">Museum Collection — Acrylic Facemount</div>
+      <p class="muted mt-2">Acrylic facemount with depth and brilliance, polished edges, and museum clarity.</p>
     </div>
   </div>
 </section>
 
-<!-- CREATE -->
+<!-- ===== CREATE (Generator) ===== -->
 <section id="create" class="max-w-6xl mx-auto px-4 py-14">
   <h2 class="h2 mb-4">Create a preview</h2>
 
-  <!-- PROMPT ROW -->
   <div class="glass rounded-xl p-4 md:p-5">
+    <!-- Prompt + Aspect -->
     <div class="grid md:grid-cols-[1fr_240px] gap-3">
       <textarea id="promptInput" class="rounded-lg bg-white/10 border border-white/15 px-3 py-3 text-white/90 min-h-[56px]"
         placeholder="e.g., photographer under a moonlit pier with a nesting turtle nearby"></textarea>
@@ -150,7 +133,7 @@
       </div>
     </div>
 
-    <!-- 🎨 CREATIVE OPTIONS -->
+    <!-- Creative options -->
     <div id="creative-options" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
       <!-- Style -->
       <label class="flex flex-col gap-1">
@@ -245,7 +228,7 @@
       </fieldset>
     </div>
 
-    <!-- PREVIEW + SIGNATURE -->
+    <!-- Preview + Signature -->
     <div class="mt-5">
       <div class="relative w-full aspect-[16/10] bg-black/40 rounded-xl overflow-hidden border border-white/10" id="previewWrap">
         <img id="previewImg" class="w-full h-full object-contain" alt="Preview" />
@@ -275,6 +258,7 @@
         </div>
       </div>
 
+      <!-- Hosted URL + Download -->
       <div id="gen-actions" class="hidden mt-4 flex flex-wrap items-center gap-3">
         <input id="gen-url" class="w-full md:w-auto flex-1 rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/80" readonly />
         <button id="copy-link" class="btn">Copy link</button>
@@ -284,7 +268,7 @@
   </div>
 </section>
 
-<!-- ORDER -->
+<!-- ===== ORDER ===== -->
 <section id="order" class="max-w-6xl mx-auto px-4 py-14">
   <h2 class="h2 mb-6">Order your print</h2>
 
@@ -353,19 +337,21 @@
   </div>
 </section>
 
+<!-- ===== FOOTER ===== -->
 <footer class="border-t border-white/10">
   <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
     <div>
       <div class="font-semibold text-white">aiPRINT.ai</div>
-      <p class="mt-2">Archival, ready-to-hang prints from your ideas.</p>
+      <p class="mt-2">Archival fine art, crafted from your imagination. Limited edition, ready to hang.</p>
       <p class="mt-2">© <span id="y"></span> aiPRINT.ai</p>
     </div>
     <div>
       <div class="font-semibold text-white">Explore</div>
       <ul class="mt-2 space-y-1">
-        <li><a href="/about.html" class="hover:text-white">How it works</a></li>
-        <li><a href="/materials.html" class="hover:text-white">Materials</a></li>
-        <li><a href="/faq.html" class="hover:text-white">FAQ</a></li>
+        <li><a href="#how" class="hover:text-white">How it works</a></li>
+        <li><a href="#materials" class="hover:text-white">Materials</a></li>
+        <li><a href="#create" class="hover:text-white">Create</a></li>
+        <li><a href="#order" class="hover:text-white">Order</a></li>
       </ul>
     </div>
     <div>
@@ -378,16 +364,16 @@
   </div>
 </footer>
 
-<!-- App scripts -->
+<!-- ===== App Scripts (all inline for simplicity) ===== -->
 <script>
-  /* year */
+  // year
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  /* ---------- tiny helpers ---------- */
+  // tiny helpers
   const $  = (q, el=document) => el.querySelector(q);
   const $$ = (q, el=document) => [...el.querySelectorAll(q)];
 
-  /* ---------- build prompt from options ---------- */
+  // assemble prompt
   function buildPrompt() {
     const subject = $('#promptInput')?.value?.trim() || '';
     const style   = $('#styleSel')?.value || '';
@@ -395,18 +381,14 @@
     const light   = $('#lightSel')?.value || '';
     const comp    = $('#compSel')?.value || '';
     const medium  = $('#mediumSel')?.value || '';
-
     const addons  = $$('.themeOpt:checked').map(i => i.value);
     const addText = addons.length ? ', ' + addons.join(', ') : '';
-
-    return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}${addText}`
-      .replace(/\s+/g,' ')
-      .trim();
+    return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}${addText}`.replace(/\s+/g,' ').trim();
   }
 
-  /* ---------- generate image ---------- */
+  // generate image (calls /api/generate-image.js you already have)
   const genBtn      = $('#genBtn');
-  const previewImg  = $('#preview-img');   // NOTE: if your <img> id is different, update this!
+  const previewImg  = $('#previewImg');
   const genUrlInput = $('#gen-url');
   const genActions  = $('#gen-actions');
   const ratioSel    = $('#ratioSel');
@@ -415,7 +397,7 @@
     const prompt = buildPrompt();
     if (!prompt) { alert('Please describe what you want.'); return; }
 
-    const size = ratioSel?.value || '1024x1024'; // 1024x1024 / 1536x1024 / 1024x1536
+    const size = ratioSel?.value || '1024x1024';
 
     genBtn.disabled = true;
     genBtn.textContent = 'Generating…';
@@ -431,38 +413,29 @@
       const data = await r.json();
       if (!r.ok || !data?.image) throw new Error(data?.error || 'Generation failed');
 
-      // Show the image
-      if (previewImg) previewImg.src = data.image;
-
-      // Expose hosted URL + download link
-      if (genUrlInput) genUrlInput.value = data.image;
-      const dl = $('#download-link');
-      if (dl) dl.href = data.image;
-      genActions?.classList.remove('hidden');
+      // show image + link
+      previewImg.src = data.image;
+      genUrlInput.value = data.image;
+      const dl = $('#download-link'); if (dl) dl.href = data.image;
+      genActions.classList.remove('hidden');
     } catch (err) {
-      alert(err.message || err);
+      alert(err.message || String(err));
     } finally {
       genBtn.disabled = false;
       genBtn.textContent = 'Generate preview';
     }
   });
 
-  /* ---------- copy link ---------- */
+  // copy link
   $('#copy-link')?.addEventListener('click', async () => {
     if (!genUrlInput?.value) return;
     await navigator.clipboard.writeText(genUrlInput.value);
-    const btn = $('#copy-link');
-    btn.textContent = 'Copied!';
-    setTimeout(() => btn.textContent = 'Copy link', 1000);
+    const btn = $('#copy-link'); btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy link', 1000);
   });
 
-  /* ---------- order tabs ---------- */
+  // order tabs
   const tabs = $$('.orderTab');
-  const tabViews = {
-    canvas:  $('#tab-canvas'),
-    metal:   $('#tab-metal'),
-    acrylic: $('#tab-acrylic')
-  };
+  const tabViews = { canvas: $('#tab-canvas'), metal: $('#tab-metal'), acrylic: $('#tab-acrylic') };
   tabs.forEach(btn => {
     btn.addEventListener('click', () => {
       const key = btn.dataset.tab;
@@ -473,44 +446,37 @@
     });
   });
 
-  /* ---------- Signature overlay ---------- */
-  const sigEl     = $('#sig');
-  const sigToggle = $('#sigToggle');
-  const sigName   = $('#sigName');
-  const sigFont   = $('#sigFont');
-  const sigColor  = $('#sigColor');
-  const sigSize   = $('#sigSize');
-  const previewWrap = $('#previewWrap');
+  // signature overlay
+  const sigEl   = $('#sig');
+  const sigOn   = $('#sigToggle');
+  const sigName = $('#sigName');
+  const sigFont = $('#sigFont');
+  const sigCol  = $('#sigColor');
+  const sigSize = $('#sigSize');
+  const wrap    = $('#previewWrap');
 
-  sigToggle?.addEventListener('change', () => {
-    if (!sigEl) return;
-    sigEl.classList.toggle('hidden', !sigToggle.checked);
-  });
-  sigName?.addEventListener('input', () => { if (sigEl) sigEl.textContent = sigName.value || ' '; });
+  sigOn?.addEventListener('change', () => sigEl.classList.toggle('hidden', !sigOn.checked));
+  sigName?.addEventListener('input', () => { sigEl.textContent = sigName.value || ' '; });
   sigFont?.addEventListener('change', () => {
-    if (!sigEl) return;
     sigEl.classList.remove('sig-GreatVibes','sig-Allura','sig-Sacramento','sig-Playfair','sig-Montserrat');
     sigEl.classList.add('sig-' + sigFont.value);
   });
-  sigColor?.addEventListener('input', () => { if (sigEl) sigEl.style.color = sigColor.value; });
-  sigSize?.addEventListener('input', () => { if (sigEl) sigEl.style.fontSize = `${sigSize.value}px`; });
+  sigCol?.addEventListener('input', () => { sigEl.style.color = sigCol.value; });
+  sigSize?.addEventListener('input', () => { sigEl.style.fontSize = `${sigSize.value}px`; });
 
-  // Dragging
+  // drag signature
   let drag = null;
   sigEl?.addEventListener('mousedown', (e) => {
-    drag = { startX: e.clientX, startY: e.clientY, startLeft: sigEl.offsetLeft, startTop: sigEl.offsetTop };
+    drag = { x:e.clientX, y:e.clientY, left:sigEl.offsetLeft, top:sigEl.offsetTop };
     e.preventDefault();
   });
   window.addEventListener('mousemove', (e) => {
-    if (!drag || !sigEl || !previewWrap) return;
-    const dx = e.clientX - drag.startX;
-    const dy = e.clientY - drag.startY;
-    const maxX = previewWrap.clientWidth - sigEl.clientWidth - 6;
-    const maxY = previewWrap.clientHeight - sigEl.clientHeight - 6;
-    const left = Math.max(6, Math.min(maxX, drag.startLeft + dx));
-    const top  = Math.max(6, Math.min(maxY, drag.startTop + dy));
-    sigEl.style.left = left + 'px';
-    sigEl.style.top  = top + 'px';
+    if (!drag) return;
+    const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    const maxX = wrap.clientWidth  - sigEl.clientWidth  - 6;
+    const maxY = wrap.clientHeight - sigEl.clientHeight - 6;
+    sigEl.style.left = Math.max(6, Math.min(maxX, drag.left + dx)) + 'px';
+    sigEl.style.top  = Math.max(6, Math.min(maxY, drag.top  + dy)) + 'px';
   });
   window.addEventListener('mouseup', () => drag = null);
 </script>
