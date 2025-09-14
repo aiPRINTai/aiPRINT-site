@@ -22,7 +22,10 @@
     .btn { background:white; color:black; font-weight:700; padding:.7rem 1rem; border-radius:.6rem; }
     .btn-ghost { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); }
     .badge { font-size:.8rem; color:#b8c7d8 }
-    .sig-overlay { position:absolute; pointer-events:auto; cursor:grab; user-select:none; white-space:nowrap; mix-blend-mode:normal; }
+    .sig-overlay {
+      position:absolute; pointer-events:auto; cursor:grab;
+      user-select:none; white-space:nowrap; mix-blend-mode:normal;
+    }
     .sig-overlay:active { cursor:grabbing; }
     .sig-GreatVibes { font-family: 'Great Vibes', cursive; }
     .sig-Allura { font-family: 'Allura', cursive; }
@@ -30,9 +33,6 @@
     .sig-Playfair { font-family: 'Playfair Display', serif; }
     .sig-Montserrat { font-family: 'Montserrat', sans-serif; }
     html { scroll-behavior: smooth; }
-
-    /* Scroll lock for mobile drawer (iOS-friendly) */
-    body.nav-open { position: fixed; width: 100%; overflow: hidden; }
   </style>
 </head>
 <body>
@@ -73,37 +73,27 @@
     </button>
   </div>
 
- <!-- Mobile nav overlay (FULL SCREEN, above all) -->
-<div id="mobileNav" class="md:hidden fixed inset-0 z-[100] hidden">
-  <!-- Dark backdrop -->
-  <div id="navBackdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+  <!-- Mobile nav overlay (FULL SCREEN, SOLID SHEET) -->
+  <div id="mobileNav" class="md:hidden fixed inset-0 z-[60] hidden">
+    <!-- Dark backdrop -->
+    <div id="navBackdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
 
-  <!-- Sheet -->
-  <nav class="absolute top-0 inset-0 overflow-y-auto p-4">
-    <div class="mx-auto max-w-7xl">
-      <div class="rounded-2xl bg-[#0b1020]/95 border border-white/10 p-4 shadow-xl">
-        <div class="grid gap-2 text-base">
-          <a href="/about.html"     class="block px-4 py-3 rounded-lg hover:bg-white/5">How it works</a>
-          <a href="/materials.html" class="block px-4 py-3 rounded-lg hover:bg-white/5">Materials</a>
-          <a href="/faq.html"       class="block px-4 py-3 rounded-lg hover:bg-white/5">FAQ</a>
-          <a href="/policies.html"  class="block px-4 py-3 rounded-lg hover:bg-white/5">Policies</a>
-          <a href="/contact.html"   class="block px-4 py-3 rounded-lg hover:bg-white/5">Contact</a>
-
-          <hr class="my-2 border-white/10">
-
-          <a href="#create"
-             class="block px-4 py-3 rounded-lg bg-white text-black font-semibold text-center">
-            Create a preview
-          </a>
-          <a href="#order"
-             class="block px-4 py-3 rounded-lg bg-white/10 border border-white/15 hover:bg-white/15 text-center">
-            Order
-          </a>
+    <!-- Sheet -->
+    <nav class="absolute top-14 inset-x-0 px-4">
+      <div class="mx-auto max-w-7xl rounded-2xl border border-white/10 shadow-2xl bg-[#0b1020]/95">
+        <div class="p-4 grid gap-2 text-base">
+          <a href="/about.html"     class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">How it works</a>
+          <a href="/materials.html" class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">Materials</a>
+          <a href="/faq.html"       class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">FAQ</a>
+          <a href="/policies.html"  class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">Policies</a>
+          <a href="/contact.html"   class="block px-4 py-3 rounded-lg hover:bg-white/5 text-white">Contact</a>
+          <div class="h-px bg-white/10 my-1"></div>
+          <a href="#create" class="block px-4 py-3 rounded-lg bg-white text-black font-semibold text-center">Create a preview</a>
+          <a href="#order"  class="block px-4 py-3 rounded-lg border border-white/15 text-center hover:bg-white/5">Order</a>
         </div>
       </div>
-    </div>
-  </nav>
-</div>
+    </nav>
+  </div>
 </header>
 <!-- Header END -->
 
@@ -564,64 +554,44 @@
   window.addEventListener('mouseup', () => drag = null);
 </script>
 
-<!-- Mobile nav logic (scroll-lock + backdrop + ESC) -->
+<!-- Mobile menu logic (backdrop, sheet, scroll lock) -->
 <script>
-(() => {
-  const btn      = document.getElementById('navToggle');
-  const panel    = document.getElementById('mobileNav');
-  const backdrop = document.getElementById('navBackdrop');
-  const iconOpen = document.getElementById('iconOpen');
-  const iconClose= document.getElementById('iconClose');
-
-  if (!btn || !panel) return;
-
-  let scrollTop = 0;
+(function () {
+  const btn    = document.getElementById('navToggle');
+  const panel  = document.getElementById('mobileNav');
+  const openI  = document.getElementById('iconOpen');
+  const closeI = document.getElementById('iconClose');
+  const backd  = document.getElementById('navBackdrop');
 
   function openNav() {
-    if (!panel.classList.contains('hidden')) return;
-
-    // lock scroll (iOS-friendly)
-    scrollTop = window.scrollY || document.documentElement.scrollTop;
-    document.body.style.top = `-${scrollTop}px`;
-    document.body.classList.add('nav-open');
-
     panel.classList.remove('hidden');
     btn.setAttribute('aria-expanded', 'true');
-    iconOpen?.classList.add('hidden');
-    iconClose?.classList.remove('hidden');
+    openI?.classList.add('hidden');
+    closeI?.classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // lock scroll
   }
-
   function closeNav() {
-    if (panel.classList.contains('hidden')) return;
-
     panel.classList.add('hidden');
     btn.setAttribute('aria-expanded', 'false');
-    iconOpen?.classList.remove('hidden');
-    iconClose?.classList.add('hidden');
-
-    // unlock scroll + restore position
-    document.body.classList.remove('nav-open');
-    document.body.style.top = '';
-    window.scrollTo(0, scrollTop);
+    openI?.classList.remove('hidden');
+    closeI?.classList.add('hidden');
+    document.body.style.overflow = ''; // unlock
   }
 
-  btn.addEventListener('click', () => {
-    panel.classList.contains('hidden') ? openNav() : closeNav();
+  btn?.addEventListener('click', () => {
+    const isHidden = panel.classList.contains('hidden');
+    isHidden ? openNav() : closeNav();
   });
 
-  // click backdrop to close
-  backdrop?.addEventListener('click', closeNav);
+  // Close on backdrop click or any link click
+  backd?.addEventListener('click', closeNav);
+  panel?.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
 
-  // close on link click
-  panel.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
-
-  // close on ESC
-  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeNav(); });
-
-  // auto-close when switching to desktop
-  window.addEventListener('resize', () => { if (window.innerWidth >= 768) closeNav(); });
+  // Auto-close if resized to desktop
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768) closeNav();
+  });
 })();
 </script>
-
 </body>
 </html>
