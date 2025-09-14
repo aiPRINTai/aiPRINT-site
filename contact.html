@@ -19,269 +19,266 @@
 </head>
 <body class="text-white/90">
 
-  <!-- Header START (slide-out mobile menu) -->
-  <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-5 h-14 flex items-center justify-between">
-      <!-- Brand -->
-      <a href="/" class="flex items-center gap-2">
-        <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
-        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
-      </a>
+<!-- Header START (same pattern as Home/About) -->
+<header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-5 h-14 flex items-center justify-between">
+    <!-- Brand -->
+    <a href="/" class="flex items-center gap-2">
+      <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
+      <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+    </a>
 
-      <!-- Desktop nav -->
-      <nav class="hidden md:flex items-center gap-6 text-sm">
-        <a href="/about.html"     class="hover:text-white">How it works</a>
-        <a href="/materials.html" class="hover:text-white">Materials</a>
-        <a href="/faq.html"       class="hover:text-white">FAQ</a>
-        <a href="/policies.html"  class="hover:text-white">Policies</a>
-        <a href="/contact.html"   class="text-white font-semibold">Contact</a>
-      </nav>
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex items-center gap-6 text-sm">
+      <a href="/about.html"     class="hover:text-white">How it works</a>
+      <a href="/materials.html" class="hover:text-white">Materials</a>
+      <a href="/faq.html"       class="hover:text-white">FAQ</a>
+      <a href="/policies.html"  class="hover:text-white">Policies</a>
+      <a href="/contact.html"   class="text-white font-semibold">Contact</a>
+    </nav>
 
-      <!-- Mobile toggle -->
-      <button id="navToggle"
-              class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10"
-              aria-expanded="false" aria-controls="mobileNav" aria-label="Toggle navigation">
-        <!-- open -->
-        <svg id="iconOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-        <!-- close -->
-        <svg id="iconClose" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 18L18 6M6 6l12 12"/>
-        </svg>
-      </button>
+    <!-- Mobile toggle -->
+    <button id="navToggle"
+            class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10"
+            aria-expanded="false" aria-controls="mobileNav" aria-label="Toggle navigation">
+      <!-- open -->
+      <svg id="iconOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+      <!-- close -->
+      <svg id="iconClose" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile nav overlay (full screen) -->
+  <div id="mobileNav" class="md:hidden fixed inset-0 z-[100] hidden">
+    <!-- Backdrop -->
+    <div id="navBackdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+
+    <!-- Panel -->
+    <nav class="absolute top-14 inset-x-0 px-4">
+      <div class="mx-auto max-w-7xl grid gap-3 text-sm">
+        <a href="/about.html"     class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">How it works</a>
+        <a href="/materials.html" class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Materials</a>
+        <a href="/faq.html"       class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">FAQ</a>
+        <a href="/policies.html"  class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Policies</a>
+        <a href="/contact.html"   class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Contact</a>
+        <a href="/#create"        class="block p-4 rounded-xl bg-white text-black font-semibold text-center">Create a preview</a>
+        <a href="/#order"         class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15 text-center">Order</a>
+      </div>
+    </nav>
+  </div>
+</header>
+<!-- Header END -->
+
+<!-- HERO — big studio photo proves “in-house” -->
+<section class="relative">
+  <!-- Replace with your file once uploaded: /assets/printlab.jpg -->
+  <img src="/assets/printlab.jpg"
+       alt="aiPRINT.ai in-house fine-art print studio"
+       class="w-full h-[460px] object-cover">
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,.35),rgba(0,0,0,.75))]"></div>
+
+  <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+    <h1 class="text-4xl md:text-5xl font-extrabold">Get in touch</h1>
+    <p class="mt-4 max-w-3xl text-white/90">
+      We design, color-calibrate, and print <em>in-house</em> for museum-grade quality.
+      Questions about materials, sizes, or orders? We’re here to help.
+    </p>
+    <div class="mt-6 flex gap-3">
+      <a href="#form" class="btn">Send a message</a>
+      <a href="/materials.html" class="btn-ghost">See materials</a>
+    </div>
+  </div>
+</section>
+
+<!-- Contact info + form -->
+<main class="max-w-6xl mx-auto px-6 py-12 md:py-16 grid lg:grid-cols-2 gap-8">
+
+  <!-- Trust / Info card -->
+  <aside class="glass rounded-2xl p-8 space-y-6">
+    <h2 class="text-2xl font-bold">Our studio</h2>
+    <p class="text-white/80">Everything is produced under one roof for consistent, gallery-level results.</p>
+
+    <dl class="grid sm:grid-cols-2 gap-6">
+      <div>
+        <dt class="font-semibold">Email</dt>
+        <dd>hello@aiprint.ai</dd>
+      </div>
+      <div>
+        <dt class="font-semibold">Studio hours</dt>
+        <dd>Mon–Fri, 10am–6pm ET</dd>
+      </div>
+      <div>
+        <dt class="font-semibold">Turnaround</dt>
+        <dd>Most prints ship within <strong>7–14 days</strong>.</dd>
+      </div>
+      <div>
+        <dt class="font-semibold">Location</dt>
+        <dd>Florida, USA — shipping nationwide.</dd>
+      </div>
+    </dl>
+
+    <!-- Badges -->
+    <div class="pt-2 flex flex-wrap gap-2 text-xs">
+      <span class="px-3 py-1 rounded-full border border-white/25">In-house printing</span>
+      <span class="px-3 py-1 rounded-full border border-white/25">Archival inks</span>
+      <span class="px-3 py-1 rounded-full border border-white/25">COA included</span>
+      <span class="px-3 py-1 rounded-full border border-white/25">Ready to hang</span>
     </div>
 
-    <!-- Mobile nav overlay (full screen) -->
-    <div id="mobileNav" class="md:hidden fixed inset-0 z-50 hidden">
-      <!-- Backdrop -->
-      <div id="navBackdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-
-      <!-- Panel -->
-      <nav class="absolute top-14 inset-x-0 px-4">
-        <div class="mx-auto max-w-7xl grid gap-3 text-sm">
-          <a href="/about.html"     class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">How it works</a>
-          <a href="/materials.html" class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Materials</a>
-          <a href="/faq.html"       class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">FAQ</a>
-          <a href="/policies.html"  class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Policies</a>
-          <a href="/contact.html"   class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Contact</a>
-          <a href="/#create"        class="block p-4 rounded-xl bg-white text-black font-semibold text-center">Create a preview</a>
-          <a href="/#order"         class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15 text-center">Order</a>
-        </div>
-      </nav>
+    <!-- Mini gallery of the lab (swap or remove) -->
+    <div class="grid grid-cols-3 gap-2 pt-4">
+      <img src="https://images.unsplash.com/photo-1549887534-4e4b5d64b02c?q=80&w=600&auto=format&fit=crop"
+           alt="Acrylic finishing" class="h-24 w-full object-cover rounded-md">
+      <img src="https://images.unsplash.com/photo-1581091870622-8a5ee90fae5d?q=80&w=600&auto=format&fit=crop"
+           alt="Studio detail" class="h-24 w-full object-cover rounded-md">
+      <img src="https://images.unsplash.com/photo-1503602642458-232111445657?q=80&w=600&auto=format&fit=crop"
+           alt="Color checks" class="h-24 w-full object-cover rounded-md">
     </div>
-  </header>
-  <!-- Header END -->
+  </aside>
 
-  <!-- HERO — big studio photo proves “in-house” -->
-  <section class="relative">
-    <!-- Replace with your file once uploaded: /assets/printlab.jpg -->
-    <img src="/assets/printlab.jpg"
-         alt="aiPRINT.ai in-house fine-art print studio"
-         class="w-full h-[460px] object-cover">
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,.35),rgba(0,0,0,.75))]"></div>
+  <!-- Form -->
+  <section id="form" class="glass rounded-2xl p-8">
+    <h2 class="text-2xl font-bold mb-4">Send us a message</h2>
 
-    <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-      <h1 class="text-4xl md:text-5xl font-extrabold">Get in touch</h1>
-      <p class="mt-4 max-w-3xl text-white/90">
-        We design, color-calibrate, and print <em>in-house</em> for museum-grade quality.
-        Questions about materials, sizes, or orders? We’re here to help.
+    <form action="https://formspree.io/f/xrbadnbo" method="POST" class="space-y-5">
+      <div>
+        <label class="text-sm">Name</label>
+        <input name="name" required
+               class="field w-full rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
+      </div>
+      <div>
+        <label class="text-sm">Email</label>
+        <input type="email" name="email" required
+               class="field w-full rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
+      </div>
+      <div>
+        <label class="text-sm">Message</label>
+        <textarea name="message" rows="7" required
+                  class="field w-full rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  placeholder="Tell us about your idea, preferred size/finish, or any questions."></textarea>
+      </div>
+
+      <!-- Redirect to thank-you page -->
+      <input type="hidden" name="_redirect" value="/thank-you.html" />
+
+      <button type="submit" class="btn w-full">Send message</button>
+      <p class="text-xs text-white/60 mt-1">
+        By submitting, you agree to our <a href="/policies.html" class="underline">Policies</a>.
       </p>
-      <div class="mt-6 flex gap-3">
-        <a href="#form" class="btn">Send a message</a>
-        <a href="/materials.html" class="btn-ghost">See materials</a>
-      </div>
-    </div>
+    </form>
   </section>
+</main>
 
-  <!-- Contact info + form -->
-  <main class="max-w-6xl mx-auto px-6 py-12 md:py-16 grid lg:grid-cols-2 gap-8">
-
-    <!-- Trust / Info card -->
-    <aside class="glass rounded-2xl p-8 space-y-6">
-      <h2 class="text-2xl font-bold">Our studio</h2>
-      <p class="text-white/80">Everything is produced under one roof for consistent, gallery-level results.</p>
-
-      <dl class="grid sm:grid-cols-2 gap-6">
-        <div>
-          <dt class="font-semibold">Email</dt>
-          <dd>hello@aiprint.ai</dd>
-        </div>
-        <div>
-          <dt class="font-semibold">Studio hours</dt>
-          <dd>Mon–Fri, 10am–6pm ET</dd>
-        </div>
-        <div>
-          <dt class="font-semibold">Turnaround</dt>
-          <dd>Most prints ship within <strong>7–14 days</strong>.</dd>
-        </div>
-        <div>
-          <dt class="font-semibold">Location</dt>
-          <dd>Florida, USA — shipping nationwide.</dd>
-        </div>
-      </dl>
-
-      <!-- Badges -->
-      <div class="pt-2 flex flex-wrap gap-2 text-xs">
-        <span class="px-3 py-1 rounded-full border border-white/25">In-house printing</span>
-        <span class="px-3 py-1 rounded-full border border-white/25">Archival inks</span>
-        <span class="px-3 py-1 rounded-full border border-white/25">COA included</span>
-        <span class="px-3 py-1 rounded-full border border-white/25">Ready to hang</span>
+<!-- Slim FAQ teaser -->
+<section class="max-w-6xl mx-auto px-6 pb-16">
+  <div class="glass rounded-2xl p-6 md:p-8">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <h3 class="text-xl font-bold">Still have questions?</h3>
+        <p class="text-white/80">A few quick answers before you write in.</p>
       </div>
+      <a href="/faq.html" class="btn-ghost px-4 py-2 rounded-md">Open full FAQ</a>
+    </div>
 
-      <!-- Mini gallery of the lab (swap or remove) -->
-      <div class="grid grid-cols-3 gap-2 pt-4">
-        <img src="https://images.unsplash.com/photo-1549887534-4e4b5d64b02c?q=80&w=600&auto=format&fit=crop"
-             alt="Acrylic finishing" class="h-24 w-full object-cover rounded-md">
-        <img src="https://images.unsplash.com/photo-1581091870622-8a5ee90fae5d?q=80&w=600&auto=format&fit=crop"
-             alt="Studio detail" class="h-24 w-full object-cover rounded-md">
-        <img src="https://images.unsplash.com/photo-1503602642458-232111445657?q=80&w=600&auto=format&fit=crop"
-             alt="Color checks" class="h-24 w-full object-cover rounded-md">
+    <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm">
+      <div class="rounded-lg border border-white/10 p-4">
+        <div class="font-semibold">Do you sign the pieces?</div>
+        <p class="text-white/75 mt-1">We can add a tasteful artist signature overlay to the print by request.</p>
       </div>
-    </aside>
-
-    <!-- Form -->
-    <section id="form" class="glass rounded-2xl p-8">
-      <h2 class="text-2xl font-bold mb-4">Send us a message</h2>
-
-      <form action="https://formspree.io/f/xrbadnbo" method="POST" class="space-y-5">
-        <div>
-          <label class="text-sm">Name</label>
-          <input name="name" required
-                 class="field w-full rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
-        </div>
-        <div>
-          <label class="text-sm">Email</label>
-          <input type="email" name="email" required
-                 class="field w-full rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
-        </div>
-        <div>
-          <label class="text-sm">Message</label>
-          <textarea name="message" rows="7" required
-                    class="field w-full rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                    placeholder="Tell us about your idea, preferred size/finish, or any questions."></textarea>
-        </div>
-
-        <!-- Redirect to thank-you page -->
-        <input type="hidden" name="_redirect" value="/thank-you.html" />
-
-        <button type="submit" class="btn w-full">Send message</button>
-        <p class="text-xs text-white/60 mt-1">
-          By submitting, you agree to our <a href="/policies.html" class="underline">Policies</a>.
-        </p>
-      </form>
-    </section>
-  </main>
-
-  <!-- Slim FAQ teaser -->
-  <section class="max-w-6xl mx-auto px-6 pb-16">
-    <div class="glass rounded-2xl p-6 md:p-8">
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h3 class="text-xl font-bold">Still have questions?</h3>
-          <p class="text-white/80">A few quick answers before you write in.</p>
-        </div>
-        <a href="/faq.html" class="btn-ghost px-4 py-2 rounded-md">Open full FAQ</a>
+      <div class="rounded-lg border border-white/10 p-4">
+        <div class="font-semibold">Can I order proofs?</div>
+        <p class="text-white/75 mt-1">Yes—digital proofs are included, and small test prints are available.</p>
       </div>
-
-      <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm">
-        <div class="rounded-lg border border-white/10 p-4">
-          <div class="font-semibold">Do you sign the pieces?</div>
-          <p class="text-white/75 mt-1">We can add a tasteful artist signature overlay to the print by request.</p>
-        </div>
-        <div class="rounded-lg border border-white/10 p-4">
-          <div class="font-semibold">Can I order proofs?</div>
-          <p class="text-white/75 mt-1">Yes—digital proofs are included, and small test prints are available.</p>
-        </div>
-        <div class="rounded-lg border border-white/10 p-4">
-          <div class="font-semibold">International shipping?</div>
-          <p class="text-white/75 mt-1">We currently ship across the U.S.; reach out for international options.</p>
-        </div>
+      <div class="rounded-lg border border-white/10 p-4">
+        <div class="font-semibold">International shipping?</div>
+        <p class="text-white/75 mt-1">We currently ship across the U.S.; reach out for international options.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Final CTA -->
-  <section class="max-w-6xl mx-auto px-6 pb-20">
-    <div class="rounded-2xl bg-gradient-to-r from-indigo-500/20 to-sky-500/20 border border-white/10 p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-      <div>
-        <h3 class="text-xl font-bold">Ready to see your idea as a fine-art print?</h3>
-        <p class="text-white/80">Generate a preview in seconds—then choose your size & finish.</p>
-      </div>
-      <a href="/#create" class="btn">Create a preview</a>
+<!-- Final CTA -->
+<section class="max-w-6xl mx-auto px-6 pb-20">
+  <div class="rounded-2xl bg-gradient-to-r from-indigo-500/20 to-sky-500/20 border border-white/10 p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <h3 class="text-xl font-bold">Ready to see your idea as a fine-art print?</h3>
+      <p class="text-white/80">Generate a preview in seconds—then choose your size & finish.</p>
     </div>
-  </section>
+    <a href="/#create" class="btn">Create a preview</a>
+  </div>
+</section>
 
-  <!-- Footer -->
-  <footer class="border-t border-white/10 text-sm text-white/60">
-    <div class="max-w-6xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-6">
-      <div>
-        <div class="font-semibold text-white">aiPRINT.ai</div>
-        <p class="mt-2">Archival, ready-to-hang prints crafted in-house.</p>
-        <p class="mt-2">© <span id="y"></span> aiPRINT.ai</p>
-      </div>
-      <div>
-        <div class="font-semibold text-white">Explore</div>
-        <ul class="mt-2 space-y-1">
-          <li><a href="/about.html" class="hover:text-white">How it works</a></li>
-          <li><a href="/materials.html" class="hover:text-white">Materials</a></li>
-          <li><a href="/faq.html" class="hover:text-white">FAQ</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="font-semibold text-white">Company</div>
-        <ul class="mt-2 space-y-1">
-          <li><a href="/policies.html" class="hover:text-white">Policies</a></li>
-          <li><a href="/contact.html" class="hover:text-white">Contact</a></li>
-        </ul>
-      </div>
+<!-- Footer -->
+<footer class="border-t border-white/10 text-sm text-white/60">
+  <div class="max-w-6xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-6">
+    <div>
+      <div class="font-semibold text-white">aiPRINT.ai</div>
+      <p class="mt-2">Archival, ready-to-hang prints crafted in-house.</p>
+      <p class="mt-2">© <span id="y"></span> aiPRINT.ai</p>
     </div>
-  </footer>
+    <div>
+      <div class="font-semibold text-white">Explore</div>
+      <ul class="mt-2 space-y-1">
+        <li><a href="/about.html" class="hover:text-white">How it works</a></li>
+        <li><a href="/materials.html" class="hover:text-white">Materials</a></li>
+        <li><a href="/faq.html" class="hover:text-white">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="font-semibold text-white">Company</div>
+      <ul class="mt-2 space-y-1">
+        <li><a href="/policies.html" class="hover:text-white">Policies</a></li>
+        <li><a href="/contact.html" class="hover:text-white">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
 
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 
-  <!-- MOBILE MENU LOGIC (same as other pages) -->
-  <script>
-  (function(){
-    const btn      = document.getElementById('navToggle');
-    const panel    = document.getElementById('mobileNav');
-    const openI    = document.getElementById('iconOpen');
-    const closeI   = document.getElementById('iconClose');
-    const backdrop = document.getElementById('navBackdrop');
+<!-- MOBILE MENU LOGIC -->
+<script>
+(function(){
+  const btn      = document.getElementById('navToggle');
+  const panel    = document.getElementById('mobileNav');
+  const openI    = document.getElementById('iconOpen');
+  const closeI   = document.getElementById('iconClose');
+  const backdrop = document.getElementById('navBackdrop');
 
-    function openNav(){
-      panel.classList.remove('hidden');
-      btn.setAttribute('aria-expanded','true');
-      openI?.classList.add('hidden');
-      closeI?.classList.remove('hidden');
-      document.body.classList.add('overflow-hidden'); // lock scroll
-    }
-    function closeNav(){
-      panel.classList.add('hidden');
-      btn.setAttribute('aria-expanded','false');
-      openI?.classList.remove('hidden');
-      closeI?.classList.add('hidden');
-      document.body.classList.remove('overflow-hidden'); // unlock scroll
-    }
+  function openNav(){
+    panel.classList.remove('hidden');
+    btn.setAttribute('aria-expanded','true');
+    openI?.classList.add('hidden');
+    closeI?.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+  }
+  function closeNav(){
+    panel.classList.add('hidden');
+    btn.setAttribute('aria-expanded','false');
+    openI?.classList.remove('hidden');
+    closeI?.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
 
-    if (!btn || !panel) return;
+  if (!btn || !panel) return;
 
-    // Toggle
-    btn.addEventListener('click', () => {
-      panel.classList.contains('hidden') ? openNav() : closeNav();
-    });
+  btn.addEventListener('click', () => {
+    panel.classList.contains('hidden') ? openNav() : closeNav();
+  });
 
-    // Close on backdrop + link tap
-    backdrop?.addEventListener('click', closeNav);
-    panel.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+  backdrop?.addEventListener('click', closeNav);
+  panel.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
 
-    // Auto-close when resizing up to desktop
-    window.addEventListener('resize', () => {
-      if (window.innerWidth >= 768) closeNav();
-    });
-  })();
-  </script>
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768) closeNav();
+  });
+})();
+</script>
 </body>
 </html>
