@@ -1,14 +1,13 @@
-// /api/generate-image.js — generates an image with OpenAI and saves it to Vercel Blob
+// /api/generate-image.js  — OpenAI image -> save to Vercel Blob (public URL)
 
 import { put } from '@vercel/blob';
 
-// helper: makes a safe filename from prompt text
 function slugify(s) {
   return (s || '')
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')   // replace non-alphanumeric with hyphen
-    .replace(/(^-|-$)/g, '')       // trim leading/trailing dashes
-    .slice(0, 60) || 'image';      // max 60 chars, fallback to 'image'
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+    .slice(0, 60) || 'image';
 }
 
 export default async function handler(req, res) {
@@ -16,8 +15,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;        // required
-  const orgId  = process.env.OPENAI_ORG_ID || '';   // optional
+  const apiKey = process.env.OPENAI_API_KEY;
+  const orgId  = process.env.OPENAI_ORG_ID || '';
 
   if (!apiKey) {
     return res.status(500).json({ ok: false, error: 'Missing env OPENAI_API_KEY' });
@@ -28,12 +27,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ ok: false, error: 'Please provide a prompt' });
   }
 
-  // restrict to supported sizes
-  const allowedSizes = new Set(['1024x1024', '1024x1536', '1536x1024']);
-  const safeSize = allowedSizes.has(size) ? size : '1024x1024';
+  const allowed = new Set(['1024x1024', '1024x1536', '1536x1024']);
+  const safeSize = allowed.has(size) ? size : '1024x1024';
 
   try {
-    // 1) Request image from OpenAI
+    // 1) Ask OpenAI for Base64 PNG
     const upstream = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
       headers: {
@@ -45,22 +43,15 @@ export default async function handler(req, res) {
         model: 'gpt-image-1',
         prompt: prompt.trim(),
         size: safeSize
-        // NOTE: no response_format → defaults to b64_json
+        // default response (b64_json) is the most compatible
       })
     });
 
     const raw = await upstream.text();
-
-    // try parsing JSON
     let data;
-    try {
-      data = JSON.parse(raw);
-    } catch {
-      return res.status(502).json({
-        ok: false,
-        error: 'Bad upstream JSON',
-        details: raw.slice(0, 500)
-      });
+    try { data = JSON.parse(raw); }
+    catch {
+      return res.status(502).json({ ok: false, error: 'Bad upstream JSON', details: raw.slice(0, 800) });
     }
 
     if (!upstream.ok) {
@@ -69,11 +60,9 @@ export default async function handler(req, res) {
     }
 
     const b64 = data?.data?.[0]?.b64_json;
-    if (!b64) {
-      return res.status(500).json({ ok: false, error: 'No image returned from provider' });
-    }
+    if (!b64) return res.status(500).json({ ok: false, error: 'No image returned from provider' });
 
-    // 2) Save image to Vercel Blob (permanent CDN URL)
+    // 2) Save to Vercel Blob (permanent public URL)
     const buffer = Buffer.from(b64, 'base64');
     const key = `previews/${Date.now()}-${slugify(prompt)}.png`;
 
@@ -84,13 +73,8 @@ export default async function handler(req, res) {
       addRandomSuffix: true
     });
 
-    // 3) Return JSON response
-    return res.status(200).json({
-      ok: true,
-      image: url,   // frontend uses this for <img>
-      url
-    });
-
+    // 3) Return permanent URL
+    return res.status(200).json({ ok: true, image: url, url });
   } catch (err) {
     return res.status(500).json({ ok: false, error: err.message || 'Server error' });
   }
