@@ -72,38 +72,25 @@
       </svg>
     </button>
   </div>
+  
+<!-- Mobile nav overlay (FULL SCREEN) -->
+<div id="mobileNav" class="md:hidden fixed inset-0 z-50 hidden">
+  <!-- Backdrop -->
+  <div id="navBackdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
 
-  <!-- Mobile nav panel (overlay + sheet) -->
-  <div id="mobileNav" class="md:hidden hidden">
-    <!-- overlay -->
-    <div class="fixed inset-0 bg-black/50 z-40"></div>
-    <!-- sheet -->
-    <div class="fixed inset-y-0 right-0 w-[86%] max-w-sm z-50 bg-[#0b1020] border-l border-white/10 p-5 flex flex-col gap-3">
-      <div class="flex items-center justify-between mb-2">
-        <div class="flex items-center gap-2">
-          <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
-          <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
-        </div>
-        <button id="navClose" class="w-9 h-9 grid place-items-center rounded-md border border-white/15 hover:bg-white/10" aria-label="Close navigation">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
-      </div>
-      <nav class="text-sm">
-        <a href="/about.html" class="block px-3 py-2 rounded-lg hover:bg-white/10">How it works</a>
-        <a href="/materials.html" class="block px-3 py-2 rounded-lg hover:bg-white/10">Materials</a>
-        <a href="/faq.html" class="block px-3 py-2 rounded-lg hover:bg-white/10">FAQ</a>
-        <a href="/policies.html" class="block px-3 py-2 rounded-lg hover:bg-white/10">Policies</a>
-        <a href="/contact.html" class="block px-3 py-2 rounded-lg hover:bg-white/10">Contact</a>
-      </nav>
-      <div class="mt-4 grid grid-cols-2 gap-2">
-        <a href="#create" class="px-3 py-2 rounded-md bg-white text-black text-center font-semibold">Create</a>
-        <a href="#order" class="px-3 py-2 rounded-md border border-white/20 text-center">Order</a>
-      </div>
+  <!-- Panel -->
+  <nav class="absolute top-14 inset-x-0 px-4">
+    <div class="mx-auto max-w-7xl grid gap-3 text-sm">
+      <a href="/about.html"     class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">How it works</a>
+      <a href="/materials.html" class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Materials</a>
+      <a href="/faq.html"       class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">FAQ</a>
+      <a href="/policies.html"  class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Policies</a>
+      <a href="/contact.html"   class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Contact</a>
+      <a href="#create"         class="block p-4 rounded-xl bg-white text-black font-semibold text-center">Create a preview</a>
+      <a href="#order"          class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15 text-center">Order</a>
     </div>
-  </div>
+  </nav>
+</div>
 </header>
 <!-- Header END -->
 
