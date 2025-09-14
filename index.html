@@ -6,7 +6,7 @@
 <title>aiPRINT.ai — Turn any idea into a gallery-worthy print</title>
 <meta name="description" content="Create premium, ready-to-hang fine art prints from your idea. AI + human curation, archival materials, Certificate of Authenticity." />
 
-<!-- Tailwind (CDN build for quick iteration) -->
+<!-- Tailwind (CDN) -->
 <script src="https://cdn.tailwindcss.com"></script>
 
 <!-- Signature fonts (5 total, 3 cursive) -->
@@ -14,7 +14,7 @@
 
 <style>
   :root { --bg:#0b1020; --card:#131a2a; --muted:#9fb3c8; --ink:#dce6f3; }
-  body { background:var(--bg); color: var(--ink); }
+  body { background:var(--bg); color: var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
   .glass { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px); }
   .muted { color: var(--muted); }
   .h1 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight:800; line-height:1.05 }
@@ -27,7 +27,6 @@
     user-select:none; white-space:nowrap; mix-blend-mode:normal;
   }
   .sig-overlay:active { cursor:grabbing; }
-  /* Signature font classes mapped to Google fonts */
   .sig-GreatVibes { font-family: 'Great Vibes', cursive; }
   .sig-Allura { font-family: 'Allura', cursive; }
   .sig-Sacramento { font-family: 'Sacramento', cursive; }
@@ -63,10 +62,10 @@
     <p class="badge mt-5">Made in the USA · Archival inks · Limited editions · Certificate of Authenticity · Ready to hang</p>
   </div>
 
-  <!-- simple image stack -->
+  <!-- image stack -->
   <div class="grid gap-4">
     <div class="h-60 rounded-2xl overflow-hidden glass">
-      <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover" alt="Library wall" />
+      <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover" alt="Gallery wall" />
     </div>
     <div class="grid grid-cols-2 gap-4">
       <div class="h-36 rounded-2xl overflow-hidden glass">
@@ -91,7 +90,7 @@
     <div class="glass rounded-xl p-5">
       <div class="font-bold">STEP 2</div>
       <div class="mt-2 text-lg font-extrabold">We craft your artwork</div>
-      <p class="muted mt-2">Your prompt + our creative options generate a preview.</p>
+      <p class="muted mt-2">Your prompt + creative options generate a preview.</p>
     </div>
     <div class="glass rounded-xl p-5">
       <div class="font-bold">STEP 3</div>
@@ -107,7 +106,7 @@
   <div class="grid md:grid-cols-3 gap-4">
     <div class="glass rounded-xl p-5">
       <div class="text-lg font-extrabold">Signature Series – Fine Art Canvas</div>
-      <p class="muted mt-2">Archival fine art canvas with rich texture and deep color, gallery-wrapped and ready to hang.</p>
+      <p class="muted mt-2">Archival fine-art canvas with rich texture and deep color, gallery-wrapped and ready to hang.</p>
     </div>
     <div class="glass rounded-xl p-5">
       <div class="text-lg font-extrabold">Gallery Edition – ChromaLuxe Metal</div>
@@ -141,8 +140,9 @@
       </div>
     </div>
 
-    <!-- CREATIVE OPTIONS -->
+    <!-- 🎨 CREATIVE OPTIONS -->
     <div id="creative-options" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+      <!-- Style -->
       <label class="flex flex-col gap-1">
         <span class="text-white/80 text-sm">Style</span>
         <select id="styleSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
@@ -157,6 +157,7 @@
         </select>
       </label>
 
+      <!-- Mood -->
       <label class="flex flex-col gap-1">
         <span class="text-white/80 text-sm">Mood / Atmosphere</span>
         <select id="moodSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
@@ -171,6 +172,7 @@
         </select>
       </label>
 
+      <!-- Lighting -->
       <label class="flex flex-col gap-1">
         <span class="text-white/80 text-sm">Lighting</span>
         <select id="lightSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
@@ -185,6 +187,7 @@
         </select>
       </label>
 
+      <!-- Camera & Composition -->
       <label class="flex flex-col gap-1">
         <span class="text-white/80 text-sm">Camera & composition</span>
         <select id="compSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
@@ -199,6 +202,7 @@
         </select>
       </label>
 
+      <!-- Medium / Output -->
       <label class="flex flex-col gap-1 md:col-span-2">
         <span class="text-white/80 text-sm">Medium / Output</span>
         <select id="mediumSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
@@ -214,6 +218,7 @@
         </select>
       </label>
 
+      <!-- Theme add-ons -->
       <fieldset class="md:col-span-2">
         <legend class="text-white/80 text-sm mb-2">Theme add-ons (optional)</legend>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-white/80">
@@ -230,21 +235,19 @@
       </fieldset>
     </div>
 
-    <!-- PREVIEW -->
+    <!-- PREVIEW + SIGNATURE -->
     <div class="mt-5">
       <div class="relative w-full aspect-[16/10] bg-black/40 rounded-xl overflow-hidden border border-white/10" id="previewWrap">
         <img id="previewImg" class="w-full h-full object-contain" alt="Preview" />
-        <!-- signature overlay (draggable) -->
+        <!-- draggable signature overlay -->
         <div id="sig" class="sig-overlay sig-GreatVibes hidden" style="left: 12px; bottom: 10px; color: #ffffff; font-size: 24px;">Your Name</div>
       </div>
 
-      <!-- Artist Signature controls -->
       <div class="mt-3 grid md:grid-cols-[1fr_220px_120px_1fr] gap-3 items-center">
         <label class="flex items-center gap-2">
           <input id="sigToggle" type="checkbox" />
           <span class="muted text-sm">Show signature on preview</span>
         </label>
-
         <input id="sigName" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2" placeholder="Type your name…" />
         <select id="sigFont" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2">
           <option value="GreatVibes">Great Vibes (cursive)</option>
@@ -262,7 +265,6 @@
         </div>
       </div>
 
-      <!-- Link + actions (populate when we have a hosted URL) -->
       <div id="gen-actions" class="hidden mt-4 flex flex-wrap items-center gap-3">
         <input id="gen-url" class="w-full md:w-auto flex-1 rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/80" readonly />
         <button id="copy-link" class="btn">Copy link</button>
@@ -287,18 +289,18 @@
   <div id="tab-canvas" class="grid md:grid-cols-3 gap-4">
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Square (1:1)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_6oU00jdsm2D32Dr2dvcV20o" target="_blank">24×24 — $155</a>
-      <a class="btn w-full" href="https://buy.stripe.com/test_4gM9AT2NI4Lb4Lzf0hcV20p" target="_blank">30×30 — $245</a>
+      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_6oU00jdsm2D32Dr2dvcV20o" target="_blank" rel="noopener">24×24 — $155</a>
+      <a class="btn w-full"      href="https://buy.stripe.com/test_4gM9AT2NI4Lb4Lzf0hcV20p" target="_blank" rel="noopener">30×30 — $245</a>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_dRmeVdfAua5va5T6tLcV20q" target="_blank">24×16 — $105</a>
-      <a class="btn w-full" href="https://buy.stripe.com/test_dRmaEXbkeelLfqdbO5cV20r" target="_blank">30×20 — $165</a>
+      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_dRmeVdfAua5va5T6tLcV20q" target="_blank" rel="noopener">24×16 — $105</a>
+      <a class="btn w-full"      href="https://buy.stripe.com/test_dRmaEXbkeelLfqdbO5cV20r" target="_blank" rel="noopener">30×20 — $165</a>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Vertical (2:3)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_fZu3cvdsmfpP7XL9FXcV20s" target="_blank">16×24 — $105</a>
-      <a class="btn w-full" href="https://buy.stripe.com/test_5kQ28raga7Xn7XLbO5cV20t" target="_blank">20×30 — $165</a>
+      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_fZu3cvdsmfpP7XL9FXcV20s" target="_blank" rel="noopener">16×24 — $105</a>
+      <a class="btn w-full"      href="https://buy.stripe.com/test_5kQ28raga7Xn7XLbO5cV20t" target="_blank" rel="noopener">20×30 — $165</a>
     </div>
   </div>
 
@@ -306,18 +308,18 @@
   <div id="tab-metal" class="hidden grid md:grid-cols-3 gap-4">
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Square (1:1)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_14A5kDewqgtT0vj9FXcV20u" target="_blank">24×24 — $275</a>
-      <a class="btn w-full" href="https://buy.stripe.com/test_dRm4gzagab9z4Lz3hzcV20v" target="_blank">30×30 — $445</a>
+      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_14A5kDewqgtT0vj9FXcV20u" target="_blank" rel="noopener">24×24 — $275</a>
+      <a class="btn w-full"      href="https://buy.stripe.com/test_dRm4gzagab9z4Lz3hzcV20v" target="_blank" rel="noopener">30×30 — $445</a>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_cNi4gz0FA3H7guh6tLcV20D" target="_blank">24×16 — $195</a>
-      <a class="btn w-full" href="https://buy.stripe.com/test_fZufZhbke2D31znaK1cV20C" target="_blank">30×20 — $295</a>
+      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_cNi4gz0FA3H7guh6tLcV20D" target="_blank" rel="noopener">24×16 — $195</a>
+      <a class="btn w-full"      href="https://buy.stripe.com/test_fZufZhbke2D31znaK1cV20C" target="_blank" rel="noopener">30×20 — $295</a>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Vertical (2:3)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_14A28r9c61yZ2DraK1cV20G" target="_blank">16×24 — $195</a>
-      <a class="btn w-full" href="https://buy.stripe.com/test_3cI5kDagagtT0vj4lDcV20H" target="_blank">20×30 — $295</a>
+      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_14A28r9c61yZ2DraK1cV20G" target="_blank" rel="noopener">16×24 — $195</a>
+      <a class="btn w-full"      href="https://buy.stripe.com/test_3cI5kDagagtT0vj4lDcV20H" target="_blank" rel="noopener">20×30 — $295</a>
     </div>
   </div>
 
@@ -325,18 +327,18 @@
   <div id="tab-acrylic" class="hidden grid md:grid-cols-3 gap-4">
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Square (1:1)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_5kQ28raga91r5PD8BTcV20B" target="_blank">24×24 — $475</a>
-      <a class="btn w-full" href="https://buy.stripe.com/test_aFa6oHaga6Tjdi54lDcV20A" target="_blank">30×30 — $745</a>
+      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_5kQ28raga91r5PD8BTcV20B" target="_blank" rel="noopener">24×24 — $475</a>
+      <a class="btn w-full"      href="https://buy.stripe.com/test_aFa6oHaga6Tjdi54lDcV20A" target="_blank" rel="noopener">30×30 — $745</a>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_bJe14ndsma5v3Hv5pHcV20z" target="_blank">24×16 — $315</a>
-      <a class="btn w-full" href="https://buy.stripe.com/test_9B628r9c6dhH3Hvg4lcV20y" target="_blank">30×20 — $495</a>
+      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_bJe14ndsma5v3Hv5pHcV20z" target="_blank" rel="noopener">24×16 — $315</a>
+      <a class="btn w-full"      href="https://buy.stripe.com/test_9B628r9c6dhH3Hvg4lcV20y" target="_blank" rel="noopener">30×20 — $495</a>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Vertical (2:3)</div>
-      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_cNi28rfAu91rb9X9FXcV20x" target="_blank">16×24 — $325</a>
-      <a class="btn w-full" href="https://buy.stripe.com/test_eVqbJ1coi5PfguhaK1cV20w" target="_blank">20×30 — $495</a>
+      <a class="btn w-full mb-2" href="https://buy.stripe.com/test_cNi28rfAu91rb9X9FXcV20x" target="_blank" rel="noopener">16×24 — $325</a>
+      <a class="btn w-full"      href="https://buy.stripe.com/test_eVqbJ1coi5PfguhaK1cV20w" target="_blank" rel="noopener">20×30 — $495</a>
     </div>
   </div>
 </section>
@@ -363,7 +365,6 @@ function buildPrompt() {
   const addons = $$('.themeOpt:checked').map(i => i.value);
   const addText = addons.length ? `, ${addons.join(', ')}` : '';
 
-  // Clear, natural language:
   return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}${addText}`.replace(/\s+/g,' ').trim();
 }
 
@@ -378,8 +379,7 @@ genBtn.onclick = async () => {
   const prompt = buildPrompt();
   if (!prompt) { alert('Please describe what you want.'); return; }
 
-  // Map dropdown to OpenAI size
-  const size = ratioSel.value; // already matches 1024x1024 / 1536x1024 / 1024x1536
+  const size = ratioSel.value; // 1024x1024 / 1536x1024 / 1024x1536
 
   genBtn.disabled = true;
   genBtn.textContent = 'Generating…';
@@ -410,12 +410,13 @@ genBtn.onclick = async () => {
 };
 
 // ---------- copy link ----------
-$('#copy-link').onclick = async () => {
+$('#copy-link')?.addEventListener('click', async () => {
   if (!genUrlInput.value) return;
   await navigator.clipboard.writeText(genUrlInput.value);
-  $('#copy-link').textContent = 'Copied!';
-  setTimeout(() => $('#copy-link').textContent = 'Copy link', 1000);
-};
+  const btn = $('#copy-link');
+  btn.textContent = 'Copied!';
+  setTimeout(() => btn.textContent = 'Copy link', 1000);
+});
 
 // ---------- tabs (order section) ----------
 const tabs = $$('.orderTab');
