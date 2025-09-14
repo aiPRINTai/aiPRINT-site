@@ -52,6 +52,56 @@
     <a href="#order"  class="hover:text-white">Order</a>
   </nav>
 </header>
+<!-- Header START -->
+<header class="sticky top-0 z-40 bg-[#0b1020]/80 backdrop-blur border-b border-white/10">
+  <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+    <!-- Brand -->
+    <a href="/" class="flex items-center gap-2">
+      <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
+      <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex items-center gap-6 text-sm">
+      <a href="/about.html" class="hover:text-white">How it works</a>
+      <a href="/materials.html" class="hover:text-white">Materials</a>
+      <a href="/faq.html" class="hover:text-white">FAQ</a>
+      <a href="/policies.html" class="hover:text-white">Policies</a>
+      <a href="/contact.html" class="hover:text-white">Contact</a>
+    </nav>
+
+<!-- Mobile hamburger -->
+<button id="navToggle"
+        class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10"
+        aria-expanded="false" aria-controls="mobileNav" aria-label="Toggle navigation">
+
+  <!-- open icon -->
+  <svg id="iconOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+       fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+       stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 6h16M4 12h16M4 18h16"/>
+  </svg>
+
+  <!-- close icon -->
+  <svg id="iconClose" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden"
+       fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+       stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 18L18 6M6 6l12 12"/>
+  </svg>
+</button>
+
+<!-- Mobile nav panel -->
+<div id="mobileNav" class="md:hidden hidden border border-white/10">
+  <div class="max-w-6xl mx-auto px-4 py-3 grid gap-3 text-sm">
+    <a href="/about.html" class="block px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">How it works</a>
+    <a href="/materials.html" class="block px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">Materials</a>
+    <a href="/faq.html" class="block px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">FAQ</a>
+    <a href="/policies.html" class="block px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">Policies</a>
+    <a href="/contact.html" class="block px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">Contact</a>
+  </div>
+</div>
+</header>
+<!-- Header END -->
 
 <!-- HERO -->
 <section class="max-w-7xl mx-auto px-5 pt-6 pb-12 grid lg:grid-cols-2 gap-10 items-center">
@@ -509,6 +559,42 @@
   });
   window.addEventListener('mouseup', () => drag = null);
 </script>
+<script>
+(function () {
+  const btn   = document.getElementById('navToggle');
+  const panel = document.getElementById('mobileNav');
+  const openI = document.getElementById('iconOpen');
+  const closeI= document.getElementById('iconClose');
+  if (!btn || !panel) return;
 
+  btn.addEventListener('click', () => {
+    const willShow = panel.classList.contains('hidden');
+    panel.classList.toggle('hidden', !willShow);
+    btn.setAttribute('aria-expanded', willShow ? 'true' : 'false');
+    openI?.classList.toggle('hidden', willShow);
+    closeI?.classList.toggle('hidden', !willShow);
+  });
+
+  // Close when a mobile link is clicked
+  panel.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      panel.classList.add('hidden');
+      btn.setAttribute('aria-expanded', 'false');
+      openI?.classList.remove('hidden');
+      closeI?.classList.add('hidden');
+    });
+  });
+
+  // Optional: auto-close if resized to desktop
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768) {
+      panel.classList.add('hidden');
+      btn.setAttribute('aria-expanded', 'false');
+      openI?.classList.remove('hidden');
+      closeI?.classList.add('hidden');
+    }
+  });
+})();
+</script>
 </body>
 </html>
