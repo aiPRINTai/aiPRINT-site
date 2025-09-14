@@ -73,24 +73,37 @@
     </button>
   </div>
 
-  <!-- Mobile nav overlay (FULL SCREEN, above all) -->
-  <div id="mobileNav" class="md:hidden fixed inset-0 z-[100] hidden">
-    <!-- Backdrop -->
-    <div id="navBackdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+ <!-- Mobile nav overlay (FULL SCREEN, above all) -->
+<div id="mobileNav" class="md:hidden fixed inset-0 z-[100] hidden">
+  <!-- Dark backdrop -->
+  <div id="navBackdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
 
-    <!-- Panel -->
-    <nav class="absolute top-14 inset-x-0 px-4">
-      <div class="mx-auto max-w-7xl grid gap-3 text-sm">
-        <a href="/about.html"     class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">How it works</a>
-        <a href="/materials.html" class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Materials</a>
-        <a href="/faq.html"       class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">FAQ</a>
-        <a href="/policies.html"  class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Policies</a>
-        <a href="/contact.html"   class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">Contact</a>
-        <a href="#create"         class="block p-4 rounded-xl bg-white text-black font-semibold text-center">Create a preview</a>
-        <a href="#order"          class="block p-4 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15 text-center">Order</a>
+  <!-- Sheet -->
+  <nav class="absolute top-0 inset-0 overflow-y-auto p-4">
+    <div class="mx-auto max-w-7xl">
+      <div class="rounded-2xl bg-[#0b1020]/95 border border-white/10 p-4 shadow-xl">
+        <div class="grid gap-2 text-base">
+          <a href="/about.html"     class="block px-4 py-3 rounded-lg hover:bg-white/5">How it works</a>
+          <a href="/materials.html" class="block px-4 py-3 rounded-lg hover:bg-white/5">Materials</a>
+          <a href="/faq.html"       class="block px-4 py-3 rounded-lg hover:bg-white/5">FAQ</a>
+          <a href="/policies.html"  class="block px-4 py-3 rounded-lg hover:bg-white/5">Policies</a>
+          <a href="/contact.html"   class="block px-4 py-3 rounded-lg hover:bg-white/5">Contact</a>
+
+          <hr class="my-2 border-white/10">
+
+          <a href="#create"
+             class="block px-4 py-3 rounded-lg bg-white text-black font-semibold text-center">
+            Create a preview
+          </a>
+          <a href="#order"
+             class="block px-4 py-3 rounded-lg bg-white/10 border border-white/15 hover:bg-white/15 text-center">
+            Order
+          </a>
+        </div>
       </div>
-    </nav>
-  </div>
+    </div>
+  </nav>
+</div>
 </header>
 <!-- Header END -->
 
