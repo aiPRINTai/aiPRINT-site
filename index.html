@@ -35,7 +35,17 @@
 </style>
 </head>
 <body>
-
+<!-- Header -->
+<header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+  <a href="/" class="font-bold tracking-tight text-white">aiPRINT.ai</a>
+  <nav class="flex gap-6 text-sm">
+    <a href="/about.html" class="hover:text-white">How it works</a>
+    <a href="/materials.html" class="hover:text-white">Materials</a>
+    <a href="/faq.html" class="hover:text-white">FAQ</a>
+    <a href="/policies.html" class="hover:text-white">Policies</a>
+    <a href="/contact.html" class="hover:text-white">Contact</a>
+  </nav>
+</header>
 <!-- NAV -->
 <header class="max-w-6xl mx-auto px-4 py-5 flex items-center justify-between">
   <div class="flex items-center gap-3">
@@ -343,11 +353,31 @@
   </div>
 </section>
 
-<footer class="max-w-6xl mx-auto px-4 py-10 muted text-sm">
-  © <span id="yr"></span> aiPRINT.ai · All rights reserved.
+<footer class="border-t border-white/10">
+  <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
+    <div>
+      <div class="font-semibold text-white">aiPRINT.ai</div>
+      <p class="mt-2">Archival, ready-to-hang prints from your ideas.</p>
+      <p class="mt-2">© <span id="y"></span> aiPRINT.ai</p>
+    </div>
+    <div>
+      <div class="font-semibold text-white">Explore</div>
+      <ul class="mt-2 space-y-1">
+        <li><a href="/about.html" class="hover:text-white">How it works</a></li>
+        <li><a href="/materials.html" class="hover:text-white">Materials</a></li>
+        <li><a href="/faq.html" class="hover:text-white">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="font-semibold text-white">Company</div>
+      <ul class="mt-2 space-y-1">
+        <li><a href="/policies.html" class="hover:text-white">Policies</a></li>
+        <li><a href="/contact.html" class="hover:text-white">Contact</a></li>
+      </ul>
+    </div>
+  </div>
 </footer>
-
-<script>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 // ---------- tiny helpers ----------
 const $ = (q, el=document) => el.querySelector(q);
 const $$ = (q, el=document) => [...el.querySelectorAll(q)];
