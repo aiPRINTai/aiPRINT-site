@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact | aiPRINT.ai – Say hello</title>
+  <link rel="icon" href="/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0b0b14] text-white/90">
+  <header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+    <a href="/" class="font-bold tracking-tight text-white">aiPRINT.ai</a>
+    <nav class="flex gap-6 text-sm">
+      <a href="/materials.html" class="hover:text-white">Materials</a>
+      <a href="/faq.html" class="hover:text-white">FAQ</a>
+      <a href="/policies.html" class="hover:text-white">Policies</a>
+      <a href="/contact.html" class="text-white">Contact</a>
+    </nav>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 pb-24">
+    <section class="mb-12">
+      <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">Contact</h1>
+      <p class="mt-4 text-white/70 max-w-2xl">Questions about materials, sizing, or licensing? We’re happy to help.</p>
+    </section>
+
+    <section class="grid md:grid-cols-2 gap-10">
+      <div class="rounded-2xl bg-white/5 border border-white/10 p-6">
+        <h2 class="text-xl font-semibold">Email</h2>
+        <p class="mt-2 text-white/70">hello@aiprint.ai</p>
+
+        <h2 class="text-xl font-semibold mt-6">Studio hours</h2>
+        <p class="mt-2 text-white/70">Mon–Fri, 10am–6pm ET</p>
+
+        <h2 class="text-xl font-semibold mt-6">Turnaround</h2>
+        <p class="mt-2 text-white/70">Most pieces ship within 7–14 days.</p>
+      </div>
+
+      <!-- Simple form: hook up to Formspree or your own endpoint later -->
+      <form class="rounded-2xl bg-white/5 border border-white/10 p-6 space-y-4" method="POST" action="https://formspree.io/f/your-id">
+        <div>
+          <label class="text-sm text-white/70">Name</label>
+          <input name="name" required class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2" />
+        </div>
+        <div>
+          <label class="text-sm text-white/70">Email</label>
+          <input name="email" type="email" required class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2" />
+        </div>
+        <div>
+          <label class="text-sm text-white/70">Message</label>
+          <textarea name="message" rows="6" required class="mt-1 w-full rounded-md bg-white/10 border border-white/15 px-3 py-2"></textarea>
+        </div>
+        <button class="rounded-md bg-white text-black font-semibold px-4 py-2 hover:opacity-90" type="submit">Send</button>
+        <p class="text-xs text-white/50">By sending, you agree to our <a class="underline" href="/policies.html">Policies</a>.</p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="border-t border-white/10">
+    <div class="max-w-6xl mx-auto px-4 py-10 text-sm text-white/60">
+      <span id="y"></span> © aiPRINT.ai – All rights reserved.
+    </div>
+  </footer>
+  <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+</body>
+</html>
