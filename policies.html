@@ -1,63 +1,81 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Policies | aiPRINT.ai – Shipping, Returns, Usage</title>
-  <link rel="icon" href="/favicon.ico" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Policies | aiPRINT.ai</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root { --bg:#0b1020; --ink:#dce6f3; --muted:#9fb3c8; }
+  body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+  .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
+  .muted{color:var(--muted)}
+  a.navlink{color:rgba(255,255,255,.85)} a.navlink:hover{color:#fff}
+</style>
 </head>
-<body class="bg-[#0b0b14] text-white/90">
-  <header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
-    <a href="/" class="font-bold tracking-tight text-white">aiPRINT.ai</a>
-    <nav class="flex gap-6 text-sm">
-      <a href="/materials.html" class="hover:text-white">Materials</a>
-      <a href="/faq.html" class="hover:text-white">FAQ</a>
-      <a href="/policies.html" class="text-white">Policies</a>
-      <a href="/contact.html" class="hover:text-white">Contact</a>
-    </nav>
-  </header>
+<body>
+<header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+  <a href="/" class="font-extrabold tracking-tight text-white flex items-center gap-2">
+    <span class="inline-grid place-items-center w-8 h-8 rounded-lg bg-white text-black">AI</span>
+    <span>aiPRINT.<span class="text-sky-300">ai</span></span>
+  </a>
+  <nav class="hidden md:flex items-center gap-6 text-sm">
+    <a href="/about.html" class="navlink">How it works</a>
+    <a href="/materials.html" class="navlink">Materials</a>
+    <a href="/faq.html" class="navlink">FAQ</a>
+    <a href="/policies.html" class="navlink">Policies</a>
+    <a href="/contact.html" class="navlink">Contact</a>
+  </nav>
+</header>
 
-  <main class="max-w-3xl mx-auto px-4 pb-24">
-    <section class="mb-12">
-      <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">Policies</h1>
-      <p class="mt-4 text-white/70">Clear and simple so you know exactly what to expect.</p>
-    </section>
+<main class="max-w-6xl mx-auto px-4 pb-20">
+  <section class="py-6">
+    <h1 class="text-4xl md:text-5xl font-extrabold">Policies</h1>
+    <p class="muted mt-3 max-w-2xl">We keep it simple and fair so you can order with confidence.</p>
+  </section>
 
-    <section class="space-y-10">
-      <div>
-        <h2 class="text-xl font-semibold">Production & Shipping</h2>
-        <p class="mt-2 text-white/70">Prints typically ship within <strong>7–14 days</strong> of ordering depending on size and material. You’ll receive tracking by email as soon as your piece leaves the studio.</p>
-      </div>
+  <section class="grid md:grid-cols-2 gap-6 mt-6">
+    <article class="glass rounded-xl p-6">
+      <h2 class="text-xl font-bold">Production & Shipping</h2>
+      <p class="muted mt-2">Prints ship within <strong>7–14 days</strong> of ordering depending on the material and size. You’ll receive tracking once your piece leaves the studio.</p>
+    </article>
 
-      <div>
-        <h2 class="text-xl font-semibold">Exclusivity</h2>
-        <p class="mt-2 text-white/70">Every ordered image is unique to you—it will <strong>never be resold or reprinted</strong> for another customer. Reorders for you are available on request.</p>
-      </div>
+    <article class="glass rounded-xl p-6">
+      <h2 class="text-xl font-bold">Exclusivity</h2>
+      <p class="muted mt-2">Every ordered image is unique to you—it will never be resold or reprinted for another customer.</p>
+    </article>
 
-      <div>
-        <h2 class="text-xl font-semibold">Refunds & Returns</h2>
-        <p class="mt-2 text-white/70">Because each piece is custom-made, refunds aren’t available. If your order arrives damaged or defective, we’ll reprint or offer store credit. Please contact us within 14 days of delivery with photos of the issue.</p>
-      </div>
+    <article class="glass rounded-xl p-6">
+      <h2 class="text-xl font-bold">Reorders</h2>
+      <p class="muted mt-2">We securely save your image so you can reorder later in any supported size and finish.</p>
+    </article>
 
-      <div>
-        <h2 class="text-xl font-semibold">Usage Rights</h2>
-        <p class="mt-2 text-white/70">Once purchased, you’re free to display your art at home or sell the physical print. Commercial licensing of the image itself is available—reach out for terms.</p>
-      </div>
+    <article class="glass rounded-xl p-6">
+      <h2 class="text-xl font-bold">Refunds & Returns</h2>
+      <p class="muted mt-2">Because each piece is custom-made, we can’t offer refunds. If your order arrives damaged or defective, we’ll reprint or offer store credit—just contact us within 14 days.</p>
+    </article>
 
-      <div>
-        <h2 class="text-xl font-semibold">Privacy</h2>
-        <p class="mt-2 text-white/70">We only use your info to fulfill your order—no spam. Your saved artwork exists so you can reorder in the future; we don’t publish or resell it.</p>
-      </div>
-    </section>
-  </main>
+    <article class="glass rounded-xl p-6">
+      <h2 class="text-xl font-bold">Usage Rights</h2>
+      <p class="muted mt-2">Once purchased, you’re free to display or resell your piece. Commercial use is welcome.</p>
+    </article>
 
-  <footer class="border-t border-white/10">
-    <div class="max-w-6xl mx-auto px-4 py-10 text-sm text-white/60">
-      <span id="y"></span> © aiPRINT.ai – All rights reserved.
-    </div>
-  </footer>
-  <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+    <article class="glass rounded-xl p-6">
+      <h2 class="text-xl font-bold">Privacy</h2>
+      <p class="muted mt-2">We only use your information to fulfill your order. No spam, ever.</p>
+    </article>
+  </section>
+
+  <section class="text-center mt-12">
+    <a href="/#create" class="inline-block bg-white text-black font-semibold px-5 py-3 rounded-lg">Create your preview</a>
+  </section>
+</main>
+
+<footer class="border-t border-white/10">
+  <div class="max-w-6xl mx-auto px-4 py-10 text-sm text-white/70">
+    © <span id="y"></span> aiPRINT.ai — All rights reserved.
+  </div>
+</footer>
+<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
 </body>
 </html>
