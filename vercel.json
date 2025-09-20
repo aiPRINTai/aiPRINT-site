@@ -1,8 +1,10 @@
 {
-  "private": true,
-  "type": "module",
-  "dependencies": {
-    "stripe": "^16.6.0",
-    "@vercel/blob": "latest"
-  }
+  "version": 2,
+  "functions": {
+    "api/webhook.js": { "maxDuration": 10, "memory": 128 }
+  },
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
 }
