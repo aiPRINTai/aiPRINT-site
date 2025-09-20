@@ -1,33 +1,47 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>aiPRINT.ai — Turn any idea into a gallery-worthy print</title>
-  <meta name="description" content="Create premium, ready-to-hang fine art prints from your idea. AI + human curation, archival materials, Certificate of Authenticity."/>
+  <meta name="description" content="Create premium, ready-to-hang fine art prints from your idea. AI + human curation, archival materials, Certificate of Authenticity." />
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Allura&family=Sacramento&family=Playfair+Display:wght@600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+
   <style>
     :root { --bg:#0a0f1d; --card:#131a2a; --muted:#9fb3c8; --ink:#e7eef8; }
     body { background:var(--bg); color:var(--ink); font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; }
     .glass { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); backdrop-filter:blur(6px); }
     .muted { color:var(--muted) }
-    .h1 { font-size:clamp(2.2rem,4vw,3.4rem); font-weight:800; line-height:1.05 }
-    .h2 { font-size:clamp(1.4rem,2.4vw,2.1rem); font-weight:800 }
-    .btn { background:#fff; color:#000; font-weight:700; padding:.7rem 1rem; border-radius:.6rem; transition: box-shadow .2s, transform .05s; }
-    .btn:hover { box-shadow:0 8px 24px rgba(0,0,0,.25) }
-    .btn:active { transform:translateY(1px) }
-    .btn-ghost { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); color:var(--ink) }
-    .btn-outline { background:transparent; color:#fff; border:2px solid rgba(255,255,255,.95) }
-    .btn-outline:hover { background:#fff; color:#000 }
-    .btn-outline:focus-visible { outline:2px solid #fff; outline-offset:3px }
-    .btn[disabled]{opacity:.5; cursor:not-allowed}
-    .badge { font-size:.8rem; color:#b8c7d8 }
-    .lock-note{font-size:.85rem; color:#c8d5e7}
+    .h1{ font-size:clamp(2.2rem,4vw,3.4rem); font-weight:800; line-height:1.05 }
+    .h2{ font-size:clamp(1.4rem,2.4vw,2.1rem); font-weight:800; }
+    .btn{ background:#fff; color:#000; font-weight:700; padding:.7rem 1rem; border-radius:.6rem; transition:box-shadow .2s, transform .05s }
+    .btn:hover{ box-shadow:0 8px 24px rgba(0,0,0,.25) }
+    .btn:active{ transform:translateY(1px) }
+    .btn-ghost{ background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); color:var(--ink) }
+    .btn[disabled]{ opacity:.5; cursor:not-allowed }
+    .lock-note{ font-size:.85rem; color:#c8d5e7 }
     html { scroll-behavior:smooth }
-    /* preview frame: we set aspect-ratio dynamically via style="aspect-ratio:X / Y" */
-    #previewWrap { display:grid; place-items:center; background:#00000066 }
-    #previewImg { max-width:100%; max-height:100%; object-fit:contain }
+
+    /* Preview frame uses CSS aspect-ratio and centers the image */
+    #previewWrap{
+      background:rgba(0,0,0,.35);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:12px;
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+      /* default to square; JS will update this */
+      aspect-ratio:1 / 1;
+      max-height:70vh;
+    }
+    #previewImg{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      image-rendering:auto;
+      display:block;
+    }
   </style>
 </head>
 <body>
@@ -71,11 +85,11 @@
     </div>
     <nav class="px-4 py-4">
       <ul class="space-y-2 text-white/90 text-base">
-        <li><a class="block rounded-lg px-3 py-2 hover:bg:white/10" href="#how">How it works</a></li>
-        <li><a class="block rounded-lg px-3 py-2 hover:bg:white/10" href="#materials">Materials</a></li>
-        <li><a class="block rounded-lg px-3 py-2 hover:bg:white/10" href="/faq.html">FAQ</a></li>
-        <li><a class="block rounded-lg px-3 py-2 hover:bg:white/10" href="/policies.html">Policies</a></li>
-        <li><a class="block rounded-lg px-3 py-2 hover:bg:white/10" href="/contact.html">Contact</a></li>
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="#how">How it works</a></li>
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="#materials">Materials</a></li>
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/faq.html">FAQ</a></li>
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/policies.html">Policies</a></li>
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/contact.html">Contact</a></li>
       </ul>
       <div class="mt-6 space-y-2">
         <a href="#create" class="block w-full text-center rounded-lg px-4 py-2 font-semibold bg-white text-black">Create a preview</a>
@@ -92,24 +106,24 @@
     <p class="muted mt-4 max-w-xl">Type a prompt. We create the art with AI + a human artist’s eye. You pick size &amp; finish. We ship an archival, limited-edition print to your door.</p>
     <div class="flex gap-3 mt-6">
       <a href="#create" class="btn">Create a preview</a>
-      <a href="#how" class="btn-outline inline-flex items-center gap-2" aria-label="See how aiPRINT works">
+      <a href="#how" class="btn-ghost inline-flex items-center gap-2" aria-label="See how aiPRINT works">
         See how it works
         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </a>
     </div>
-    <p class="badge mt-5">Made in the USA · Archival materials · Certificate of Authenticity · Ready to hang</p>
+    <p class="text-sm text-white/70 mt-5">Made in the USA · Archival materials · Certificate of Authenticity · Ready to hang</p>
   </div>
 
   <div class="grid gap-4">
     <div class="h-64 rounded-2xl overflow-hidden glass">
-      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop" class="w-full h-full object-cover" alt="Milky Way over mountains"/>
+      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop" alt="Milky Way over mountains" class="w-full h-full object-cover"/>
     </div>
     <div class="grid grid-cols-2 gap-4">
       <div class="h-36 rounded-2xl overflow-hidden glass">
-        <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover" alt="Alpine lake"/>
+        <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop" alt="Alpine lake" class="w-full h-full object-cover"/>
       </div>
       <div class="h-36 rounded-2xl overflow-hidden glass">
-        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover" alt="Sunset beach"/>
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop" alt="Sunset beach" class="w-full h-full object-cover"/>
       </div>
     </div>
   </div>
@@ -130,17 +144,17 @@
   <h2 class="h2 mb-6">Materials & finishes</h2>
   <div class="grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-5">
-      <img src="/Canvas.jpg" class="w-full h-36 object-cover rounded-lg mb-4" alt="Canvas example"/>
+      <img src="/Canvas.jpg" alt="Canvas example" class="w-full h-36 object-cover rounded-lg mb-4" />
       <div class="text-lg font-extrabold">Signature Series – Fine Art Canvas</div>
       <p class="muted mt-2">Archival fine-art canvas with rich texture and deep color, gallery-wrapped and ready to hang.</p>
     </div>
     <div class="glass rounded-xl p-5">
-      <img src="/Metal.jpg" class="w-full h-36 object-cover rounded-lg mb-4" alt="Metal example"/>
+      <img src="/Metal.jpg" alt="Metal example" class="w-full h-36 object-cover rounded-lg mb-4" />
       <div class="text-lg font-extrabold">Gallery Edition – ChromaLuxe Metal</div>
       <p class="muted mt-2">Vibrant aluminum print with durable float mount. Sleek modern look, ready to hang.</p>
     </div>
     <div class="glass rounded-xl p-5">
-      <img src="/Acrylic.jpg" class="w-full h-36 object-cover rounded-lg mb-4" alt="Acrylic example"/>
+      <img src="/Acrylic.jpg" alt="Acrylic example" class="w-full h-36 object-cover rounded-lg mb-4" />
       <div class="text-lg font-extrabold">Museum Collection – Acrylic Facemount</div>
       <p class="muted mt-2">Museum-grade acrylic facemount with brilliant clarity and depth, polished edges, ready to hang.</p>
     </div>
@@ -153,7 +167,7 @@
   <div class="glass rounded-xl p-5 md:p-6">
     <div class="grid lg:grid-cols-[1fr_260px] gap-4">
       <div class="space-y-2">
-        <textarea id="promptInput" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-3 text-white/90 min-h-[56px]" placeholder="e.g., photographer on the Oregon coast photographing seastacks by his jeep"></textarea>
+        <textarea id="promptInput" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-3 text-white/90 min-h-[56px]" placeholder="e.g., photographer in a tent under the Milky Way"></textarea>
       </div>
       <div class="space-y-2">
         <label class="text-sm muted block">Aspect ratio</label>
@@ -240,15 +254,31 @@
     </label>
 
     <div class="mt-6">
-      <!-- preview frame: aspect ratio is set in JS via style="aspect-ratio: X / Y" -->
-      <div id="previewWrap" class="relative w-full rounded-xl overflow-hidden border border-white/10" style="aspect-ratio: 1 / 1;">
-        <img id="previewImg" alt="Preview"/>
+      <div id="previewWrap" class="w-full">
+        <img id="previewImg" alt="Preview" />
       </div>
 
-      <div class="mt-3 grid md:grid-cols-[1fr_220px_220px_1fr] gap-3 items-center">
+      <div class="mt-3 grid md:grid-cols-[1fr_220px_140px_1fr] gap-3 items-center">
+        <label class="flex items-center gap-2"><input id="sigToggle" type="checkbox"/><span class="muted text-sm">Show signature on preview</span></label>
+        <input id="sigName" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2" placeholder="Type your name…" />
+        <select id="sigFont" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2">
+          <option value="Great Vibes">Great Vibes (cursive)</option>
+          <option value="Allura">Allura (cursive)</option>
+          <option value="Sacramento">Sacramento (cursive)</option>
+          <option value="Playfair Display">Playfair Display</option>
+          <option value="Montserrat">Montserrat</option>
+        </select>
+        <div class="flex items-center gap-3">
+          <input id="sigColor" type="color" value="#ffffff" class="w-12 h-10 rounded" />
+          <div class="flex items-center gap-2"><span class="muted text-sm">Size</span><input id="sigSize" type="range" min="14" max="64" value="24" /></div>
+        </div>
+      </div>
+
+      <div id="gen-actions" class="hidden mt-4 flex flex-wrap items-center gap-3">
         <input id="gen-url" class="w-full md:w-auto flex-1 rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/80" readonly />
         <button id="copy-link" class="btn">Copy link</button>
-        <button id="open-watermarked" class="btn-ghost px-4 py-2 rounded-lg border border-white/20">Open watermarked preview</button>
+        <a id="download-link" href="#" download="aiPRINT-preview.jpg" class="btn-ghost px-4 py-2 rounded-lg border border-white/20">Download (watermarked)</a>
+        <button id="open-saved" class="btn-ghost px-4 py-2 rounded-lg border border-white/20">Open watermarked preview</button>
         <button id="share-later" class="btn-ghost px-4 py-2 rounded-lg border border-white/20">Share to order later</button>
       </div>
     </div>
@@ -326,7 +356,7 @@
   <!-- selection + review -->
   <div class="mt-6 flex flex-wrap items-center gap-3">
     <div id="selectionSummary" class="text-sm muted">Selected: —</div>
-    <button id="reviewBtn" class="btn btn-ghost" disabled>Review & Checkout</button>
+    <button id="reviewBtn" class="btn-ghost px-4 py-2 rounded-lg border border-white/20" disabled>Review & Checkout</button>
   </div>
 </section>
 
@@ -341,268 +371,284 @@
 
 <!-- APP + CHECKOUT LOGIC -->
 <script>
-  document.getElementById('y').textContent = new Date().getFullYear();
-  const $ = (q, el=document)=>el.querySelector(q), $$=(q,el=document)=>[...el.querySelectorAll(q)];
+document.getElementById('y').textContent = new Date().getFullYear();
+const $ = (q, el=document)=>el.querySelector(q), $$=(q,el=document)=>[...el.querySelectorAll(q)];
 
-  /* ---------- Stripe direct links (by lookup_key) ---------- */
-  const STRIPE_LINK = {
-    'CAN-24-SQ':'https://buy.stripe.com/7sY6oIgiiebS3OBazLeIw0j',
-    'CAN-30-SQ':'https://buy.stripe.com/4gMcN6d666Jq0CpbDPeIw0h',
-    'CAN-24x16-LS':'https://buy.stripe.com/9B6cN64zA3xeacZfU5eIw0g',
-    'CAN-30x20-LS':'https://buy.stripe.com/8x200k0jk7Nucl7gY9eIw0f',
-    'CAN-16x24-PT':'https://buy.stripe.com/5kQ7sM0jkgk098V9vHeIw0e',
-    'CAN-20x30-PT':'https://buy.stripe.com/eVq4gA9TU3xefxjazLeIw0d',
-    'MET-24SQ':'https://buy.stripe.com/14AdRaeaa2tafxjazLeIw0c',
-    'MET-30SQ':'https://buy.stripe.com/00weVeeaagk0fxj7nzeIw0b',
-    'MET-24x16-LS':'https://buy.stripe.com/aFaeVe2rs5Fm5WJ37jeIw03',
-    'MET-30x20-LS':'https://buy.stripe.com/7sY5kE2rs1p684R6jveIw02',
-    'MET-16x24-PT':'https://buy.stripe.com/dRm9AUc229VCacZ9vHeIw01',
-    'MET-20x30-PT':'https://buy.stripe.com/9B66oI3vw9VCcl7azLeIw00',
-    'ACR-24-SQ':'https://buy.stripe.com/7sY7sMc228Ry1GtgY9eIw05',
-    'ACR-30-SQ':'https://buy.stripe.com/4gM14oc222taacZfU5eIw06',
-    'ACR-24x16-LS':'https://buy.stripe.com/eVq5kE6HI9VC5WJ9vHeIw07',
-    'ACR-30x20-LS':'https://buy.stripe.com/7sY6oI8PQebSfxjbDPeIw08',
-    'ACR-16x24-PT':'https://buy.stripe.com/5kQ5kE0jk6JqacZ23feIw09',
-    'ACR-20x30-PT':'https://buy.stripe.com/7sY3cw5DE2tadpb23feIw0a',
-  };
+/* ---------- Stripe direct links (by lookup_key) ---------- */
+const STRIPE_LINK = {
+  'CAN-24-SQ':'https://buy.stripe.com/7sY6oIgiiebS3OBazLeIw0j',
+  'CAN-30-SQ':'https://buy.stripe.com/4gMcN6d666Jq0CpbDPeIw0h',
+  'CAN-24x16-LS':'https://buy.stripe.com/9B6cN64zA3xeacZfU5eIw0g',
+  'CAN-30x20-LS':'https://buy.stripe.com/8x200k0jk7Nucl7gY9eIw0f',
+  'CAN-16x24-PT':'https://buy.stripe.com/5kQ7sM0jkgk098V9vHeIw0e',
+  'CAN-20x30-PT':'https://buy.stripe.com/eVq4gA9TU3xefxjazLeIw0d',
+  'MET-24SQ':'https://buy.stripe.com/14AdRaeaa2tafxjazLeIw0c',
+  'MET-30SQ':'https://buy.stripe.com/00weVeeaagk0fxj7nzeIw0b',
+  'MET-24x16-LS':'https://buy.stripe.com/aFaeVe2rs5Fm5WJ37jeIw03',
+  'MET-30x20-LS':'https://buy.stripe.com/7sY5kE2rs1p684R6jveIw02',
+  'MET-16x24-PT':'https://buy.stripe.com/dRm9AUc229VCacZ9vHeIw01',
+  'MET-20x30-PT':'https://buy.stripe.com/9B66oI3vw9VCcl7azLeIw00',
+  'ACR-24-SQ':'https://buy.stripe.com/7sY7sMc228Ry1GtgY9eIw05',
+  'ACR-30-SQ':'https://buy.stripe.com/4gM14oc222taacZfU5eIw06',
+  'ACR-24x16-LS':'https://buy.stripe.com/eVq5kE6HI9VC5WJ9vHeIw07',
+  'ACR-30x20-LS':'https://buy.stripe.com/7sY6oI8PQebSfxjbDPeIw08',
+  'ACR-16x24-PT':'https://buy.stripe.com/5kQ5kE0jk6JqacZ23feIw09',
+  'ACR-20x30-PT':'https://buy.stripe.com/7sY3cw5DE2tadpb23feIw0a',
+};
 
-  /* ---------- Helpers ---------- */
-  const AUTO_SWITCH_TAB_TO_MATCH_SHAPE = false; // stays OFF
+/* ---------- Helpers ---------- */
+function buildPrompt(){
+  const subject=$('#promptInput')?.value?.trim()||'';
+  const style=$('#styleSel')?.value||'', mood=$('#moodSel')?.value||'';
+  const light=$('#lightSel')?.value||'', comp=$('#compSel')?.value||'';
+  const medium=$('#mediumSel')?.value||'';
+  return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}`.replace(/\s+/g,' ').trim();
+}
+function getShapeFromRatio(ratio){
+  if(ratio==='1024x1024') return 'square';
+  if(ratio==='1536x1024') return 'horizontal';
+  if(ratio==='1024x1536') return 'vertical';
+  return '';
+}
+function approxShapeFromWH(w,h){
+  const r = w/h;
+  if (Math.abs(r-1) < 0.05) return 'square';
+  return r>1 ? 'horizontal' : 'vertical';
+}
+function lockButtonsToShape(shape){
+  $$('.sizeBtn').forEach(btn=>{
+    const match = btn.dataset.shape === shape;
+    btn.disabled = !match || !lastPreview?.originalUrl;
+    btn.classList.toggle('opacity-60', !match);
+    btn.title = match ? '' : 'This preview is a different shape';
+  });
+}
+function setPreviewAspect(w,h){
+  const wrap = $('#previewWrap');
+  if(!wrap) return;
+  wrap.style.aspectRatio = `${w} / ${h}`;
+}
 
-  function buildPrompt(){
-    const subject=$('#promptInput')?.value?.trim()||'';
-    const style=$('#styleSel')?.value||'', mood=$('#moodSel')?.value||'';
-    const light=$('#lightSel')?.value||'', comp=$('#compSel')?.value||'';
-    const medium=$('#mediumSel')?.value||'';
-    return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}`.replace(/\s+/g,' ').trim();
+/* ---------- Watermark drawing (on-canvas) ---------- */
+async function drawWatermarked(url, signature) {
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.src = url;
+  await img.decode();
+
+  const c = document.createElement('canvas');
+  const ctx = c.getContext('2d');
+  c.width = img.naturalWidth;
+  c.height = img.naturalHeight;
+  ctx.drawImage(img, 0, 0);
+
+  // tiled watermark
+  const text = 'aiPRINT.ai';
+  ctx.save();
+  ctx.globalAlpha = 0.16;
+  ctx.fillStyle = '#ffffff';
+  ctx.font = `${Math.floor(c.width * 0.04)}px Montserrat, sans-serif`;
+  ctx.translate(c.width/2, c.height/2);
+  ctx.rotate(-Math.PI/6);
+  const stepX = Math.floor(c.width * 0.22);
+  const stepY = Math.floor(c.width * 0.12);
+  for (let y=-c.height; y<c.height; y+=stepY){
+    for (let x=-c.width; x<c.width; x+=stepX){
+      ctx.fillText(text, x, y);
+    }
   }
+  ctx.restore();
 
-  function getShapeFromRatio(ratio) {
-    if (ratio === '1024x1024') return 'square';
-    if (ratio === '1536x1024') return 'horizontal';
-    if (ratio === '1024x1536') return 'vertical';
-    return '';
-  }
-
-  function aspectFromRatio(ratio){
-    if (ratio === '1024x1024') return [1,1];
-    if (ratio === '1536x1024') return [3,2];
-    if (ratio === '1024x1536') return [2,3];
-    return [1,1];
-  }
-
-  function lockButtonsToShape(shape) {
-    $$('.sizeBtn').forEach(btn => {
-      const isMatch = btn.dataset.shape === shape;
-      btn.disabled = !isMatch;
-      btn.classList.toggle('opacity-60', !isMatch);
-      btn.title = isMatch ? '' : 'This preview is a different shape';
-    });
-  }
-
-  // canvas watermark
-  async function drawWatermarked(url) {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.src = url;
-    await img.decode();
-    const c = document.createElement('canvas');
-    const ctx = c.getContext('2d');
-    c.width = img.naturalWidth; c.height = img.naturalHeight;
-    ctx.drawImage(img,0,0);
-
-    const text = 'aiPRINT.ai';
+  if (signature?.text){
     ctx.save();
-    ctx.globalAlpha = 0.18;
-    ctx.fillStyle = '#ffffff';
-    ctx.font = `${Math.floor(c.width * 0.04)}px Montserrat, sans-serif`;
-    ctx.translate(c.width/2, c.height/2);
-    ctx.rotate(-Math.PI/6);
-    const stepX = Math.floor(c.width * 0.22);
-    const stepY = Math.floor(c.width * 0.12);
-    for (let y=-c.height; y<c.height; y+=stepY)
-      for (let x=-c.width; x<c.width; x+=stepX)
-        ctx.fillText(text, x, y);
+    ctx.fillStyle = signature.color || '#ffffff';
+    ctx.shadowColor = 'rgba(0,0,0,.35)'; ctx.shadowBlur = 4;
+    const px = Math.max(14, signature.size || 24) * (c.width/1024);
+    ctx.font = `${px}px "${signature.font||'Great Vibes'}", cursive, serif`;
+    const pad = Math.floor(c.width * 0.02);
+    ctx.fillText(signature.text, pad, c.height - pad);
     ctx.restore();
-
-    return c.toDataURL('image/jpeg', 0.92);
   }
 
-  /* ---------- State ---------- */
-  let lastPreview = null;  // { originalUrl, watermarkedUrl, ratio, shape }
-  let selected = null;     // { material, shape, lookup, label }
+  return { dataUrl: c.toDataURL('image/jpeg', .92), w:c.width, h:c.height };
+}
 
-  const genBtn=$('#genBtn'), previewImg=$('#previewImg'),
-        genUrlInput=$('#gen-url'), ratioSel=$('#ratioSel'),
-        orderNote=$('#orderLockExplain'), selectionSummary=$('#selectionSummary'),
-        reviewBtn=$('#reviewBtn'), previewWrap=$('#previewWrap');
+/* ---------- State ---------- */
+let lastPreview = null;   // { originalUrl, watermarkedUrl, w, h, shape }
+let selected = null;      // { material, shape, lookup, label }
 
-  function enableOrdering(on) {
-    $$('.sizeBtn').forEach(b=>{
-      b.disabled = !on;
-      b.classList.toggle('opacity-60', !on);
-      b.title = on ? '' : 'Create a preview first';
-    });
-    reviewBtn.disabled = !on || !selected;
-  }
-  enableOrdering(false);
+const genBtn=$('#genBtn'), previewImg=$('#previewImg'),
+      genUrlInput=$('#gen-url'), genActions=$('#gen-actions'),
+      ratioSel=$('#ratioSel'), orderNote=$('#orderLockExplain'),
+      reviewBtn=$('#reviewBtn'), selectionSummary=$('#selectionSummary');
 
-  function setPreviewAspectByRatio(ratio){
-    const [w,h] = aspectFromRatio(ratio);
-    previewWrap.style.aspectRatio = `${w} / ${h}`;
-  }
-
-  /* ---------- Generate preview ---------- */
-  genBtn?.addEventListener('click', async () => {
-    const subject=buildPrompt();
-    if(!subject){ alert('Please describe what you want.'); return; }
-    const ratio = ratioSel?.value || '1024x1024';
-    const shape = getShapeFromRatio(ratio);
-
-    genBtn.disabled = true; genBtn.textContent='Generating…';
-    previewImg.removeAttribute('src'); genUrlInput.value = '';
-    enableOrdering(false);
-
-    try {
-      const r = await fetch('/api/generate-image', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ prompt: subject, size: ratio })
-      });
-      const data = await r.json();
-      if(!r.ok || !data?.image) throw new Error(data?.error || 'Generation failed');
-
-      // watermark (for page) + set frame aspect to exact ratio
-      const wmDataUrl = await drawWatermarked(data.image);
-      setPreviewAspectByRatio(ratio);
-      previewImg.src = wmDataUrl;
-
-      // state
-      lastPreview = { originalUrl: data.image, watermarkedUrl: wmDataUrl, ratio, shape };
-
-      // UI
-      genUrlInput.value = data.image; // clean link for sharing
-      lockButtonsToShape(shape);
-      orderNote.textContent = `Looks great! Only ${shape} sizes are available for this preview.`;
-      enableOrdering(true);
-    } catch (e) {
-      alert(e.message || String(e));
-    } finally {
-      genBtn.disabled = false; genBtn.textContent='Generate preview';
-    }
-  });
-
-  // open the same watermarked data-url in a new tab
-  $('#open-watermarked')?.addEventListener('click', ()=>{
-    if(!lastPreview?.watermarkedUrl) return alert('Create a preview first.');
-    const w = window.open();
-    w.document.write(`<img src="${lastPreview.watermarkedUrl}" style="max-width:100%;height:auto;display:block;margin:0 auto"/>`);
-    w.document.close();
-  });
-
-  // copy clean URL (good for “order later”)
-  $('#copy-link')?.addEventListener('click', async ()=>{
-    if(!genUrlInput?.value) return alert('Nothing to copy yet.');
-    await navigator.clipboard.writeText(genUrlInput.value);
-    const b=$('#copy-link'); b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy link',900);
-  });
-
-  // share deep link with preview + shape (so locks correctly later)
-  $('#share-later')?.addEventListener('click', async ()=>{
-    if(!lastPreview?.originalUrl) return alert('Create a preview first.');
-    const url = new URL(location.href);
-    url.searchParams.set('preview', lastPreview.originalUrl);
-    url.searchParams.set('shape', lastPreview.shape || '');
-    url.searchParams.set('ratio', lastPreview.ratio || '');
-    if (selected?.lookup) url.searchParams.set('lookup', selected.lookup);
-    await navigator.clipboard.writeText(url.toString());
-    alert('Sharable link copied!');
-  });
-
-  /* ---------- Tabs ---------- */
-  const views={canvas:$('#tab-canvas'), metal:$('#tab-metal'), acrylic:$('#tab-acrylic')};
-  const tabs=$$('.orderTab');
-  tabs.forEach(btn=>btn.addEventListener('click',()=>{
-    const k=btn.dataset.tab;
-    Object.values(views).forEach(v=>v?.classList.add('hidden'));
-    views[k]?.classList.remove('hidden');
-    tabs.forEach(b=>b.classList.add('btn-ghost'));
-    btn.classList.remove('btn-ghost');
-  }));
-
-  /* ---------- Size selection (review later) ---------- */
+function enableOrdering(on){
   $$('.sizeBtn').forEach(b=>{
-    b.addEventListener('click', ()=>{
-      if(!lastPreview?.originalUrl){ alert('Please generate a preview first.'); return; }
-      if (b.disabled) return;
-      $$('.sizeBtn').forEach(x=>x.classList.remove('ring-2','ring-white'));
-      b.classList.add('ring-2','ring-white');
-      selected = {
-        material: b.dataset.material,
-        shape: b.dataset.shape,
-        lookup: b.dataset.lookup,
-        label: b.dataset.label
-      };
-      selectionSummary.textContent = `Selected: ${selected.material.toUpperCase()} • ${selected.label}`;
-      reviewBtn.disabled = false;
+    b.disabled = !on;
+    b.classList.toggle('opacity-60', !on);
+    b.title = on ? '' : 'Create a preview first';
+  });
+  reviewBtn.disabled = !on || !selected;
+}
+enableOrdering(false);
+
+/* ---------- Generate preview ---------- */
+genBtn?.addEventListener('click', async ()=>{
+  const subject=buildPrompt();
+  if(!subject){ alert('Please describe what you want.'); return; }
+  const ratio = ratioSel?.value || '1024x1024';
+
+  genBtn.disabled = true; genBtn.textContent='Generating…';
+  genActions.classList.add('hidden'); previewImg.removeAttribute('src');
+
+  try{
+    // 1) ask server for the image (expects { image })
+    const r = await fetch('/api/generate-image', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ prompt:subject, size:ratio })
     });
-  });
+    const data = await r.json();
+    if(!r.ok || !data?.image) throw new Error(data?.error || 'Generation failed');
 
-  /* ---------- Review & Checkout (direct Stripe link) ---------- */
-  reviewBtn.addEventListener('click', ()=>{
-    if(!selected) return alert('Pick a size first.');
-    if (lastPreview?.shape && selected.shape !== lastPreview.shape) {
-      return alert('That size does not match this preview’s aspect ratio.');
-    }
-    const link = STRIPE_LINK[selected.lookup];
-    if(!link) return alert(`No Stripe link configured for ${selected.lookup}`);
-    const safe = encodeURIComponent(lastPreview?.originalUrl || '');
-    window.location.href = link + (safe ? `?client_reference_id=${safe}` : '');
-  });
-
-  /* ---------- Deep link loader (order later) ---------- */
-  (async function preload(){
-    const sp = new URLSearchParams(location.search);
-    const preview = sp.get('preview');
-    if (!preview) return;
-
-    // if ratio/shape provided use them; else infer shape from image dims
-    let ratio = sp.get('ratio'); let shape = sp.get('shape');
-    if (!shape) {
-      const img = new Image(); img.crossOrigin='anonymous'; img.src = preview;
-      await img.decode();
-      const ar = img.naturalWidth / img.naturalHeight;
-      if (Math.abs(ar-1) < 0.02) { ratio='1024x1024'; shape='square'; }
-      else if (ar>1)          { ratio='1536x1024'; shape='horizontal'; }
-      else                    { ratio='1024x1536'; shape='vertical'; }
+    // 2) signature
+    const sigOn = $('#sigToggle')?.checked;
+    let sig = null;
+    if(sigOn){
+      sig = {
+        text: $('#sigName')?.value || '',
+        font: $('#sigFont')?.value || 'Great Vibes',
+        color: $('#sigColor')?.value || '#ffffff',
+        size: parseInt($('#sigSize')?.value || '24',10)
+      };
     }
 
-    const wm = await drawWatermarked(preview);
-    setPreviewAspectByRatio(ratio || '1024x1024');
-    previewImg.src = wm;
+    // 3) draw watermark & compute exact aspect
+    const wm = await drawWatermarked(data.image, sig);
+    setPreviewAspect(wm.w, wm.h);
+    previewImg.src = wm.dataUrl;
+    $('#download-link').href = wm.dataUrl;
+    $('#open-saved').onclick = () => window.open(wm.dataUrl,'_blank','noopener');
 
-    lastPreview = { originalUrl: preview, watermarkedUrl: wm, ratio: ratio||'1024x1024', shape };
-    genUrlInput.value = preview;
-    lockButtonsToShape(shape);
-    orderNote.textContent = 'Loaded a saved preview. Only matching sizes are enabled.';
+    // 4) state
+    lastPreview = {
+      originalUrl: data.image,
+      watermarkedUrl: wm.dataUrl,
+      w: wm.w, h: wm.h,
+      shape: getShapeFromRatio(ratio) || approxShapeFromWH(wm.w, wm.h)
+    };
+
+    // 5) UI
+    genUrlInput.value = data.image;
+    genActions.classList.remove('hidden');
+    lockButtonsToShape(lastPreview.shape);
+    orderNote.textContent = `Looks great! Only ${lastPreview.shape} sizes are available for this preview.`;
     enableOrdering(true);
 
-    const lookup = sp.get('lookup');
-    if (lookup) {
-      const btn = document.querySelector(`.sizeBtn[data-lookup="${lookup}"]`);
-      if (btn && !btn.disabled) btn.click();
-    }
-  })();
+  }catch(e){
+    alert(e.message || String(e));
+  }finally{
+    genBtn.disabled=false; genBtn.textContent='Generate preview';
+  }
+});
 
-  /* ---------- Mobile sheet ---------- */
-  (() => {
-    const sheet=document.getElementById('navSheet'); const drawer=document.getElementById('navDrawer'); const backdrop=document.getElementById('navBackdrop'); const openBtn=document.getElementById('navOpen'); const closeBtn=document.getElementById('navClose');
-    const openSheet=()=>{ sheet.classList.remove('hidden'); requestAnimationFrame(()=>{ drawer.classList.remove('translate-x-full'); backdrop.classList.remove('opacity-0'); document.body.classList.add('overflow-hidden'); openBtn.setAttribute('aria-expanded','true'); sheet.setAttribute('aria-hidden','false'); }); };
-    const closeSheet=()=>{ drawer.classList.add('translate-x-full'); backdrop.classList.add('opacity-0'); openBtn.setAttribute('aria-expanded','false'); sheet.setAttribute('aria-hidden','true'); setTimeout(()=>{ sheet.classList.add('hidden'); document.body.classList.remove('overflow-hidden'); },250); };
-    openBtn?.addEventListener('click',openSheet); closeBtn?.addEventListener('click',closeSheet); backdrop?.addEventListener('click',closeSheet);
-    sheet.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeSheet));
-    window.addEventListener('keydown',e=>{ if(e.key==='Escape' && !sheet.classList.contains('hidden')) closeSheet(); });
-    window.addEventListener('resize',()=>{ if(window.innerWidth>=768 && !sheet.classList.contains('hidden')) closeSheet(); });
-  })();
+/* Copy link */
+$('#copy-link')?.addEventListener('click', async()=>{
+  if(!genUrlInput?.value) return alert('Nothing to copy yet.');
+  await navigator.clipboard.writeText(genUrlInput.value);
+  const b=$('#copy-link'); b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy link',900);
+});
+
+/* Share to order later (deep link) */
+$('#share-later')?.addEventListener('click', async ()=>{
+  if(!lastPreview?.originalUrl) return alert('Create a preview first.');
+  const url = new URL(window.location.href);
+  url.searchParams.set('preview', lastPreview.originalUrl);
+  if (selected?.lookup) url.searchParams.set('lookup', selected.lookup);
+  await navigator.clipboard.writeText(url.toString());
+  alert('Sharable link copied!');
+});
+
+/* Tabs */
+const tabs=$$('.orderTab'); const views={canvas:$('#tab-canvas'),metal:$('#tab-metal'),acrylic:$('#tab-acrylic')};
+tabs.forEach(btn=>btn.addEventListener('click',()=>{
+  const k=btn.dataset.tab;
+  Object.values(views).forEach(v=>v?.classList.add('hidden'));
+  views[k]?.classList.remove('hidden');
+  tabs.forEach(b=>b.classList.add('btn-ghost'));
+  btn.classList.remove('btn-ghost');
+}));
+
+/* Size selection (no instant checkout) */
+$$('.sizeBtn').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    if(!lastPreview?.originalUrl){ alert('Please generate a preview first.'); return; }
+    if(b.disabled) return;
+    $$('.sizeBtn').forEach(x=>x.classList.remove('ring-2','ring-white'));
+    b.classList.add('ring-2','ring-white');
+    selected = {
+      material: b.dataset.material,
+      shape: b.dataset.shape,
+      lookup: b.dataset.lookup,
+      label: b.dataset.label
+    };
+    selectionSummary.textContent = `Selected: ${selected.material.toUpperCase()} • ${selected.label}`;
+    reviewBtn.disabled = false;
+  });
+});
+
+/* Review & Checkout (direct Stripe links) */
+reviewBtn.addEventListener('click', ()=>{
+  if(!selected) return alert('Pick a size first.');
+  // safety: block if shape mismatch
+  if(selected.shape !== lastPreview?.shape){
+    return alert(`This preview is ${lastPreview.shape}. Please choose a matching ${lastPreview.shape} size.`);
+  }
+  const link = STRIPE_LINK[selected.lookup];
+  if(!link) return alert(`No Stripe link configured for ${selected.lookup}`);
+  const safe = encodeURIComponent(lastPreview?.originalUrl || '');
+  window.location.href = link + (safe ? `?client_reference_id=${safe}` : '');
+});
+
+/* Deep-link loader (order later) */
+(async function preloadFromQuery(){
+  const sp = new URLSearchParams(location.search);
+  const preview = sp.get('preview');
+  const lookup  = sp.get('lookup');
+  if(!preview) return;
+
+  // Make a watermarked in-page image & compute aspect from real dimensions
+  const img = new Image(); img.crossOrigin='anonymous'; img.src = preview;
+  try{
+    await img.decode();
+    const wm = await drawWatermarked(preview, null);
+    setPreviewAspect(wm.w, wm.h);
+    previewImg.src = wm.dataUrl;
+    $('#download-link').href = wm.dataUrl;
+    $('#open-saved').onclick = () => window.open(wm.dataUrl,'_blank','noopener');
+    genUrlInput.value = preview;
+    genActions.classList.remove('hidden');
+    lastPreview = { originalUrl: preview, watermarkedUrl: wm.dataUrl, w:wm.w, h:wm.h, shape: approxShapeFromWH(wm.w, wm.h) };
+    lockButtonsToShape(lastPreview.shape);
+    enableOrdering(true);
+    orderNote.textContent = 'Loaded a saved preview. Pick your size & finish.';
+    if(lookup){
+      const btn = document.querySelector(`.sizeBtn[data-lookup="${lookup}"]`);
+      if(btn && !btn.disabled) btn.click();
+    }
+  }catch{
+    // ignore
+  }
+})();
+
+/* Mobile sheet */
+(()=>{
+  const sheet = $('#navSheet'), drawer = $('#navDrawer'), backdrop = $('#navBackdrop'), openBtn = $('#navOpen'), closeBtn = $('#navClose');
+  const open = ()=>{ sheet.classList.remove('hidden'); requestAnimationFrame(()=>{ drawer.classList.remove('translate-x-full'); backdrop.classList.remove('opacity-0'); document.body.classList.add('overflow-hidden'); openBtn.setAttribute('aria-expanded','true'); sheet.setAttribute('aria-hidden','false'); }); };
+  const close= ()=>{ drawer.classList.add('translate-x-full'); backdrop.classList.add('opacity-0'); openBtn.setAttribute('aria-expanded','false'); sheet.setAttribute('aria-hidden','true'); setTimeout(()=>{ sheet.classList.add('hidden'); document.body.classList.remove('overflow-hidden'); },250); };
+  openBtn?.addEventListener('click', open); closeBtn?.addEventListener('click', close); backdrop?.addEventListener('click', close);
+  sheet.querySelectorAll('a').forEach(a=>a.addEventListener('click', close));
+  window.addEventListener('keydown', e=>{ if(e.key==='Escape' && !sheet.classList.contains('hidden')) close(); });
+})();
 </script>
 </body>
 </html>
