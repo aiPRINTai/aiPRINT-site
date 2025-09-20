@@ -1,54 +1,90 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>aiPRINT.ai — Turn any idea into a gallery-worthy print</title>
-  <meta name="description" content="Create premium, ready-to-hang fine art prints from your idea. AI + human curation, archival materials, Certificate of Authenticity." />
+  <meta name="description" content="Create premium, ready-to-hang fine art prints from your idea. AI + human curation, archival materials, Certificate of Authenticity."/>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Allura&family=Sacramento&family=Playfair+Display:wght@600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
   <style>
     :root { --bg:#0a0f1d; --card:#131a2a; --muted:#9fb3c8; --ink:#e7eef8; }
-    body { background:var(--bg); color:var(--ink); font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"; }
-    .glass { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); backdrop-filter:blur(6px); }
-    .muted { color:var(--muted); }
-    .h1 { font-size:clamp(2.2rem,4vw,3.4rem); font-weight:800; line-height:1.05 }
-    .h2 { font-size:clamp(1.4rem,2.4vw,2.1rem); font-weight:800; }
-    .btn { background:white; color:black; font-weight:700; padding:.7rem 1rem; border-radius:.6rem; transition:box-shadow .2s, transform .05s; }
-    .btn:hover { box-shadow:0 8px 24px rgba(0,0,0,.25); }
-    .btn:active { transform:translateY(1px); }
-    .btn-ghost { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); color:var(--ink); }
+    html { scroll-behavior:smooth }
+    body { background:var(--bg); color:var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; }
+    .glass { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px); }
+    .muted { color: var(--muted); }
+    .h1 { font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight:800; line-height:1.05 }
+    .h2 { font-size: clamp(1.4rem, 2.4vw, 2.1rem); font-weight:800; }
+    .btn { background:white; color:black; font-weight:700; padding:.7rem 1rem; border-radius:.6rem; transition: box-shadow .2s, transform .05s; }
+    .btn:hover { box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+    .btn:active { transform: translateY(1px); }
+    .btn-ghost { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); color: var(--ink); }
     .btn-outline { background:transparent; color:#fff; border:2px solid rgba(255,255,255,.95); }
     .btn-outline:hover { background:#fff; color:#000; }
     .btn[disabled]{opacity:.5; cursor:not-allowed}
     .badge { font-size:.8rem; color:#b8c7d8 }
+    .lock-note{font-size:.85rem;color:#c8d5e7}
+
+    /* Signature overlay */
     .sig-overlay { position:absolute; pointer-events:auto; cursor:grab; user-select:none; white-space:nowrap; }
     .sig-overlay:active { cursor:grabbing; }
-    .sig-GreatVibes{font-family:'Great Vibes',cursive}.sig-Allura{font-family:'Allura',cursive}.sig-Sacramento{font-family:'Sacramento',cursive}.sig-Playfair{font-family:'Playfair Display',serif}.sig-Montserrat{font-family:'Montserrat',sans-serif}
-    .lock-note{font-size:.85rem;color:#c8d5e7}
-    html { scroll-behavior:smooth; }
-    /* keep grids centered and width-constrained everywhere */
-    .container { max-width:80rem; margin-left:auto; margin-right:auto; }
+    .sig-GreatVibes{font-family:'Great Vibes',cursive}
+    .sig-Allura{font-family:'Allura',cursive}
+    .sig-Sacramento{font-family:'Sacramento',cursive}
+    .sig-Playfair{font-family:'Playfair Display',serif}
+    .sig-Montserrat{font-family:'Montserrat',sans-serif}
+
+    /* Watermark layer across the preview (visible in-page) */
+    .wm {
+      position:absolute; inset:0; pointer-events:none; 
+      background:
+        repeating-linear-gradient(
+          -28deg,
+          rgba(255,255,255,.09) 0 24px,
+          transparent 24px 64px
+        );
+      mask-image: linear-gradient(to bottom, transparent 0, rgba(0,0,0,.8) 80px, rgba(0,0,0,.8) calc(100% - 80px), transparent 100%);
+    }
+    .wm::before{
+      content:"aiPRINT.ai  •  aiPRINT.ai  •  aiPRINT.ai  •  ";
+      position:absolute; left:0; right:0; top:50%;
+      transform: translateY(-50%) rotate(-12deg);
+      font-weight:800; letter-spacing:.2em;
+      font-size: clamp(22px, 3vw, 44px);
+      color: rgba(255,255,255,.18);
+      text-align:center;
+      white-space:nowrap;
+    }
+
+    /* Center guard for sections (fixes any accidental drift) */
+    .section { max-width: 72rem; margin: 0 auto; padding-left: 1.25rem; padding-right: 1.25rem; }
   </style>
 </head>
 <body>
 
 <!-- HEADER -->
 <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
-  <div class="container px-5 h-16 flex items-center justify-between">
+  <div class="section h-16 flex items-center justify-between">
     <a href="/" class="flex items-center gap-2">
       <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
       <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
     </a>
     <nav class="hidden md:flex items-center gap-6 text-base">
-      <a href="/about.html" class="hover:text-white px-3 py-2 rounded-md">How it works</a>
+      <a href="/about.html"     class="hover:text-white px-3 py-2 rounded-md">How it works</a>
       <a href="/materials.html" class="hover:text-white px-3 py-2 rounded-md">Materials</a>
-      <a href="/faq.html" class="hover:text-white px-3 py-2 rounded-md">FAQ</a>
-      <a href="/policies.html" class="hover:text-white px-3 py-2 rounded-md">Policies</a>
-      <a href="/contact.html" class="hover:text-white px-3 py-2 rounded-md">Contact</a>
+      <a href="/faq.html"       class="hover:text-white px-3 py-2 rounded-md">FAQ</a>
+      <a href="/policies.html"  class="hover:text-white px-3 py-2 rounded-md">Policies</a>
+      <a href="/contact.html"   class="hover:text-white px-3 py-2 rounded-md">Contact</a>
     </nav>
-    <button id="navOpen" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10" aria-label="Open navigation" aria-controls="navSheet" aria-expanded="false">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+
+    <!-- Mobile hamburger -->
+    <button id="navOpen"
+      class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10"
+      aria-label="Open navigation" aria-controls="navSheet" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
     </button>
   </div>
 </header>
@@ -83,7 +119,7 @@
 </div>
 
 <!-- HERO -->
-<section class="container px-5 pt-6 pb-12 grid lg:grid-cols-2 gap-10 items-center">
+<section class="section pt-6 pb-12 grid lg:grid-cols-2 gap-10 items-center">
   <div>
     <h1 class="h1">Turn any idea into a <span class="text-indigo-300">gallery-worthy</span> print.</h1>
     <p class="muted mt-4 max-w-xl">Type a prompt. We create the art with AI + a human artist’s eye. You pick size &amp; finish. We ship an archival, limited-edition print to your door.</p>
@@ -96,6 +132,7 @@
     </div>
     <p class="badge mt-5">Made in the USA · Archival materials · Certificate of Authenticity · Ready to hang</p>
   </div>
+
   <div class="grid gap-4">
     <div class="h-64 rounded-2xl overflow-hidden glass">
       <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop" alt="Milky Way over mountains" class="w-full h-full object-cover"/>
@@ -111,8 +148,8 @@
   </div>
 </section>
 
-<!-- HOW IT WORKS (centered) -->
-<section id="how" class="container px-5 py-12">
+<!-- HOW IT WORKS -->
+<section id="how" class="section py-12">
   <h2 class="h2 mb-6">How it works</h2>
   <div class="grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-5"><div class="font-bold">STEP 1</div><div class="mt-2 text-lg font-extrabold">Describe your idea</div><p class="muted mt-2">Share a prompt (style, mood, colors). Add an optional reference image.</p></div>
@@ -122,7 +159,7 @@
 </section>
 
 <!-- MATERIALS -->
-<section id="materials" class="container px-5 py-12">
+<section id="materials" class="section py-12">
   <h2 class="h2 mb-6">Materials & finishes</h2>
   <div class="grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-5">
@@ -144,7 +181,7 @@
 </section>
 
 <!-- CREATE -->
-<section id="create" class="container px-5 py-14">
+<section id="create" class="section py-14">
   <h2 class="h2 mb-4">Create a preview</h2>
   <div class="glass rounded-xl p-5 md:p-6">
     <div class="grid lg:grid-cols-[1fr_260px] gap-4">
@@ -218,30 +255,17 @@
       </label>
     </div>
 
-    <label class="flex flex-col gap-1 mt-4">
-      <span class="text-white/80 text-sm">Medium / Output</span>
-      <select id="mediumSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
-        <option value="photograph / realistic" selected>Photograph / Realistic</option>
-        <option value="oil painting">Oil Painting</option>
-        <option value="watercolor">Watercolor</option>
-        <option value="pencil sketch">Pencil Sketch</option>
-        <option value="digital illustration">Digital Illustration</option>
-        <option value="charcoal drawing">Charcoal Drawing</option>
-        <option value="mosaic / stained glass">Mosaic / Stained Glass</option>
-        <option value="collage">Collage</option>
-        <option value="graffiti / street art">Graffiti / Street Art</option>
-      </select>
-    </label>
-
+    <!-- Preview stage -->
     <div class="mt-6">
-      <div id="previewWrap" class="relative w-full h-[420px] bg-black/40 rounded-xl overflow-hidden border border-white/10 select-none">
-        <img id="previewImg" class="absolute inset-0 w-full h-full object-contain pointer-events-none" alt="Preview" />
+      <div id="previewWrap" class="relative w-full h-[420px] bg-black/40 rounded-xl overflow-hidden border border-white/10">
+        <img id="previewImg" class="absolute inset-0 w-full h-full object-contain" alt="Preview"/>
+        <div class="wm" id="wm" hidden></div>
         <div id="sig" class="sig-overlay sig-GreatVibes hidden" style="left:12px; bottom:10px; color:#fff; font-size:24px;">Your Name</div>
       </div>
 
       <div class="mt-3 grid md:grid-cols-[1fr_220px_140px_1fr] gap-3 items-center">
         <label class="flex items-center gap-2"><input id="sigToggle" type="checkbox"/><span class="muted text-sm">Show signature on preview</span></label>
-        <input id="sigName" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2" placeholder="Type your name…" />
+        <input id="sigName" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2" placeholder="Type your name…"/>
         <select id="sigFont" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2">
           <option value="GreatVibes">Great Vibes (cursive)</option>
           <option value="Allura">Allura (cursive)</option>
@@ -250,22 +274,26 @@
           <option value="Montserrat">Montserrat</option>
         </select>
         <div class="flex items-center gap-3">
-          <input id="sigColor" type="color" value="#ffffff" class="w-12 h-10 rounded" />
-          <div class="flex items-center gap-2"><span class="muted text-sm">Size</span><input id="sigSize" type="range" min="14" max="64" value="24" /></div>
+          <input id="sigColor" type="color" value="#ffffff" class="w-12 h-10 rounded"/>
+          <div class="flex items-center gap-2"><span class="muted text-sm">Size</span><input id="sigSize" type="range" min="14" max="64" value="24"/></div>
         </div>
       </div>
 
+      <!-- After-generate actions -->
       <div id="gen-actions" class="hidden mt-4 flex flex-wrap items-center gap-3">
-        <input id="gen-url" class="w-full md:w-auto flex-1 rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/80" readonly />
+        <input id="gen-url" class="w-full md:w-auto flex-1 rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/80" readonly/>
         <button id="copy-link" class="btn">Copy link</button>
-        <a id="download-link" href="#" download="aiPRINT-preview.png" class="btn btn-ghost">Download preview</a>
+        <button id="download-wm" class="btn btn-ghost">Download (watermarked)</button>
+        <a id="share-link" class="btn btn-ghost" target="_blank" rel="noopener">Open saved preview</a>
       </div>
+
+      <p id="shareTip" class="muted text-sm mt-2 hidden">Your preview is saved. Share the link above to order later.</p>
     </div>
   </div>
 </section>
 
 <!-- ORDER -->
-<section id="order" class="container px-5 py-14">
+<section id="order" class="section py-14">
   <h2 class="h2 mb-2">Order your print</h2>
   <p class="lock-note mb-4" id="orderLockExplain">Generate a preview first to unlock ordering.</p>
 
@@ -279,18 +307,18 @@
   <div id="tab-canvas" class="grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Square (1:1)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="square"     data-lookup="CAN-24-SQ"     data-label="Canvas 24×24 — $155">Select 24×24 — $155</button>
-      <button class="btn w-full buyBtn"      data-shape="square"     data-lookup="CAN-30-SQ"     data-label="Canvas 30×30 — $245">Select 30×30 — $245</button>
+      <button class="btn w-full mb-2 buyBtn" data-shape="square"     data-lookup="CAN-24-SQ"     data-label="Canvas • 24×24 — $155">24×24 — $155</button>
+      <button class="btn w-full buyBtn"      data-shape="square"     data-lookup="CAN-30-SQ"     data-label="Canvas • 30×30 — $245">30×30 — $245</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="horizontal" data-lookup="CAN-24x16-LS"  data-label="Canvas 24×16 — $105">Select 24×16 — $105</button>
-      <button class="btn w-full buyBtn"      data-shape="horizontal" data-lookup="CAN-30x20-LS"  data-label="Canvas 30×20 — $165">Select 30×20 — $165</button>
+      <button class="btn w-full mb-2 buyBtn" data-shape="horizontal" data-lookup="CAN-24x16-LS"  data-label="Canvas • 24×16 — $105">24×16 — $105</button>
+      <button class="btn w-full buyBtn"      data-shape="horizontal" data-lookup="CAN-30x20-LS"  data-label="Canvas • 30×20 — $165">30×20 — $165</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Vertical (2:3)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="vertical"   data-lookup="CAN-16x24-PT"  data-label="Canvas 16×24 — $105">Select 16×24 — $105</button>
-      <button class="btn w-full buyBtn"      data-shape="vertical"   data-lookup="CAN-20x30-PT"  data-label="Canvas 20×30 — $165">Select 20×30 — $165</button>
+      <button class="btn w-full mb-2 buyBtn" data-shape="vertical"   data-lookup="CAN-16x24-PT"  data-label="Canvas • 16×24 — $105">16×24 — $105</button>
+      <button class="btn w-full buyBtn"      data-shape="vertical"   data-lookup="CAN-20x30-PT"  data-label="Canvas • 20×30 — $165">20×30 — $165</button>
     </div>
   </div>
 
@@ -298,18 +326,18 @@
   <div id="tab-metal" class="hidden grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Square (1:1)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="square"     data-lookup="MET-24SQ"      data-label="Metal 24×24 — $275">Select 24×24 — $275</button>
-      <button class="btn w-full buyBtn"      data-shape="square"     data-lookup="MET-30SQ"      data-label="Metal 30×30 — $445">Select 30×30 — $445</button>
+      <button class="btn w-full mb-2 buyBtn" data-shape="square"     data-lookup="MET-24SQ"      data-label="Metal • 24×24 — $275">24×24 — $275</button>
+      <button class="btn w-full buyBtn"      data-shape="square"     data-lookup="MET-30SQ"      data-label="Metal • 30×30 — $445">30×30 — $445</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="horizontal" data-lookup="MET-24x16-LS"  data-label="Metal 24×16 — $195">Select 24×16 — $195</button>
-      <button class="btn w-full buyBtn"      data-shape="horizontal" data-lookup="MET-30x20-LS"  data-label="Metal 30×20 — $295">Select 30×20 — $295</button>
+      <button class="btn w-full mb-2 buyBtn" data-shape="horizontal" data-lookup="MET-24x16-LS"  data-label="Metal • 24×16 — $195">24×16 — $195</button>
+      <button class="btn w-full buyBtn"      data-shape="horizontal" data-lookup="MET-30x20-LS"  data-label="Metal • 30×20 — $295">30×20 — $295</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Vertical (2:3)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="vertical"   data-lookup="MET-16x24-PT"  data-label="Metal 16×24 — $195">Select 16×24 — $195</button>
-      <button class="btn w-full buyBtn"      data-shape="vertical"   data-lookup="MET-20x30-PT"  data-label="Metal 20×30 — $295">Select 20×30 — $295</button>
+      <button class="btn w-full mb-2 buyBtn" data-shape="vertical"   data-lookup="MET-16x24-PT"  data-label="Metal • 16×24 — $195">16×24 — $195</button>
+      <button class="btn w-full buyBtn"      data-shape="vertical"   data-lookup="MET-20x30-PT"  data-label="Metal • 20×30 — $295">20×30 — $295</button>
     </div>
   </div>
 
@@ -317,31 +345,34 @@
   <div id="tab-acrylic" class="hidden grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Square (1:1)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="square"     data-lookup="ACR-24-SQ"     data-label="Acrylic 24×24 — $475">Select 24×24 — $475</button>
-      <button class="btn w-full buyBtn"      data-shape="square"     data-lookup="ACR-30-SQ"     data-label="Acrylic 30×30 — $745">Select 30×30 — $745</button>
+      <button class="btn w-full mb-2 buyBtn" data-shape="square"     data-lookup="ACR-24-SQ"     data-label="Acrylic • 24×24 — $475">24×24 — $475</button>
+      <button class="btn w-full buyBtn"      data-shape="square"     data-lookup="ACR-30-SQ"     data-label="Acrylic • 30×30 — $745">30×30 — $745</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="horizontal" data-lookup="ACR-24x16-LS"  data-label="Acrylic 24×16 — $315">Select 24×16 — $315</button>
-      <button class="btn w-full buyBtn"      data-shape="horizontal" data-lookup="ACR-30x20-LS"  data-label="Acrylic 30×20 — $495">Select 30×20 — $495</button>
+      <button class="btn w-full mb-2 buyBtn" data-shape="horizontal" data-lookup="ACR-24x16-LS"  data-label="Acrylic • 24×16 — $315">24×16 — $315</button>
+      <button class="btn w-full buyBtn"      data-shape="horizontal" data-lookup="ACR-30x20-LS"  data-label="Acrylic • 30×20 — $495">30×20 — $495</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Vertical (2:3)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="vertical"   data-lookup="ACR-16x24-PT"  data-label="Acrylic 16×24 — $325">Select 16×24 — $325</button>
-      <button class="btn w-full buyBtn"      data-shape="vertical"   data-lookup="ACR-20x30-PT"  data-label="Acrylic 20×30 — $495">Select 20×30 — $495</button>
+      <button class="btn w-full mb-2 buyBtn" data-shape="vertical"   data-lookup="ACR-16x24-PT"  data-label="Acrylic • 16×24 — $325">16×24 — $325</button>
+      <button class="btn w-full buyBtn"      data-shape="vertical"   data-lookup="ACR-20x30-PT"  data-label="Acrylic • 20×30 — $495">20×30 — $495</button>
     </div>
   </div>
 
-  <!-- checkout row -->
-  <div class="mt-6 flex flex-col sm:flex-row items-center gap-3">
-    <div id="selectedSummary" class="muted text-sm flex-1">No size selected yet.</div>
-    <button id="checkoutBtn" class="btn px-6" disabled>Proceed to Checkout</button>
+  <!-- Selection + proceed -->
+  <div class="glass rounded-xl p-4 mt-6">
+    <div class="flex flex-wrap items-center gap-3">
+      <div id="chosen" class="muted">No size selected yet.</div>
+      <div class="grow"></div>
+      <button id="checkoutBtn" class="btn" disabled>Review & Checkout</button>
+    </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer class="border-t border-white/10">
-  <div class="container px-5 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
+  <div class="section py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
     <div><div class="font-semibold text-white">aiPRINT.ai</div><p class="mt-2">Archival, ready-to-hang prints from your ideas.</p><p class="mt-2">© <span id="y"></span> aiPRINT.ai</p></div>
     <div><div class="font-semibold text-white">Explore</div><ul class="mt-2 space-y-1"><li><a href="/about.html" class="hover:text-white">How it works</a></li><li><a href="/materials.html" class="hover:text-white">Materials</a></li><li><a href="/faq.html" class="hover:text-white">FAQ</a></li></ul></div>
     <div><div class="font-semibold text-white">Company</div><ul class="mt-2 space-y-1"><li><a href="/policies.html" class="hover:text-white">Policies</a></li><li><a href="/contact.html" class="hover:text-white">Contact</a></li></ul></div>
@@ -353,13 +384,10 @@
   document.getElementById('y').textContent = new Date().getFullYear();
   const $ = (q, el=document)=>el.querySelector(q), $$=(q,el=document)=>[...el.querySelectorAll(q)];
 
-  /* ===== config ===== */
-  const AUTO_SWITCH_TAB_TO_MATCH_SHAPE = false; // stays OFF per your request
-  const WATERMARK_TEXT = 'aiPRINT.ai';
-  const WATERMARK_OPACITY = 0.14;
-  const WATERMARK_SIZE_FACTOR = 0.065; // fraction of min(image width,height)
+  /* ================= Utilities ================= */
+  function safeJSON(text){ try{ return JSON.parse(text) }catch{ return null } }
+  function toast(msg){ alert(msg) }
 
-  /* ===== prompt builder ===== */
   function buildPrompt(){
     const subject=$('#promptInput')?.value?.trim()||'';
     const style=$('#styleSel')?.value||'', mood=$('#moodSel')?.value||'';
@@ -368,115 +396,115 @@
     return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}`.replace(/\s+/g,' ').trim();
   }
 
-  /* ===== helpers: ratio -> shape; lock buttons ===== */
+  // ratio -> shape
   function getShapeFromRatio(ratio) {
     if (ratio === '1024x1024') return 'square';
     if (ratio === '1536x1024') return 'horizontal';
     if (ratio === '1024x1536') return 'vertical';
     return '';
   }
+  // dim non-matching buttons
   function lockButtonsToShape(shape) {
     const all = document.querySelectorAll('.buyBtn');
     all.forEach(btn => {
       const isMatch = btn.dataset.shape === shape;
-      btn.disabled = !isMatch || !lastPreview?.image;
-      btn.classList.toggle('opacity-60', !isMatch || !lastPreview?.image);
-      btn.title = (!isMatch) ? 'This preview is a different shape' : (lastPreview?.image ? '' : 'Create a preview first');
+      btn.disabled = !isMatch;
+      btn.classList.toggle('opacity-60', !isMatch);
+      btn.title = isMatch ? '' : 'This preview is a different shape';
     });
-    // (Optional) visual hint on tabs
-    if (AUTO_SWITCH_TAB_TO_MATCH_SHAPE) {
-      if (shape === 'square') showTab(lastTabKey); // leave as-is when OFF
-    }
   }
 
-  /* ===== watermark ===== */
-  async function makeWatermarkedURL(src, sigEl) {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.src = src;
-    await img.decode();
+  /* ================= Signature controls ================= */
+  const sigEl=$('#sig'), sigOn=$('#sigToggle'), sigName=$('#sigName'), sigFont=$('#sigFont'), sigCol=$('#sigColor'), sigSize=$('#sigSize'), wrap=$('#previewWrap');
+  sigOn?.addEventListener('change',()=>sigEl?.classList.toggle('hidden',!sigOn.checked));
+  sigName?.addEventListener('input',()=>{ if(sigEl) sigEl.textContent=sigName.value||' '; });
+  sigFont?.addEventListener('change',()=>{ if(!sigEl) return; sigEl.classList.remove('sig-GreatVibes','sig-Allura','sig-Sacramento','sig-Playfair','sig-Montserrat'); sigEl.classList.add('sig-'+sigFont.value); });
+  sigCol?.addEventListener('input',()=>{ if(sigEl) sigEl.style.color=sigCol.value; });
+  sigSize?.addEventListener('input',()=>{ if(sigEl) sigEl.style.fontSize=`${sigSize.value}px`; });
+  let drag=null; sigEl?.addEventListener('mousedown',e=>{drag={x:e.clientX,y:e.clientY,left:sigEl.offsetLeft,top:sigEl.offsetTop}; e.preventDefault();});
+  window.addEventListener('mousemove',e=>{ if(!drag||!sigEl||!wrap) return; const dx=e.clientX-drag.x, dy=e.clientY-drag.y; const maxX=wrap.clientWidth-sigEl.clientWidth-6, maxY=wrap.clientHeight-sigEl.clientHeight-6; sigEl.style.left=Math.max(6,Math.min(maxX,drag.left+dx))+'px'; sigEl.style.top=Math.max(6,Math.min(maxY,drag.top+dy))+'px';});
+  window.addEventListener('mouseup',()=>drag=null);
 
-    const w = img.naturalWidth, h = img.naturalHeight;
-    const cnv = document.createElement('canvas');
-    cnv.width = w; cnv.height = h;
-    const ctx = cnv.getContext('2d');
-
-    // draw image
-    ctx.drawImage(img, 0, 0, w, h);
-
-    // draw signature (if shown)
-    if (sigEl && !sigEl.classList.contains('hidden')) {
-      const scale = Math.max(w / $('#previewWrap').clientWidth, h / $('#previewWrap').clientHeight);
-      const fontSize = parseInt(sigEl.style.fontSize || '24', 10) * scale;
-      ctx.font = `${fontSize}px ${sigEl.classList.contains('sig-Playfair') ? 'Playfair Display' :
-                               sigEl.classList.contains('sig-Montserrat') ? 'Montserrat' :
-                               sigEl.classList.contains('sig-Allura') ? 'Allura' :
-                               sigEl.classList.contains('sig-Sacramento') ? 'Sacramento' : 'Great Vibes'}`;
-      ctx.fillStyle = sigEl.style.color || '#ffffff';
-      ctx.textBaseline = 'bottom';
-      // approximate placement: bottom-left with padding
-      const pad = 12 * scale;
-      ctx.fillText(sigEl.textContent || '', pad, h - pad);
-    }
-
-    // draw big repeating watermark
-    const base = Math.floor(Math.min(w, h) * WATERMARK_SIZE_FACTOR);
-    ctx.save();
-    ctx.translate(w/2, h/2);
-    ctx.rotate(-Math.PI / 6); // ~ -30deg
-    ctx.globalAlpha = WATERMARK_OPACITY;
-    ctx.fillStyle = '#ffffff';
-    ctx.font = `bold ${base}px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial`;
-    const text = WATERMARK_TEXT;
-    const metrics = ctx.measureText(text);
-    const stepX = metrics.width + base * 3;
-    const stepY = base * 4;
-
-    for (let y=-h; y<h; y+=stepY) {
-      for (let x=-w; x<w; x+=stepX) {
-        ctx.fillText(text, x, y);
-      }
-    }
-    ctx.restore();
-
-    return cnv.toDataURL('image/png'); // data URL (used for copy/download/preview)
-  }
-
-  let lastPreview = null;              // what we show (watermarked)
-  let cleanPreviewURL = null;          // clean image from generator (sent to Stripe)
-  let selectedOffer = null;            // { lookup_key, label }
+  /* ================= State ================= */
+  let lastPreview = null;      // what we generated
+  let savedId = null;          // id from save-preview
+  let selected = null;         // { lookup_key, label }
 
   const genBtn=$('#genBtn'), previewImg=$('#previewImg'), genUrlInput=$('#gen-url'),
-        genActions=$('#gen-actions'), ratioSel=$('#ratioSel');
+        genActions=$('#gen-actions'), ratioSel=$('#ratioSel'), wmLayer = $('#wm');
 
-  /* ===== robust JSON fetch helper ===== */
-  async function jsonOrError(res) {
-    const text = await res.text();
-    try { return { ok: res.ok, data: JSON.parse(text) }; }
-    catch { return { ok: res.ok, data: null, text }; }
+  function enableBuyButtons(on){
+    $$('.buyBtn').forEach(b=>{
+      // initial lock: all disabled
+      b.disabled = !on;
+      b.classList.toggle('opacity-60', !on);
+      b.title = on ? '' : 'Create a preview first';
+    });
+  }
+  enableBuyButtons(false);
+
+  // Tab controls (auto-switch OFF)
+  const tabs=$$('.orderTab'); const views={canvas:$('#tab-canvas'),metal:$('#tab-metal'),acrylic:$('#tab-acrylic')};
+  tabs.forEach(btn=>btn.addEventListener('click',()=>{const k=btn.dataset.tab; Object.values(views).forEach(v=>v?.classList.add('hidden')); views[k]?.classList.remove('hidden'); tabs.forEach(b=>b.classList.add('btn-ghost')); btn.classList.remove('btn-ghost');}));
+
+  /* ================= Generate ================= */
+  async function postJSON(url, body){
+    const r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body||{}) });
+    const raw = await r.text();
+    const data = safeJSON(raw);
+    if(!r.ok) throw new Error((data && (data.error||data.message)) || raw || 'Server error');
+    return data;
   }
 
-  genBtn?.addEventListener('click',async()=>{
-    const subject=buildPrompt(); if(!subject){alert('Please describe what you want.');return;}
-    const size=ratioSel?.value||'1024x1024';
-    genBtn.disabled=true; genBtn.textContent='Generating…'; genActions?.classList.add('hidden'); if(previewImg) previewImg.src='';
+  // Populate from share link ?p=ID
+  (async function hydrateFromQuery(){
+    const id = new URL(location.href).searchParams.get('p');
+    if (!id) return;
     try{
-      // 1) generate clean image via server
-      const r = await fetch('/api/generate-image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:subject,size})});
-      const { ok, data, text } = await jsonOrError(r);
-      if(!ok || !data?.image) throw new Error(data?.error || text || 'Generation failed');
-
-      cleanPreviewURL = data.image;
-
-      // 2) build watermarked preview (client-side)
-      const sigEl = $('#sig');
-      const wmURL = await makeWatermarkedURL(cleanPreviewURL, sigEl);
-
-      // show
-      previewImg.src = wmURL;
-      genUrlInput.value = wmURL;            // copy = watermarked
-      $('#download-link').href = wmURL;     // download = watermarked
+      const r = await fetch(`/api/get-preview?id=${encodeURIComponent(id)}`);
+      const raw = await r.text();
+      const data = safeJSON(raw);
+      if(!r.ok || !data?.ok) throw new Error((data && data.error) || raw);
+      const p = data.preview;
+      savedId = id;
+      // load prompt + options
+      $('#promptInput').value = p.prompt || '';
+      $('#styleSel').value = p.style || $('#styleSel').value;
+      $('#moodSel').value  = p.mood  || $('#moodSel').value;
+      $('#lightSel').value = p.light || $('#lightSel').value;
+      $('#compSel').value  = p.comp  || $('#compSel').value;
+      ratioSel.value       = p.size  || '1024x1024';
+      // show image
+      previewImg.src = p.image;
+      wmLayer.hidden = false;
+      genUrlInput.value = p.image;
       genActions.classList.remove('hidden');
+      $('#share-link').href = `${location.origin}/?p=${encodeURIComponent(id)}`;
+      $('#shareTip').classList.remove('hidden');
+
+      lastPreview = p;
+      const shape = getShapeFromRatio(p.size);
+      lockButtonsToShape(shape);
+      const note = $('#orderLockExplain'); if(note) note.textContent = `Looks great! Only ${shape} sizes are available for this preview.`;
+      enableBuyButtons(true);
+    }catch(e){
+      console.error(e);
+      toast('Could not load saved preview link.');
+    }
+  })();
+
+  genBtn?.addEventListener('click', async ()=>{
+    const subject=buildPrompt(); if(!subject){ toast('Please describe what you want.'); return; }
+    const size=ratioSel?.value||'1024x1024';
+    genBtn.disabled=true; genBtn.textContent='Generating…';
+    genActions?.classList.add('hidden'); if(previewImg) previewImg.src=''; savedId=null; selected=null; $('#chosen').textContent='No size selected yet.'; $('#checkoutBtn').disabled = true;
+    try{
+      const data = await postJSON('/api/generate-image', { prompt: subject, size });
+      if(!data?.image) throw new Error('Generation failed');
+
+      previewImg.src = data.image;
+      wmLayer.hidden = false;
+      genUrlInput.value = data.image;
 
       // capture signature overlay state
       const sigOn   = $('#sigToggle')?.checked;
@@ -493,7 +521,7 @@
       }
 
       lastPreview = {
-        image: wmURL,           // watermarked for UI
+        image: data.image,
         prompt: subject,
         size,
         style: $('#styleSel')?.value||'',
@@ -504,118 +532,128 @@
         sig
       };
 
-      // shape locking + note
+      // Save for later; get an id + share URL
+      try {
+        const saved = await postJSON('/api/save-preview', { preview: lastPreview });
+        if (saved?.ok && saved?.id) {
+          savedId = saved.id;
+          const share = `${location.origin}/?p=${encodeURIComponent(savedId)}`;
+          $('#share-link').href = share;
+          $('#share-link').textContent = 'Open saved preview';
+          $('#shareTip').classList.remove('hidden');
+        }
+      } catch(e){ console.warn('Save-preview failed:', e.message); }
+
+      genActions.classList.remove('hidden');
+
       const shape = getShapeFromRatio(size);
-      lockButtonsToShape(shape);
-      const note = $('#orderLockExplain');
-      if (note) note.textContent = `Looks great! Only ${shape} sizes are available for this preview.`;
-
-      // reset selection
-      selectedOffer = null;
-      updateSelectedSummary();
-      $('#checkoutBtn').disabled = true;
-
-    }catch(e){ alert(e.message||String(e)); }
-    finally{ genBtn.disabled=false; genBtn.textContent='Generate preview'; }
+      lockButtonsToShape(shape); // allow only matching shape
+      const note = $('#orderLockExplain'); if(note) note.textContent = `Looks great! Only ${shape} sizes are available for this preview.`;
+      enableBuyButtons(true);
+    }catch(e){
+      toast(e.message||String(e));
+    }finally{
+      genBtn.disabled=false; genBtn.textContent='Generate preview';
+    }
   });
 
-  $('#copy-link')?.addEventListener('click',async()=>{
+  // Copy direct image link (still okay; page watermark prevents clean copy;
+  // download button will add watermark into the file)
+  $('#copy-link')?.addEventListener('click', async ()=>{
     if(!genUrlInput?.value) return;
     await navigator.clipboard.writeText(genUrlInput.value);
     const b=$('#copy-link'); b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy link',1000);
   });
 
-  /* ===== Tabs ===== */
-  const tabs=$$('.orderTab'); 
-  const views={canvas:$('#tab-canvas'),metal:$('#tab-metal'),acrylic:$('#tab-acrylic')};
-  let lastTabKey = 'canvas';
-  function showTab(k){
-    Object.values(views).forEach(v=>v?.classList.add('hidden')); 
-    views[k]?.classList.remove('hidden'); 
-    tabs.forEach(b=>b.classList.add('btn-ghost')); 
-    document.querySelector(`.orderTab[data-tab="${k}"]`)?.classList.remove('btn-ghost');
-    lastTabKey = k;
-  }
-  tabs.forEach(btn=>btn.addEventListener('click',()=>{ showTab(btn.dataset.tab); }));
-
-  /* ===== Signature overlay controls ===== */
-  const sigEl=$('#sig'), sigOn=$('#sigToggle'), sigName=$('#sigName'), sigFont=$('#sigFont'), sigCol=$('#sigColor'), sigSize=$('#sigSize'), wrap=$('#previewWrap');
-  sigOn?.addEventListener('change',()=>sigEl?.classList.toggle('hidden',!sigOn.checked));
-  sigName?.addEventListener('input',()=>{ if(sigEl) sigEl.textContent=sigName.value||' '; });
-  sigFont?.addEventListener('change',()=>{ if(!sigEl) return; sigEl.classList.remove('sig-GreatVibes','sig-Allura','sig-Sacramento','sig-Playfair','sig-Montserrat'); sigEl.classList.add('sig-'+sigFont.value); });
-  sigCol?.addEventListener('input',()=>{ if(sigEl) sigEl.style.color=sigCol.value; });
-  sigSize?.addEventListener('input',()=>{ if(sigEl) sigEl.style.fontSize=`${sigSize.value}px`; });
-  let drag=null; sigEl?.addEventListener('mousedown',e=>{drag={x:e.clientX,y:e.clientY,left:sigEl.offsetLeft,top:sigEl.offsetTop}; e.preventDefault();});
-  window.addEventListener('mousemove',e=>{ if(!drag||!sigEl||!wrap) return; const dx=e.clientX-drag.x, dy=e.clientY-drag.y; const maxX=wrap.clientWidth-sigEl.clientWidth-6, maxY=wrap.clientHeight-sigEl.clientHeight-6; sigEl.style.left=Math.max(6,Math.min(maxX,drag.left+dx))+'px'; sigEl.style.top=Math.max(6,Math.min(maxY,drag.top+dy))+'px';});
-  window.addEventListener('mouseup',()=>drag=null);
-
-  /* ===== Order selection (no instant redirect) ===== */
-  function updateSelectedSummary() {
-    const el = $('#selectedSummary');
-    if (!selectedOffer) { el.textContent = 'No size selected yet.'; return; }
-    el.textContent = `Selected: ${selectedOffer.label}`;
-  }
-  function enableAllBuyButtons(enabled) {
-    $$('.buyBtn').forEach(b=>{
-      // still respect shape lock if preview exists
-      if (lastPreview?.image) {
-        const match = b.dataset.shape === getShapeFromRatio(lastPreview.size);
-        b.disabled = !enabled || !match;
-        b.classList.toggle('opacity-60', !enabled || !match);
-      } else {
-        b.disabled = true;
-        b.classList.add('opacity-60');
-      }
-    });
-  }
-  enableAllBuyButtons(false);
-
-  $$('.buyBtn').forEach(b=>{
-    b.addEventListener('click', ()=>{
-      if(!lastPreview?.image){ alert('Please generate a preview first.'); return; }
-      const shape = getShapeFromRatio(lastPreview.size);
-      if (b.dataset.shape !== shape) { return; }
-      selectedOffer = { lookup_key: b.dataset.lookup, label: b.dataset.label || b.textContent.trim() };
-      updateSelectedSummary();
-      $('#checkoutBtn').disabled = false;
-      // subtle visual cue
-      $$('.buyBtn').forEach(x=>x.classList.remove('ring','ring-white/80'));
-      b.classList.add('ring','ring-white/80');
-    });
-  });
-
-  $('#checkoutBtn')?.addEventListener('click', async ()=>{
-    if (!selectedOffer) { alert('Pick a size first.'); return; }
-    if (!lastPreview?.image) { alert('Please generate a preview first.'); return; }
-
-    const btn = $('#checkoutBtn');
-    const originalText = btn.textContent;
-    btn.disabled = true; btn.textContent = 'Creating checkout…';
+  // Download a WATERMARKED raster
+  $('#download-wm')?.addEventListener('click', async ()=>{
+    const src = previewImg?.src; if(!src){ toast('Generate a preview first.'); return; }
     try{
-      const res = await fetch('/api/create-checkout-session', {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ 
-          lookup_key: selectedOffer.lookup_key,
-          // send clean image for production; keep watermarked for UI
-          preview: { ...lastPreview, image: cleanPreviewURL }
-        })
-      });
-      const { ok, data, text } = await jsonOrError(res);
-      if(!ok || !data?.url) throw new Error(data?.error || text || 'Could not start checkout');
-      window.location.href = data.url;
+      const img = new Image(); img.crossOrigin = 'anonymous'; img.src = src;
+      await img.decode();
+
+      // Canvas size = visible preview box for simplicity
+      const box = $('#previewWrap').getBoundingClientRect();
+      const W = Math.max(800, Math.floor(box.width)); // prevent tiny
+      const H = Math.max(800, Math.floor(box.height));
+
+      const c = document.createElement('canvas'); c.width = W; c.height = H;
+      const ctx = c.getContext('2d');
+
+      // contain-fit the image
+      const ir = img.width / img.height, cr = W / H;
+      let dw, dh, dx, dy;
+      if (ir > cr) { dw = W; dh = W/ir; dx = 0; dy = (H - dh)/2; }
+      else { dh = H; dw = H*ir; dy = 0; dx = (W - dw)/2; }
+      ctx.drawImage(img, dx, dy, dw, dh);
+
+      // watermark text across
+      ctx.save();
+      ctx.globalAlpha = 0.22;
+      ctx.translate(W/2, H/2);
+      ctx.rotate(-Math.PI/9);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = `${Math.floor(W*0.045)}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.fillText('aiPRINT.ai  •  aiPRINT.ai  •  aiPRINT.ai', 0, 0);
+      ctx.restore();
+
+      // optional small corner sig overlay
+      if (lastPreview?.sig?.text) {
+        ctx.save();
+        ctx.fillStyle = lastPreview.sig.color || '#ffffff';
+        ctx.font = `${Math.max(18, Math.floor(W*0.02))}px ${lastPreview.sig.font || 'sans-serif'}`;
+        ctx.textAlign = 'left';
+        ctx.fillText(lastPreview.sig.text, 18, H-18);
+        ctx.restore();
+      }
+
+      const a = document.createElement('a');
+      a.href = c.toDataURL('image/png');
+      a.download = 'aiPRINT-preview-watermarked.png';
+      document.body.appendChild(a); a.click(); a.remove();
     }catch(e){
-      // this is where FUNCTION_INVOCATION_FAILED would bubble up; now you see the real message or raw body
-      alert(e.message || 'Server error');
-    }finally{
-      btn.disabled = false; btn.textContent = originalText;
+      toast('Could not prepare download.');
     }
   });
 
-  /* ===== keep nav centered & footer year ===== */
-  // (already set above)
+  /* ================= Selection & Checkout ================= */
+  const chosen = $('#chosen');
+  const checkoutBtn = $('#checkoutBtn');
 
-  /* ===== Nav sheet JS ===== */
+  // selecting a size row (no auto-redirect)
+  $$('.buyBtn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      if(!lastPreview?.image){ toast('Please generate a preview first.'); return; }
+      $$('.buyBtn').forEach(x=>x.classList.remove('ring-2','ring-white'));
+      b.classList.add('ring-2','ring-white');
+      selected = { lookup_key: b.dataset.lookup, label: b.dataset.label || b.textContent.trim() };
+      chosen.textContent = `Selected: ${selected.label}`;
+      checkoutBtn.disabled = false;
+    });
+  });
+
+  checkoutBtn.addEventListener('click', async ()=>{
+    if(!lastPreview?.image){ toast('Please generate a preview first.'); return; }
+    if(!selected?.lookup_key){ toast('Please choose a size.'); return; }
+    const label = checkoutBtn.textContent;
+    checkoutBtn.disabled = true; checkoutBtn.textContent = 'Creating checkout…';
+    try{
+      const data = await postJSON('/api/create-checkout-session', {
+        lookup_key: selected.lookup_key,
+        preview: lastPreview,
+        saved_id: savedId || ''
+      });
+      if(!data?.url) throw new Error('Could not start checkout');
+      location.href = data.url;
+    }catch(e){
+      toast(e.message||String(e));
+    }finally{
+      checkoutBtn.disabled = false; checkoutBtn.textContent = label;
+    }
+  });
+
+  /* ================= Mobile sheet JS ================= */
   (() => {
     const sheet   = document.getElementById('navSheet');
     const drawer  = document.getElementById('navDrawer');
