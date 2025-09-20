@@ -15,12 +15,19 @@
     .muted { color: var(--muted); }
     .h1 { font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight:800; line-height:1.05 }
     .h2 { font-size: clamp(1.4rem, 2.4vw, 2.1rem); font-weight:800; }
-    .btn { background:white; color:black; font-weight:700; padding:.7rem 1rem; border-radius:.6rem; }
-    .btn-ghost { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); }
+    .btn { background:white; color:black; font-weight:700; padding:.7rem 1rem; border-radius:.6rem; transition: box-shadow .2s, transform .05s; }
+    .btn:hover { box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+    .btn:active { transform: translateY(1px); }
+    .btn-ghost { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); color: var(--ink); }
+    .btn-outline { background:transparent; color:#fff; border:2px solid rgba(255,255,255,.95); }
+    .btn-outline:hover { background:#fff; color:#000; }
+    .btn-outline:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+    .btn[disabled]{opacity:.5; cursor:not-allowed}
     .badge { font-size:.8rem; color:#b8c7d8 }
-    .sig-overlay { position:absolute; pointer-events:auto; cursor:grab; user-select:none; white-space:nowrap; mix-blend-mode:normal; }
+    .sig-overlay { position:absolute; pointer-events:auto; cursor:grab; user-select:none; white-space:nowrap; }
     .sig-overlay:active { cursor:grabbing; }
     .sig-GreatVibes{font-family:'Great Vibes',cursive}.sig-Allura{font-family:'Allura',cursive}.sig-Sacramento{font-family:'Sacramento',cursive}.sig-Playfair{font-family:'Playfair Display',serif}.sig-Montserrat{font-family:'Montserrat',sans-serif}
+    .lock-note{font-size:.85rem;color:#c8d5e7}
     html { scroll-behavior: smooth; }
   </style> 
 </head>
@@ -53,29 +60,19 @@
   </div>
 </header>
 
-<!-- MOBILE NAV SHEET (outside header so it can overlay the whole page) -->
+<!-- MOBILE NAV SHEET -->
 <div id="navSheet" class="fixed inset-0 z-[100] hidden" aria-hidden="true">
-  <!-- Backdrop -->
   <div id="navBackdrop" class="absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-200"></div>
-
-  <!-- Drawer -->
-  <aside id="navDrawer"
-         class="absolute right-0 top-0 h-full w-80 max-w-[88vw] bg-[#0b1020] border-l border-white/10
-                translate-x-full transition-transform duration-300 will-change-transform">
+  <aside id="navDrawer" class="absolute right-0 top-0 h-full w-80 max-w-[88vw] bg-[#0b1020] border-l border-white/10 translate-x-full transition-transform duration-300 will-change-transform">
     <div class="h-14 px-4 border-b border-white/10 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
         <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
       </div>
-      <button id="navClose" class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 hover:bg-white/10"
-              aria-label="Close navigation">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 18L18 6M6 6l12 12"/>
-        </svg>
+      <button id="navClose" class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 hover:bg-white/10" aria-label="Close navigation">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
-
     <nav class="px-4 py-4">
       <ul class="space-y-2 text-white/90 text-base">
         <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/about.html">How it works</a></li>
@@ -84,7 +81,6 @@
         <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/policies.html">Policies</a></li>
         <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/contact.html">Contact</a></li>
       </ul>
-
       <div class="mt-6 space-y-2">
         <a href="#create" class="block w-full text-center rounded-lg px-4 py-2 font-semibold bg-white text-black">Create a preview</a>
         <a href="#order"  class="block w-full text-center rounded-lg px-4 py-2 border border-white/20 hover:bg-white/10">Order</a>
@@ -100,7 +96,10 @@
     <p class="muted mt-4 max-w-xl">Type a prompt. We create the art with AI + a human artist’s eye. You pick size &amp; finish. We ship an archival, limited-edition print to your door.</p>
     <div class="flex gap-3 mt-6">
       <a href="#create" class="btn">Create a preview</a>
-      <a href="#how" class="btn btn-ghost">See how it works</a>
+      <a href="#how" class="btn-outline inline-flex items-center gap-2" aria-label="See how aiPRINT works">
+        See how it works
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
     </div>
     <p class="badge mt-5">Made in the USA · Archival materials · Certificate of Authenticity · Ready to hang</p>
   </div>
@@ -242,21 +241,6 @@
       </select>
     </label>
 
-    <fieldset class="mt-4">
-      <legend class="text-white/80 text-sm mb-2">Theme add-ons (optional)</legend>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-white/80">
-        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="black and white"> Black & White</label>
-        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="minimalist"> Minimalist</label>
-        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="vibrant colors"> Vibrant Colors</label>
-        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="pastel colors"> Pastel Colors</label>
-        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="cinematic"> Cinematic</label>
-        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="fantasy / mythical"> Fantasy / Mythical</label>
-        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="sci-fi / futuristic"> Sci-Fi / Futuristic</label>
-        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="nature-focused"> Nature-Focused</label>
-        <label class="flex items-center gap-2"><input class="themeOpt" type="checkbox" value="architecture-focused"> Architecture-Focused</label>
-      </div>
-    </fieldset>
-
     <div class="mt-6">
       <div id="previewWrap" class="relative w-full h-[420px] bg-black/40 rounded-xl overflow-hidden border border-white/10">
         <img id="previewImg" class="absolute inset-0 w-full h-full object-contain" alt="Preview" />
@@ -290,54 +274,68 @@
 
 <!-- ORDER -->
 <section id="order" class="max-w-7xl mx-auto px-5 py-14">
-  <h2 class="h2 mb-6">Order your print</h2>
+  <h2 class="h2 mb-2">Order your print</h2>
+  <p class="lock-note mb-4" id="orderLockExplain">Generate a preview first to unlock ordering.</p>
   <div class="flex gap-2 mb-5">
     <button data-tab="canvas"  class="orderTab btn">Canvas</button>
     <button data-tab="metal"   class="orderTab btn btn-ghost">Metal</button>
     <button data-tab="acrylic" class="orderTab btn btn-ghost">Acrylic</button>
   </div>
+
+  <!-- CANVAS -->
   <div id="tab-canvas" class="grid md:grid-cols-3 gap-5">
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Square (1:1)</div>
-      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/7sY6oIgiiebS3OBazLeIw0j" target="_blank" rel="noopener">24×24 — $155</a>
-      <a class="btn w-full pay-link" href="https://buy.stripe.com/4gMcN6d666Jq0CpbDPeIw0h" target="_blank" rel="noopener">30×30 — $245</a>
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Square (1:1)</div>
+      <button class="btn w-full mb-2 buyBtn" data-lookup="CAN-24-SQ" data-label="24×24 — $155">24×24 — $155</button>
+      <button class="btn w-full buyBtn"      data-lookup="CAN-30-SQ" data-label="30×30 — $245">30×30 — $245</button>
     </div>
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Horizontal (3:2)</div>
-      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/9B6cN64zA3xeacZfU5eIw0g" target="_blank" rel="noopener">24×16 — $105</a>
-      <a class="btn w-full pay-link" href="https://buy.stripe.com/8x200k0jk7Nucl7gY9eIw0f" target="_blank" rel="noopener">30×20 — $165</a>
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Horizontal (3:2)</div>
+      <button class="btn w-full mb-2 buyBtn" data-lookup="CAN-24x16-LS" data-label="24×16 — $105">24×16 — $105</button>
+      <button class="btn w-full buyBtn"      data-lookup="CAN-30x20-LS" data-label="30×20 — $165">30×20 — $165</button>
     </div>
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Vertical (2:3)</div>
-      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/5kQ7sM0jkgk098V9vHeIw0e" target="_blank" rel="noopener">16×24 — $105</a>
-      <a class="btn w-full pay-link" href="https://buy.stripe.com/eVq4gA9TU3xefxjazLeIw0d" target="_blank" rel="noopener">20×30 — $165</a>
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Vertical (2:3)</div>
+      <button class="btn w-full mb-2 buyBtn" data-lookup="CAN-16x24-PT" data-label="16×24 — $105">16×24 — $105</button>
+      <button class="btn w-full buyBtn"      data-lookup="CAN-20x30-PT" data-label="20×30 — $165">20×30 — $165</button>
     </div>
   </div>
 
+  <!-- METAL -->
   <div id="tab-metal" class="hidden grid md:grid-cols-3 gap-5">
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Square (1:1)</div>
-      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/14AdRaeaa2tafxjazLeIw0c">24×24 — $275</a>
-      <a class="btn w-full pay-link" href="https://buy.stripe.com/00weVeeaagk0fxj7nzeIw0b">30×30 — $445</a>
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Square (1:1)</div>
+      <button class="btn w-full mb-2 buyBtn" data-lookup="MET-24SQ" data-label="24×24 — $275">24×24 — $275</button>
+      <button class="btn w-full buyBtn"      data-lookup="MET-30SQ" data-label="30×30 — $445">30×30 — $445</button>
     </div>
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Horizontal (3:2)</div>
-      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/aFaeVe2rs5Fm5WJ37jeIw03">24×16 — $195</a>
-      <a class="btn w-full pay-link" href="https://buy.stripe.com/7sY5kE2rs1p684R6jveIw02">30×20 — $295</a>
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Horizontal (3:2)</div>
+      <button class="btn w-full mb-2 buyBtn" data-lookup="MET-24x16-LS" data-label="24×16 — $195">24×16 — $195</button>
+      <button class="btn w-full buyBtn"      data-lookup="MET-30x20-LS" data-label="30×20 — $295">30×20 — $295</button>
     </div>
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Vertical (2:3)</div>
-      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/dRm9AUc229VCacZ9vHeIw01">16×24 — $195</a>
-      <a class="btn w-full pay-link" href="https://buy.stripe.com/9B66oI3vw9VCcl7azLeIw00">20×30 — $295</a>
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Vertical (2:3)</div>
+      <button class="btn w-full mb-2 buyBtn" data-lookup="MET-16x24-PT" data-label="16×24 — $195">16×24 — $195</button>
+      <button class="btn w-full buyBtn"      data-lookup="MET-20x30-PT" data-label="20×30 — $295">20×30 — $295</button>
     </div>
   </div>
 
+  <!-- ACRYLIC -->
   <div id="tab-acrylic" class="hidden grid md:grid-cols-3 gap-5">
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Square (1:1)</div>
-      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/7sY7sMc228Ry1GtgY9eIw05">24×24 — $475</a>
-      <a class="btn w-full pay-link" href="https://buy.stripe.com/4gM14oc222taacZfU5eIw06">30×30 — $745</a>
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Square (1:1)</div>
+      <button class="btn w-full mb-2 buyBtn" data-lookup="ACR-24-SQ" data-label="24×24 — $475">24×24 — $475</button>
+      <button class="btn w-full buyBtn"      data-lookup="ACR-30-SQ" data-label="30×30 — $745">30×30 — $745</button>
     </div>
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Horizontal (3:2)</div>
-      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/eVq5kE6HI9VC5WJ9vHeIw07">24×16 — $315</a>
-      <a class="btn w-full pay-link" href="https://buy.stripe.com/7sY6oI8PQebSfxjbDPeIw08">30×20 — $495</a>
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Horizontal (3:2)</div>
+      <button class="btn w-full mb-2 buyBtn" data-lookup="ACR-24x16-LS" data-label="24×16 — $315">24×16 — $315</button>
+      <button class="btn w-full buyBtn"      data-lookup="ACR-30x20-LS" data-label="30×20 — $495">30×20 — $495</button>
     </div>
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Vertical (2:3)</div>
-      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/5kQ5kE0jk6JqacZ23feIw09">16×24 — $325</a>
-      <a class="btn w-full pay-link" href="https://buy.stripe.com/7sY3cw5DE2tadpb23feIw0a">20×30 — $495</a>
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Vertical (2:3)</div>
+      <button class="btn w-full mb-2 buyBtn" data-lookup="ACR-16x24-PT" data-label="16×24 — $325">16×24 — $325</button>
+      <button class="btn w-full buyBtn"      data-lookup="ACR-20x30-PT" data-label="20×30 — $495">20×30 — $495</button>
     </div>
   </div>
 </section>
@@ -351,7 +349,7 @@
   </div>
 </footer>
 
-<!-- APP SCRIPTS -->
+<!-- APP + CHECKOUT LOGIC -->
 <script>
   document.getElementById('y').textContent = new Date().getFullYear();
   const $ = (q, el=document)=>el.querySelector(q), $$=(q,el=document)=>[...el.querySelectorAll(q)];
@@ -366,23 +364,61 @@
     return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}${addText}`.replace(/\s+/g,' ').trim();
   }
 
-  const genBtn=$('#genBtn'), previewImg=$('#previewImg'), genUrlInput=$('#gen-url'), genActions=$('#gen-actions'), ratioSel=$('#ratioSel');
+  let lastPreview = null;
+
+  const genBtn=$('#genBtn'), previewImg=$('#previewImg'), genUrlInput=$('#gen-url'),
+        genActions=$('#gen-actions'), ratioSel=$('#ratioSel');
+
   genBtn?.addEventListener('click',async()=>{
-    const prompt=buildPrompt(); if(!prompt){alert('Please describe what you want.');return;}
+    const subject=buildPrompt(); if(!subject){alert('Please describe what you want.');return;}
     const size=ratioSel?.value||'1024x1024';
     genBtn.disabled=true; genBtn.textContent='Generating…'; genActions?.classList.add('hidden'); if(previewImg) previewImg.src='';
     try{
-      const r=await fetch('/api/generate-image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt,size})});
+      // NOTE: your server's /api/generate-image should return { image: "https://..." }
+      const r=await fetch('/api/generate-image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:subject,size})});
       const data=await r.json(); if(!r.ok||!data?.image) throw new Error(data?.error||'Generation failed');
+
       previewImg.src=data.image; genUrlInput.value=data.image; $('#download-link').href=data.image; genActions.classList.remove('hidden');
+
+      // capture signature overlay state (if visible)
+      const sigOn   = $('#sigToggle')?.checked;
+      const sigEl   = $('#sig');
+      let sig = null;
+      if (sigOn && sigEl) {
+        sig = {
+          text: sigEl.textContent || '',
+          font: [...sigEl.classList].find(c=>c.startsWith('sig-'))?.replace('sig-','') || '',
+          color: sigEl.style.color || '#ffffff',
+          size: parseInt(sigEl.style.fontSize||'24',10),
+          left: sigEl.style.left || '12px',
+          top: sigEl.style.top  || 'auto'
+        };
+      }
+
+      lastPreview = {
+        image: data.image,
+        prompt: subject,
+        size,
+        style: $('#styleSel')?.value||'',
+        mood:  $('#moodSel')?.value||'',
+        light: $('#lightSel')?.value||'',
+        comp:  $('#compSel')?.value||'',
+        medium:$('#mediumSel')?.value||'',
+        sig
+      };
+
+      enableBuyButtons(true);
+      const note = $('#orderLockExplain'); if(note) note.textContent = 'Looks great! Choose your size & finish below.';
     }catch(e){ alert(e.message||String(e)); }finally{ genBtn.disabled=false; genBtn.textContent='Generate preview'; }
   });
 
   $('#copy-link')?.addEventListener('click',async()=>{ if(!genUrlInput?.value) return; await navigator.clipboard.writeText(genUrlInput.value); const b=$('#copy-link'); b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy link',1000); });
 
+  // Tabs
   const tabs=$$('.orderTab'); const views={canvas:$('#tab-canvas'),metal:$('#tab-metal'),acrylic:$('#tab-acrylic')};
   tabs.forEach(btn=>btn.addEventListener('click',()=>{const k=btn.dataset.tab; Object.values(views).forEach(v=>v?.classList.add('hidden')); views[k]?.classList.remove('hidden'); tabs.forEach(b=>b.classList.add('btn-ghost')); btn.classList.remove('btn-ghost');}));
 
+  // Signature overlay controls
   const sigEl=$('#sig'), sigOn=$('#sigToggle'), sigName=$('#sigName'), sigFont=$('#sigFont'), sigCol=$('#sigColor'), sigSize=$('#sigSize'), wrap=$('#previewWrap');
   sigOn?.addEventListener('change',()=>sigEl?.classList.toggle('hidden',!sigOn.checked));
   sigName?.addEventListener('input',()=>{ if(sigEl) sigEl.textContent=sigName.value||' '; });
@@ -392,8 +428,38 @@
   let drag=null; sigEl?.addEventListener('mousedown',e=>{drag={x:e.clientX,y:e.clientY,left:sigEl.offsetLeft,top:sigEl.offsetTop}; e.preventDefault();});
   window.addEventListener('mousemove',e=>{ if(!drag||!sigEl||!wrap) return; const dx=e.clientX-drag.x, dy=e.clientY-drag.y; const maxX=wrap.clientWidth-sigEl.clientWidth-6, maxY=wrap.clientHeight-sigEl.clientHeight-6; sigEl.style.left=Math.max(6,Math.min(maxX,drag.left+dx))+'px'; sigEl.style.top=Math.max(6,Math.min(maxY,drag.top+dy))+'px';});
   window.addEventListener('mouseup',()=>drag=null);
+
+  // Lock/unlock buy buttons + create Checkout Session
+  function enableBuyButtons(on){
+    $$('.buyBtn').forEach(b=>{
+      b.disabled = !on;
+      b.classList.toggle('opacity-60', !on);
+      b.title = on ? '' : 'Create a preview first';
+    });
+  }
+  enableBuyButtons(false);
+
+  $$('.buyBtn').forEach(b=>{
+    b.addEventListener('click', async ()=>{
+      if(!lastPreview?.image){ alert('Please generate a preview first.'); return; }
+      const lookupKey = b.dataset.lookup;
+      const label = b.dataset.label || b.textContent;
+      try{
+        b.disabled = true; b.textContent = 'Redirecting…';
+        const res = await fetch('/api/create-checkout-session', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ lookup_key: lookupKey, preview: lastPreview })
+        });
+        const data = await res.json();
+        if(!res.ok || !data?.url) throw new Error(data?.error || 'Could not start checkout');
+        window.location.href = data.url;
+      }catch(e){ alert(e.message||String(e)); }finally{ b.disabled=false; b.textContent=label; }
+    });
+  });
 </script>
 
+<!-- NAV SHEET JS -->
 <script>
 (() => {
   const sheet   = document.getElementById('navSheet');
@@ -407,7 +473,7 @@
     requestAnimationFrame(() => {
       drawer.classList.remove('translate-x-full');
       backdrop.classList.remove('opacity-0');
-      document.body.classList.add('overflow-hidden');  // lock scroll
+      document.body.classList.add('overflow-hidden');
       openBtn.setAttribute('aria-expanded', 'true');
       sheet.setAttribute('aria-hidden', 'false');
     });
@@ -420,47 +486,17 @@
     sheet.setAttribute('aria-hidden', 'true');
     setTimeout(() => {
       sheet.classList.add('hidden');
-      document.body.classList.remove('overflow-hidden'); // unlock scroll
+      document.body.classList.remove('overflow-hidden');
     }, 250);
   };
 
   openBtn?.addEventListener('click', openSheet);
   closeBtn?.addEventListener('click', closeSheet);
   backdrop?.addEventListener('click', closeSheet);
-
-  // Close on link click inside the drawer
   sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSheet));
-
-  // Escape to close
-  window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !sheet.classList.contains('hidden')) closeSheet(); });
-
-  // Auto-close if resized up to desktop
-  window.addEventListener('resize', () => {
-    if (window.innerWidth >= 768 && !sheet.classList.contains('hidden')) closeSheet();
-  });
+  window.addEventListener('keydown', e => { if (e.key === 'Escape' && !sheet.classList.contains('hidden')) closeSheet(); });
+  window.addEventListener('resize', () => { if (window.innerWidth >= 768 && !sheet.classList.contains('hidden')) closeSheet(); });
 })();
 </script>
-
-<!-- SAFETY: flag any sandbox/test links so you don't accidentally ship them -->
-<script>
-  (function(){
-    const links=[...document.querySelectorAll('.pay-link')];
-    let foundTest=false;
-    links.forEach(a=>{
-      if(/\/test_/.test(a.href)){
-        foundTest=true;
-        a.insertAdjacentHTML('afterend','<div class="mt-2 text-xs text-red-300">⚠ This link is TEST mode. Replace with LIVE payment link.</div>');
-      }
-    });
-    if(foundTest){
-      const warn=document.createElement('div');
-      warn.className='fixed bottom-4 right-4 bg-red-600 text-white text-sm px-4 py-3 rounded-lg shadow-lg';
-      warn.textContent='Sandbox links detected — replace all /test_ Payment Links with LIVE links before going live.';
-      document.body.appendChild(warn);
-      setTimeout(()=>warn.remove(), 12000);
-    }
-  })();
-</script>
-
 </body>
 </html>
