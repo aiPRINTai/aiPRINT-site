@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>aiPRINT.ai — Order Confirmed</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { --bg:#0a0f1d; --ink:#e7eef8; }
+    body { background:var(--bg); color:var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+    .glass { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px); }
+    .muted { color:#b8c7d8 }
+  </style>
+</head>
+<body class="min-h-screen">
+  <header class="sticky top-0 z-10 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
+    <div class="max-w-5xl mx-auto px-5 h-14 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2">
+        <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
+        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+      </a>
+      <a href="/" class="text-sm underline">Back to home</a>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-5 py-8">
+    <h1 class="text-3xl font-extrabold">Thank you! Your order is confirmed.</h1>
+    <p class="muted mt-2">We’ve emailed a receipt. Below are the details we’ll use to make your print.</p>
+
+    <div id="content" class="mt-6 grid md:grid-cols-[340px_1fr] gap-6 items-start">
+      <div class="glass rounded-xl p-3">
+        <img id="prevImg" class="w-full h-auto rounded-lg" alt="Your artwork preview"/>
+      </div>
+      <div class="space-y-4">
+        <div class="glass rounded-xl p-4">
+          <div class="font-bold text-lg mb-2">Order Summary</div>
+          <div class="grid grid-cols-2 gap-y-2 text-sm">
+            <div class="muted">Order ID</div><div id="orderId" class="font-mono"></div>
+            <div class="muted">Email</div><div id="email"></div>
+            <div class="muted">Finish / Size</div><div id="finish"></div>
+            <div class="muted">Total</div><div id="total"></div>
+            <div class="muted">Tax</div><div id="tax"></div>
+          </div>
+        </div>
+
+        <div class="glass rounded-xl p-4">
+          <div class="font-bold text-lg mb-2">Shipping</div>
+          <div id="shipName"></div>
+          <div id="shipAddr" class="text-sm whitespace-pre-line muted"></div>
+        </div>
+
+        <div class="glass rounded-xl p-4">
+          <div class="font-bold text-lg mb-2">Your Selections</div>
+          <div class="text-sm grid grid-cols-2 gap-y-2">
+            <div class="muted">Prompt</div><div id="prompt"></div>
+            <div class="muted">Aspect ratio</div><div id="ratio"></div>
+            <div class="muted">Style</div><div id="style"></div>
+            <div class="muted">Mood</div><div id="mood"></div>
+            <div class="muted">Lighting</div><div id="light"></div>
+            <div class="muted">Composition</div><div id="comp"></div>
+            <div class="muted">Medium</div><div id="medium"></div>
+          </div>
+          <div id="sigWrap" class="text-sm mt-3 hidden">
+            <div class="muted">Signature overlay</div>
+            <pre id="sig" class="mt-1 p-2 rounded bg-black/30 overflow-x-auto"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="error" class="hidden mt-6 text-red-300"></div>
+  </main>
+
+  <script>
+    const $ = (q, el=document)=>el.querySelector(q);
+    function qparam(name){ return new URLSearchParams(location.search).get(name); }
+
+    async function load() {
+      const id = qparam('session_id');
+      if(!id){ showErr('Missing session_id in URL.'); return; }
+
+      try {
+        const r = await fetch(`/api/session?id=${encodeURIComponent(id)}`);
+        const data = await r.json();
+        if(!r.ok) throw new Error(data?.error || 'Failed to load session');
+
+        // Preview image
+        const prevUrl = data?.metadata?.preview_url || '';
+        if(prevUrl) $('#prevImg').src = prevUrl;
+
+        // Order basics
+        $('#orderId').textContent = data.id || '';
+        $('#email').textContent = data.customer_email || '';
+
+        // Size / finish: prefer Stripe line item description, fall back to lookup key
+        const li = (data.line_items && data.line_items[0]) || null;
+        const finish = li?.description || data?.metadata?.lookup_key || 'Custom print';
+        $('#finish').textContent = finish;
+
+        // Money
+        function fmt(amount, currency){ return (amount/100).toLocaleString(undefined, { style:'currency', currency: (currency||'usd').toUpperCase() }); }
+        $('#total').textContent = fmt(data.amount_total || 0, data.currency || 'usd');
+        $('#tax').textContent   = fmt(data.tax_amount || 0, data.currency || 'usd');
+
+        // Shipping
+        const s = data.shipping || {};
+        $('#shipName').textContent = s?.name || '';
+        const a = s?.address || {};
+        $('#shipAddr').textContent = [a.line1, a.line2, `${a.city||''}${a.city?', ':''}${a.state||''} ${a.postal_code||''}`, a.country || ''].filter(Boolean).join('\n');
+
+        // Creative selections
+        const m = data.metadata || {};
+        $('#prompt').textContent = m.prompt || '';
+        $('#ratio').textContent  = m.ratio || '';
+        $('#style').textContent  = m.style || '';
+        $('#mood').textContent   = m.mood || '';
+        $('#light').textContent  = m.light || '';
+        $('#comp').textContent   = m.composition || '';
+        $('#medium').textContent = m.medium || '';
+
+        if (m.signature_json) {
+          $('#sigWrap').classList.remove('hidden');
+          $('#sig').textContent = m.signature_json;
+        }
+      } catch (e) {
+        showErr(e.message || String(e));
+      }
+    }
+
+    function showErr(msg){
+      const el = $('#error');
+      el.textContent = msg;
+      el.classList.remove('hidden');
+    }
+
+    load();
+  </script>
+</body>
+</html>
