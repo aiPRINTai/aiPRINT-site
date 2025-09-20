@@ -365,18 +365,19 @@
     return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}${addText}`.replace(/\s+/g,' ').trim();
   }
 
-  /* ===== Shape helpers (NEW) ===== */
+  /* ====== Shape helpers (NEW) ====== */
   function getShapeFromRatio(ratio) {
     if (ratio === '1024x1024') return 'square';
     if (ratio === '1536x1024') return 'horizontal';
     if (ratio === '1024x1536') return 'vertical';
     return '';
   }
+
   function lockButtonsToShape(shape) {
     const all = document.querySelectorAll('.buyBtn');
     all.forEach(btn => {
       const isMatch = btn.dataset.shape === shape;
-      btn.disabled = !isMatch;
+      btn.disabled = !isMatch;                     // only matching shape is enabled
       btn.classList.toggle('opacity-60', !isMatch);
       btn.title = isMatch ? '' : 'This preview is a different shape';
     });
@@ -424,11 +425,12 @@
         sig
       };
 
-      // Unlock only matching shape buttons (NEW)
+      // === Shape-based unlocking (NEW) ===
       const shape = getShapeFromRatio(size);
       lockButtonsToShape(shape);
       const note = $('#orderLockExplain');
       if (note) note.textContent = `Looks great! Only ${shape} sizes are available for this preview.`;
+
     }catch(e){ alert(e.message||String(e)); }finally{ genBtn.disabled=false; genBtn.textContent='Generate preview'; }
   });
 
@@ -449,15 +451,11 @@
   window.addEventListener('mousemove',e=>{ if(!drag||!sigEl||!wrap) return; const dx=e.clientX-drag.x, dy=e.clientY-drag.y; const maxX=wrap.clientWidth-sigEl.clientWidth-6, maxY=wrap.clientHeight-sigEl.clientHeight-6; sigEl.style.left=Math.max(6,Math.min(maxX,drag.left+dx))+'px'; sigEl.style.top=Math.max(6,Math.min(maxY,drag.top+dy))+'px';});
   window.addEventListener('mouseup',()=>drag=null);
 
-  // Start with ALL purchase buttons locked
-  function enableBuyButtons(on){
-    $$('.buyBtn').forEach(b=>{
-      b.disabled = !on;
-      b.classList.toggle('opacity-60', !on);
-      b.title = on ? '' : 'Create a preview first';
-    });
-  }
-  enableBuyButtons(false);
+  // Start with everything locked
+  (function lockAllAtStart(){
+    const all = document.querySelectorAll('.buyBtn');
+    all.forEach(b => { b.disabled = true; b.classList.add('opacity-60'); b.title = 'Create a preview first'; });
+  })();
 
   // Checkout
   $$('.buyBtn').forEach(b=>{
