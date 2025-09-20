@@ -45,7 +45,6 @@
     <button id="navOpen"
       class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10"
       aria-label="Open navigation" aria-controls="navSheet" aria-expanded="false">
-      <!-- hamburger -->
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 6h16M4 12h16M4 18h16"/>
@@ -298,21 +297,48 @@
     <button data-tab="acrylic" class="orderTab btn btn-ghost">Acrylic</button>
   </div>
   <div id="tab-canvas" class="grid md:grid-cols-3 gap-5">
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Square (1:1)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_6oU00jdsm2D32Dr2dvcV20o" target="_blank" rel="noopener">24×24 — $155</a><a class="btn w-full" href="https://buy.stripe.com/test_4gM9AT2NI4Lb4Lzf0hcV20p" target="_blank" rel="noopener">30×30 — $245</a></div>
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Horizontal (3:2)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_dRmeVdfAua5va5T6tLcV20q" target="_blank" rel="noopener">24×16 — $105</a><a class="btn w-full" href="https://buy.stripe.com/test_dRmaEXbkeelLfqdbO5cV20r" target="_blank" rel="noopener">30×20 — $165</a></div>
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Vertical (2:3)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_fZu3cvdsmfpP7XL9FXcV20s" target="_blank" rel="noopener">16×24 — $105</a><a class="btn w-full" href="https://buy.stripe.com/test_5kQ28raga7Xn7XLbO5cV20t" target="_blank" rel="noopener">20×30 — $165</a></div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Square (1:1)</div>
+      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/7sY6oIgiiebS3OBazLeIw0j" target="_blank" rel="noopener">24×24 — $155</a>
+      <a class="btn w-full pay-link" href="https://buy.stripe.com/4gMcN6d666Jq0CpbDPeIw0h" target="_blank" rel="noopener">30×30 — $245</a>
+    </div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Horizontal (3:2)</div>
+      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/9B6cN64zA3xeacZfU5eIw0g" target="_blank" rel="noopener">24×16 — $105</a>
+      <a class="btn w-full pay-link" href="https://buy.stripe.com/8x200k0jk7Nucl7gY9eIw0f" target="_blank" rel="noopener">30×20 — $165</a>
+    </div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Vertical (2:3)</div>
+      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/5kQ7sM0jkgk098V9vHeIw0e" target="_blank" rel="noopener">16×24 — $105</a>
+      <a class="btn w-full pay-link" href="https://buy.stripe.com/eVq4gA9TU3xefxjazLeIw0d" target="_blank" rel="noopener">20×30 — $165</a>
+    </div>
   </div>
 
   <div id="tab-metal" class="hidden grid md:grid-cols-3 gap-5">
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Square (1:1)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_14A5kDewqgtT0vj9FXcV20u">24×24 — $275</a><a class="btn w-full" href="https://buy.stripe.com/test_dRm4gzagab9z4Lz3hzcV20v">30×30 — $445</a></div>
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Horizontal (3:2)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_cNi4gz0FA3H7guh6tLcV20D">24×16 — $195</a><a class="btn w-full" href="https://buy.stripe.com/test_fZufZhbke2D31znaK1cV20C">30×20 — $295</a></div>
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Vertical (2:3)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_14A28r9c61yZ2DraK1cV20G">16×24 — $195</a><a class="btn w-full" href="https://buy.stripe.com/test_3cI5kDagagtT0vj4lDcV20H">20×30 — $295</a></div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Square (1:1)</div>
+      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/14AdRaeaa2tafxjazLeIw0c">24×24 — $275</a>
+      <a class="btn w-full pay-link" href="https://buy.stripe.com/00weVeeaagk0fxj7nzeIw0b">30×30 — $445</a>
+    </div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Horizontal (3:2)</div>
+      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/aFaeVe2rs5Fm5WJ37jeIw03">24×16 — $195</a>
+      <a class="btn w-full pay-link" href="https://buy.stripe.com/7sY5kE2rs1p684R6jveIw02">30×20 — $295</a>
+    </div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Vertical (2:3)</div>
+      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/dRm9AUc229VCacZ9vHeIw01">16×24 — $195</a>
+      <a class="btn w-full pay-link" href="https://buy.stripe.com/9B66oI3vw9VCcl7azLeIw00">20×30 — $295</a>
+    </div>
   </div>
 
   <div id="tab-acrylic" class="hidden grid md:grid-cols-3 gap-5">
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Square (1:1)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_5kQ28raga91r5PD8BTcV20B">24×24 — $475</a><a class="btn w-full" href="https://buy.stripe.com/test_aFa6oHaga6Tjdi54lDcV20A">30×30 — $745</a></div>
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Horizontal (3:2)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_bJe14ndsma5v3Hv5pHcV20z">24×16 — $315</a><a class="btn w-full" href="https://buy.stripe.com/test_9B628r9c6dhH3Hvg4lcV20y">30×20 — $495</a></div>
-    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Vertical (2:3)</div><a class="btn w-full mb-2" href="https://buy.stripe.com/test_cNi28rfAu91rb9X9FXcV20x">16×24 — $325</a><a class="btn w-full" href="https://buy.stripe.com/test_eVqbJ1coi5PfguhaK1cV20w">20×30 — $495</a></div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Square (1:1)</div>
+      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/7sY7sMc228Ry1GtgY9eIw05">24×24 — $475</a>
+      <a class="btn w-full pay-link" href="https://buy.stripe.com/4gM14oc222taacZfU5eIw06">30×30 — $745</a>
+    </div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Horizontal (3:2)</div>
+      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/eVq5kE6HI9VC5WJ9vHeIw07">24×16 — $315</a>
+      <a class="btn w-full pay-link" href="https://buy.stripe.com/7sY6oI8PQebSfxjbDPeIw08">30×20 — $495</a>
+    </div>
+    <div class="glass rounded-xl p-4"><div class="font-bold mb-2">Vertical (2:3)</div>
+      <a class="btn w-full mb-2 pay-link" href="https://buy.stripe.com/5kQ5kE0jk6JqacZ23feIw09">16×24 — $325</a>
+      <a class="btn w-full pay-link" href="https://buy.stripe.com/7sY3cw5DE2tadpb23feIw0a">20×30 — $495</a>
+    </div>
   </div>
 </section>
 
@@ -414,5 +440,27 @@
   });
 })();
 </script>
+
+<!-- SAFETY: flag any sandbox/test links so you don't accidentally ship them -->
+<script>
+  (function(){
+    const links=[...document.querySelectorAll('.pay-link')];
+    let foundTest=false;
+    links.forEach(a=>{
+      if(/\/test_/.test(a.href)){
+        foundTest=true;
+        a.insertAdjacentHTML('afterend','<div class="mt-2 text-xs text-red-300">⚠ This link is TEST mode. Replace with LIVE payment link.</div>');
+      }
+    });
+    if(foundTest){
+      const warn=document.createElement('div');
+      warn.className='fixed bottom-4 right-4 bg-red-600 text-white text-sm px-4 py-3 rounded-lg shadow-lg';
+      warn.textContent='Sandbox links detected — replace all /test_ Payment Links with LIVE links before going live.';
+      document.body.appendChild(warn);
+      setTimeout(()=>warn.remove(), 12000);
+    }
+  })();
+</script>
+
 </body>
 </html>
