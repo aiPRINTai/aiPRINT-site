@@ -21,17 +21,16 @@
     .btn-outline { background:transparent; color:#fff; border:2px solid rgba(255,255,255,.95); }
     .btn-outline:hover { background:#fff; color:#000; }
     .btn-outline:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-    .btn[disabled]{opacity:.45; cursor:not-allowed}
+    .btn[disabled]{opacity:.5; cursor:not-allowed}
     .badge { font-size:.8rem; color:#b8c7d8 }
-    .sig-overlay { position:absolute; pointer-events:auto; cursor:grab; user-select:none; white-space:nowrap; }
-    .sig-overlay:active { cursor:grabbing; }
-    .sig-GreatVibes{font-family:'Great Vibes',cursive}
-    .sig-Allura{font-family:'Allura',cursive}
-    .sig-Sacramento{font-family:'Sacramento',cursive}
-    .sig-Playfair{font-family:'Playfair Display',serif}
-    .sig-Montserrat{font-family:'Montserrat',sans-serif}
     .lock-note{font-size:.85rem;color:#c8d5e7}
     html { scroll-behavior: smooth; }
+    /* watermark overlay grid for preview frame only */
+    .wm-frame {
+      background-image:
+        linear-gradient(transparent, transparent),
+        repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 24px, transparent 24px 64px);
+    }
   </style>
 </head>
 <body>
@@ -44,13 +43,14 @@
       <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
     </a>
     <nav class="hidden md:flex items-center gap-6 text-base">
-      <a href="/about.html"     class="hover:text-white px-3 py-2 rounded-md">How it works</a>
-      <a href="/materials.html" class="hover:text-white px-3 py-2 rounded-md">Materials</a>
-      <a href="/faq.html"       class="hover:text-white px-3 py-2 rounded-md">FAQ</a>
-      <a href="/policies.html"  class="hover:text-white px-3 py-2 rounded-md">Policies</a>
-      <a href="/contact.html"   class="hover:text-white px-3 py-2 rounded-md">Contact</a>
+      <a href="#how"        class="hover:text-white px-3 py-2 rounded-md">How it works</a>
+      <a href="#materials"  class="hover:text-white px-3 py-2 rounded-md">Materials</a>
+      <a href="/faq.html"   class="hover:text-white px-3 py-2 rounded-md">FAQ</a>
+      <a href="/policies.html" class="hover:text-white px-3 py-2 rounded-md">Policies</a>
+      <a href="/contact.html"  class="hover:text-white px-3 py-2 rounded-md">Contact</a>
     </nav>
 
+    <!-- Mobile hamburger -->
     <button id="navOpen"
       class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10"
       aria-label="Open navigation" aria-controls="navSheet" aria-expanded="false">
@@ -65,7 +65,7 @@
 <!-- MOBILE NAV SHEET -->
 <div id="navSheet" class="fixed inset-0 z-[100] hidden" aria-hidden="true">
   <div id="navBackdrop" class="absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-200"></div>
-  <aside id="navDrawer" class="absolute right-0 top-0 h-full w-80 max-w-[88vw] bg-[#0b1020] border-l border-white/10 translate-x-full transition-transform duration-300">
+  <aside id="navDrawer" class="absolute right-0 top-0 h-full w-80 max-w-[88vw] bg-[#0b1020] border-l border-white/10 translate-x-full transition-transform duration-300 will-change-transform">
     <div class="h-14 px-4 border-b border-white/10 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
@@ -77,8 +77,8 @@
     </div>
     <nav class="px-4 py-4">
       <ul class="space-y-2 text-white/90 text-base">
-        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/about.html">How it works</a></li>
-        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/materials.html">Materials</a></li>
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="#how">How it works</a></li>
+        <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="#materials">Materials</a></li>
         <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/faq.html">FAQ</a></li>
         <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/policies.html">Policies</a></li>
         <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/contact.html">Contact</a></li>
@@ -158,7 +158,9 @@
   <h2 class="h2 mb-4">Create a preview</h2>
   <div class="glass rounded-xl p-5 md:p-6">
     <div class="grid lg:grid-cols-[1fr_260px] gap-4">
-      <textarea id="promptInput" class="rounded-lg bg-white/10 border border-white/15 px-3 py-3 text-white/90 min-h-[56px]" placeholder="e.g., photographer under a moonlit pier with a nesting turtle nearby"></textarea>
+      <div class="space-y-2">
+        <textarea id="promptInput" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-3 text-white/90 min-h-[56px]" placeholder="e.g., photographer on the Oregon coast photographing seastacks by his jeep"></textarea>
+      </div>
       <div class="space-y-2">
         <label class="text-sm muted block">Aspect ratio</label>
         <select id="ratioSel" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2">
@@ -244,19 +246,18 @@
     </label>
 
     <div class="mt-6">
-      <div id="previewWrap" class="relative w-full h-[420px] bg-black/40 rounded-xl overflow-hidden border border-white/10">
-        <img id="previewImg" class="absolute inset-0 w-full h-full object-contain" alt="Preview" />
-        <div id="sig" class="sig-overlay sig-GreatVibes hidden" style="left:12px; bottom:10px; color:#fff; font-size:24px;">Your Name</div>
+      <div id="previewWrap" class="relative w-full h-[420px] bg-black/40 rounded-xl overflow-hidden border border-white/10 grid place-items-center wm-frame">
+        <img id="previewImg" class="max-w-full max-h-full object-contain" alt="Preview" />
       </div>
 
       <div class="mt-3 grid md:grid-cols-[1fr_220px_140px_1fr] gap-3 items-center">
         <label class="flex items-center gap-2"><input id="sigToggle" type="checkbox"/><span class="muted text-sm">Show signature on preview</span></label>
         <input id="sigName" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2" placeholder="Type your name…" />
         <select id="sigFont" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2">
-          <option value="GreatVibes">Great Vibes (cursive)</option>
+          <option value="Great Vibes">Great Vibes (cursive)</option>
           <option value="Allura">Allura (cursive)</option>
           <option value="Sacramento">Sacramento (cursive)</option>
-          <option value="Playfair">Playfair Display</option>
+          <option value="Playfair Display">Playfair Display</option>
           <option value="Montserrat">Montserrat</option>
         </select>
         <div class="flex items-center gap-3">
@@ -268,8 +269,9 @@
       <div id="gen-actions" class="hidden mt-4 flex flex-wrap items-center gap-3">
         <input id="gen-url" class="w-full md:w-auto flex-1 rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/80" readonly />
         <button id="copy-link" class="btn">Copy link</button>
-        <a id="download-link" href="#" class="btn btn-ghost">Download (watermarked)</a>
-        <button id="open-saved" class="btn-ghost px-3 py-2 rounded-lg border border-white/20">Open saved preview</button>
+        <a id="download-link" href="#" download="aiPRINT-preview.jpg" class="btn btn-ghost">Download (watermarked)</a>
+        <button id="open-saved" class="btn-ghost px-4 py-2 rounded-lg border border-white/20">Open saved preview</button>
+        <button id="share-later" class="btn-ghost px-4 py-2 rounded-lg border border-white/20">Share to order later</button>
       </div>
     </div>
   </div>
@@ -290,18 +292,18 @@
   <div id="tab-canvas" class="grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Square (1:1)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="square"     data-lookup="CAN-24-SQ"     data-label="Canvas • 24×24 — $155">24×24 — $155</button>
-      <button class="btn w-full buyBtn"      data-shape="square"     data-lookup="CAN-30-SQ"     data-label="Canvas • 30×30 — $245">30×30 — $245</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="square"     data-lookup="CAN-24-SQ"    data-label="24×24 — $155">24×24 — $155</button>
+      <button class="btn w-full sizeBtn"      data-material="canvas" data-shape="square"     data-lookup="CAN-30-SQ"    data-label="30×30 — $245">30×30 — $245</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="horizontal" data-lookup="CAN-24x16-LS"  data-label="Canvas • 24×16 — $105">24×16 — $105</button>
-      <button class="btn w-full buyBtn"      data-shape="horizontal" data-lookup="CAN-30x20-LS"  data-label="Canvas • 30×20 — $165">30×20 — $165</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="horizontal" data-lookup="CAN-24x16-LS" data-label="24×16 — $105">24×16 — $105</button>
+      <button class="btn w-full sizeBtn"      data-material="canvas" data-shape="horizontal" data-lookup="CAN-30x20-LS" data-label="30×20 — $165">30×20 — $165</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Vertical (2:3)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="vertical"   data-lookup="CAN-16x24-PT"  data-label="Canvas • 16×24 — $105">16×24 — $105</button>
-      <button class="btn w-full buyBtn"      data-shape="vertical"   data-lookup="CAN-20x30-PT"  data-label="Canvas • 20×30 — $165">20×30 — $165</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="vertical"   data-lookup="CAN-16x24-PT" data-label="16×24 — $105">16×24 — $105</button>
+      <button class="btn w-full sizeBtn"      data-material="canvas" data-shape="vertical"   data-lookup="CAN-20x30-PT" data-label="20×30 — $165">20×30 — $165</button>
     </div>
   </div>
 
@@ -309,18 +311,18 @@
   <div id="tab-metal" class="hidden grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Square (1:1)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="square"     data-lookup="MET-24SQ"      data-label="Metal • 24×24 — $275">24×24 — $275</button>
-      <button class="btn w-full buyBtn"      data-shape="square"     data-lookup="MET-30SQ"      data-label="Metal • 30×30 — $445">30×30 — $445</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="square"     data-lookup="MET-24SQ"     data-label="24×24 — $275">24×24 — $275</button>
+      <button class="btn w-full sizeBtn"      data-material="metal" data-shape="square"     data-lookup="MET-30SQ"     data-label="30×30 — $445">30×30 — $445</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="horizontal" data-lookup="MET-24x16-LS"  data-label="Metal • 24×16 — $195">24×16 — $195</button>
-      <button class="btn w-full buyBtn"      data-shape="horizontal" data-lookup="MET-30x20-LS"  data-label="Metal • 30×20 — $295">30×20 — $295</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="horizontal" data-lookup="MET-24x16-LS"  data-label="24×16 — $195">24×16 — $195</button>
+      <button class="btn w-full sizeBtn"      data-material="metal" data-shape="horizontal" data-lookup="MET-30x20-LS"  data-label="30×20 — $295">30×20 — $295</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Vertical (2:3)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="vertical"   data-lookup="MET-16x24-PT"  data-label="Metal • 16×24 — $195">16×24 — $195</button>
-      <button class="btn w-full buyBtn"      data-shape="vertical"   data-lookup="MET-20x30-PT"  data-label="Metal • 20×30 — $295">20×30 — $295</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="vertical"   data-lookup="MET-16x24-PT"  data-label="16×24 — $195">16×24 — $195</button>
+      <button class="btn w-full sizeBtn"      data-material="metal" data-shape="vertical"   data-lookup="MET-20x30-PT"  data-label="20×30 — $295">20×30 — $295</button>
     </div>
   </div>
 
@@ -328,30 +330,33 @@
   <div id="tab-acrylic" class="hidden grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Square (1:1)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="square"     data-lookup="ACR-24-SQ"     data-label="Acrylic • 24×24 — $475">24×24 — $475</button>
-      <button class="btn w-full buyBtn"      data-shape="square"     data-lookup="ACR-30-SQ"     data-label="Acrylic • 30×30 — $745">30×30 — $745</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="square"     data-lookup="ACR-24-SQ"     data-label="24×24 — $475">24×24 — $475</button>
+      <button class="btn w-full sizeBtn"      data-material="acrylic" data-shape="square"     data-lookup="ACR-30-SQ"     data-label="30×30 — $745">30×30 — $745</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="horizontal" data-lookup="ACR-24x16-LS"  data-label="Acrylic • 24×16 — $315">24×16 — $315</button>
-      <button class="btn w-full buyBtn"      data-shape="horizontal" data-lookup="ACR-30x20-LS"  data-label="Acrylic • 30×20 — $495">30×20 — $495</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="horizontal" data-lookup="ACR-24x16-LS"  data-label="24×16 — $315">24×16 — $315</button>
+      <button class="btn w-full sizeBtn"      data-material="acrylic" data-shape="horizontal" data-lookup="ACR-30x20-LS"  data-label="30×20 — $495">30×20 — $495</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Vertical (2:3)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="vertical"   data-lookup="ACR-16x24-PT"  data-label="Acrylic • 16×24 — $325">16×24 — $325</button>
-      <button class="btn w-full buyBtn"      data-shape="vertical"   data-lookup="ACR-20x30-PT"  data-label="Acrylic • 20×30 — $495">20×30 — $495</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="vertical"   data-lookup="ACR-16x24-PT"  data-label="16×24 — $325">16×24 — $325</button>
+      <button class="btn w-full sizeBtn"      data-material="acrylic" data-shape="vertical"   data-lookup="ACR-20x30-PT"  data-label="20×30 — $495">20×30 — $495</button>
     </div>
   </div>
 
-  <p id="selectedBox" class="muted mt-4">Selected: —</p>
-  <button id="reviewBtn" class="btn mt-2" disabled>Review & Checkout</button>
+  <!-- selection + review -->
+  <div class="mt-6 flex flex-wrap items-center gap-3">
+    <div id="selectionSummary" class="text-sm muted">Selected: —</div>
+    <button id="reviewBtn" class="btn btn-ghost" disabled>Review & Checkout</button>
+  </div>
 </section>
 
 <!-- FOOTER -->
 <footer class="border-t border-white/10">
   <div class="max-w-7xl mx-auto px-5 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
     <div><div class="font-semibold text-white">aiPRINT.ai</div><p class="mt-2">Archival, ready-to-hang prints from your ideas.</p><p class="mt-2">© <span id="y"></span> aiPRINT.ai</p></div>
-    <div><div class="font-semibold text-white">Explore</div><ul class="mt-2 space-y-1"><li><a href="/about.html" class="hover:text-white">How it works</a></li><li><a href="/materials.html" class="hover:text-white">Materials</a></li><li><a href="/faq.html" class="hover:text-white">FAQ</a></li></ul></div>
+    <div><div class="font-semibold text-white">Explore</div><ul class="mt-2 space-y-1"><li><a href="#how" class="hover:text-white">How it works</a></li><li><a href="#materials" class="hover:text-white">Materials</a></li><li><a href="/faq.html" class="hover:text-white">FAQ</a></li></ul></div>
     <div><div class="font-semibold text-white">Company</div><ul class="mt-2 space-y-1"><li><a href="/policies.html" class="hover:text-white">Policies</a></li><li><a href="/contact.html" class="hover:text-white">Contact</a></li></ul></div>
   </div>
 </footer>
@@ -361,293 +366,268 @@
   document.getElementById('y').textContent = new Date().getFullYear();
   const $ = (q, el=document)=>el.querySelector(q), $$=(q,el=document)=>[...el.querySelectorAll(q)];
 
-  // ===== Config toggles =====
-  const AUTO_SWITCH_TAB_TO_MATCH_SHAPE = false; // stays OFF unless you want it
-  // Hard fallback links (if create-checkout-session fails or lookup key missing/inactive)
-  const FALLBACK_STRIPE_LINKS = {
-    "CAN-24-SQ":"https://buy.stripe.com/7sY6oIgiiebS3OBazLeIw0j",
-    "CAN-30-SQ":"https://buy.stripe.com/4gMcN6d666Jq0CpbDPeIw0h",
-    "CAN-24x16-LS":"https://buy.stripe.com/9B6cN64zA3xeacZfU5eIw0g",
-    "CAN-30x20-LS":"https://buy.stripe.com/8x200k0jk7Nucl7gY9eIw0f",
-    "CAN-16x24-PT":"https://buy.stripe.com/5kQ7sM0jkgk098V9vHeIw0e",
-    "CAN-20x30-PT":"https://buy.stripe.com/eVq4gA9TU3xefxjazLeIw0d",
-    "MET-24SQ":"https://buy.stripe.com/14AdRaeaa2tafxjazLeIw0c",
-    "MET-30SQ":"https://buy.stripe.com/00weVeeaagk0fxj7nzeIw0b",
-    "MET-24x16-LS":"https://buy.stripe.com/aFaeVe2rs5Fm5WJ37jeIw03",
-    "MET-30x20-LS":"https://buy.stripe.com/7sY5kE2rs1p684R6jveIw02",
-    "MET-16x24-PT":"https://buy.stripe.com/dRm9AUc229VCacZ9vHeIw01",
-    "MET-20x30-PT":"https://buy.stripe.com/9B66oI3vw9VCcl7azLeIw00",
-    "ACR-24-SQ":"https://buy.stripe.com/7sY7sMc228Ry1GtgY9eIw05",
-    "ACR-30-SQ":"https://buy.stripe.com/4gM14oc222taacZfU5eIw06",
-    "ACR-24x16-LS":"https://buy.stripe.com/eVq5kE6HI9VC5WJ9vHeIw07",
-    "ACR-30x20-LS":"https://buy.stripe.com/7sY6oI8PQebSfxjbDPeIw08",
-    "ACR-16x24-PT":"https://buy.stripe.com/5kQ5kE0jk6JqacZ23feIw09",
-    "ACR-20x30-PT":"https://buy.stripe.com/7sY3cw5DE2tadpb23feIw0a"
+  /* ---------- Stripe direct links (by lookup_key) ---------- */
+  const STRIPE_LINK = {
+    'CAN-24-SQ':'https://buy.stripe.com/7sY6oIgiiebS3OBazLeIw0j',
+    'CAN-30-SQ':'https://buy.stripe.com/4gMcN6d666Jq0CpbDPeIw0h',
+    'CAN-24x16-LS':'https://buy.stripe.com/9B6cN64zA3xeacZfU5eIw0g',
+    'CAN-30x20-LS':'https://buy.stripe.com/8x200k0jk7Nucl7gY9eIw0f',
+    'CAN-16x24-PT':'https://buy.stripe.com/5kQ7sM0jkgk098V9vHeIw0e',
+    'CAN-20x30-PT':'https://buy.stripe.com/eVq4gA9TU3xefxjazLeIw0d',
+    'MET-24SQ':'https://buy.stripe.com/14AdRaeaa2tafxjazLeIw0c',
+    'MET-30SQ':'https://buy.stripe.com/00weVeeaagk0fxj7nzeIw0b',
+    'MET-24x16-LS':'https://buy.stripe.com/aFaeVe2rs5Fm5WJ37jeIw03',
+    'MET-30x20-LS':'https://buy.stripe.com/7sY5kE2rs1p684R6jveIw02',
+    'MET-16x24-PT':'https://buy.stripe.com/dRm9AUc229VCacZ9vHeIw01',
+    'MET-20x30-PT':'https://buy.stripe.com/9B66oI3vw9VCcl7azLeIw00',
+    'ACR-24-SQ':'https://buy.stripe.com/7sY7sMc228Ry1GtgY9eIw05',
+    'ACR-30-SQ':'https://buy.stripe.com/4gM14oc222taacZfU5eIw06',
+    'ACR-24x16-LS':'https://buy.stripe.com/eVq5kE6HI9VC5WJ9vHeIw07',
+    'ACR-30x20-LS':'https://buy.stripe.com/7sY6oI8PQebSfxjbDPeIw08',
+    'ACR-16x24-PT':'https://buy.stripe.com/5kQ5kE0jk6JqacZ23feIw09',
+    'ACR-20x30-PT':'https://buy.stripe.com/7sY3cw5DE2tadpb23feIw0a',
   };
 
+  /* ---------- Helpers ---------- */
   function buildPrompt(){
     const subject=$('#promptInput')?.value?.trim()||'';
     const style=$('#styleSel')?.value||'', mood=$('#moodSel')?.value||'';
     const light=$('#lightSel')?.value||'', comp=$('#compSel')?.value||'';
     const medium=$('#mediumSel')?.value||'';
-    const addons=$$('.themeOpt:checked').map(i=>i.value);
-    const addText=addons.length?', '+addons.join(', '):'';
-    return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}${addText}`.replace(/\s+/g,' ').trim();
+    return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}`.replace(/\s+/g,' ').trim();
   }
 
-  // ===== Helpers for shapes / lock =====
   function getShapeFromRatio(ratio) {
     if (ratio === '1024x1024') return 'square';
     if (ratio === '1536x1024') return 'horizontal';
     if (ratio === '1024x1536') return 'vertical';
     return '';
   }
+
   function lockButtonsToShape(shape) {
-    const all = document.querySelectorAll('.buyBtn');
+    const all = document.querySelectorAll('.sizeBtn');
     all.forEach(btn => {
       const isMatch = btn.dataset.shape === shape;
       btn.disabled = !isMatch;
       btn.classList.toggle('opacity-60', !isMatch);
       btn.title = isMatch ? '' : 'This preview is a different shape';
-      if (!isMatch) btn.classList.remove('ring-2','ring-white/90');
     });
   }
 
-  // ===== Watermarking helpers =====
-  async function loadImageBitmap(url) {
-    const r = await fetch(url, { cache: 'no-cache' });
-    if (!r.ok) throw new Error('Could not fetch image');
-    const blob = await r.blob();
-    return await createImageBitmap(blob);
-  }
-  async function makeWatermarkedBlob(srcUrlOrData) {
-    const img = await loadImageBitmap(srcUrlOrData);
-    const w = img.width, h = img.height;
-    const c = document.createElement('canvas'); c.width = w; c.height = h;
-    const ctx = c.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
-    ctx.save();
-    ctx.globalAlpha = 0.18;
-    ctx.fillStyle = '#ffffff';
-    ctx.translate(w*0.1, h*0.1);
-    ctx.rotate(-Math.PI / 8);
-    ctx.font = Math.max(14, Math.floor(w * 0.035)) + 'px sans-serif';
+  const AUTO_SWITCH_TAB_TO_MATCH_SHAPE = false;
+
+  /* ---------- Watermark drawing (on-canvas) ---------- */
+  async function drawWatermarked(url, signature) {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = url;
+    await img.decode();
+
+    const c = document.createElement('canvas');
+    const ctx = c.getContext('2d');
+    c.width = img.naturalWidth;
+    c.height = img.naturalHeight;
+    ctx.drawImage(img, 0, 0);
+
+    // tiled watermark
     const text = 'aiPRINT.ai';
-    const stepX = Math.max(160, Math.floor(w * 0.22));
-    const stepY = Math.max(120, Math.floor(h * 0.18));
-    for (let y = -stepY; y < h + stepY; y += stepY) {
-      for (let x = -stepX; x < w + stepX; x += stepX) {
+    ctx.save();
+    ctx.globalAlpha = 0.16;
+    ctx.fillStyle = '#ffffff';
+    ctx.font = `${Math.floor(c.width * 0.04)}px Montserrat, sans-serif`;
+    ctx.translate(c.width/2, c.height/2);
+    ctx.rotate(-Math.PI/6);
+    const stepX = Math.floor(c.width * 0.22);
+    const stepY = Math.floor(c.width * 0.12);
+    for (let y = -c.height; y < c.height; y += stepY) {
+      for (let x = -c.width; x < c.width; x += stepX) {
         ctx.fillText(text, x, y);
       }
     }
     ctx.restore();
-    return await new Promise(resolve => c.toBlob(resolve, 'image/jpeg', 0.92));
+
+    // optional signature
+    if (signature?.text) {
+      ctx.save();
+      ctx.fillStyle = signature.color || '#ffffff';
+      ctx.font = `${Math.max(14, signature.size || 24) * (c.width/1024)}px "${signature.font||'Great Vibes'}", serif`;
+      const pad = Math.floor(c.width * 0.015);
+      const metrics = ctx.measureText(signature.text);
+      const x = pad;
+      const y = c.height - pad;
+      ctx.shadowColor = 'rgba(0,0,0,.35)';
+      ctx.shadowBlur = 4;
+      ctx.fillText(signature.text, x, y);
+      ctx.restore();
+    }
+
+    return c.toDataURL('image/jpeg', 0.92);
   }
-  async function savePreviewToServer(preview) {
-    const fd = new FormData();
-    fd.append('prompt', preview.prompt || '');
-    fd.append('size',   preview.size || '');
-    fd.append('style',  preview.style || '');
-    fd.append('mood',   preview.mood  || '');
-    fd.append('light',  preview.light || '');
-    fd.append('comp',   preview.comp  || '');
-    fd.append('medium', preview.medium|| '');
-    if (preview.sig) fd.append('sig', JSON.stringify(preview.sig));
-    fd.append('file', preview._wmBlob, 'preview.jpg');
-    const res = await fetch('/api/save-preview', { method:'POST', body: fd });
-    const text = await res.text();
-    let data; try { data = JSON.parse(text); } catch { throw new Error(text.slice(0,200)); }
-    if (!res.ok || !data?.id || !data?.url) throw new Error(data?.error || 'Save failed');
-    return data;
-  }
 
-  let lastPreview = null;
-  let selectedLookup = null, selectedLabel = '', allowedShape = '';
+  /* ---------- State ---------- */
+  let lastPreview = null;     // { originalUrl, watermarkedUrl, size(ratio), ... }
+  let selected = null;        // { material, shape, lookup, label }
+  const genBtn=$('#genBtn'), previewImg=$('#previewImg'),
+        genUrlInput=$('#gen-url'), genActions=$('#gen-actions'),
+        ratioSel=$('#ratioSel'), orderNote=$('#orderLockExplain'),
+        reviewBtn=$('#reviewBtn'), selectionSummary=$('#selectionSummary');
 
-  const genBtn=$('#genBtn'), previewImg=$('#previewImg'), genUrlInput=$('#gen-url'),
-        genActions=$('#gen-actions'), ratioSel=$('#ratioSel');
-
-  genBtn?.addEventListener('click', async () => {
-    const subject=buildPrompt(); if(!subject){alert('Please describe what you want.');return;}
-    const size=ratioSel?.value||'1024x1024';
-    genBtn.disabled=true; genBtn.textContent='Generating…'; genActions?.classList.add('hidden'); if(previewImg) previewImg.src='';
-
-    try{
-      const r=await fetch('/api/generate-image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:subject,size})});
-      const text = await r.text();
-      let data; try { data = JSON.parse(text); } catch { throw new Error(`Server error: ${text.slice(0,200)}`); }
-      if(!r.ok||!data?.image) throw new Error(data?.error||'Generation failed');
-
-      const wmBlob = await makeWatermarkedBlob(data.image);
-      const wmUrl  = URL.createObjectURL(wmBlob);
-      previewImg.src = wmUrl;
-
-      // signature capture
-      const sigOn   = $('#sigToggle')?.checked;
-      const sigEl   = $('#sig'); let sig = null;
-      if (sigOn && sigEl) {
-        sig = {
-          text: sigEl.textContent || '',
-          font: [...sigEl.classList].find(c=>c.startsWith('sig-'))?.replace('sig-','') || '',
-          color: sigEl.style.color || '#ffffff',
-          size: parseInt(sigEl.style.fontSize||'24',10),
-          left: sigEl.style.left || '12px',
-          top:  sigEl.style.top  || 'auto'
-        };
-      }
-
-      lastPreview = {
-        image:'(server-saved)', prompt:subject, size,
-        style: $('#styleSel')?.value||'', mood:$('#moodSel')?.value||'',
-        light: $('#lightSel')?.value||'', comp:$('#compSel')?.value||'',
-        medium:$('#mediumSel')?.value||'', sig
-      };
-      lastPreview._wmBlob = wmBlob;
-
-      const saved = await savePreviewToServer(lastPreview);
-      lastPreview.id  = saved.id; lastPreview.url = saved.url;
-      genUrlInput.value = saved.url;
-      $('#download-link').onclick = () => { const a=document.createElement('a'); a.href=wmUrl; a.download='aiPRINT-preview.jpg'; a.click(); };
-      genActions.classList.remove('hidden');
-
-      allowedShape = getShapeFromRatio(size);
-      lockButtonsToShape(allowedShape);
-      clearSelectedButtons();
-      selectedLookup = null; selectedLabel = '';
-
-      const note = $('#orderLockExplain');
-      if (note) note.textContent = `Looks great! Only ${allowedShape} sizes are available for this preview.`;
-
-      if (AUTO_SWITCH_TAB_TO_MATCH_SHAPE) {
-        const tabBtn = document.querySelector(`[data-tab].btn:not(.btn-ghost)`); // current tab button
-        // (we keep current material; just visual hinting would go here)
-      }
-
-      const reviewBtn = $('#reviewBtn');
-      if (reviewBtn) { reviewBtn.disabled = true; reviewBtn.textContent = 'Review & Checkout'; }
-    }catch(e){ alert(e.message||String(e)); }finally{ genBtn.disabled=false; genBtn.textContent='Generate preview'; }
-  });
-
-  // Copy link
-  $('#copy-link')?.addEventListener('click', async ()=>{
-    if(!genUrlInput?.value || !/^https?:\/\//i.test(genUrlInput.value)){ alert('No saved share URL yet. Generate again.'); return; }
-    await navigator.clipboard.writeText(genUrlInput.value);
-    const b=$('#copy-link'); b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy link',900);
-  });
-
-  // Tabs switch
-  const tabs=$$('.orderTab'); const views={canvas:$('#tab-canvas'),metal:$('#tab-metal'),acrylic:$('#tab-acrylic')};
-  tabs.forEach(btn=>btn.addEventListener('click',()=>{const k=btn.dataset.tab; Object.values(views).forEach(v=>v?.classList.add('hidden')); views[k]?.classList.remove('hidden'); tabs.forEach(b=>b.classList.add('btn-ghost')); btn.classList.remove('btn-ghost');}));
-
-  // Signature overlay controls
-  const sigEl=$('#sig'), sigOn=$('#sigToggle'), sigName=$('#sigName'), sigFont=$('#sigFont'), sigCol=$('#sigColor'), sigSize=$('#sigSize'), wrap=$('#previewWrap');
-  sigOn?.addEventListener('change',()=>sigEl?.classList.toggle('hidden',!sigOn.checked));
-  sigName?.addEventListener('input',()=>{ if(sigEl) sigEl.textContent=sigName.value||' '; });
-  sigFont?.addEventListener('change',()=>{ if(!sigEl) return; sigEl.classList.remove('sig-GreatVibes','sig-Allura','sig-Sacramento','sig-Playfair','sig-Montserrat'); sigEl.classList.add('sig-'+sigFont.value); });
-  sigCol?.addEventListener('input',()=>{ if(sigEl) sigEl.style.color=sigCol.value; });
-  sigSize?.addEventListener('input',()=>{ if(sigEl) sigEl.style.fontSize=`${sigSize.value}px`; });
-  let drag=null; sigEl?.addEventListener('mousedown',e=>{drag={x:e.clientX,y:e.clientY,left:sigEl.offsetLeft,top:sigEl.offsetTop}; e.preventDefault();});
-  window.addEventListener('mousemove',e=>{ if(!drag||!sigEl||!wrap) return; const dx=e.clientX-drag.x, dy=e.clientY-drag.y; const maxX=wrap.clientWidth-sigEl.clientWidth-6, maxY=wrap.clientHeight-sigEl.clientHeight-6; sigEl.style.left=Math.max(6,Math.min(maxX,drag.left+dx))+'px'; sigEl.style.top=Math.max(6,Math.min(maxY,drag.top+dy))+'px';});
-  window.addEventListener('mouseup',()=>drag=null);
-
-  // Lock/unlock + selection UI
-  function clearSelectedButtons(){ document.querySelectorAll('.buyBtn').forEach(b=>b.classList.remove('ring-2','ring-white/90')); }
-  function enableBuyButtons(on){
-    $$('.buyBtn').forEach(b=>{
+  function enableOrdering(on) {
+    $$('.sizeBtn').forEach(b=>{
       b.disabled = !on;
       b.classList.toggle('opacity-60', !on);
       b.title = on ? '' : 'Create a preview first';
     });
+    reviewBtn.disabled = !on || !selected;
   }
-  enableBuyButtons(false);
+  enableOrdering(false);
 
-  // Size selection (no redirect yet; we store selection and use Review button)
-  $$('.buyBtn').forEach(b=>{
+  /* ---------- Generate preview ---------- */
+  genBtn?.addEventListener('click', async () => {
+    const subject=buildPrompt();
+    if(!subject){ alert('Please describe what you want.'); return; }
+    const ratio = ratioSel?.value || '1024x1024';
+
+    genBtn.disabled = true; genBtn.textContent='Generating…';
+    genActions.classList.add('hidden'); previewImg.removeAttribute('src');
+
+    try {
+      // 1) Generate image on server — expects { ok, image }
+      const r = await fetch('/api/generate-image', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ prompt: subject, size: ratio })
+      });
+      const data = await r.json();
+      if(!r.ok || !data?.image) throw new Error(data?.error || 'Generation failed');
+
+      // 2) Signature capture from UI
+      const sigOn = $('#sigToggle')?.checked;
+      let sig = null;
+      if (sigOn) {
+        sig = {
+          text: $('#sigName')?.value || '',
+          font: $('#sigFont')?.value || 'Great Vibes',
+          color: $('#sigColor')?.value || '#ffffff',
+          size: parseInt($('#sigSize')?.value || '24',10)
+        };
+      }
+
+      // 3) Draw watermark to canvas (keeps saved Blob URL clean)
+      const wmDataUrl = await drawWatermarked(data.image, sig);
+
+      // 4) Update UI
+      previewImg.src = wmDataUrl;
+      $('#download-link').href = wmDataUrl;
+      $('#open-saved').onclick = () => window.open(data.image, '_blank');
+
+      genUrlInput.value = data.image;          // copy/share uses clean saved URL
+      genActions.classList.remove('hidden');
+
+      // 5) Save state
+      lastPreview = {
+        originalUrl: data.image,
+        watermarkedUrl: wmDataUrl,
+        prompt: subject,
+        size: ratio,
+      };
+
+      // lock by shape
+      const shape = getShapeFromRatio(ratio);
+      lockButtonsToShape(shape);
+      orderNote.textContent = `Looks great! Only ${shape} sizes are available for this preview.`;
+      if (AUTO_SWITCH_TAB_TO_MATCH_SHAPE) {
+        if (shape === 'horizontal') $('[data-tab="canvas"]').click(); // noop just a hint example
+      }
+
+      enableOrdering(true);
+    } catch (e) {
+      alert(e.message || String(e));
+    } finally {
+      genBtn.disabled = false; genBtn.textContent='Generate preview';
+    }
+  });
+
+  $('#copy-link')?.addEventListener('click',async()=>{
+    if(!genUrlInput?.value) return alert('Nothing to copy yet.');
+    await navigator.clipboard.writeText(genUrlInput.value);
+    const b=$('#copy-link'); b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy link',900);
+  });
+
+  // Share to order later (encodes preview + current selection)
+  $('#share-later')?.addEventListener('click', async () => {
+    if (!lastPreview?.originalUrl) return alert('Create a preview first.');
+    const url = new URL(window.location.href);
+    url.searchParams.set('preview', lastPreview.originalUrl);
+    if (selected?.lookup) url.searchParams.set('lookup', selected.lookup);
+    await navigator.clipboard.writeText(url.toString());
+    alert('Sharable link copied!');
+  });
+
+  /* ---------- Tabs ---------- */
+  const tabs=$$('.orderTab'); const views={canvas:$('#tab-canvas'),metal:$('#tab-metal'),acrylic:$('#tab-acrylic')};
+  tabs.forEach(btn=>btn.addEventListener('click',()=>{
+    const k=btn.dataset.tab;
+    Object.values(views).forEach(v=>v?.classList.add('hidden'));
+    views[k]?.classList.remove('hidden');
+    tabs.forEach(b=>b.classList.add('btn-ghost'));
+    btn.classList.remove('btn-ghost');
+  }));
+
+  /* ---------- Size selection (no instant checkout) ---------- */
+  $$('.sizeBtn').forEach(b=>{
     b.addEventListener('click', ()=>{
+      if(!lastPreview?.originalUrl){ alert('Please generate a preview first.'); return; }
       if (b.disabled) return;
-      clearSelectedButtons();
-      b.classList.add('ring-2','ring-white/90');
-      selectedLookup = b.dataset.lookup;
-      selectedLabel  = b.dataset.label || b.textContent.trim();
-      const sel = $('#selectedBox'); if (sel) sel.textContent = `Selected: ${selectedLabel}`;
-      const reviewBtn = $('#reviewBtn'); if (reviewBtn) { reviewBtn.disabled = false; reviewBtn.textContent = 'Review & Checkout'; }
+      $$('.sizeBtn').forEach(x=>x.classList.remove('ring-2','ring-white'));
+      b.classList.add('ring-2','ring-white');
+      selected = {
+        material: b.dataset.material,
+        shape: b.dataset.shape,
+        lookup: b.dataset.lookup,
+        label: b.dataset.label
+      };
+      selectionSummary.textContent = `Selected: ${selected.material.toUpperCase()} • ${selected.label}`;
+      reviewBtn.disabled = false;
     });
   });
 
-  // Review button
-  const reviewBtn = $('#reviewBtn');
-  reviewBtn?.addEventListener('click', async () => {
-    if (!lastPreview?.image) { alert('Please generate a preview first.'); return; }
-    if (!selectedLookup)    { alert('Pick a size.'); return; }
-    try {
-      reviewBtn.disabled = true; reviewBtn.textContent = 'Creating checkout...';
-      const res = await fetch('/api/create-checkout-session', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ lookup_key: selectedLookup, preview: lastPreview })
-      });
-      const text = await res.text();
-      let data; try { data = JSON.parse(text); } catch { data = null; }
-      if (res.ok && data?.url) { window.location.href = data.url; return; }
-
-      // Fallback to your prebuilt Stripe payment link if server route fails / no price
-      const fallback = FALLBACK_STRIPE_LINKS[selectedLookup];
-      if (fallback) { window.location.href = fallback; return; }
-
-      throw new Error((data && data.error) || text || 'Could not start checkout');
-    } catch (err) {
-      alert(err.message || String(err));
-    } finally {
-      reviewBtn.disabled = false; reviewBtn.textContent = 'Review & Checkout';
-    }
+  /* ---------- Review & Checkout (direct Stripe link) ---------- */
+  reviewBtn.addEventListener('click', ()=>{
+    if(!selected) return alert('Pick a size first.');
+    const link = STRIPE_LINK[selected.lookup];
+    if(!link) return alert(`No Stripe link configured for ${selected.lookup}`);
+    // Optional metadata pass: add ?client_reference_id with preview URL compressed
+    const safe = encodeURIComponent(lastPreview?.originalUrl || '');
+    window.location.href = link + (safe ? `?client_reference_id=${safe}` : '');
   });
 
-  // Open saved preview in new tab
-  $('#open-saved')?.addEventListener('click', ()=>{
-    if (!genUrlInput?.value) { alert('No saved link yet.'); return; }
-    window.open(genUrlInput.value, '_blank', 'noopener');
-  });
+  /* ---------- Deep link loader (order later) ---------- */
+  (async function preloadFromQuery(){
+    const sp = new URLSearchParams(location.search);
+    const preview = sp.get('preview');
+    const lookup  = sp.get('lookup');
+    if (!preview) return;
+    // Show watermarked version for on-page
+    const wm = await drawWatermarked(preview, null);
+    previewImg.src = wm;
+    $('#download-link').href = wm;
+    $('#open-saved').onclick = () => window.open(preview,'_blank');
+    genUrlInput.value = preview;
+    genActions.classList.remove('hidden');
 
-  // Hydrate from pid
-  async function hydrateFromPid() {
-    const pid = new URLSearchParams(location.search).get('pid');
-    if (!pid) return;
-    try {
-      const r = await fetch(`/api/get-preview?pid=${encodeURIComponent(pid)}`);
-      const t = await r.text(); let data; try { data = JSON.parse(t); } catch { throw new Error(t.slice(0,200)); }
-      if (!r.ok || !data?.url) throw new Error(data?.error || 'Not found');
-
-      const imgBlob = await (await fetch(data.url)).blob();
-      const bmp = await createImageBitmap(imgBlob);
-      const c = document.createElement('canvas'); c.width = bmp.width; c.height = bmp.height;
-      c.getContext('2d').drawImage(bmp, 0, 0);
-      const showUrl = c.toDataURL('image/jpeg', 0.92);
-      previewImg.src = showUrl;
-
-      genUrlInput.value = data.share_url || data.url;
-      genActions.classList.remove('hidden');
-
-      lastPreview = {
-        image:'(server-saved)', url:data.url, id:pid,
-        prompt:data.prompt||'', size:data.size||'1024x1024',
-        style:data.style||'', mood:data.mood||'',
-        light:data.light||'', comp:data.comp||'',
-        medium:data.medium||'', sig:data.sig||null
-      };
-
-      allowedShape = getShapeFromRatio(lastPreview.size);
-      lockButtonsToShape(allowedShape);
-      clearSelectedButtons();
-      selectedLookup = null; selectedLabel = '';
-      const note = $('#orderLockExplain');
-      if (note) note.textContent = `Loaded a saved preview. Only ${allowedShape} sizes are available.`;
-      const rb = $('#reviewBtn'); if (rb) { rb.disabled = true; rb.textContent = 'Review & Checkout'; }
-    } catch (e) {
-      console.error(e);
-      alert('Could not load saved preview.');
+    lastPreview = { originalUrl: preview, watermarkedUrl: wm, size: '1024x1024' };
+    enableOrdering(true);
+    orderNote.textContent = 'Loaded a saved preview. Pick your size & finish.';
+    if (lookup) {
+      const btn = document.querySelector(`.sizeBtn[data-lookup="${lookup}"]`);
+      if (btn && !btn.disabled) btn.click();
     }
-  }
-  hydrateFromPid();
+  })();
 
-  // Mobile nav JS
+  /* ---------- Simple signature UI wiring (overlay not needed now) ---------- */
+  $('#sigToggle')?.addEventListener('change',()=>{}); // kept for future: watermark function reads values
+
+  /* ---------- Mobile sheet ---------- */
   (() => {
     const sheet   = document.getElementById('navSheet');
     const drawer  = document.getElementById('navDrawer');
@@ -665,6 +645,7 @@
         sheet.setAttribute('aria-hidden', 'false');
       });
     };
+
     const closeSheet = () => {
       drawer.classList.add('translate-x-full');
       backdrop.classList.add('opacity-0');
@@ -679,7 +660,7 @@
     openBtn?.addEventListener('click', openSheet);
     closeBtn?.addEventListener('click', closeSheet);
     backdrop?.addEventListener('click', closeSheet);
-    sheet?.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSheet));
+    sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSheet));
     window.addEventListener('keydown', e => { if (e.key === 'Escape' && !sheet.classList.contains('hidden')) closeSheet(); });
     window.addEventListener('resize', () => { if (window.innerWidth >= 768 && !sheet.classList.contains('hidden')) closeSheet(); });
   })();
