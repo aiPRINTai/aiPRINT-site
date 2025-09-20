@@ -28,8 +28,9 @@
     .sig-overlay:active { cursor:grabbing; }
     .sig-GreatVibes{font-family:'Great Vibes',cursive}.sig-Allura{font-family:'Allura',cursive}.sig-Sacramento{font-family:'Sacramento',cursive}.sig-Playfair{font-family:'Playfair Display',serif}.sig-Montserrat{font-family:'Montserrat',sans-serif}
     .lock-note{font-size:.85rem;color:#c8d5e7}
+    .size-btn.selected { outline:2px solid #fff; outline-offset:2px; }
     html { scroll-behavior: smooth; }
-  </style> 
+  </style>
 </head>
 <body>
 
@@ -120,7 +121,7 @@
 </section>
 
 <!-- HOW IT WORKS -->
-<section id="how" class="max-w-7xl mx-auto px-5 py-12">
+<section id="how" class="max-w-7xl mx_auto px-5 py-12">
   <h2 class="h2 mb-6">How it works</h2>
   <div class="grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-5"><div class="font-bold">STEP 1</div><div class="mt-2 text-lg font-extrabold">Describe your idea</div><p class="muted mt-2">Share a prompt (style, mood, colors). Add an optional reference image.</p></div>
@@ -287,18 +288,18 @@
   <div id="tab-canvas" class="grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Square (1:1)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="square"     data-lookup="CAN-24-SQ"     data-label="24×24 — $155">24×24 — $155</button>
-      <button class="btn w-full buyBtn"      data-shape="square"     data-lookup="CAN-30-SQ"     data-label="30×30 — $245">30×30 — $245</button>
+      <button class="btn size-btn w-full mb-2 selectBtn" data-material="canvas" data-shape="square"     data-lookup="CAN-24-SQ"    data-label="Canvas · 24×24 — $155">24×24 — $155</button>
+      <button class="btn size-btn w-full selectBtn"      data-material="canvas" data-shape="square"     data-lookup="CAN-30-SQ"    data-label="Canvas · 30×30 — $245">30×30 — $245</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="horizontal" data-lookup="CAN-24x16-LS"  data-label="24×16 — $105">24×16 — $105</button>
-      <button class="btn w-full buyBtn"      data-shape="horizontal" data-lookup="CAN-30x20-LS"  data-label="30×20 — $165">30×20 — $165</button>
+      <button class="btn size-btn w-full mb-2 selectBtn" data-material="canvas" data-shape="horizontal" data-lookup="CAN-24x16-LS" data-label="Canvas · 24×16 — $105">24×16 — $105</button>
+      <button class="btn size-btn w-full selectBtn"      data-material="canvas" data-shape="horizontal" data-lookup="CAN-30x20-LS" data-label="Canvas · 30×20 — $165">30×20 — $165</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Vertical (2:3)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="vertical"   data-lookup="CAN-16x24-PT"  data-label="16×24 — $105">16×24 — $105</button>
-      <button class="btn w-full buyBtn"      data-shape="vertical"   data-lookup="CAN-20x30-PT"  data-label="20×30 — $165">20×30 — $165</button>
+      <button class="btn size-btn w-full mb-2 selectBtn" data-material="canvas" data-shape="vertical"   data-lookup="CAN-16x24-PT" data-label="Canvas · 16×24 — $105">16×24 — $105</button>
+      <button class="btn size-btn w-full selectBtn"      data-material="canvas" data-shape="vertical"   data-lookup="CAN-20x30-PT" data-label="Canvas · 20×30 — $165">20×30 — $165</button>
     </div>
   </div>
 
@@ -306,18 +307,18 @@
   <div id="tab-metal" class="hidden grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Square (1:1)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="square"     data-lookup="MET-24SQ"      data-label="24×24 — $275">24×24 — $275</button>
-      <button class="btn w-full buyBtn"      data-shape="square"     data-lookup="MET-30SQ"      data-label="30×30 — $445">30×30 — $445</button>
+      <button class="btn size-btn w-full mb-2 selectBtn" data-material="metal" data-shape="square"     data-lookup="MET-24SQ"     data-label="Metal · 24×24 — $275">24×24 — $275</button>
+      <button class="btn size-btn w-full selectBtn"      data-material="metal" data-shape="square"     data-lookup="MET-30SQ"     data-label="Metal · 30×30 — $445">30×30 — $445</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="horizontal" data-lookup="MET-24x16-LS"  data-label="24×16 — $195">24×16 — $195</button>
-      <button class="btn w-full buyBtn"      data-shape="horizontal" data-lookup="MET-30x20-LS"  data-label="30×20 — $295">30×20 — $295</button>
+      <button class="btn size-btn w-full mb-2 selectBtn" data-material="metal" data-shape="horizontal" data-lookup="MET-24x16-LS" data-label="Metal · 24×16 — $195">24×16 — $195</button>
+      <button class="btn size-btn w-full selectBtn"      data-material="metal" data-shape="horizontal" data-lookup="MET-30x20-LS" data-label="Metal · 30×20 — $295">30×20 — $295</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Vertical (2:3)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="vertical"   data-lookup="MET-16x24-PT"  data-label="16×24 — $195">16×24 — $195</button>
-      <button class="btn w-full buyBtn"      data-shape="vertical"   data-lookup="MET-20x30-PT"  data-label="20×30 — $295">20×30 — $295</button>
+      <button class="btn size-btn w-full mb-2 selectBtn" data-material="metal" data-shape="vertical"   data-lookup="MET-16x24-PT" data-label="Metal · 16×24 — $195">16×24 — $195</button>
+      <button class="btn size-btn w-full selectBtn"      data-material="metal" data-shape="vertical"   data-lookup="MET-20x30-PT" data-label="Metal · 20×30 — $295">20×30 — $295</button>
     </div>
   </div>
 
@@ -325,22 +326,28 @@
   <div id="tab-acrylic" class="hidden grid md:grid-cols-3 gap-5">
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Square (1:1)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="square"     data-lookup="ACR-24-SQ"     data-label="24×24 — $475">24×24 — $475</button>
-      <button class="btn w-full buyBtn"      data-shape="square"     data-lookup="ACR-30-SQ"     data-label="30×30 — $745">30×30 — $745</button>
+      <button class="btn size-btn w-full mb-2 selectBtn" data-material="acrylic" data-shape="square"     data-lookup="ACR-24-SQ"    data-label="Acrylic · 24×24 — $475">24×24 — $475</button>
+      <button class="btn size-btn w-full selectBtn"      data-material="acrylic" data-shape="square"     data-lookup="ACR-30-SQ"    data-label="Acrylic · 30×30 — $745">30×30 — $745</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="horizontal" data-lookup="ACR-24x16-LS"  data-label="24×16 — $315">24×16 — $315</button>
-      <button class="btn w-full buyBtn"      data-shape="horizontal" data-lookup="ACR-30x20-LS"  data-label="30×20 — $495">30×20 — $495</button>
+      <button class="btn size-btn w-full mb-2 selectBtn" data-material="acrylic" data-shape="horizontal" data-lookup="ACR-24x16-LS" data-label="Acrylic · 24×16 — $315">24×16 — $315</button>
+      <button class="btn size-btn w-full selectBtn"      data-material="acrylic" data-shape="horizontal" data-lookup="ACR-30x20-LS" data-label="Acrylic · 30×20 — $495">30×20 — $495</button>
     </div>
     <div class="glass rounded-xl p-4">
       <div class="font-bold mb-2">Vertical (2:3)</div>
-      <button class="btn w-full mb-2 buyBtn" data-shape="vertical"   data-lookup="ACR-16x24-PT"  data-label="16×24 — $325">16×24 — $325</button>
-      <button class="btn w-full buyBtn"      data-shape="vertical"   data-lookup="ACR-20x30-PT"  data-label="20×30 — $495">20×30 — $495</button>
+      <button class="btn size-btn w-full mb-2 selectBtn" data-material="acrylic" data-shape="vertical"   data-lookup="ACR-16x24-PT" data-label="Acrylic · 16×24 — $325">16×24 — $325</button>
+      <button class="btn size-btn w-full selectBtn"      data-material="acrylic" data-shape="vertical"   data-lookup="ACR-20x30-PT" data-label="Acrylic · 20×30 — $495">20×30 — $495</button>
     </div>
   </div>
+
+  <!-- Selection + Proceed -->
+  <div class="mt-6 flex flex-wrap items-center gap-3">
+    <div id="chosen" class="muted text-sm">No size selected yet.</div>
+    <button id="checkoutBtn" class="btn" disabled>Proceed to checkout</button>
+  </div>
 </section>
-  
+
 <!-- FOOTER -->
 <footer class="border-t border-white/10">
   <div class="max-w-7xl mx-auto px-5 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
@@ -352,6 +359,9 @@
 
 <!-- APP + CHECKOUT LOGIC -->
 <script>
+  // ====== SETTINGS ======
+  const AUTO_SWITCH_TAB_TO_MATCH_SHAPE = true;
+
   document.getElementById('y').textContent = new Date().getFullYear();
   const $ = (q, el=document)=>el.querySelector(q), $$=(q,el=document)=>[...el.querySelectorAll(q)];
 
@@ -360,30 +370,32 @@
     const style=$('#styleSel')?.value||'', mood=$('#moodSel')?.value||'';
     const light=$('#lightSel')?.value||'', comp=$('#compSel')?.value||'';
     const medium=$('#mediumSel')?.value||'';
-    const addons=$$('.themeOpt:checked').map(i=>i.value);
-    const addText=addons.length?', '+addons.join(', '):'';
-    return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}${addText}`.replace(/\s+/g,' ').trim();
+    return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}`.replace(/\s+/g,' ').trim();
   }
 
-  /* ====== Shape helpers (NEW) ====== */
+  // ====== helpers for shape gating ======
   function getShapeFromRatio(ratio) {
     if (ratio === '1024x1024') return 'square';
     if (ratio === '1536x1024') return 'horizontal';
     if (ratio === '1024x1536') return 'vertical';
     return '';
   }
-
   function lockButtonsToShape(shape) {
-    const all = document.querySelectorAll('.buyBtn');
-    all.forEach(btn => {
+    $$('.selectBtn').forEach(btn => {
       const isMatch = btn.dataset.shape === shape;
-      btn.disabled = !isMatch;                     // only matching shape is enabled
+      btn.disabled = !isMatch;
       btn.classList.toggle('opacity-60', !isMatch);
       btn.title = isMatch ? '' : 'This preview is a different shape';
     });
   }
+  function switchTabForShape(shape){
+    if (!AUTO_SWITCH_TAB_TO_MATCH_SHAPE) return;
+    // keep current material; just visual hint is enough
+    // (If you ever want to auto-switch material, you can add logic here)
+  }
 
   let lastPreview = null;
+  let selected = null; // { lookup, label, shape, material }
 
   const genBtn=$('#genBtn'), previewImg=$('#previewImg'), genUrlInput=$('#gen-url'),
         genActions=$('#gen-actions'), ratioSel=$('#ratioSel');
@@ -393,8 +405,15 @@
     const size=ratioSel?.value||'1024x1024';
     genBtn.disabled=true; genBtn.textContent='Generating…'; genActions?.classList.add('hidden'); if(previewImg) previewImg.src='';
     try{
-      const r=await fetch('/api/generate-image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:subject,size})});
-      const data=await r.json(); if(!r.ok||!data?.image) throw new Error(data?.error||'Generation failed');
+      const r=await fetch('/api/generate-image',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({prompt:subject,size})
+      });
+      const raw = await r.text();
+      let data;
+      try { data = JSON.parse(raw); } catch { throw new Error(raw.slice(0,120) || 'Image server error'); }
+      if(!r.ok || !data?.image) throw new Error(data?.error || 'Generation failed');
 
       previewImg.src=data.image; genUrlInput.value=data.image; $('#download-link').href=data.image; genActions.classList.remove('hidden');
 
@@ -425,20 +444,38 @@
         sig
       };
 
-      // === Shape-based unlocking (NEW) ===
+      // lock buy buttons to matching shape
       const shape = getShapeFromRatio(size);
       lockButtonsToShape(shape);
-      const note = $('#orderLockExplain');
-      if (note) note.textContent = `Looks great! Only ${shape} sizes are available for this preview.`;
+      switchTabForShape(shape);
 
-    }catch(e){ alert(e.message||String(e)); }finally{ genBtn.disabled=false; genBtn.textContent='Generate preview'; }
+      // clear any old selection
+      clearSelection();
+
+      const note = $('#orderLockExplain');
+      if (note) note.textContent = `Looks great! Only ${shape} sizes are available for this preview. Select a size, then click Proceed to checkout.`;
+    }catch(e){
+      alert(e.message||String(e));
+    }finally{
+      genBtn.disabled=false; genBtn.textContent='Generate preview';
+    }
   });
 
-  $('#copy-link')?.addEventListener('click',async()=>{ if(!genUrlInput?.value) return; await navigator.clipboard.writeText(genUrlInput.value); const b=$('#copy-link'); b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy link',1000); });
+  $('#copy-link')?.addEventListener('click',async()=>{
+    if(!genUrlInput?.value) return;
+    await navigator.clipboard.writeText(genUrlInput.value);
+    const b=$('#copy-link'); b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy link',1000);
+  });
 
   // Tabs
   const tabs=$$('.orderTab'); const views={canvas:$('#tab-canvas'),metal:$('#tab-metal'),acrylic:$('#tab-acrylic')};
-  tabs.forEach(btn=>btn.addEventListener('click',()=>{const k=btn.dataset.tab; Object.values(views).forEach(v=>v?.classList.add('hidden')); views[k]?.classList.remove('hidden'); tabs.forEach(b=>b.classList.add('btn-ghost')); btn.classList.remove('btn-ghost');}));
+  tabs.forEach(btn=>btn.addEventListener('click',()=>{
+    const k=btn.dataset.tab;
+    Object.values(views).forEach(v=>v?.classList.add('hidden'));
+    views[k]?.classList.remove('hidden');
+    tabs.forEach(b=>b.classList.add('btn-ghost'));
+    btn.classList.remove('btn-ghost');
+  }));
 
   // Signature overlay controls
   const sigEl=$('#sig'), sigOn=$('#sigToggle'), sigName=$('#sigName'), sigFont=$('#sigFont'), sigCol=$('#sigColor'), sigSize=$('#sigSize'), wrap=$('#previewWrap');
@@ -451,71 +488,107 @@
   window.addEventListener('mousemove',e=>{ if(!drag||!sigEl||!wrap) return; const dx=e.clientX-drag.x, dy=e.clientY-drag.y; const maxX=wrap.clientWidth-sigEl.clientWidth-6, maxY=wrap.clientHeight-sigEl.clientHeight-6; sigEl.style.left=Math.max(6,Math.min(maxX,drag.left+dx))+'px'; sigEl.style.top=Math.max(6,Math.min(maxY,drag.top+dy))+'px';});
   window.addEventListener('mouseup',()=>drag=null);
 
-  // Start with everything locked
-  (function lockAllAtStart(){
-    const all = document.querySelectorAll('.buyBtn');
-    all.forEach(b => { b.disabled = true; b.classList.add('opacity-60'); b.title = 'Create a preview first'; });
-  })();
+  // ====== selection logic (no instant redirect) ======
+  const chosenEl = $('#chosen');
+  const checkoutBtn = $('#checkoutBtn');
 
-  // Checkout
-  $$('.buyBtn').forEach(b=>{
-    b.addEventListener('click', async ()=>{
-      if(!lastPreview?.image){ alert('Please generate a preview first.'); return; }
-      const lookupKey = b.dataset.lookup;
-      const label = b.dataset.label || b.textContent;
-      try{
-        b.disabled = true; b.textContent = 'Redirecting…';
-        const res = await fetch('/api/create-checkout-session', {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ lookup_key: lookupKey, preview: lastPreview })
-        });
-        const data = await res.json();
-        if(!res.ok || !data?.url) throw new Error(data?.error || 'Could not start checkout');
-        window.location.href = data.url;
-      }catch(e){ alert(e.message||String(e)); }finally{ b.disabled=false; b.textContent=label; }
+  function clearSelection(){
+    selected = null;
+    $$('.size-btn').forEach(b=>b.classList.remove('selected'));
+    checkoutBtn.disabled = true;
+    if (chosenEl) chosenEl.textContent = 'No size selected yet.';
+  }
+
+  function selectButton(btn){
+    if (btn.disabled) return;
+    $$('.size-btn').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selected = {
+      lookup: btn.dataset.lookup,
+      label:  btn.dataset.label || btn.textContent.trim(),
+      shape:  btn.dataset.shape,
+      material: btn.dataset.material
+    };
+    checkoutBtn.disabled = !lastPreview?.image;
+    if (chosenEl) chosenEl.textContent = `Selected: ${selected.label}`;
+  }
+
+  $$('.selectBtn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      if (!lastPreview?.image) { alert('Please generate a preview first.'); return; }
+      selectButton(b);
     });
   });
-</script>
 
-<!-- NAV SHEET JS -->
-<script>
-(() => {
-  const sheet   = document.getElementById('navSheet');
-  const drawer  = document.getElementById('navDrawer');
-  const backdrop= document.getElementById('navBackdrop');
-  const openBtn = document.getElementById('navOpen');
-  const closeBtn= document.getElementById('navClose');
+  checkoutBtn?.addEventListener('click', async ()=>{
+    if (!lastPreview?.image) { alert('Please generate a preview first.'); return; }
+    if (!selected?.lookup)   { alert('Please select a size first.'); return; }
 
-  const openSheet = () => {
-    sheet.classList.remove('hidden');
-    requestAnimationFrame(() => {
-      drawer.classList.remove('translate-x-full');
-      backdrop.classList.remove('opacity-0');
-      document.body.classList.add('overflow-hidden');
-      openBtn.setAttribute('aria-expanded', 'true');
-      sheet.setAttribute('aria-hidden', 'false');
-    });
-  };
+    const labelBackup = checkoutBtn.textContent;
+    try{
+      checkoutBtn.disabled = true;
+      checkoutBtn.textContent = 'Creating checkout…';
+      const res = await fetch('/api/create-checkout-session', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ lookup_key: selected.lookup, preview: lastPreview })
+      });
+      const raw = await res.text();
+      let data; try { data = JSON.parse(raw); } catch { throw new Error(raw.slice(0,160) || 'Server error'); }
+      if (!res.ok || !data?.url) throw new Error(data?.error || 'Could not start checkout');
+      window.location.href = data.url;
+    } catch (e) {
+      alert(e.message || String(e));
+    } finally {
+      checkoutBtn.textContent = labelBackup;
+      checkoutBtn.disabled = false;
+    }
+  });
 
-  const closeSheet = () => {
-    drawer.classList.add('translate-x-full');
-    backdrop.classList.add('opacity-0');
-    openBtn.setAttribute('aria-expanded', 'false');
-    sheet.setAttribute('aria-hidden', 'true');
-    setTimeout(() => {
-      sheet.classList.add('hidden');
-      document.body.classList.remove('overflow-hidden');
-    }, 250);
-  };
+  // Initially everything locked
+  $$('.selectBtn').forEach(b=>{
+    b.disabled = true;
+    b.classList.add('opacity-60');
+    b.title = 'Create a preview first';
+  });
 
-  openBtn?.addEventListener('click', openSheet);
-  closeBtn?.addEventListener('click', closeSheet);
-  backdrop?.addEventListener('click', closeSheet);
-  sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSheet));
-  window.addEventListener('keydown', e => { if (e.key === 'Escape' && !sheet.classList.contains('hidden')) closeSheet(); });
-  window.addEventListener('resize', () => { if (window.innerWidth >= 768 && !sheet.classList.contains('hidden')) closeSheet(); });
-})();
+  // ===== NAV SHEET JS =====
+  (() => {
+    const sheet   = document.getElementById('navSheet');
+    const drawer  = document.getElementById('navDrawer');
+    const backdrop= document.getElementById('navBackdrop');
+    const openBtn = document.getElementById('navOpen');
+    const closeBtn= document.getElementById('navClose');
+
+    const openSheet = () => {
+      sheet.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        drawer.classList.remove('translate-x-full');
+        backdrop.classList.remove('opacity-0');
+        document.body.classList.add('overflow-hidden');
+        openBtn.setAttribute('aria-expanded', 'true');
+        sheet.setAttribute('aria-hidden', 'false');
+      });
+    };
+
+    const closeSheet = () => {
+      drawer.classList.add('translate-x-full');
+      backdrop.classList.add('opacity-0');
+      openBtn.setAttribute('aria-expanded', 'false');
+      sheet.setAttribute('aria-hidden', 'true');
+      setTimeout(() => {
+        sheet.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }, 250);
+    };
+
+    openBtn?.addEventListener('click', openSheet);
+    closeBtn?.addEventListener('click', closeSheet);
+    backdrop?.addEventListener('click', closeSheet);
+    sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSheet));
+    window.addEventListener('keydown', e => { if (e.key === 'Escape' && !sheet.classList.contains('hidden')) closeSheet(); });
+    window.addEventListener('resize', () => { if (window.innerWidth >= 768 && !sheet.classList.contains('hidden')) closeSheet(); });
+  })();
 </script>
 </body>
 </html>
