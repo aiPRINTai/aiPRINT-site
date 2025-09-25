@@ -630,6 +630,98 @@ async function drawWatermarked(url, signature) {
 }
 
 /* ---------- State ---------- */
+/* ---- Persist/restore preview so Back/Reload keeps it alive ---- */
+const STATE_KEY = 'aiprint:last';
+
+function saveState() {
+  if (!lastPreview?.originalUrl) return;
+  const sig = Sig.enabled ? {
+    text:  Sig.text || '',
+    font:  Sig.font || 'Great Vibes',
+    color: Sig.color || '#ffffff',
+    size:  Sig.size || 24,
+    px:    Sig.px ?? 0.02,
+    py:    Sig.py ?? 0.02
+  } : null;
+
+  const payload = {
+    originalUrl: lastPreview.originalUrl,
+    ratio:       lastPreview.ratio,
+    shape:       lastPreview.shape,
+    signature:   sig,
+    selected:    selected ? {
+      material: selected.material,
+      shape:    selected.shape,
+      lookup:   selected.lookup,
+      label:    selected.label
+    } : null
+  };
+  try { sessionStorage.setItem(STATE_KEY, JSON.stringify(payload)); }
+  catch(e) { /* storage blocked - ignore */ }
+}
+
+async function restoreStateIfAny() {
+  // If URL already has ?preview=... let preloadFromQuery handle it
+  const qsHasPreview = new URLSearchParams(location.search).has('preview');
+  if (qsHasPreview) return;
+
+  const raw = sessionStorage.getItem(STATE_KEY);
+  if (!raw) return;
+
+  let s; try { s = JSON.parse(raw); } catch { return; }
+  if (!s?.originalUrl) return;
+
+  try {
+    // Show CLEAN image (no baked elements) — same as after generation
+    setPreviewAspect(s.ratio || '1024x1024');
+    $('#previewImg').src = s.originalUrl;
+
+    // Rebuild a share link into the field
+    const shareUrl = new URL(window.location.href);
+    shareUrl.searchParams.set('preview', s.originalUrl);
+    shareUrl.searchParams.set('ratio',   s.ratio || '1024x1024');
+    shareUrl.searchParams.set('shape',   s.shape || getShapeFromRatio(s.ratio || '1024x1024'));
+    if (s.selected?.lookup) shareUrl.searchParams.set('lookup', s.selected.lookup);
+    $('#gen-url').value = shareUrl.toString();
+    $('#gen-actions').classList.remove('hidden');
+
+    lastPreview = {
+      originalUrl: s.originalUrl,
+      ratio: s.ratio || '1024x1024',
+      shape: s.shape || getShapeFromRatio(s.ratio || '1024x1024')
+    };
+
+    // Restore signature UI state (live overlay only)
+    if (s.signature) {
+      sigToggle.checked = true;
+      Sig.enabled = true;
+      Sig.text = s.signature.text || '';
+      Sig.font = s.signature.font || 'Great Vibes';
+      Sig.color= s.signature.color || '#ffffff';
+      Sig.size = s.signature.size || 24;
+      Sig.px   = s.signature.px ?? 0.02;
+      Sig.py   = s.signature.py ?? 0.02;
+
+      if (sigName)  sigName.value  = Sig.text;
+      if (sigFont)  sigFont.value  = Sig.font;
+      if (sigColor) sigColor.value = Sig.color;
+      if (sigSize)  sigSize.value  = String(Sig.size);
+      refreshSigEl();
+    }
+
+    orderNote.textContent = 'Welcome back! Your preview was restored.';
+    lockButtonsToShape(lastPreview.shape);
+
+    if (s.selected?.lookup) {
+      const btn = document.querySelector(`.sizeBtn[data-lookup="${s.selected.lookup}"]`);
+      if (btn && !btn.disabled) btn.click();
+    }
+  } catch {
+    sessionStorage.removeItem(STATE_KEY);
+  }
+}
+
+window.addEventListener('beforeunload', saveState);  
 let lastPreview = null;  // { originalUrl, ratio, shape }
 let selected    = null;  // { material, shape, lookup, label }
 
