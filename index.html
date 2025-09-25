@@ -161,8 +161,7 @@
       </nav>
     </aside>
   </div>
-
-  <!-- =========================================================
+<!-- =========================================================
        HERO
        ========================================================= -->
   <section class="max-w-7xl mx-auto px-5 pt-6 pb-12 grid lg:grid-cols-2 gap-10 items-center">
@@ -243,7 +242,7 @@
   </section>
 
   <!-- =========================================================
-       CREATE (Generator + Live Signature Overlay + Watermark)
+       CREATE (Generator + Live Signature Overlay — not baked here)
        ========================================================= -->
   <section id="create" class="max-w-7xl mx-auto px-5 py-14">
     <h2 class="h2 mb-4">Create a preview</h2>
@@ -266,7 +265,8 @@
           <button id="genBtn" class="btn w-full">Generate preview</button>
         </div>
       </div>
-<!-- Style controls -->
+
+      <!-- Creative controls -->
       <div class="mt-5 grid md:grid-cols-2 gap-4">
         <label class="flex flex-col gap-1">
           <span class="text-white/80 text-sm">Style</span>
@@ -325,23 +325,7 @@
         </label>
       </div>
 
-      <!-- Medium / Output -->
-      <label class="flex flex-col gap-1 mt-4">
-        <span class="text-white/80 text-sm">Medium / Output</span>
-        <select id="mediumSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
-          <option value="photograph / realistic" selected>Photograph / Realistic</option>
-          <option value="oil painting">Oil Painting</option>
-          <option value="watercolor">Watercolor</option>
-          <option value="pencil sketch">Pencil Sketch</option>
-          <option value="digital illustration">Digital Illustration</option>
-          <option value="charcoal drawing">Charcoal Drawing</option>
-          <option value="mosaic / stained glass">Mosaic / Stained Glass</option>
-          <option value="collage">Collage</option>
-          <option value="graffiti / street art">Graffiti / Street Art</option>
-        </select>
-      </label>
-
-      <!-- Preview frame (aspect ratio set dynamically), with live signature overlay -->
+      <!-- Preview frame with LIVE signature overlay (not baked here) -->
       <div class="mt-6">
         <div
           id="previewWrap"
@@ -353,7 +337,7 @@
           <div id="sig" class="sig-overlay sig-Great Vibes hidden">Your Name</div>
         </div>
 
-        <!-- Signature controls -->
+        <!-- Signature controls (LIVE overlay only) -->
         <div class="mt-3 grid md:grid-cols-[1fr_220px_220px_1fr] gap-3 items-center">
           <label class="flex items-center gap-2">
             <input id="sigToggle" type="checkbox"/>
@@ -379,20 +363,20 @@
           </div>
         </div>
 
-        <!-- Actions after generation -->
+        <!-- Actions (preview/share). Baking happens ONLY at checkout. -->
         <div id="gen-actions" class="hidden mt-4 flex flex-wrap items-center gap-3">
           <input id="gen-url" class="w-full md:w-auto flex-1 rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/80" readonly />
 
-          <!-- Watermarked link copy -->
-          <button id="copy-link" class="btn">Copy link (watermarked)</button>
+          <!-- Copy a sharable page URL (not a clean image URL) -->
+          <button id="copy-link" class="btn">Copy share link</button>
 
-          <!-- Open watermarked in new tab -->
+          <!-- Open a temporary WATERMARKED PREVIEW (generated client-side) -->
           <button id="open-wm" class="btn btn-ghost">Open watermarked preview</button>
 
-          <!-- Direct watermarked download -->
-          <a id="download-link" href="#" download="aiPRINT-preview.jpg" class="btn btn-ghost">Download (watermarked)</a>
+          <!-- Download a temporary WATERMARKED PREVIEW (client-side) -->
+          <a id="download-link" href="#" class="btn btn-ghost" download="aiPRINT-preview-watermarked.jpg">Download (watermarked)</a>
 
-          <!-- Share-to-order-later (clean saved URL + ratio + shape + optional lookup) -->
+          <!-- Save a share URL (with ratio/shape/selection) for later -->
           <button id="share-later" class="btn-ghost px-4 py-2 rounded-lg border border-white/20">Share to order later</button>
         </div>
       </div>
@@ -470,7 +454,7 @@
       </div>
     </div>
 
-    <!-- Selection summary + manual checkout CTA (no auto-redirect on size) -->
+    <!-- Selection summary + manual checkout CTA -->
     <div class="mt-6 flex flex-wrap items-center gap-3">
       <div id="selectionSummary" class="text-sm muted">Selected: —</div>
       <button id="reviewBtn" class="btn btn-ghost" disabled>Review & Checkout</button>
@@ -506,490 +490,511 @@
   </footer>
 
   <!-- =========================================================
-       APP + CHECKOUT LOGIC
+       APP + CHECKOUT LOGIC (loaded in Part 3)
        ========================================================= -->
   <script>
-    // Year in footer
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    // DOM helpers
-    const $  = (q, el=document)=>el.querySelector(q);
-    const $$ = (q, el=document)=>[...el.querySelectorAll(q)];
-
-    /* ---------------------------------------------------------
-       Stripe direct Payment Links (by lookup_key)
-       --------------------------------------------------------- */
-    const STRIPE_LINK = {
-      'CAN-24-SQ':'https://buy.stripe.com/7sY6oIgiiebS3OBazLeIw0j',
-      'CAN-30-SQ':'https://buy.stripe.com/4gMcN6d666Jq0CpbDPeIw0h',
-      'CAN-24x16-LS':'https://buy.stripe.com/9B6cN64zA3xeacZfU5eIw0g',
-      'CAN-30x20-LS':'https://buy.stripe.com/8x200k0jk7Nucl7gY9eIw0f',
-      'CAN-16x24-PT':'https://buy.stripe.com/5kQ7sM0jkgk098V9vHeIw0e',
-      'CAN-20x30-PT':'https://buy.stripe.com/eVq4gA9TU3xefxjazLeIw0d',
-      'MET-24SQ':'https://buy.stripe.com/14AdRaeaa2tafxjazLeIw0c',
-      'MET-30SQ':'https://buy.stripe.com/00weVeeaagk0fxj7nzeIw0b',
-      'MET-24x16-LS':'https://buy.stripe.com/aFaeVe2rs5Fm5WJ37jeIw03',
-      'MET-30x20-LS':'https://buy.stripe.com/7sY5kE2rs1p684R6jveIw02',
-      'MET-16x24-PT':'https://buy.stripe.com/dRm9AUc229VCacZ9vHeIw01',
-      'MET-20x30-PT':'https://buy.stripe.com/9B66oI3vw9VCcl7azLeIw00',
-      'ACR-24-SQ':'https://buy.stripe.com/7sY7sMc228Ry1GtgY9eIw05',
-      'ACR-30-SQ':'https://buy.stripe.com/4gM14oc222taacZfU5eIw06',
-      'ACR-24x16-LS':'https://buy.stripe.com/eVq5kE6HI9VC5WJ9vHeIw07',
-      'ACR-30x20-LS':'https://buy.stripe.com/7sY6oI8PQebSfxjbDPeIw08',
-      'ACR-16x24-PT':'https://buy.stripe.com/5kQ5kE0jk6JqacZ23feIw09',
-      'ACR-20x30-PT':'https://buy.stripe.com/7sY3cw5DE2tadpb23feIw0a',
-    };
-
-    /* ---------------------------------------------------------
-       Small utilities
-       --------------------------------------------------------- */
-    function buildPrompt(){
-      const subject=$('#promptInput')?.value?.trim()||'';
-      const style=$('#styleSel')?.value||'', mood=$('#moodSel')?.value||'';
-      const light=$('#lightSel')?.value||'', comp=$('#compSel')?.value||'';
-      const medium=$('#mediumSel')?.value||'';
-      return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}`.replace(/\s+/g,' ').trim();
-    }
-
-    function getShapeFromRatio(ratio) {
-      if (ratio === '1024x1024') return 'square';
-      if (ratio === '1536x1024') return 'horizontal';
-      if (ratio === '1024x1536') return 'vertical';
-      return '';
-    }
-
-    function setPreviewAspect(ratio){
-      const wrap = $('#previewWrap');
-      if (!wrap) return;
-      if (ratio === '1024x1024') wrap.style.aspectRatio = '1 / 1';
-      else if (ratio === '1536x1024') wrap.style.aspectRatio = '3 / 2';
-      else if (ratio === '1024x1536') wrap.style.aspectRatio = '2 / 3';
-    }
-
-    function lockButtonsToShape(shape) {
-      // Disable non-matching size buttons
-      $$('.sizeBtn').forEach(btn=>{
-        const isMatch = btn.dataset.shape === shape;
-        btn.disabled = !isMatch;
-        btn.classList.toggle('opacity-60', !isMatch);
-        btn.title = isMatch ? '' : 'This preview is a different shape';
-      });
-    }
-
-    const toBlobURL = (canvas) => new Promise(res=>{
-      canvas.toBlob(b=>{
-        const url = URL.createObjectURL(b);
-        res(url);
-      }, 'image/jpeg', 0.92);
-    });
-
-    /* ---------------------------------------------------------
-       Watermark + signature (rendered into the image)
-       signature.position is proportional {px, py} (0..1) bottom-left
-       --------------------------------------------------------- */
-    async function drawWatermarked(url, signature) {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.src = url;
-      await img.decode();
-
-      const c = document.createElement('canvas');
-      const ctx = c.getContext('2d');
-
-      c.width = img.naturalWidth;
-      c.height = img.naturalHeight;
-
-      // base image
-      ctx.drawImage(img, 0, 0, c.width, c.height);
-
-      // tiled watermark
-      const text = 'aiPRINT.ai';
-      ctx.save();
-      ctx.globalAlpha = 0.16;
-      ctx.fillStyle = '#ffffff';
-      ctx.font = `${Math.floor(c.width * 0.04)}px Montserrat, sans-serif`;
-      ctx.translate(c.width/2, c.height/2);
-      ctx.rotate(-Math.PI/6);
-      const stepX = Math.floor(c.width * 0.22);
-      const stepY = Math.floor(c.width * 0.12);
-      for (let y = -c.height; y < c.height; y += stepY) {
-        for (let x = -c.width; x < c.width; x += stepX) {
-          ctx.fillText(text, x, y);
-        }
-      }
-      ctx.restore();
-
-      // optional signature (positioned from proportional coords)
-      if (signature?.text) {
-        ctx.save();
-        ctx.fillStyle = signature.color || '#ffffff';
-        const px = Math.max(0, Math.min(1, signature.px ?? 0.02)); // default 2% from left
-        const py = Math.max(0, Math.min(1, signature.py ?? 0.02)); // default 2% from bottom
-        const sizePx = Math.max(14, signature.size || 24) * (c.width / 1024);
-        ctx.font = `${sizePx}px "${signature.font||'Great Vibes'}", serif`;
-        ctx.shadowColor='rgba(0,0,0,.35)'; ctx.shadowBlur=4;
-        const x = Math.floor(c.width * px);
-        const y = Math.floor(c.height * (1 - py)); // py from bottom
-        ctx.fillText(signature.text, x, y);
-        ctx.restore();
-      }
-
-      const dataUrl = c.toDataURL('image/jpeg', 0.92);
-      const blobUrl = await toBlobURL(c);
-      return { dataUrl, blobUrl };
-    }
-
-    /* ---------------------------------------------------------
-       State
-       --------------------------------------------------------- */
-    let lastPreview = null;  // { originalUrl, wmDataUrl, wmBlobUrl, ratio, shape }
-    let selected    = null;  // { material, shape, lookup, label }
-
-    const genBtn   = $('#genBtn');
-    const preview  = $('#previewImg');
-    const wrap     = $('#previewWrap');
-
-    const genUrl   = $('#gen-url');
-    const genRow   = $('#gen-actions');
-
-    const ratioSel = $('#ratioSel');
-    const orderNote= $('#orderLockExplain');
-
-    const reviewBtn= $('#reviewBtn');
-    const summary  = $('#selectionSummary');
-
-    // Signature UI
-    const sigEl    = $('#sig');
-    const sigToggle= $('#sigToggle');
-    const sigName  = $('#sigName');
-    const sigFont  = $('#sigFont');
-    const sigColor = $('#sigColor');
-    const sigSize  = $('#sigSize');
-
-    function setReviewEnabled() {
-      reviewBtn.disabled = !selected;
-    }
-
-    /* ---------------------------------------------------------
-       Signature overlay behavior (show/hide, type, font, color,
-       size, and drag to position). We store proportional coords
-       relative to the preview frame for correct watermarking.
-       --------------------------------------------------------- */
-    const Sig = {
-      enabled: false,
-      px: 0.02,  // left %
-      py: 0.02,  // bottom %
-      text: 'Your Name',
-      font: 'Great Vibes',
-      color:'#ffffff',
-      size: 24,
-      dragging: null,
-    };
-
-    function refreshSigEl() {
-      if (!Sig.enabled) { sigEl.classList.add('hidden'); return; }
-      sigEl.classList.remove('hidden');
-      sigEl.textContent = Sig.text || ' ';
-      // font class swap
-      sigEl.classList.remove('sig-Great','sig-Allura','sig-Sacramento','sig-Playfair','sig-Montserrat','sig-Great Vibes','sig-Playfair Display');
-      sigEl.classList.add('sig-' + Sig.font);
-      sigEl.style.color = Sig.color;
-      sigEl.style.fontSize = `${Sig.size}px`;
-
-      // place using proportional coords inside wrap
-      const W = wrap.clientWidth, H = wrap.clientHeight;
-      const x = Math.max(6, Math.min(W - 6, Math.floor(Sig.px * W)));
-      const y = Math.max(6, Math.min(H - 6, Math.floor((1 - Sig.py) * H)));
-      // Absolute top-based positioning (approx baseline)
-      sigEl.style.left = `${x}px`;
-      const approxTop = y - sigEl.clientHeight + 2;
-      sigEl.style.top  = `${Math.max(6, approxTop)}px`;
-    }
-
-    sigToggle?.addEventListener('change', ()=>{
-      Sig.enabled = !!sigToggle.checked;
-      refreshSigEl();
-    });
-
-    sigName?.addEventListener('input', ()=>{
-      Sig.text = sigName.value || '';
-      refreshSigEl();
-    });
-
-    sigFont?.addEventListener('change', ()=>{
-      Sig.font = sigFont.value || 'Great Vibes';
-      refreshSigEl();
-    });
-
-    sigColor?.addEventListener('input', ()=>{
-      Sig.color = sigColor.value || '#ffffff';
-      refreshSigEl();
-    });
-
-    sigSize?.addEventListener('input', ()=>{
-      Sig.size = parseInt(sigSize.value || '24',10);
-      refreshSigEl();
-    });
-
-    // Dragging
-    sigEl?.addEventListener('mousedown', (e)=>{
-      if (!Sig.enabled) return;
-      Sig.dragging = {
-        startX: e.clientX,
-        startY: e.clientY,
-        startLeft: sigEl.offsetLeft,
-        startTop : sigEl.offsetTop
-      };
-      e.preventDefault();
-    });
-    window.addEventListener('mousemove', (e)=>{
-      if (!Sig.enabled || !Sig.dragging) return;
-      const dx = e.clientX - Sig.dragging.startX;
-      const dy = e.clientY - Sig.dragging.startY;
-
-      const newLeft = Math.max(6, Math.min(wrap.clientWidth - sigEl.clientWidth - 6, Sig.dragging.startLeft + dx));
-      const newTop  = Math.max(6, Math.min(wrap.clientHeight - sigEl.clientHeight - 6, Sig.dragging.startTop  + dy));
-      sigEl.style.left = `${newLeft}px`;
-      sigEl.style.top  = `${newTop}px`;
-
-      // Update proportional coords
-      Sig.px = newLeft / wrap.clientWidth;
-      const baselineY = newTop + sigEl.clientHeight;
-      Sig.py = 1 - (baselineY / wrap.clientHeight);
-    });
-    window.addEventListener('mouseup', ()=>{ Sig.dragging = null; });
-
-    // Keep overlay in right place when frame resizes
-    window.addEventListener('resize', refreshSigEl);
-
-    /* ---------------------------------------------------------
-       Generate preview flow
-       --------------------------------------------------------- */
-    genBtn?.addEventListener('click', async () => {
-      const subject = buildPrompt();
-      if (!subject) { alert('Please describe what you want.'); return; }
-
-      const ratio = ratioSel?.value || '1024x1024';
-
-      genBtn.disabled = true;
-      genBtn.textContent='Generating…';
-      genRow.classList.add('hidden');
-      preview.removeAttribute('src');
-
-      try {
-        // 1) Ask backend to generate and store to Blob — returns { ok, image }
-        const r = await fetch('/api/generate-image', {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ prompt: subject, size: ratio })
-        });
-        const data = await r.json();
-        if (!r.ok || !data?.image) throw new Error(data?.error || 'Generation failed');
-
-        // 2) Prepare signature payload for watermark (proportional coordinates)
-        const signature = Sig.enabled ? {
-          text:  Sig.text || '',
-          font:  Sig.font || 'Great Vibes',
-          color: Sig.color || '#ffffff',
-          size:  Sig.size || 24,
-          px:    Sig.px ?? 0.02,
-          py:    Sig.py ?? 0.02
-        } : null;
-
-        // 3) Render watermarked image (dataURL + blobURL)
-        const { dataUrl, blobUrl } = await drawWatermarked(data.image, signature);
-
-        // 4) Update UI: set aspect, show watermarked image in frame
-        setPreviewAspect(ratio);
-        preview.src = dataUrl;
-
-        $('#download-link').href = dataUrl;
-        $('#open-wm').onclick = () => window.open(blobUrl, '_blank');
-
-        // Copy button uses watermarked Blob URL to prevent clean copying
-        genUrl.value = blobUrl;
-        genRow.classList.remove('hidden');
-
-        // 5) Save state
-        lastPreview = {
-          originalUrl: data.image,
-          wmDataUrl: dataUrl,
-          wmBlobUrl: blobUrl,
-          ratio,
-          shape: getShapeFromRatio(ratio)
-        };
-
-        // 6) Enforce shape lock and reset any previous selection
-        orderNote.textContent = `Looks great! Only ${lastPreview.shape} sizes are available for this preview.`;
-        lockButtonsToShape(lastPreview.shape);
-
-        selected = null;
-        summary.textContent = 'Selected: —';
-        setReviewEnabled();
-
-        // Refresh overlay (keeps position correct after aspect change)
-        refreshSigEl();
-      } catch (e) {
-        alert(e.message || String(e));
-      } finally {
-        genBtn.disabled = false;
-        genBtn.textContent='Generate preview';
-      }
-    });
-
-    // Copy watermarked link (not clean image)
-    $('#copy-link')?.addEventListener('click', async ()=>{
-      if(!lastPreview?.wmBlobUrl){ alert('Create a preview first.'); return; }
-      await navigator.clipboard.writeText(lastPreview.wmBlobUrl);
-      const b=$('#copy-link');
-      b.textContent='Copied!';
-      setTimeout(()=>b.textContent='Copy link (watermarked)', 900);
-    });
-
-    // Share to order later (clean saved URL + ratio + shape + optional lookup)
-    $('#share-later')?.addEventListener('click', async () => {
-      if (!lastPreview?.originalUrl) return alert('Create a preview first.');
-      const url = new URL(window.location.href);
-      url.searchParams.set('preview', lastPreview.originalUrl);
-      url.searchParams.set('ratio',   lastPreview.ratio);
-      url.searchParams.set('shape',   lastPreview.shape);
-      if (selected?.lookup) url.searchParams.set('lookup', selected.lookup);
-      await navigator.clipboard.writeText(url.toString());
-      alert('Sharable link copied!');
-    });
-
-    /* ---------------------------------------------------------
-       Tabs for material sections
-       --------------------------------------------------------- */
-    const views={canvas:$('#tab-canvas'), metal:$('#tab-metal'), acrylic:$('#tab-acrylic')};
-    $$('.orderTab').forEach(btn=>btn.addEventListener('click',()=>{
-      const k=btn.dataset.tab;
-      Object.values(views).forEach(v=>v?.classList.add('hidden'));
-      views[k]?.classList.remove('hidden');
-      $$('.orderTab').forEach(b=>b.classList.add('btn-ghost'));
-      btn.classList.remove('btn-ghost');
-    }));
-
-    /* ---------------------------------------------------------
-       Size selection (no instant checkout)
-       --------------------------------------------------------- */
-    $$('.sizeBtn').forEach(b=>{
-      b.addEventListener('click', ()=>{
-        if(!lastPreview?.originalUrl){ alert('Please generate a preview first.'); return; }
-        if (b.disabled) return; // respect shape lock
-        $$('.sizeBtn').forEach(x=>x.classList.remove('ring-2','ring-white'));
-        b.classList.add('ring-2','ring-white');
-        selected = {
-          material: b.dataset.material,
-          shape:    b.dataset.shape,
-          lookup:   b.dataset.lookup,
-          label:    b.dataset.label
-        };
-        summary.textContent = `Selected: ${selected.material.toUpperCase()} • ${selected.label}`;
-        setReviewEnabled();
-      });
-    });
-
-    /* ---------------------------------------------------------
-       Review & Checkout (direct Stripe Payment Link)
-       We attach the original preview URL as client_reference_id
-       so you see it on the Stripe side (optional).
-       --------------------------------------------------------- */
-    reviewBtn.addEventListener('click', ()=>{
-      if(!selected) return alert('Pick a size first.');
-      const link = STRIPE_LINK[selected.lookup];
-      if(!link) return alert(`No Stripe link configured for ${selected.lookup}`);
-      const ref = encodeURIComponent(lastPreview?.originalUrl || '');
-      window.location.href = link + (ref ? `?client_reference_id=${ref}` : '');
-    });
-
-    /* ---------------------------------------------------------
-       Deep link loader (for Share to order later)
-       Will render a watermarked on-page view of the saved preview
-       and lock the sizes to the saved shape. If a lookup is
-       provided, it pre-selects the matching size (if allowed).
-       --------------------------------------------------------- */
-    (async function preloadFromQuery(){
-      const sp = new URLSearchParams(location.search);
-      const previewUrl = sp.get('preview');
-      const ratio      = sp.get('ratio') || '1024x1024';
-      const shape      = sp.get('shape') || getShapeFromRatio(ratio);
-      const lookup     = sp.get('lookup');
-
-      if (!previewUrl) return;
-
-      try {
-        const { dataUrl, blobUrl } = await drawWatermarked(previewUrl, null);
-        setPreviewAspect(ratio);
-
-        $('#previewImg').src = dataUrl;
-        $('#download-link').href = dataUrl;
-        $('#open-wm').onclick = () => window.open(blobUrl, '_blank');
-        $('#gen-url').value = blobUrl;
-        $('#gen-actions').classList.remove('hidden');
-
-        lastPreview = {
-          originalUrl: previewUrl,
-          wmDataUrl: dataUrl,
-          wmBlobUrl: blobUrl,
-          ratio,
-          shape
-        };
-
-        orderNote.textContent = 'Loaded a saved preview. Pick your size & finish.';
-        lockButtonsToShape(shape);
-
-        // Keep live signature overlay state visible if toggled on
-        refreshSigEl();
-
-        if (lookup) {
-          const btn = document.querySelector(`.sizeBtn[data-lookup="${lookup}"]`);
-          if (btn && !btn.disabled) btn.click();
-        }
-      } catch(e){
-        console.warn('preload error', e);
-      }
-    })();
-
-    /* ---------------------------------------------------------
-       Mobile nav sheet wiring
-       --------------------------------------------------------- */
-    (() => {
-      const sheet   = document.getElementById('navSheet');
-      const drawer  = document.getElementById('navDrawer');
-      const backdrop= document.getElementById('navBackdrop');
-      const openBtn = document.getElementById('navOpen');
-      const closeBtn= document.getElementById('navClose');
-
-      const openSheet = () => {
-        sheet.classList.remove('hidden');
-        requestAnimationFrame(() => {
-          drawer.classList.remove('translate-x-full');
-          backdrop.classList.remove('opacity-0');
-          document.body.classList.add('overflow-hidden');
-          openBtn.setAttribute('aria-expanded', 'true');
-          sheet.setAttribute('aria-hidden', 'false');
-        });
-      };
-
-      const closeSheet = () => {
-        drawer.classList.add('translate-x-full');
-        backdrop.classList.add('opacity-0');
-        openBtn.setAttribute('aria-expanded', 'false');
-        sheet.setAttribute('aria-hidden', 'true');
-        setTimeout(() => {
-          sheet.classList.add('hidden');
-          document.body.classList.remove('overflow-hidden');
-        }, 250);
-      };
-
-      openBtn?.addEventListener('click', openSheet);
-      closeBtn?.addEventListener('click', closeSheet);
-      backdrop?.addEventListener('click', closeSheet);
-      sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSheet));
-      window.addEventListener('keydown', e => { if (e.key === 'Escape' && !sheet.classList.contains('hidden')) closeSheet(); });
-      window.addEventListener('resize', () => { if (window.innerWidth >= 768 && !sheet.classList.contains('hidden')) closeSheet(); });
-    })();
+    /* Part 3 will append the full JS below this tag. */
   </script>
-</body>
-</html>
+<script>
+/* ============================================================
+   aiPRINT.ai — App & Checkout Logic
+   - Live signature overlay (DOM, draggable; NOT baked)
+   - Generate preview (clean image in frame)
+   - Temporary watermarked preview/download (client-side only)
+   - Share links (URL with query params)
+   - Size lock by aspect ratio; Review & Checkout flow
+   - Final bake happens BEFORE redirect (POST /api/bake-preview)
+   ============================================================ */
+
+/* ---------- DOM helpers ---------- */
+const $  = (q, el=document)=>el.querySelector(q);
+const $$ = (q, el=document)=>[...el.querySelectorAll(q)];
+
+/* ---------- Footer year ---------- */
+document.getElementById('y').textContent = new Date().getFullYear();
+
+/* ---------- Stripe Payment Links ---------- */
+const STRIPE_LINK = {
+  'CAN-24-SQ':'https://buy.stripe.com/7sY6oIgiiebS3OBazLeIw0j',
+  'CAN-30-SQ':'https://buy.stripe.com/4gMcN6d666Jq0CpbDPeIw0h',
+  'CAN-24x16-LS':'https://buy.stripe.com/9B6cN64zA3xeacZfU5eIw0g',
+  'CAN-30x20-LS':'https://buy.stripe.com/8x200k0jk7Nucl7gY9eIw0f',
+  'CAN-16x24-PT':'https://buy.stripe.com/5kQ7sM0jkgk098V9vHeIw0e',
+  'CAN-20x30-PT':'https://buy.stripe.com/eVq4gA9TU3xefxjazLeIw0d',
+  'MET-24SQ':'https://buy.stripe.com/14AdRaeaa2tafxjazLeIw0c',
+  'MET-30SQ':'https://buy.stripe.com/00weVeeaagk0fxj7nzeIw0b',
+  'MET-24x16-LS':'https://buy.stripe.com/aFaeVe2rs5Fm5WJ37jeIw03',
+  'MET-30x20-LS':'https://buy.stripe.com/7sY5kE2rs1p684R6jveIw02',
+  'MET-16x24-PT':'https://buy.stripe.com/dRm9AUc229VCacZ9vHeIw01',
+  'MET-20x30-PT':'https://buy.stripe.com/9B66oI3vw9VCcl7azLeIw00',
+  'ACR-24-SQ':'https://buy.stripe.com/7sY7sMc228Ry1GtgY9eIw05',
+  'ACR-30-SQ':'https://buy.stripe.com/4gM14oc222taacZfU5eIw06',
+  'ACR-24x16-LS':'https://buy.stripe.com/eVq5kE6HI9VC5WJ9vHeIw07',
+  'ACR-30x20-LS':'https://buy.stripe.com/7sY6oI8PQebSfxjbDPeIw08',
+  'ACR-16x24-PT':'https://buy.stripe.com/5kQ5kE0jk6JqacZ23feIw09',
+  'ACR-20x30-PT':'https://buy.stripe.com/7sY3cw5DE2tadpb23feIw0a',
+};
+
+/* ---------- Small utilities ---------- */
+function buildPrompt(){
+  const subject=$('#promptInput')?.value?.trim()||'';
+  const style=$('#styleSel')?.value||'', mood=$('#moodSel')?.value||'';
+  const light=$('#lightSel')?.value||'', comp=$('#compSel')?.value||'';
+  const medium=$('#mediumSel')?.value||'';
+  return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}`.replace(/\s+/g,' ').trim();
+}
+
+function getShapeFromRatio(ratio) {
+  if (ratio === '1024x1024') return 'square';
+  if (ratio === '1536x1024') return 'horizontal';
+  if (ratio === '1024x1536') return 'vertical';
+  return '';
+}
+
+function setPreviewAspect(ratio){
+  const wrap = $('#previewWrap');
+  if (!wrap) return;
+  if (ratio === '1024x1024') wrap.style.aspectRatio = '1 / 1';
+  else if (ratio === '1536x1024') wrap.style.aspectRatio = '3 / 2';
+  else if (ratio === '1024x1536') wrap.style.aspectRatio = '2 / 3';
+}
+
+function lockButtonsToShape(shape) {
+  $$('.sizeBtn').forEach(btn=>{
+    const isMatch = btn.dataset.shape === shape;
+    btn.disabled = !isMatch;
+    btn.classList.toggle('opacity-60', !isMatch);
+    btn.title = isMatch ? '' : 'This preview is a different shape';
+  });
+}
+
+/* canvas → blob URL helper */
+const toBlobURL = (canvas) => new Promise(res=>{
+  canvas.toBlob(b=>{
+    const url = URL.createObjectURL(b);
+    res(url);
+  }, 'image/jpeg', 0.92);
+});
+
+/* ---------- Watermark & Signature (for temporary preview/download ONLY) ---------- */
+async function drawWatermarked(url, signature) {
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.src = url;
+  await img.decode();
+
+  const c = document.createElement('canvas');
+  const ctx = c.getContext('2d');
+
+  c.width = img.naturalWidth;
+  c.height = img.naturalHeight;
+
+  // base
+  ctx.drawImage(img, 0, 0, c.width, c.height);
+
+  // tiled watermark (brand)
+  const text = 'aiPRINT.ai';
+  ctx.save();
+  ctx.globalAlpha = 0.16;
+  ctx.fillStyle = '#ffffff';
+  ctx.font = `${Math.floor(c.width * 0.04)}px Montserrat, sans-serif`;
+  ctx.translate(c.width/2, c.height/2);
+  ctx.rotate(-Math.PI/6);
+  const stepX = Math.floor(c.width * 0.22);
+  const stepY = Math.floor(c.width * 0.12);
+  for (let y = -c.height; y < c.height; y += stepY) {
+    for (let x = -c.width; x < c.width; x += stepX) {
+      ctx.fillText(text, x, y);
+    }
+  }
+  ctx.restore();
+
+  // optional signature for temporary output preview
+  if (signature?.text) {
+    ctx.save();
+    ctx.fillStyle = signature.color || '#ffffff';
+    const px = Math.max(0, Math.min(1, signature.px ?? 0.02));
+    const py = Math.max(0, Math.min(1, signature.py ?? 0.02));
+    const sizePx = Math.max(14, signature.size || 24) * (c.width / 1024);
+    ctx.font = `${sizePx}px "${signature.font||'Great Vibes'}", serif`;
+    ctx.shadowColor='rgba(0,0,0,.35)'; ctx.shadowBlur=4;
+    const x = Math.floor(c.width * px);
+    const y = Math.floor(c.height * (1 - py));
+    ctx.fillText(signature.text, x, y);
+    ctx.restore();
+  }
+
+  const dataUrl = c.toDataURL('image/jpeg', 0.92);
+  const blobUrl = await toBlobURL(c);
+  return { dataUrl, blobUrl };
+}
+
+/* ---------- State ---------- */
+let lastPreview = null;  // { originalUrl, ratio, shape }
+let selected    = null;  // { material, shape, lookup, label }
+
+/* ---------- Element refs ---------- */
+const genBtn    = $('#genBtn');
+const preview   = $('#previewImg');
+const wrap      = $('#previewWrap');
+
+const genUrl    = $('#gen-url');          // we will place the sharable PAGE URL here
+const genRow    = $('#gen-actions');
+
+const ratioSel  = $('#ratioSel');
+const orderNote = $('#orderLockExplain');
+
+const reviewBtn = $('#reviewBtn');
+const summary   = $('#selectionSummary');
+
+/* Signature UI */
+const sigEl     = $('#sig');
+const sigToggle = $('#sigToggle');
+const sigName   = $('#sigName');
+const sigFont   = $('#sigFont');
+const sigColor  = $('#sigColor');
+const sigSize   = $('#sigSize');
+
+/* ---------- Signature overlay model ---------- */
+const Sig = {
+  enabled: false,
+  px: 0.02,   // left %
+  py: 0.02,   // bottom %
+  text: 'Your Name',
+  font: 'Great Vibes',
+  color:'#ffffff',
+  size: 24,
+  dragging: null,
+};
+
+function refreshSigEl() {
+  if (!Sig.enabled) { sigEl.classList.add('hidden'); return; }
+  sigEl.classList.remove('hidden');
+  sigEl.textContent = Sig.text || ' ';
+  // font class swap (keep classes simple; class names created in CSS)
+  sigEl.className = `sig-overlay sig-${Sig.font.replace(/\s/g, '\\ ')}`; // maintain base + font variant
+  sigEl.style.color = Sig.color;
+  sigEl.style.fontSize = `${Sig.size}px`;
+
+  // place using proportional coords inside wrap
+  const W = wrap.clientWidth, H = wrap.clientHeight;
+  const x = Math.max(6, Math.min(W - 6, Math.floor(Sig.px * W)));
+  const y = Math.max(6, Math.min(H - 6, Math.floor((1 - Sig.py) * H)));
+  sigEl.style.left = `${x}px`;
+  const approxTop = y - sigEl.clientHeight + 2;
+  sigEl.style.top  = `${Math.max(6, approxTop)}px`;
+}
+
+/* Keep checkout button state updated */
+function setReviewEnabled() {
+  reviewBtn.disabled = !selected;
+}
+
+/* ---------- Signature controls (LIVE overlay only) ---------- */
+sigToggle?.addEventListener('change', ()=>{
+  Sig.enabled = !!sigToggle.checked;
+  refreshSigEl();
+});
+sigName?.addEventListener('input', ()=>{
+  Sig.text = sigName.value || '';
+  refreshSigEl();
+});
+sigFont?.addEventListener('change', ()=>{
+  Sig.font = sigFont.value || 'Great Vibes';
+  refreshSigEl();
+});
+sigColor?.addEventListener('input', ()=>{
+  Sig.color = sigColor.value || '#ffffff';
+  refreshSigEl();
+});
+sigSize?.addEventListener('input', ()=>{
+  Sig.size = parseInt(sigSize.value || '24',10);
+  refreshSigEl();
+});
+
+/* Dragging */
+sigEl?.addEventListener('mousedown', (e)=>{
+  if (!Sig.enabled) return;
+  Sig.dragging = {
+    startX: e.clientX,
+    startY: e.clientY,
+    startLeft: sigEl.offsetLeft,
+    startTop : sigEl.offsetTop
+  };
+  e.preventDefault();
+});
+window.addEventListener('mousemove', (e)=>{
+  if (!Sig.enabled || !Sig.dragging) return;
+  const dx = e.clientX - Sig.dragging.startX;
+  const dy = e.clientY - Sig.dragging.startY;
+
+  const newLeft = Math.max(6, Math.min(wrap.clientWidth - sigEl.clientWidth - 6, Sig.dragging.startLeft + dx));
+  const newTop  = Math.max(6, Math.min(wrap.clientHeight - sigEl.clientHeight - 6, Sig.dragging.startTop  + dy));
+  sigEl.style.left = `${newLeft}px`;
+  sigEl.style.top  = `${newTop}px`;
+
+  // Update proportional coords
+  Sig.px = newLeft / wrap.clientWidth;
+  const baselineY = newTop + sigEl.clientHeight;
+  Sig.py = 1 - (baselineY / wrap.clientHeight);
+});
+window.addEventListener('mouseup', ()=>{ Sig.dragging = null; });
+window.addEventListener('resize', refreshSigEl);
+
+/* ---------- Generate preview (CLEAN in frame, overlay live) ---------- */
+genBtn?.addEventListener('click', async () => {
+  const subject = buildPrompt();
+  if (!subject) { alert('Please describe what you want.'); return; }
+
+  const ratio = ratioSel?.value || '1024x1024';
+
+  genBtn.disabled = true;
+  genBtn.textContent='Generating…';
+  genRow.classList.add('hidden');
+  preview.removeAttribute('src');
+
+  try {
+    // Ask backend to generate image — returns { image: <URL> }
+    const r = await fetch('/api/generate-image', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ prompt: subject, size: ratio })
+    });
+    const data = await r.json();
+    if (!r.ok || !data?.image) throw new Error(data?.error || 'Generation failed');
+
+    // Show CLEAN image in the frame (no baked marks)
+    setPreviewAspect(ratio);
+    preview.src = data.image;
+
+    // Show action row; put a sharable PAGE URL (not the clean image) in the field
+    const shareUrl = new URL(window.location.href);
+    shareUrl.searchParams.set('preview', data.image);
+    shareUrl.searchParams.set('ratio', ratio);
+    shareUrl.searchParams.set('shape', getShapeFromRatio(ratio));
+    genUrl.value = shareUrl.toString();
+    genRow.classList.remove('hidden');
+
+    // Save state
+    lastPreview = { originalUrl: data.image, ratio, shape: getShapeFromRatio(ratio) };
+
+    // Enforce shape lock and reset any previous selection
+    orderNote.textContent = `Looks great! Only ${lastPreview.shape} sizes are available for this preview.`;
+    lockButtonsToShape(lastPreview.shape);
+
+    selected = null;
+    summary.textContent = 'Selected: —';
+    setReviewEnabled();
+
+    // Keep overlay positioned
+    refreshSigEl();
+  } catch (e) {
+    alert(e.message || String(e));
+  } finally {
+    genBtn.disabled = false;
+    genBtn.textContent='Generate preview';
+  }
+});
+
+/* ---------- Temporary watermarked actions (client-side only) ---------- */
+$('#open-wm')?.addEventListener('click', async () => {
+  if(!lastPreview?.originalUrl){ alert('Create a preview first.'); return; }
+  const sig = Sig.enabled ? { ...Sig } : null;
+  const { blobUrl } = await drawWatermarked(lastPreview.originalUrl, sig);
+  window.open(blobUrl, '_blank');
+});
+
+$('#download-link')?.addEventListener('click', async (e) => {
+  if(!lastPreview?.originalUrl){ e.preventDefault(); alert('Create a preview first.'); return; }
+  e.preventDefault();
+  const sig = Sig.enabled ? { ...Sig } : null;
+  const { dataUrl } = await drawWatermarked(lastPreview.originalUrl, sig);
+  $('#download-link').href = dataUrl;
+  // Let the browser handle the download after href is set (second click not required)
+  $('#download-link').click();
+});
+
+/* Copy share link (page URL with params; NOT clean image) */
+$('#copy-link')?.addEventListener('click', async ()=>{
+  if(!genUrl?.value){ alert('Nothing to copy yet.'); return; }
+  await navigator.clipboard.writeText(genUrl.value);
+  const b=$('#copy-link');
+  b.textContent='Copied!';
+  setTimeout(()=>b.textContent='Copy share link', 900);
+});
+
+/* Share to order later (same as gen-url but ensures latest selection embedded if any) */
+$('#share-later')?.addEventListener('click', async () => {
+  if (!lastPreview?.originalUrl) return alert('Create a preview first.');
+  const url = new URL(window.location.href);
+  url.searchParams.set('preview', lastPreview.originalUrl);
+  url.searchParams.set('ratio',   lastPreview.ratio);
+  url.searchParams.set('shape',   lastPreview.shape);
+  if (selected?.lookup) url.searchParams.set('lookup', selected.lookup);
+  await navigator.clipboard.writeText(url.toString());
+  alert('Sharable link copied!');
+});
+
+/* ---------- Tabs for materials ---------- */
+const views={canvas:$('#tab-canvas'), metal:$('#tab-metal'), acrylic:$('#tab-acrylic')};
+$$('.orderTab').forEach(btn=>btn.addEventListener('click',()=>{
+  const k=btn.dataset.tab;
+  Object.values(views).forEach(v=>v?.classList.add('hidden'));
+  views[k]?.classList.remove('hidden');
+  $$('.orderTab').forEach(b=>b.classList.add('btn-ghost'));
+  btn.classList.remove('btn-ghost');
+}));
+
+/* ---------- Size selection ---------- */
+$$('.sizeBtn').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    if(!lastPreview?.originalUrl){ alert('Please generate a preview first.'); return; }
+    if (b.disabled) return; // respect shape lock
+    $$('.sizeBtn').forEach(x=>x.classList.remove('ring-2','ring-white'));
+    b.classList.add('ring-2','ring-white');
+    selected = {
+      material: b.dataset.material,
+      shape:    b.dataset.shape,
+      lookup:   b.dataset.lookup,
+      label:    b.dataset.label
+    };
+    summary.textContent = `Selected: ${selected.material.toUpperCase()} • ${selected.label}`;
+    setReviewEnabled();
+  });
+});
+
+/* ---------- Review & Checkout ----------
+   1) Ensure selection and preview exist
+   2) Call backend to BAKE final production image with:
+      - originalUrl, ratio, shape
+      - signature (text/font/color/size/px/py) ONLY IF enabled
+   3) On success, redirect to Stripe Payment Link; include a reference
+      (client_reference_id) with an order token or the baked asset id.
+---------------------------------------- */
+reviewBtn.addEventListener('click', async ()=>{
+  if(!selected) return alert('Pick a size first.');
+  if(!lastPreview?.originalUrl) return alert('Please generate a preview first.');
+  const link = STRIPE_LINK[selected.lookup];
+  if(!link) return alert(`No Stripe link configured for ${selected.lookup}`);
+
+  // Prepare payload for server bake
+  const payload = {
+    image:   lastPreview.originalUrl,
+    ratio:   lastPreview.ratio,
+    shape:   lastPreview.shape,
+    size:    selected.label,
+    material:selected.material,
+    signature: Sig.enabled ? {
+      text:  Sig.text || '',
+      font:  Sig.font || 'Great Vibes',
+      color: Sig.color || '#ffffff',
+      size:  Sig.size || 24,
+      px:    Sig.px ?? 0.02,
+      py:    Sig.py ?? 0.02
+    } : null
+  };
+
+  reviewBtn.disabled = true;
+  reviewBtn.textContent = 'Preparing your file…';
+
+  try {
+    // This endpoint should bake the watermark/signature into a production-ready file,
+    // persist it, and return an order reference id or asset id you can see in Stripe.
+    const r = await fetch('/api/bake-preview', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data?.error || 'Could not prepare final file');
+
+    // Expecting { ok:true, orderRef: '...' } (or assetId)
+    const ref = encodeURIComponent(data?.orderRef || '');
+    window.location.href = link + (ref ? `?client_reference_id=${ref}` : '');
+  } catch (err) {
+    alert(err.message || String(err));
+    reviewBtn.disabled = false;
+    reviewBtn.textContent = 'Review & Checkout';
+  }
+});
+
+/* ---------- Deep-link loader ----------
+   Loads from ?preview=...&ratio=...&shape=...&lookup=...
+   Shows CLEAN image in frame; signature overlay state remains user controlled.
+---------------------------------------- */
+(async function preloadFromQuery(){
+  const sp = new URLSearchParams(location.search);
+  const previewUrl = sp.get('preview');
+  const ratio      = sp.get('ratio') || '1024x1024';
+  const shape      = sp.get('shape') || getShapeFromRatio(ratio);
+  const lookup     = sp.get('lookup');
+
+  if (!previewUrl) return;
+
+  try {
+    setPreviewAspect(ratio);
+    $('#previewImg').src = previewUrl;
+
+    // Put the same sharable URL into the field
+    const shareUrl = new URL(window.location.href);
+    shareUrl.searchParams.set('preview', previewUrl);
+    shareUrl.searchParams.set('ratio', ratio);
+    shareUrl.searchParams.set('shape', shape);
+    if (lookup) shareUrl.searchParams.set('lookup', lookup);
+    $('#gen-url').value = shareUrl.toString();
+    $('#gen-actions').classList.remove('hidden');
+
+    lastPreview = { originalUrl: previewUrl, ratio, shape };
+
+    orderNote.textContent = 'Loaded a saved preview. Pick your size & finish.';
+    lockButtonsToShape(shape);
+
+    refreshSigEl();
+
+    if (lookup) {
+      const btn = document.querySelector(`.sizeBtn[data-lookup="${lookup}"]`);
+      if (btn && !btn.disabled) btn.click();
+    }
+  } catch(e){
+    console.warn('preload error', e);
+  }
+})();
+
+/* ---------- Mobile nav sheet wiring ---------- */
+(() => {
+  const sheet   = document.getElementById('navSheet');
+  const drawer  = document.getElementById('navDrawer');
+  const backdrop= document.getElementById('navBackdrop');
+  const openBtn = document.getElementById('navOpen');
+  const closeBtn= document.getElementById('navClose');
+
+  const openSheet = () => {
+    sheet.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      drawer.classList.remove('translate-x-full');
+      backdrop.classList.remove('opacity-0');
+      document.body.classList.add('overflow-hidden');
+      openBtn.setAttribute('aria-expanded', 'true');
+      sheet.setAttribute('aria-hidden', 'false');
+    });
+  };
+
+  const closeSheet = () => {
+    drawer.classList.add('translate-x-full');
+    backdrop.classList.add('opacity-0');
+    openBtn.setAttribute('aria-expanded', 'false');
+    sheet.setAttribute('aria-hidden', 'true');
+    setTimeout(() => {
+      sheet.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }, 250);
+  };
+
+  openBtn?.addEventListener('click', openSheet);
+  closeBtn?.addEventListener('click', closeSheet);
+  backdrop?.addEventListener('click', closeSheet);
+  sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSheet));
+  window.addEventListener('keydown', e => { if (e.key === 'Escape' && !sheet.classList.contains('hidden')) closeSheet(); });
+  window.addEventListener('resize', () => { if (window.innerWidth >= 768 && !sheet.classList.contains('hidden')) closeSheet(); });
+})();
+</script>
