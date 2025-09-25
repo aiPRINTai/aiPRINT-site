@@ -81,11 +81,6 @@
       line-height:1;
     }
     .sig-overlay:active { cursor:grabbing; }
-    .sig-Great\ Vibes{font-family:'Great Vibes',cursive}
-    .sig-Allura{font-family:'Allura',cursive}
-    .sig-Sacramento{font-family:'Sacramento',cursive}
-    .sig-Playfair\ Display{font-family:'Playfair Display',serif}
-    .sig-Montserrat{font-family:'Montserrat',sans-serif}
 
     /* keyboard focus for chosen size */
     .ring-white { box-shadow: 0 0 0 2px rgba(255,255,255,1) inset; }
@@ -161,7 +156,8 @@
       </nav>
     </aside>
   </div>
-<!-- =========================================================
+
+  <!-- =========================================================
        HERO
        ========================================================= -->
   <section class="max-w-7xl mx-auto px-5 pt-6 pb-12 grid lg:grid-cols-2 gap-10 items-center">
@@ -170,7 +166,7 @@
       <p class="muted mt-4 max-w-xl">Type a prompt. We create the art with AI + a human artist’s eye. You pick size &amp; finish. We ship an archival, limited-edition print to your door.</p>
       <div class="flex gap-3 mt-6">
         <a href="#create" class="btn">Create a preview</a>
-        <a href="#how" class="btn-outline inline-flex items-center gap-2" aria-label="See how aiPRINT works">
+        <a href="#how" class="btn-outline inline-flex items-center gap-2" aria-label="See how it works">
           See how it works
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </a>
@@ -334,7 +330,7 @@
         >
           <img id="previewImg" class="max-w-full max-h-full object-contain" alt="Preview" />
           <!-- LIVE signature overlay (draggable) -->
-          <div id="sig" class="sig-overlay sig-Great Vibes hidden">Your Name</div>
+          <div id="sig" class="sig-overlay hidden">Your Name</div>
         </div>
 
         <!-- Signature controls (LIVE overlay only) -->
@@ -366,17 +362,9 @@
         <!-- Actions (preview/share). Baking happens ONLY at checkout. -->
         <div id="gen-actions" class="hidden mt-4 flex flex-wrap items-center gap-3">
           <input id="gen-url" class="w-full md:w-auto flex-1 rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/80" readonly />
-
-          <!-- Copy a sharable page URL (not a clean image URL) -->
           <button id="copy-link" class="btn">Copy share link</button>
-
-          <!-- Open a temporary WATERMARKED PREVIEW (generated client-side) -->
           <button id="open-wm" class="btn btn-ghost">Open watermarked preview</button>
-
-          <!-- Download a temporary WATERMARKED PREVIEW (client-side) -->
           <a id="download-link" href="#" class="btn btn-ghost" download="aiPRINT-preview-watermarked.jpg">Download (watermarked)</a>
-
-          <!-- Save a share URL (with ratio/shape/selection) for later -->
           <button id="share-later" class="btn-ghost px-4 py-2 rounded-lg border border-white/20">Share to order later</button>
         </div>
       </div>
@@ -490,20 +478,18 @@
   </footer>
 
   <!-- =========================================================
-       APP + CHECKOUT LOGIC (loaded in Part 3)
+       APP + CHECKOUT LOGIC
        ========================================================= -->
   <script>
-    /* Part 3 will append the full JS below this tag. */
-  </script>
-<script>
 /* ============================================================
    aiPRINT.ai — App & Checkout Logic
-   - Live signature overlay (DOM, draggable; NOT baked)
-   - Generate preview (clean image in frame)
-   - Temporary watermarked preview/download (client-side only)
-   - Share links (URL with query params)
+   - Live signature overlay (DOM, draggable; NOT baked in preview)
+   - Generate preview (clean in-frame)
+   - Watermarked "open/download" is client-side only
+   - Share links + deep links
+   - Persist preview/signature/selection across Back/Reload
    - Size lock by aspect ratio; Review & Checkout flow
-   - Final bake happens BEFORE redirect (POST /api/bake-preview)
+   - Final bake occurs on backend at checkout
    ============================================================ */
 
 /* ---------- DOM helpers ---------- */
@@ -535,22 +521,13 @@ const STRIPE_LINK = {
   'ACR-20x30-PT':'https://buy.stripe.com/7sY3cw5DE2tadpb23feIw0a',
 };
 
-/* ---------- Small utilities ---------- */
-function buildPrompt(){
-  const subject=$('#promptInput')?.value?.trim()||'';
-  const style=$('#styleSel')?.value||'', mood=$('#moodSel')?.value||'';
-  const light=$('#lightSel')?.value||'', comp=$('#compSel')?.value||'';
-  const medium=$('#mediumSel')?.value||'';
-  return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}, ${medium}`.replace(/\s+/g,' ').trim();
-}
-
+/* ---------- Utilities ---------- */
 function getShapeFromRatio(ratio) {
   if (ratio === '1024x1024') return 'square';
   if (ratio === '1536x1024') return 'horizontal';
   if (ratio === '1024x1536') return 'vertical';
   return '';
 }
-
 function setPreviewAspect(ratio){
   const wrap = $('#previewWrap');
   if (!wrap) return;
@@ -558,7 +535,6 @@ function setPreviewAspect(ratio){
   else if (ratio === '1536x1024') wrap.style.aspectRatio = '3 / 2';
   else if (ratio === '1024x1536') wrap.style.aspectRatio = '2 / 3';
 }
-
 function lockButtonsToShape(shape) {
   $$('.sizeBtn').forEach(btn=>{
     const isMatch = btn.dataset.shape === shape;
@@ -567,8 +543,6 @@ function lockButtonsToShape(shape) {
     btn.title = isMatch ? '' : 'This preview is a different shape';
   });
 }
-
-/* canvas → blob URL helper */
 const toBlobURL = (canvas) => new Promise(res=>{
   canvas.toBlob(b=>{
     const url = URL.createObjectURL(b);
@@ -576,7 +550,7 @@ const toBlobURL = (canvas) => new Promise(res=>{
   }, 'image/jpeg', 0.92);
 });
 
-/* ---------- Watermark & Signature (for temporary preview/download ONLY) ---------- */
+/* ---------- Watermark & Signature (temp preview/download ONLY) ---------- */
 async function drawWatermarked(url, signature) {
   const img = new Image();
   img.crossOrigin = 'anonymous';
@@ -589,10 +563,9 @@ async function drawWatermarked(url, signature) {
   c.width = img.naturalWidth;
   c.height = img.naturalHeight;
 
-  // base
   ctx.drawImage(img, 0, 0, c.width, c.height);
 
-  // tiled watermark (brand)
+  // tiled brand watermark
   const text = 'aiPRINT.ai';
   ctx.save();
   ctx.globalAlpha = 0.16;
@@ -609,7 +582,7 @@ async function drawWatermarked(url, signature) {
   }
   ctx.restore();
 
-  // optional signature for temporary output preview
+  // optional signature
   if (signature?.text) {
     ctx.save();
     ctx.fillStyle = signature.color || '#ffffff';
@@ -629,9 +602,10 @@ async function drawWatermarked(url, signature) {
   return { dataUrl, blobUrl };
 }
 
-/* ---------- State ---------- */
-/* ---- Persist/restore preview so Back/Reload keeps it alive ---- */
+/* ---------- State & Persistence ---------- */
 const STATE_KEY = 'aiprint:last';
+let lastPreview = null;  // { originalUrl, ratio, shape }
+let selected    = null;  // { material, shape, lookup, label }
 
 function saveState() {
   if (!lastPreview?.originalUrl) return;
@@ -661,7 +635,7 @@ function saveState() {
 }
 
 async function restoreStateIfAny() {
-  // If URL already has ?preview=... let preloadFromQuery handle it
+  // If URL has ?preview=..., let deep-link loader handle it
   const qsHasPreview = new URLSearchParams(location.search).has('preview');
   if (qsHasPreview) return;
 
@@ -672,11 +646,11 @@ async function restoreStateIfAny() {
   if (!s?.originalUrl) return;
 
   try {
-    // Show CLEAN image (no baked elements) — same as after generation
+    // show clean image
     setPreviewAspect(s.ratio || '1024x1024');
     $('#previewImg').src = s.originalUrl;
 
-    // Rebuild a share link into the field
+    // rebuild a share link
     const shareUrl = new URL(window.location.href);
     shareUrl.searchParams.set('preview', s.originalUrl);
     shareUrl.searchParams.set('ratio',   s.ratio || '1024x1024');
@@ -691,7 +665,7 @@ async function restoreStateIfAny() {
       shape: s.shape || getShapeFromRatio(s.ratio || '1024x1024')
     };
 
-    // Restore signature UI state (live overlay only)
+    // restore signature UI
     if (s.signature) {
       sigToggle.checked = true;
       Sig.enabled = true;
@@ -720,17 +694,16 @@ async function restoreStateIfAny() {
     sessionStorage.removeItem(STATE_KEY);
   }
 }
-
-window.addEventListener('beforeunload', saveState);  
-let lastPreview = null;  // { originalUrl, ratio, shape }
-let selected    = null;  // { material, shape, lookup, label }
+window.addEventListener('beforeunload', saveState);
+document.addEventListener('DOMContentLoaded', restoreStateIfAny);
+window.addEventListener('pageshow', (e) => { if (e.persisted) restoreStateIfAny(); });
 
 /* ---------- Element refs ---------- */
 const genBtn    = $('#genBtn');
 const preview   = $('#previewImg');
 const wrap      = $('#previewWrap');
 
-const genUrl    = $('#gen-url');          // we will place the sharable PAGE URL here
+const genUrl    = $('#gen-url'); // page share URL (not clean image)
 const genRow    = $('#gen-actions');
 
 const ratioSel  = $('#ratioSel');
@@ -739,7 +712,7 @@ const orderNote = $('#orderLockExplain');
 const reviewBtn = $('#reviewBtn');
 const summary   = $('#selectionSummary');
 
-/* Signature UI */
+/* ---------- Signature overlay model ---------- */
 const sigEl     = $('#sig');
 const sigToggle = $('#sigToggle');
 const sigName   = $('#sigName');
@@ -747,7 +720,6 @@ const sigFont   = $('#sigFont');
 const sigColor  = $('#sigColor');
 const sigSize   = $('#sigSize');
 
-/* ---------- Signature overlay model ---------- */
 const Sig = {
   enabled: false,
   px: 0.02,   // left %
@@ -763,8 +735,11 @@ function refreshSigEl() {
   if (!Sig.enabled) { sigEl.classList.add('hidden'); return; }
   sigEl.classList.remove('hidden');
   sigEl.textContent = Sig.text || ' ';
-  // font class swap (keep classes simple; class names created in CSS)
-  sigEl.className = `sig-overlay sig-${Sig.font.replace(/\s/g, '\\ ')}`; // maintain base + font variant
+
+  // set font inline (no fragile classnames)
+  const isSerif = /Playfair/i.test(Sig.font);
+  sigEl.className = 'sig-overlay';
+  sigEl.style.fontFamily = `"${Sig.font}", ${isSerif ? 'serif' : 'cursive'}`;
   sigEl.style.color = Sig.color;
   sigEl.style.fontSize = `${Sig.size}px`;
 
@@ -782,26 +757,26 @@ function setReviewEnabled() {
   reviewBtn.disabled = !selected;
 }
 
-/* ---------- Signature controls (LIVE overlay only) ---------- */
+/* ---------- Signature controls (persist on change) ---------- */
 sigToggle?.addEventListener('change', ()=>{
   Sig.enabled = !!sigToggle.checked;
-  refreshSigEl();
+  refreshSigEl(); saveState();
 });
 sigName?.addEventListener('input', ()=>{
   Sig.text = sigName.value || '';
-  refreshSigEl();
+  refreshSigEl(); saveState();
 });
 sigFont?.addEventListener('change', ()=>{
   Sig.font = sigFont.value || 'Great Vibes';
-  refreshSigEl();
+  refreshSigEl(); saveState();
 });
 sigColor?.addEventListener('input', ()=>{
   Sig.color = sigColor.value || '#ffffff';
-  refreshSigEl();
+  refreshSigEl(); saveState();
 });
 sigSize?.addEventListener('input', ()=>{
   Sig.size = parseInt(sigSize.value || '24',10);
-  refreshSigEl();
+  refreshSigEl(); saveState();
 });
 
 /* Dragging */
@@ -833,8 +808,20 @@ window.addEventListener('mousemove', (e)=>{
 window.addEventListener('mouseup', ()=>{ Sig.dragging = null; });
 window.addEventListener('resize', refreshSigEl);
 
-/* ---------- Generate preview (CLEAN in frame, overlay live) ---------- */
-genBtn?.addEventListener('click', async () => {
+/* ---------- Prompt builder ---------- */
+function buildPrompt() {
+  const subject = $('#promptInput')?.value?.trim() || '';
+  const style = $('#styleSel')?.value || '';
+  const mood = $('#moodSel')?.value || '';
+  const light = $('#lightSel')?.value || '';
+  const comp = $('#compSel')?.value || '';
+  return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}`
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/* ---------- Generate preview (clean in frame, overlay live) ---------- */
+const genHandler = async () => {
   const subject = buildPrompt();
   if (!subject) { alert('Please describe what you want.'); return; }
 
@@ -846,7 +833,6 @@ genBtn?.addEventListener('click', async () => {
   preview.removeAttribute('src');
 
   try {
-    // Ask backend to generate image — returns { image: <URL> }
     const r = await fetch('/api/generate-image', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -855,11 +841,9 @@ genBtn?.addEventListener('click', async () => {
     const data = await r.json();
     if (!r.ok || !data?.image) throw new Error(data?.error || 'Generation failed');
 
-    // Show CLEAN image in the frame (no baked marks)
     setPreviewAspect(ratio);
     preview.src = data.image;
 
-    // Show action row; put a sharable PAGE URL (not the clean image) in the field
     const shareUrl = new URL(window.location.href);
     shareUrl.searchParams.set('preview', data.image);
     shareUrl.searchParams.set('ratio', ratio);
@@ -867,10 +851,7 @@ genBtn?.addEventListener('click', async () => {
     genUrl.value = shareUrl.toString();
     genRow.classList.remove('hidden');
 
-    // Save state
     lastPreview = { originalUrl: data.image, ratio, shape: getShapeFromRatio(ratio) };
-
-    // Enforce shape lock and reset any previous selection
     orderNote.textContent = `Looks great! Only ${lastPreview.shape} sizes are available for this preview.`;
     lockButtonsToShape(lastPreview.shape);
 
@@ -878,15 +859,16 @@ genBtn?.addEventListener('click', async () => {
     summary.textContent = 'Selected: —';
     setReviewEnabled();
 
-    // Keep overlay positioned
     refreshSigEl();
+    saveState(); // persist immediately
   } catch (e) {
     alert(e.message || String(e));
   } finally {
     genBtn.disabled = false;
     genBtn.textContent='Generate preview';
   }
-});
+};
+genBtn?.addEventListener('click', genHandler);
 
 /* ---------- Temporary watermarked actions (client-side only) ---------- */
 $('#open-wm')?.addEventListener('click', async () => {
@@ -895,15 +877,13 @@ $('#open-wm')?.addEventListener('click', async () => {
   const { blobUrl } = await drawWatermarked(lastPreview.originalUrl, sig);
   window.open(blobUrl, '_blank');
 });
-
 $('#download-link')?.addEventListener('click', async (e) => {
   if(!lastPreview?.originalUrl){ e.preventDefault(); alert('Create a preview first.'); return; }
   e.preventDefault();
   const sig = Sig.enabled ? { ...Sig } : null;
   const { dataUrl } = await drawWatermarked(lastPreview.originalUrl, sig);
   $('#download-link').href = dataUrl;
-  // Let the browser handle the download after href is set (second click not required)
-  $('#download-link').click();
+  $('#download-link').click(); // trigger after href set
 });
 
 /* Copy share link (page URL with params; NOT clean image) */
@@ -915,7 +895,7 @@ $('#copy-link')?.addEventListener('click', async ()=>{
   setTimeout(()=>b.textContent='Copy share link', 900);
 });
 
-/* Share to order later (same as gen-url but ensures latest selection embedded if any) */
+/* Share to order later (include selection if present) */
 $('#share-later')?.addEventListener('click', async () => {
   if (!lastPreview?.originalUrl) return alert('Create a preview first.');
   const url = new URL(window.location.href);
@@ -941,7 +921,7 @@ $$('.orderTab').forEach(btn=>btn.addEventListener('click',()=>{
 $$('.sizeBtn').forEach(b=>{
   b.addEventListener('click', ()=>{
     if(!lastPreview?.originalUrl){ alert('Please generate a preview first.'); return; }
-    if (b.disabled) return; // respect shape lock
+    if (b.disabled) return;
     $$('.sizeBtn').forEach(x=>x.classList.remove('ring-2','ring-white'));
     b.classList.add('ring-2','ring-white');
     selected = {
@@ -952,25 +932,23 @@ $$('.sizeBtn').forEach(b=>{
     };
     summary.textContent = `Selected: ${selected.material.toUpperCase()} • ${selected.label}`;
     setReviewEnabled();
+    saveState();
   });
 });
 
 /* ---------- Review & Checkout ----------
-   1) Ensure selection and preview exist
-   2) Call backend to BAKE final production image with:
-      - originalUrl, ratio, shape
-      - signature (text/font/color/size/px/py) ONLY IF enabled
-   3) On success, redirect to Stripe Payment Link; include a reference
-      (client_reference_id) with an order token or the baked asset id.
+   1) Ensure selection + preview
+   2) POST to your backend to create a Stripe Checkout Session
+      (your backend can BAKE the final image before/after payment)
+   3) Redirect to Stripe Checkout
 ---------------------------------------- */
 reviewBtn.addEventListener('click', async () => {
   if (!selected) return alert('Pick a size first.');
   if (!lastPreview?.originalUrl) return alert('Please generate a preview first.');
-  
-  // Build the complete prompt from all selections
+  saveState();
+
   const fullPrompt = buildPrompt();
-  
-  // Prepare the preview data with all creative options
+
   const previewData = {
     image: lastPreview.originalUrl,
     prompt: fullPrompt,
@@ -979,7 +957,6 @@ reviewBtn.addEventListener('click', async () => {
     mood: $('#moodSel')?.value || '',
     light: $('#lightSel')?.value || '',
     comp: $('#compSel')?.value || '',
-    medium: '', // Remove reference to non-existent mediumSel
     sig: Sig.enabled ? {
       text: Sig.text || '',
       font: Sig.font || 'Great Vibes',
@@ -994,7 +971,6 @@ reviewBtn.addEventListener('click', async () => {
   reviewBtn.textContent = 'Creating checkout session...';
 
   try {
-    // Call the create-checkout-session API
     const r = await fetch('/api/create-checkout-session', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1003,20 +979,10 @@ reviewBtn.addEventListener('click', async () => {
         preview: previewData
       })
     });
-    
     const data = await r.json();
-    
-    if (!r.ok) {
-      throw new Error(data?.error || 'Could not create checkout session');
-    }
-
-    // Redirect to Stripe Checkout
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      throw new Error('No checkout URL received');
-    }
-    
+    if (!r.ok) throw new Error(data?.error || 'Could not create checkout session');
+    if (!data.url) throw new Error('No checkout URL received');
+    window.location.href = data.url;
   } catch (err) {
     alert(err.message || String(err));
     reviewBtn.disabled = false;
@@ -1024,23 +990,8 @@ reviewBtn.addEventListener('click', async () => {
   }
 });
 
-// Also fix the buildPrompt function to remove medium reference:
-function buildPrompt() {
-  const subject = $('#promptInput')?.value?.trim() || '';
-  const style = $('#styleSel')?.value || '';
-  const mood = $('#moodSel')?.value || '';
-  const light = $('#lightSel')?.value || '';
-  const comp = $('#compSel')?.value || '';
-  // Remove: const medium = $('#mediumSel')?.value || '';
-  
-  return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}`
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
 /* ---------- Deep-link loader ----------
    Loads from ?preview=...&ratio=...&shape=...&lookup=...
-   Shows CLEAN image in frame; signature overlay state remains user controlled.
 ---------------------------------------- */
 (async function preloadFromQuery(){
   const sp = new URLSearchParams(location.search);
@@ -1055,7 +1006,6 @@ function buildPrompt() {
     setPreviewAspect(ratio);
     $('#previewImg').src = previewUrl;
 
-    // Put the same sharable URL into the field
     const shareUrl = new URL(window.location.href);
     shareUrl.searchParams.set('preview', previewUrl);
     shareUrl.searchParams.set('ratio', ratio);
@@ -1070,11 +1020,11 @@ function buildPrompt() {
     lockButtonsToShape(shape);
 
     refreshSigEl();
-
     if (lookup) {
       const btn = document.querySelector(`.sizeBtn[data-lookup="${lookup}"]`);
       if (btn && !btn.disabled) btn.click();
     }
+    saveState();
   } catch(e){
     console.warn('preload error', e);
   }
@@ -1117,4 +1067,6 @@ function buildPrompt() {
   window.addEventListener('keydown', e => { if (e.key === 'Escape' && !sheet.classList.contains('hidden')) closeSheet(); });
   window.addEventListener('resize', () => { if (window.innerWidth >= 768 && !sheet.classList.contains('hidden')) closeSheet(); });
 })();
-</script>
+  </script>
+</body>
+</html>
