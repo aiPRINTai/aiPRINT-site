@@ -871,52 +871,80 @@ $$('.sizeBtn').forEach(b=>{
    3) On success, redirect to Stripe Payment Link; include a reference
       (client_reference_id) with an order token or the baked asset id.
 ---------------------------------------- */
-reviewBtn.addEventListener('click', async ()=>{
-  if(!selected) return alert('Pick a size first.');
-  if(!lastPreview?.originalUrl) return alert('Please generate a preview first.');
-  const link = STRIPE_LINK[selected.lookup];
-  if(!link) return alert(`No Stripe link configured for ${selected.lookup}`);
-
-  // Prepare payload for server bake
-  const payload = {
-    image:   lastPreview.originalUrl,
-    ratio:   lastPreview.ratio,
-    shape:   lastPreview.shape,
-    size:    selected.label,
-    material:selected.material,
-    signature: Sig.enabled ? {
-      text:  Sig.text || '',
-      font:  Sig.font || 'Great Vibes',
+reviewBtn.addEventListener('click', async () => {
+  if (!selected) return alert('Pick a size first.');
+  if (!lastPreview?.originalUrl) return alert('Please generate a preview first.');
+  
+  // Build the complete prompt from all selections
+  const fullPrompt = buildPrompt();
+  
+  // Prepare the preview data with all creative options
+  const previewData = {
+    image: lastPreview.originalUrl,
+    prompt: fullPrompt,
+    size: lastPreview.ratio,
+    style: $('#styleSel')?.value || '',
+    mood: $('#moodSel')?.value || '',
+    light: $('#lightSel')?.value || '',
+    comp: $('#compSel')?.value || '',
+    medium: '', // Remove reference to non-existent mediumSel
+    sig: Sig.enabled ? {
+      text: Sig.text || '',
+      font: Sig.font || 'Great Vibes',
       color: Sig.color || '#ffffff',
-      size:  Sig.size || 24,
-      px:    Sig.px ?? 0.02,
-      py:    Sig.py ?? 0.02
+      size: Sig.size || 24,
+      px: Sig.px ?? 0.02,
+      py: Sig.py ?? 0.02
     } : null
   };
 
   reviewBtn.disabled = true;
-  reviewBtn.textContent = 'Preparing your file…';
+  reviewBtn.textContent = 'Creating checkout session...';
 
   try {
-    // This endpoint should bake the watermark/signature into a production-ready file,
-    // persist it, and return an order reference id or asset id you can see in Stripe.
-    const r = await fetch('/api/bake-preview', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
+    // Call the create-checkout-session API
+    const r = await fetch('/api/create-checkout-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        lookup_key: selected.lookup,
+        preview: previewData
+      })
     });
+    
     const data = await r.json();
-    if (!r.ok) throw new Error(data?.error || 'Could not prepare final file');
+    
+    if (!r.ok) {
+      throw new Error(data?.error || 'Could not create checkout session');
+    }
 
-    // Expecting { ok:true, orderRef: '...' } (or assetId)
-    const ref = encodeURIComponent(data?.orderRef || '');
-    window.location.href = link + (ref ? `?client_reference_id=${ref}` : '');
+    // Redirect to Stripe Checkout
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      throw new Error('No checkout URL received');
+    }
+    
   } catch (err) {
     alert(err.message || String(err));
     reviewBtn.disabled = false;
     reviewBtn.textContent = 'Review & Checkout';
   }
 });
+
+// Also fix the buildPrompt function to remove medium reference:
+function buildPrompt() {
+  const subject = $('#promptInput')?.value?.trim() || '';
+  const style = $('#styleSel')?.value || '';
+  const mood = $('#moodSel')?.value || '';
+  const light = $('#lightSel')?.value || '';
+  const comp = $('#compSel')?.value || '';
+  // Remove: const medium = $('#mediumSel')?.value || '';
+  
+  return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}`
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
 /* ---------- Deep-link loader ----------
    Loads from ?preview=...&ratio=...&shape=...&lookup=...
