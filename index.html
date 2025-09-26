@@ -20,8 +20,9 @@
     .h2{font-size:clamp(1.4rem,2.4vw,2.1rem);font-weight:800;}
     .muted{color:var(--muted)}
     .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
-    .btn{background:#fff;color:#000;font-weight:700;padding:.7rem 1rem;border-radius:.6rem}
-    .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#e7eef8}
+    .btn{background:#fff;color:#000;font-weight:700;padding:.7rem 1rem;border-radius:.6rem;cursor:pointer;border:none;}
+    .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#e7eef8;cursor:pointer;}
+    .btn:disabled{opacity:0.5;cursor:not-allowed;}
     .ringy{box-shadow:0 0 0 2px #fff inset}
     .wm{background-image:repeating-linear-gradient(45deg, rgba(255,255,255,.07) 0 24px, transparent 24px 64px);}
     .disabled{
@@ -33,7 +34,17 @@
       filter: saturate(0.1);
       opacity: .8;
     }
-    .disabled:hover{opacity:.8 !important;}
+    .signature-overlay {
+      position: absolute;
+      cursor: move;
+      user-select: none;
+      z-index: 10;
+    }
+    .signature-font-great-vibes { font-family: 'Great Vibes', cursive; }
+    .signature-font-allura { font-family: 'Allura', cursive; }
+    .signature-font-sacramento { font-family: 'Sacramento', cursive; }
+    .signature-font-playfair { font-family: 'Playfair Display', serif; font-weight: 600; }
+    .signature-font-montserrat { font-family: 'Montserrat', sans-serif; font-weight: 600; }
   </style>
 </head>
 <body>
@@ -59,7 +70,7 @@
   <section class="max-w-7xl mx-auto px-5 pt-6 pb-12 grid lg:grid-cols-2 gap-10 items-center">
     <div>
       <h1 class="h1">Turn any idea into a <span class="text-indigo-300">gallery-worthy</span> print.</h1>
-      <p class="muted mt-4 max-w-xl">Type a prompt. We create the art with AI + a human artist’s eye. You pick size & finish. We ship an archival, limited-edition print to your door.</p>
+      <p class="muted mt-4 max-w-xl">Type a prompt. We create the art with AI + a human artist's eye. You pick size & finish. We ship an archival, limited-edition print to your door.</p>
       <div class="flex gap-3 mt-6">
         <a href="#create" class="btn">Create a preview</a>
         <a href="#how" class="btn-ghost">See how it works</a>
@@ -108,30 +119,108 @@
     <h2 class="h2 mb-4">Create a preview</h2>
     <div class="glass rounded-xl p-5 md:p-6">
       <div class="grid lg:grid-cols-[1fr_260px] gap-4">
-        <textarea id="promptInput" class="rounded-lg bg-white/10 border border-white/15 px-3 py-3 min-h-[56px]" placeholder="e.g., photographer on a beach surrounded by wildlife"></textarea>
+        <textarea id="promptInput" class="rounded-lg bg-white/10 border border-white/15 px-3 py-3 min-h-[56px]" placeholder="e.g., photographer on jeep in mountains"></textarea>
         <div class="space-y-2">
           <label class="text-sm muted block">Aspect ratio</label>
           <select id="ratioSel" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2">
             <option value="1024x1024">Square (1:1)</option>
-            <option value="1536x1024">Horizontal 3:2</option>
-            <option value="1024x1536">Vertical 2:3</option>
+            <option value="1536x1024">Horizontal (3:2)</option>
+            <option value="1024x1536">Vertical (2:3)</option>
           </select>
           <button id="genBtn" class="btn w-full">Generate preview</button>
         </div>
       </div>
 
-      <div class="mt-6">
-        <div id="previewWrap" class="relative w-full bg-black/40 rounded-xl overflow-hidden border border-white/10 grid place-items-center wm" style="aspect-ratio:1/1;">
+      <!-- Preview Section -->
+      <div id="previewSection" class="mt-6 hidden">
+        <div id="previewWrap" class="relative w-full bg-black/40 rounded-xl overflow-hidden border border-white/10 grid place-items-center" style="aspect-ratio:1/1;">
           <img id="previewImg" class="max-w-full max-h-full object-contain" alt="Preview" />
+          <!-- Signature overlay will be added here -->
+        </div>
+
+        <!-- Controls -->
+        <div class="mt-4 flex flex-wrap gap-3">
+          <button id="selectBtn" class="btn">Select this image</button>
+          <button id="regenerateBtn" class="btn-ghost">Generate another</button>
+          <button id="startOverBtn" class="btn-ghost">Start over</button>
         </div>
       </div>
+
+      <!-- Loading state -->
+      <div id="loadingState" class="mt-6 hidden">
+        <div class="bg-black/40 rounded-xl border border-white/10 p-8 text-center">
+          <div class="animate-spin w-8 h-8 border-2 border-white/30 border-t-white rounded-full mx-auto"></div>
+          <p class="mt-4 muted">Generating your artwork...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDITOR (shown after selecting image) -->
+  <section id="editor" class="max-w-7xl mx-auto px-5 py-14 hidden">
+    <h2 class="h2 mb-4">Customize your print</h2>
+    <div class="grid lg:grid-cols-[1fr_300px] gap-6">
+      <!-- Image preview with signature -->
+      <div class="glass rounded-xl p-4">
+        <div id="editorPreviewWrap" class="relative w-full bg-black/40 rounded-xl overflow-hidden border border-white/10 grid place-items-center" style="aspect-ratio:1/1;">
+          <img id="editorImg" class="max-w-full max-h-full object-contain" alt="Your artwork" />
+        </div>
+      </div>
+
+      <!-- Signature controls -->
+      <div class="glass rounded-xl p-4 space-y-4">
+        <h3 class="font-bold text-lg">Signature Options</h3>
+        
+        <label class="flex items-center gap-2">
+          <input type="checkbox" id="signatureToggle" class="rounded">
+          <span>Show signature on preview</span>
+        </label>
+
+        <div id="signatureControls" class="space-y-3 hidden">
+          <div>
+            <label class="text-sm muted block mb-1">Font Style</label>
+            <select id="signatureFont" class="w-full rounded bg-white/10 border border-white/15 px-2 py-1 text-sm">
+              <option value="great-vibes">Great Vibes (Script)</option>
+              <option value="allura">Allura (Script)</option>
+              <option value="sacramento">Sacramento (Script)</option>
+              <option value="playfair">Playfair Display</option>
+              <option value="montserrat">Montserrat</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="text-sm muted block mb-1">Size</label>
+            <select id="signatureSize" class="w-full rounded bg-white/10 border border-white/15 px-2 py-1 text-sm">
+              <option value="small">Small</option>
+              <option value="medium">Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-sm muted block mb-1">Color</label>
+            <select id="signatureColor" class="w-full rounded bg-white/10 border border-white/15 px-2 py-1 text-sm">
+              <option value="white">White</option>
+              <option value="black">Black</option>
+              <option value="gold">#FFD700 Gold</option>
+              <option value="silver">#C0C0C0 Silver</option>
+            </select>
+          </div>
+
+          <p class="text-xs muted">Drag the signature to position it on your artwork</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 text-center">
+      <button id="proceedToOrderBtn" class="btn">Proceed to Order</button>
     </div>
   </section>
 
   <!-- ORDER -->
   <section id="order" class="max-w-7xl mx-auto px-5 py-14">
     <h2 class="h2 mb-2">Order your print</h2>
-    <p id="orderMsg" class="text-sm text-gray-300 mb-4">Generate a preview first to unlock ordering.</p>
+    <p id="orderMsg" class="text-sm text-gray-300 mb-4">Customize your preview to unlock ordering.</p>
 
     <!-- Material tabs -->
     <div class="flex gap-2 mb-5">
@@ -158,7 +247,7 @@
 
     <div class="mt-6 flex items-center gap-3">
       <div id="selectionSummary" class="text-sm text-gray-300">Selected: —</div>
-      <button id="reviewBtn" class="btn btn-ghost disabled">Review & Checkout</button>
+      <button id="reviewBtn" class="btn disabled">Review & Checkout</button>
     </div>
   </section>
 
@@ -175,22 +264,22 @@
   const $$ = (q, el=document) => [...el.querySelectorAll(q)];
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  const orderMsg = $('#orderMsg');
-  const reviewBtn = $('#reviewBtn');
-  const summary = $('#selectionSummary');
-
+  // Global state
   let CATALOG = null;
   let currentCollection = 'canvas';
-  let lastPreview = null;
+  let currentPreview = null;
   let selected = null;
+  let signatureData = null;
 
   const formatMoney = n => `$${Number(n).toLocaleString()}`;
+  
   const classifyAspect = (w,h) => {
     const r = w/h, eps=0.04;
     if (Math.abs(r-1) <= eps) return 'square';
     return r > 1 ? 'h32' : 'v23';
   };
 
+  // Load product catalog
   async function loadCatalog(){
     const urls = [
       '/data/products.json',
@@ -198,6 +287,7 @@
       'https://raw.githubusercontent.com/aiPRINTai/aiPRINT-site/main/data/products.json',
       'https://raw.githubusercontent.com/aiPRINTai/aiPRINT-site/main/public/data/products.json'
     ];
+    
     for (const url of urls){
       try{
         const r = await fetch(url, {cache:'no-cache'});
@@ -226,11 +316,155 @@
     return col.products.filter(p => p.orientation === orient).sort((a,b)=>a.price_usd-b.price_usd);
   }
 
+  // Generate image using real AI API
+  async function generateImage(prompt, size) {
+    const loadingState = $('#loadingState');
+    const previewSection = $('#previewSection');
+    
+    loadingState.classList.remove('hidden');
+    previewSection.classList.add('hidden');
+    
+    try {
+      const response = await fetch('/api/generate-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, size })
+      });
+      
+      const data = await response.json();
+      
+      if (!data.ok || !data.image) {
+        throw new Error(data.error || 'Failed to generate image');
+      }
+      
+      return {
+        url: data.image,
+        width: data.width,
+        height: data.height,
+        prompt: prompt,
+        size: size
+      };
+    } catch (error) {
+      console.error('Image generation error:', error);
+      throw error;
+    } finally {
+      loadingState.classList.add('hidden');
+    }
+  }
+
+  // Set preview aspect ratio
+  function setWrapAspect(ratio) {
+    const wraps = ['#previewWrap', '#editorPreviewWrap'];
+    wraps.forEach(sel => {
+      const wrap = $(sel);
+      if (!wrap) return;
+      if (ratio === '1024x1024') wrap.style.aspectRatio = '1 / 1';
+      else if (ratio === '1536x1024') wrap.style.aspectRatio = '3 / 2';
+      else wrap.style.aspectRatio = '2 / 3';
+    });
+  }
+
+  // Signature system
+  function createSignature() {
+    if (!currentPreview) return;
+    
+    const container = $('#editorPreviewWrap');
+    if (!container) return;
+
+    // Remove existing signature
+    const existing = container.querySelector('.signature-overlay');
+    if (existing) existing.remove();
+
+    if (!$('#signatureToggle').checked) return;
+
+    const signature = document.createElement('div');
+    signature.className = 'signature-overlay';
+    signature.textContent = 'Lawrence Leyderman';
+    
+    // Apply styles
+    const font = $('#signatureFont').value;
+    const size = $('#signatureSize').value;
+    const color = $('#signatureColor').value;
+    
+    signature.classList.add(`signature-font-${font}`);
+    
+    const sizeMap = { small: '16px', medium: '24px', large: '32px' };
+    signature.style.fontSize = sizeMap[size];
+    signature.style.color = color === 'gold' ? '#FFD700' : color === 'silver' ? '#C0C0C0' : color;
+    
+    // Position (bottom right by default)
+    signature.style.bottom = '10px';
+    signature.style.right = '10px';
+    
+    // Make draggable
+    let isDragging = false;
+    let startX, startY, startLeft, startTop;
+    
+    signature.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      const rect = signature.getBoundingClientRect();
+      startLeft = rect.left;
+      startTop = rect.top;
+      e.preventDefault();
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      
+      const deltaX = e.clientX - startX;
+      const deltaY = e.clientY - startY;
+      
+      signature.style.position = 'absolute';
+      signature.style.left = `${startLeft + deltaX - container.getBoundingClientRect().left}px`;
+      signature.style.top = `${startTop + deltaY - container.getBoundingClientRect().top}px`;
+      signature.style.right = 'auto';
+      signature.style.bottom = 'auto';
+    });
+    
+    document.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        // Store signature data
+        const rect = signature.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        signatureData = {
+          enabled: true,
+          text: signature.textContent,
+          font: font,
+          size: size,
+          color: color,
+          x: rect.left - containerRect.left,
+          y: rect.top - containerRect.top
+        };
+      }
+    });
+    
+    container.appendChild(signature);
+    
+    // Store initial signature data
+    signatureData = {
+      enabled: true,
+      text: signature.textContent,
+      font: font,
+      size: size,
+      color: color,
+      x: container.clientWidth - signature.offsetWidth - 10,
+      y: container.clientHeight - signature.offsetHeight - 10
+    };
+  }
+
+  // Product rendering
   function renderBucket(bucket){
     const box = $(`.opts[data-bucket="${bucket}"]`);
     if (!box) return;
+    
     const items = getProductsFor(currentCollection, bucket);
-    if (!items.length) { box.innerHTML = '<div class="opacity-60">No sizes</div>'; return; }
+    if (!items.length) { 
+      box.innerHTML = '<div class="opacity-60">No sizes</div>'; 
+      return; 
+    }
 
     box.innerHTML = items.map(p => `
       <button class="sizeBtn w-full mb-2 last:mb-0 px-3 py-2 rounded bg-white text-black hover:opacity-90"
@@ -243,38 +477,50 @@
       </button>
     `).join('');
 
-    box.querySelectorAll('.sizeBtn').forEach(b=>{
-      b.addEventListener('click', ()=>{
-        if (!lastPreview) { alert('Generate a preview first.'); return; }
-        if (b.classList.contains('disabled')) return;
-        $$('.sizeBtn').forEach(x=>x.classList.remove('ringy'));
-        b.classList.add('ringy');
+    // Add click handlers
+    box.querySelectorAll('.sizeBtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!currentPreview) { 
+          alert('Generate and select a preview first.'); 
+          return; 
+        }
+        if (btn.classList.contains('disabled')) return;
+        
+        // Update selection
+        $$('.sizeBtn').forEach(x => x.classList.remove('ringy'));
+        btn.classList.add('ringy');
+        
         selected = {
-          material: b.dataset.material,
-          shape: b.dataset.shape,
-          lookup: b.dataset.lookup,
-          label: b.dataset.label,
-          link: b.dataset.link
+          material: btn.dataset.material,
+          shape: btn.dataset.shape,
+          lookup: btn.dataset.lookup,
+          label: btn.dataset.label,
+          link: btn.dataset.link
         };
-        summary.textContent = `Selected: ${selected.material.toUpperCase()} • ${selected.label}`;
-        reviewBtn.classList.remove('disabled');
+        
+        $('#selectionSummary').textContent = `Selected: ${selected.material.toUpperCase()} • ${selected.label}`;
+        $('#reviewBtn').classList.remove('disabled');
       });
     });
   }
 
-  function renderAllBuckets(){ ['square','h32','v23'].forEach(renderBucket); }
+  function renderAllBuckets() { 
+    ['square','h32','v23'].forEach(renderBucket); 
+  }
 
-  function setActiveOnly(bucket){
-    [['square','#grp-square'], ['h32','#grp-h32'], ['v23','#grp-v23']].forEach(([k,sel])=>{
-      const el = document.querySelector(sel);
-      if (!bucket || k === bucket) el.classList.remove('opacity-50','pointer-events-none');
-      else el.classList.add('opacity-50','pointer-events-none');
+  function setActiveOnly(bucket) {
+    [['square','#grp-square'], ['h32','#grp-h32'], ['v23','#grp-v23']].forEach(([k,sel]) => {
+      const el = $(sel);
+      if (!bucket || k === bucket) {
+        el.classList.remove('opacity-50','pointer-events-none');
+      } else {
+        el.classList.add('opacity-50','pointer-events-none');
+      }
     });
   }
 
-  // Updated helper: make all buttons visible but disabled until unlocked
-  function setButtonsEnabled(enabledBucket){
-    document.querySelectorAll('.sizeBtn').forEach(btn=>{
+  function setButtonsEnabled(enabledBucket) {
+    $$('.sizeBtn').forEach(btn => {
       const shape = btn.dataset.shape;
       const enabled = !!enabledBucket && shape === enabledBucket;
       btn.classList.toggle('disabled', !enabled);
@@ -283,44 +529,149 @@
     });
   }
 
+  // Event handlers
+  $('#genBtn').addEventListener('click', async () => {
+    const prompt = $('#promptInput').value.trim();
+    const ratio = $('#ratioSel').value;
+    
+    if (!prompt) {
+      alert('Please enter a prompt');
+      return;
+    }
+    
+    try {
+      $('#genBtn').disabled = true;
+      $('#genBtn').textContent = 'Generating...';
+      
+      const result = await generateImage(prompt, ratio);
+      
+      currentPreview = {
+        url: result.url,
+        width: result.width,
+        height: result.height,
+        prompt: prompt,
+        size: ratio,
+        shape: classifyAspect(result.width, result.height)
+      };
+      
+      // Update preview
+      $('#previewImg').src = result.url;
+      setWrapAspect(ratio);
+      $('#previewSection').classList.remove('hidden');
+      
+    } catch (error) {
+      alert('Failed to generate image: ' + error.message);
+    } finally {
+      $('#genBtn').disabled = false;
+      $('#genBtn').textContent = 'Generate preview';
+    }
+  });
+
+  $('#selectBtn').addEventListener('click', () => {
+    if (!currentPreview) return;
+    
+    // Move to editor
+    $('#editorImg').src = currentPreview.url;
+    setWrapAspect(currentPreview.size);
+    $('#editor').classList.remove('hidden');
+    $('#create').style.display = 'none';
+    
+    // Enable ordering for this aspect ratio
+    setActiveOnly(currentPreview.shape);
+    setButtonsEnabled(currentPreview.shape);
+    $('#orderMsg').textContent = `Perfect! Only ${currentPreview.shape === 'square' ? 'square' : (currentPreview.shape === 'h32' ? 'horizontal' : 'vertical')} sizes are available for this preview.`;
+  });
+
+  $('#regenerateBtn').addEventListener('click', () => {
+    $('#genBtn').click();
+  });
+
+  $('#startOverBtn').addEventListener('click', () => {
+    currentPreview = null;
+    $('#previewSection').classList.add('hidden');
+    $('#promptInput').value = '';
+    $('#ratioSel').selectedIndex = 0;
+  });
+
+  $('#proceedToOrderBtn').addEventListener('click', () => {
+    document.querySelector('#order').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // Signature controls
+  $('#signatureToggle').addEventListener('change', (e) => {
+    $('#signatureControls').classList.toggle('hidden', !e.target.checked);
+    createSignature();
+  });
+
+  ['#signatureFont', '#signatureSize', '#signatureColor'].forEach(sel => {
+    $(sel).addEventListener('change', createSignature);
+  });
+
   // Material tabs
-  $$('.orderTab').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      $$('.orderTab').forEach(x=>x.classList.remove('bg-white/10'));
+  $$('.orderTab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      $$('.orderTab').forEach(x => x.classList.remove('bg-white/10'));
       btn.classList.add('bg-white/10');
       currentCollection = btn.dataset.tab;
       renderAllBuckets();
-      setActiveOnly(lastPreview ? lastPreview.shape : null);
-      setButtonsEnabled(lastPreview ? lastPreview.shape : null);
+      if (currentPreview) {
+        setActiveOnly(currentPreview.shape);
+        setButtonsEnabled(currentPreview.shape);
+      }
     });
   });
 
-  // Generate preview
-  const genBtn = $('#genBtn'), preview = $('#previewImg'), wrap = $('#previewWrap'), ratioSel = $('#ratioSel');
-  function setWrapAspect(ratio){
-    if (ratio === '1024x1024') wrap.style.aspectRatio = '1 / 1';
-    else if (ratio === '1536x1024') wrap.style.aspectRatio = '3 / 2';
-    else wrap.style.aspectRatio = '2 / 3';
-  }
-  genBtn.addEventListener('click', ()=>{
-    const ratio = ratioSel.value;
-    const [w,h] = ratio.split('x').map(Number);
-    setWrapAspect(ratio);
-    preview.src = `https://picsum.photos/${w}/${h}?random=${Date.now()}`;
-    lastPreview = { w, h, shape: classifyAspect(w,h) };
-    setActiveOnly(lastPreview.shape);
-    setButtonsEnabled(lastPreview.shape);
-    orderMsg.textContent = `Looks great! Only ${ lastPreview.shape === 'square' ? 'square' : (lastPreview.shape === 'h32' ? 'horizontal' : 'vertical') } sizes are available for this preview.`;
-  });
-
   // Checkout
-  reviewBtn.addEventListener('click', ()=>{
-    if (!selected) return alert('Pick a size first.');
-    if (!lastPreview) return alert('Generate a preview first.');
-    window.location.href = selected.link;
+  $('#reviewBtn').addEventListener('click', async () => {
+    if (!selected || !currentPreview) {
+      alert('Please select a size first.');
+      return;
+    }
+
+    try {
+      $('#reviewBtn').disabled = true;
+      $('#reviewBtn').textContent = 'Creating checkout...';
+
+      // Prepare preview data for checkout
+      const previewData = {
+        image: currentPreview.url,
+        prompt: currentPreview.prompt,
+        size: currentPreview.size,
+        style: '', // Add style fields if you implement them
+        mood: '',
+        light: '',
+        comp: '',
+        medium: currentCollection,
+        sig: signatureData
+      };
+
+      // Create Stripe checkout session
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lookup_key: selected.lookup,
+          preview: previewData
+        })
+      });
+
+      const result = await response.json();
+      
+      if (result.url) {
+        window.location.href = result.url;
+      } else {
+        throw new Error(result.error || 'Failed to create checkout session');
+      }
+      
+    } catch (error) {
+      alert('Checkout error: ' + error.message);
+    } finally {
+      $('#reviewBtn').disabled = false;
+      $('#reviewBtn').textContent = 'Review & Checkout';
+    }
   });
 
-  // Boot
+  // Initialize
   (async () => {
     try {
       CATALOG = await loadCatalog();
@@ -329,10 +680,10 @@
       setButtonsEnabled(null);
     } catch (e) {
       console.error(e);
-      orderMsg.textContent = 'Could not load products. Please refresh.';
+      $('#orderMsg').textContent = 'Could not load products. Please refresh.';
     }
   })();
- 
+  
   </script>
 </body>
 </html>
