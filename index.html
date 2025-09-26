@@ -5,22 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>aiPRINT.ai — Turn any idea into a gallery-worthy print</title>
   <meta name="description" content="Create premium, ready-to-hang fine art prints from your idea. AI + human curation, archival materials, Certificate of Authenticity." />
+
+  <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Signature fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Allura&family=Sacramento&family=Playfair+Display:wght@600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+
   <style>
-    :root { --bg:#0a0f1d; --card:#131a2a; --muted:#9fb3c8; --ink:#e7eef8; }
-    body{background:var(--bg);color:var(--ink);font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";}
-    .glass{background: rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter: blur(6px);}
-    .muted{color:var(--muted)} .h1{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:800;line-height:1.05} .h2{font-size:clamp(1.4rem,2.4vw,2.1rem);font-weight:800;}
-    .btn{background:white;color:black;font-weight:700;padding:.7rem 1rem;border-radius:.6rem;transition:box-shadow .2s,transform .05s}
-    .btn:hover{box-shadow:0 8px 24px rgba(0,0,0,.25)} .btn:active{transform:translateY(1px)}
-    .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:var(--ink)}
-    .wm-frame{background-image:repeating-linear-gradient(45deg, rgba(255,255,255,.07) 0 24px, transparent 24px 64px);}
-    .sig-overlay{position:absolute;left:12px;bottom:12px;color:#fff;font-size:24px;white-space:nowrap;user-select:none;pointer-events:auto;cursor:grab;text-shadow:0 1px 2px rgba(0,0,0,.45);line-height:1}
-    .sig-overlay:active{cursor:grabbing}
+    body { background:#0a0f1d; color:#e7eef8; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+    .glass { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px); }
+    .muted { color: #9fb3c8; }
+    .h1 { font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight:800; line-height:1.05 }
+    .h2 { font-size: clamp(1.4rem, 2.4vw, 2.1rem); font-weight:800; }
+    .btn { background:white; color:black; font-weight:700; padding:.7rem 1rem; border-radius:.6rem; }
+    .btn-ghost { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); color:#e7eef8; }
+    .sig-overlay { position:absolute; left:12px; bottom:12px; color:#fff; font-size:24px; pointer-events:auto; }
   </style>
 </head>
 <body>
+
+  <!-- HEADER -->
   <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
     <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2">
@@ -28,11 +33,11 @@
         <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
       </a>
       <nav class="hidden md:flex items-center gap-6 text-base">
-        <a href="#how" class="hover:text-white px-3 py-2 rounded-md">How it works</a>
-        <a href="#materials" class="hover:text-white px-3 py-2 rounded-md">Materials</a>
-        <a href="/faq.html" class="hover:text-white px-3 py-2 rounded-md">FAQ</a>
-        <a href="/policies.html" class="hover:text-white px-3 py-2 rounded-md">Policies</a>
-        <a href="/contact.html" class="hover:text-white px-3 py-2 rounded-md">Contact</a>
+        <a href="#how" class="hover:text-white">How it works</a>
+        <a href="#materials" class="hover:text-white">Materials</a>
+        <a href="/faq.html" class="hover:text-white">FAQ</a>
+        <a href="/policies.html" class="hover:text-white">Policies</a>
+        <a href="/contact.html" class="hover:text-white">Contact</a>
       </nav>
     </div>
   </header>
@@ -41,28 +46,12 @@
   <section class="max-w-7xl mx-auto px-5 pt-6 pb-12 grid lg:grid-cols-2 gap-10 items-center">
     <div>
       <h1 class="h1">Turn any idea into a <span class="text-indigo-300">gallery-worthy</span> print.</h1>
-      <p class="muted mt-4 max-w-xl">Type a prompt. We create the art with AI + a human artist's eye. You pick size &amp; finish. We ship an archival, limited-edition print to your door.</p>
+      <p class="muted mt-4 max-w-xl">Type a prompt. We create the art with AI + a human artist's eye. You pick size & finish. We ship an archival, limited-edition print to your door.</p>
       <div class="flex gap-3 mt-6">
         <a href="#create" class="btn">Create a preview</a>
-        <a href="#how" class="btn-ghost inline-flex items-center gap-2" aria-label="See how it works">
-          See how it works
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-        </a>
+        <a href="#how" class="btn-ghost">See how it works</a>
       </div>
-      <p class="text-sm text-white/70 mt-5">Made in the USA · Archival materials · Certificate of Authenticity · Ready to hang</p>
-    </div>
-    <div class="grid gap-4">
-      <div class="h-64 rounded-2xl overflow-hidden glass">
-        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop" alt="Milky Way over mountains" class="w-full h-full object-cover"/>
-      </div>
-      <div class="grid grid-cols-2 gap-4">
-        <div class="h-36 rounded-2xl overflow-hidden glass">
-          <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop" alt="Alpine lake" class="w-full h-full object-cover"/>
-        </div>
-        <div class="h-36 rounded-2xl overflow-hidden glass">
-          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop" alt="Sunset beach" class="w-full h-full object-cover"/>
-        </div>
-      </div>
+      <p class="mt-5 text-sm text-gray-400">Made in the USA · Archival materials · Certificate of Authenticity · Ready to hang</p>
     </div>
   </section>
 
@@ -70,265 +59,97 @@
   <section id="how" class="max-w-7xl mx-auto px-5 py-12">
     <h2 class="h2 mb-6">How it works</h2>
     <div class="grid md:grid-cols-3 gap-5">
-      <div class="glass rounded-xl p-5"><div class="font-bold">STEP 1</div><div class="mt-2 text-lg font-extrabold">Describe your idea</div><p class="muted mt-2">Share a prompt (style, mood, colors). Add an optional reference image.</p></div>
-      <div class="glass rounded-xl p-5"><div class="font-bold">STEP 2</div><div class="mt-2 text-lg font-extrabold">We craft your artwork</div><p class="muted mt-2">Your prompt + creative options generate a preview with our human curation.</p></div>
-      <div class="glass rounded-xl p-5"><div class="font-bold">STEP 3</div><div class="mt-2 text-lg font-extrabold">Printed. Signed. Shipped.</div><p class="muted mt-2">Premium materials, ready to hang. Certificate of Authenticity.</p></div>
+      <div class="glass rounded-xl p-5"><div class="font-bold">STEP 1</div><div class="mt-2 font-extrabold">Describe your idea</div><p class="muted">Share a prompt (style, mood, colors).</p></div>
+      <div class="glass rounded-xl p-5"><div class="font-bold">STEP 2</div><div class="mt-2 font-extrabold">We craft your artwork</div><p class="muted">Your prompt generates a preview with our curation.</p></div>
+      <div class="glass rounded-xl p-5"><div class="font-bold">STEP 3</div><div class="mt-2 font-extrabold">Printed. Signed. Shipped.</div><p class="muted">Premium materials, ready to hang.</p></div>
     </div>
   </section>
 
-  <!-- MATERIALS -->
-  <section id="materials" class="max-w-7xl mx-auto px-5 py-12">
-    <h2 class="h2 mb-6">Materials & finishes</h2>
-    <div class="grid md:grid-cols-3 gap-5">
-      <div class="glass rounded-xl p-5">
-        <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=800&auto=format&fit=crop" alt="Canvas example" class="w-full h-36 object-cover rounded-lg mb-4" />
-        <div class="text-lg font-extrabold">Signature Series – Fine Art Canvas</div>
-        <p class="muted mt-2">Archival fine-art canvas with rich texture and deep color, gallery-wrapped and ready to hang.</p>
-      </div>
-      <div class="glass rounded-xl p-5">
-        <img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?q=80&w=800&auto=format&fit=crop" alt="Metal example" class="w-full h-36 object-cover rounded-lg mb-4" />
-        <div class="text-lg font-extrabold">Gallery Edition – ChromaLuxe Metal</div>
-        <p class="muted mt-2">Vibrant aluminum print with durable float mount. Sleek modern look, ready to hang.</p>
-      </div>
-      <div class="glass rounded-xl p-5">
-        <img src="https://images.unsplash.com/photo-1549298916-f52d724204b4?q=80&w=800&auto=format&fit=crop" alt="Acrylic example" class="w-full h-36 object-cover rounded-lg mb-4" />
-        <div class="text-lg font-extrabold">Museum Collection – Acrylic Facemount</div>
-        <p class="muted mt-2">Museum-grade acrylic facemount with brilliant clarity and depth, polished edges, ready to hang.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- CREATE (Preview) -->
+  <!-- PREVIEW -->
   <section id="create" class="max-w-7xl mx-auto px-5 py-14">
     <h2 class="h2 mb-4">Create a preview</h2>
-    <div class="glass rounded-xl p-5 md:p-6">
-      <div class="grid lg:grid-cols-[1fr_260px] gap-4">
-        <textarea id="promptInput" class="rounded-lg bg-white/10 border border-white/15 px-3 py-3 text-white/90 min-h-[56px]" placeholder="e.g., photographer in a tent under the Milky Way with a nesting turtle nearby"></textarea>
-        <div class="space-y-2">
-          <label class="text-sm muted block">Aspect ratio</label>
-          <select id="ratioSel" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2">
-            <option value="1024x1024" selected>Square (1:1)</option>
-            <option value="1536x1024">Horizontal 3:2</option>
-            <option value="1024x1536">Vertical 2:3</option>
-          </select>
-          <button id="genBtn" class="btn w-full">Generate preview</button>
-        </div>
+    <div class="glass rounded-xl p-5">
+      <textarea id="promptInput" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-3" placeholder="Describe your idea..."></textarea>
+      <div class="mt-4">
+        <label class="text-sm muted">Aspect ratio</label>
+        <select id="ratioSel" class="rounded bg-white/10 border px-2 py-1">
+          <option value="1024x1024">Square (1:1)</option>
+          <option value="1536x1024">Horizontal (3:2)</option>
+          <option value="1024x1536">Vertical (2:3)</option>
+        </select>
+        <button id="genBtn" class="btn ml-3">Generate preview</button>
       </div>
-
-      <div class="mt-6">
-        <div id="previewWrap" class="relative w-full bg-black/40 rounded-xl overflow-hidden border border-white/10 grid place-items-center wm-frame" style="aspect-ratio:1/1;">
-          <img id="previewImg" class="max-w-full max-h-full object-contain" alt="Preview" />
-          <div id="sig" class="sig-overlay hidden">Your Name</div>
-        </div>
-        <div class="mt-3 grid md:grid-cols-[1fr_220px_220px_1fr] gap-3 items-center">
-          <label class="flex items-center gap-2"><input id="sigToggle" type="checkbox"/><span class="muted text-sm">Show signature on preview</span></label>
-          <input id="sigName" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2" placeholder="Type your name…"/>
-          <select id="sigFont" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2">
-            <option value="Great Vibes" selected>Great Vibes (cursive)</option>
-            <option value="Allura">Allura</option><option value="Sacramento">Sacramento</option>
-            <option value="Playfair Display">Playfair Display</option><option value="Montserrat">Montserrat</option>
-          </select>
-          <div class="flex items-center gap-3">
-            <input id="sigColor" type="color" value="#ffffff" class="w-12 h-10 rounded" />
-            <div class="flex items-center gap-2"><span class="muted text-sm">Size</span><input id="sigSize" type="range" min="14" max="96" value="24" /></div>
-          </div>
-        </div>
-
-        <div id="gen-actions" class="hidden mt-4 flex flex-wrap items-center gap-3">
-          <input id="gen-url" class="w-full md:w-auto flex-1 rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/80" readonly />
-          <button id="copy-link" class="btn">Copy share link</button>
-          <button id="open-wm" class="btn btn-ghost">Open watermarked preview</button>
-          <a id="download-link" href="#" class="btn btn-ghost" download="aiPRINT-preview-watermarked.jpg">Download (watermarked)</a>
-        </div>
+      <div class="mt-6 relative w-full bg-black/40 rounded-xl overflow-hidden border border-white/10 grid place-items-center" style="aspect-ratio:1/1;">
+        <img id="previewImg" class="max-w-full max-h-full object-contain" alt="Preview"/>
       </div>
     </div>
   </section>
 
   <!-- ORDER -->
   <section id="order" class="max-w-7xl mx-auto px-5 py-14">
-    <h2 class="h2 mb-2">Order your print</h2>
-    <p class="text-sm text-white/70 mb-4" id="orderLockExplain">Generate a preview first to unlock ordering.</p>
+    <h2 class="h2 mb-4">Order your print</h2>
+    <p class="opacity-70 mb-6">Generate a preview first to unlock ordering.</p>
+    <!-- Material tabs -->
     <div class="flex gap-2 mb-6">
-      <button id="tab-canvas"  data-collection="canvas"  class="px-3 py-2 rounded-lg border border-white/15 bg-white/10">Canvas</button>
-      <button id="tab-metal"   data-collection="metal"   class="px-3 py-2 rounded-lg border border-white/15">ChromaLuxe Metal</button>
-      <button id="tab-acrylic" data-collection="acrylic" class="px-3 py-2 rounded-lg border border-white/15">Acrylic Facemount</button>
+      <button id="tab-canvas"  class="px-3 py-2 rounded bg-white/10">Canvas</button>
+      <button id="tab-metal"   class="px-3 py-2 rounded border border-white/15">Metal</button>
+      <button id="tab-acrylic" class="px-3 py-2 rounded border border-white/15">Acrylic</button>
     </div>
+    <!-- Aspect ratio boxes -->
     <div class="grid md:grid-cols-3 gap-5">
-      <div id="box-square"  class="p-4 rounded-xl border border-white/15 bg-white/5"><h3 class="font-semibold mb-3">Square (1:1)</h3><div class="options space-y-2 text-sm opacity-80">—</div></div>
-      <div id="box-h32"     class="p-4 rounded-xl border border-white/15 bg-white/5"><h3 class="font-semibold mb-3">Horizontal (3:2)</h3><div class="options space-y-2 text-sm opacity-80">—</div></div>
-      <div id="box-v23"     class="p-4 rounded-xl border border-white/15 bg-white/5"><h3 class="font-semibold mb-3">Vertical (2:3)</h3><div class="options space-y-2 text-sm opacity-80">—</div></div>
+      <div id="box-square" class="p-4 rounded-xl border border-white/15 bg-white/5"><h3 class="font-semibold mb-3">Square (1:1)</h3><div class="options">—</div></div>
+      <div id="box-h32" class="p-4 rounded-xl border border-white/15 bg-white/5"><h3 class="font-semibold mb-3">Horizontal (3:2)</h3><div class="options">—</div></div>
+      <div id="box-v23" class="p-4 rounded-xl border border-white/15 bg-white/5"><h3 class="font-semibold mb-3">Vertical (2:3)</h3><div class="options">—</div></div>
     </div>
   </section>
 
-  <footer class="border-t border-white/10">
-    <div class="max-w-7xl mx-auto px-5 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
-      <div><div class="font-semibold text-white">aiPRINT.ai</div><p class="mt-2">Archival, ready-to-hang prints from your ideas.</p><p class="mt-2">© <span id="y"></span> aiPRINT.ai</p></div>
-      <div><div class="font-semibold text-white">Explore</div><ul class="mt-2 space-y-1"><li><a href="#how" class="hover:text-white">How it works</a></li><li><a href="#materials" class="hover:text-white">Materials</a></li><li><a href="/faq.html" class="hover:text-white">FAQ</a></li></ul></div>
-      <div><div class="font-semibold text-white">Company</div><ul class="mt-2 space-y-1"><li><a href="/policies.html" class="hover:text-white">Policies</a></li><li><a href="/contact.html" class="hover:text-white">Contact</a></li></ul></div>
-    </div>
+  <!-- FOOTER -->
+  <footer class="border-t border-white/10 mt-10">
+    <div class="max-w-7xl mx-auto px-5 py-10 text-sm text-gray-400">© <span id="y"></span> aiPRINT.ai</div>
   </footer>
 
+  <!-- SCRIPT -->
   <script>
-// Footer year
-document.getElementById('y').textContent = new Date().getFullYear();
+  document.getElementById('y').textContent = new Date().getFullYear();
 
-// ----- Utilities -----
-const $ = (q, el=document) => el.querySelector(q);
-const money = n => `$${Number(n).toLocaleString()}`;
+  const els = {
+    tabs: {
+      canvas: document.querySelector('#tab-canvas'),
+      metal: document.querySelector('#tab-metal'),
+      acrylic: document.querySelector('#tab-acrylic'),
+    },
+    boxes: {
+      square: document.querySelector('#box-square .options'),
+      h32: document.querySelector('#box-h32 .options'),
+      v23: document.querySelector('#box-v23 .options'),
+    },
+    containers: {
+      square: document.querySelector('#box-square'),
+      h32: document.querySelector('#box-h32'),
+      v23: document.querySelector('#box-v23'),
+    }
+  };
 
-function setPreviewAspect(ratio){
-  const wrap = $('#previewWrap'); if(!wrap) return;
-  if (ratio === '1024x1024') wrap.style.aspectRatio = '1/1';
-  else if (ratio === '1536x1024') wrap.style.aspectRatio = '3/2';
-  else if (ratio === '1024x1536') wrap.style.aspectRatio = '2/3';
-}
-function getShapeFromRatio(ratio){
-  if (ratio === '1024x1024') return 'square';
-  if (ratio === '1536x1024') return 'h32';
-  if (ratio === '1024x1536') return 'v23';
-  return 'square';
-}
+  let CATALOG = null;
+  let currentCollection = 'canvas';
 
-// ----- Signature overlay (simple) -----
-const sigEl = document.getElementById('sig');
-const sigToggle = document.getElementById('sigToggle');
-const sigName = document.getElementById('sigName');
-const sigFont = document.getElementById('sigFont');
-const sigColor = document.getElementById('sigColor');
-const sigSize = document.getElementById('sigSize');
-const wrap = document.getElementById('previewWrap');
+  // TEMP: Load from GitHub Raw
+  const CATALOG_URL = 'https://raw.githubusercontent.com/aiPRINTai/aiPRINT-site/main/public/data/products.json';
+  fetch(CATALOG_URL, {cache:'no-cache'})
+    .then(r => r.json())
+    .then(data => { CATALOG = data; })
+    .catch(err => console.error('Error loading products.json', err));
 
-const Sig = { enabled:false, text:'Your Name', font:'Great Vibes', color:'#fff', size:24, px:0.02, py:0.02, dragging:null };
-function refreshSigEl(){
-  if(!Sig.enabled){ sigEl.classList.add('hidden'); return; }
-  sigEl.classList.remove('hidden');
-  sigEl.textContent = Sig.text || ' ';
-  const isSerif = /Playfair/i.test(Sig.font);
-  sigEl.style.fontFamily = `"${Sig.font}", ${isSerif?'serif':'cursive'}`;
-  sigEl.style.color = Sig.color;
-  sigEl.style.fontSize = Sig.size + 'px';
-  const W=wrap.clientWidth, H=wrap.clientHeight;
-  const x = Math.max(6, Math.min(W - 6, Math.floor(Sig.px * W)));
-  const y = Math.max(6, Math.min(H - 6, Math.floor((1 - Sig.py) * H)));
-  sigEl.style.left = x + 'px';
-  sigEl.style.top  = (y - sigEl.clientHeight + 2) + 'px';
-}
-sigToggle?.addEventListener('change', ()=>{ Sig.enabled = !!sigToggle.checked; refreshSigEl(); });
-sigName?.addEventListener('input', ()=>{ Sig.text = sigName.value; refreshSigEl(); });
-sigFont?.addEventListener('change', ()=>{ Sig.font = sigFont.value; refreshSigEl(); });
-sigColor?.addEventListener('input', ()=>{ Sig.color = sigColor.value; refreshSigEl(); });
-sigSize?.addEventListener('input', ()=>{ Sig.size = parseInt(sigSize.value||'24',10); refreshSigEl(); });
-sigEl?.addEventListener('mousedown', (e)=>{
-  if(!Sig.enabled) return;
-  Sig.dragging={sx:e.clientX, sy:e.clientY, sl:sigEl.offsetLeft, st:sigEl.offsetTop};
-  e.preventDefault();
-});
-window.addEventListener('mousemove', (e)=>{
-  if(!Sig.enabled || !Sig.dragging) return;
-  const dx=e.clientX-Sig.dragging.sx, dy=e.clientY-Sig.dragging.sy;
-  const nl=Math.max(6, Math.min(wrap.clientWidth - sigEl.clientWidth - 6, Sig.dragging.sl + dx));
-  const nt=Math.max(6, Math.min(wrap.clientHeight- sigEl.clientHeight- 6, Sig.dragging.st + dy));
-  sigEl.style.left = nl+'px'; sigEl.style.top=nt+'px';
-  Sig.px = nl / wrap.clientWidth; const baselineY = nt + sigEl.clientHeight; Sig.py = 1 - (baselineY / wrap.clientHeight);
-});
-window.addEventListener('mouseup', ()=>{ Sig.dragging=null; });
-window.addEventListener('resize', refreshSigEl);
+  const money = n => `$${Number(n).toLocaleString()}`;
+  function classifyAspect(w,h){const r=w/h;const eps=0.04;if(Math.abs(r-1)<=eps)return'square';if(r>1)return'h32';return'v23';}
+  function getOptions(colId,bucket){if(!CATALOG)return[];const col=CATALOG.collections.find(c=>c.id===colId);if(!col)return[];return col.products.filter(p=>bucket==='square'?p.orientation==='square':bucket==='h32'?p.orientation==='horizontal':p.orientation==='vertical').sort((a,b)=>a.price_usd-b.price_usd);}
+  function renderBox(boxEl,items){if(!items.length){boxEl.innerHTML='<div class="opacity-50">No sizes</div>';return;}boxEl.innerHTML=items.map(p=>`<button class="w-full px-3 py-2 rounded bg-white/10 hover:bg-white/20 border border-white/15" data-link="${p.stripe_payment_link}">${p.size_w_in}×${p.size_h_in} — ${money(p.price_usd)}</button>`).join('');boxEl.querySelectorAll('button').forEach(btn=>{btn.addEventListener('click',()=>window.location.href=btn.dataset.link);});}
+  function setActiveBucket(active){Object.entries(els.containers).forEach(([k,el])=>{if(k===active)el.classList.remove('opacity-40','pointer-events-none');else el.classList.add('opacity-40','pointer-events-none');});}
+  window.updateOrderOptions=function(w,h){if(!CATALOG)return;const bucket=classifyAspect(w,h);const options=getOptions(currentCollection,bucket);renderBox(els.boxes[bucket],options);setActiveBucket(bucket);};
+  Object.entries(els.tabs).forEach(([id,btn])=>{btn.addEventListener('click',()=>{currentCollection=id;window.updateOrderOptions(1024,1024);Object.values(els.tabs).forEach(b=>b.classList.remove('bg-white/10'));btn.classList.add('bg-white/10');});});
 
-// ----- Mock generator (replace with your API) -----
-async function generateMockImage(prompt, size){
-  await new Promise(r=>setTimeout(r,1000));
-  const [w,h]=size.split('x'); return `https://picsum.photos/${w}/${h}?random=${Date.now()}`;
-}
-
-// ----- Load catalog -----
-let CATALOG=null, currentCollection='canvas';
-fetch('/data/products.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{ CATALOG=d; }).catch(e=>console.error(e));
-
-const els = {
-  tabs: { canvas:$('#tab-canvas'), metal:$('#tab-metal'), acrylic:$('#tab-acrylic') },
-  boxes: {
-    square: document.querySelector('#box-square .options'),
-    h32:    document.querySelector('#box-h32 .options'),
-    v23:    document.querySelector('#box-v23 .options'),
-  },
-  containers: {
-    square: document.getElementById('box-square'),
-    h32:    document.getElementById('box-h32'),
-    v23:    document.getElementById('box-v23'),
-  }
-};
-
-function classifyAspectWH(w,h){ const r=w/h, eps=0.04; if(Math.abs(r-1)<=eps) return 'square'; if(r>1) return 'h32'; return 'v23'; }
-function getOptions(collectionId, bucket){
-  if(!CATALOG) return [];
-  const col = CATALOG.collections.find(c=>c.id===collectionId);
-  if(!col) return [];
-  return col.products.filter(p=>bucket==='square'?p.orientation==='square':bucket==='h32'?p.orientation==='horizontal':p.orientation==='vertical')
-                     .sort((a,b)=>a.price_usd-b.price_usd);
-}
-function renderBox(boxEl, items){
-  if(!boxEl) return;
-  if(!items.length){ boxEl.innerHTML = '<div class="opacity-50">No sizes available</div>'; return; }
-  boxEl.innerHTML = items.map(p=>`
-    <button class="w-full text-left px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15"
-            data-link="${p.stripe_payment_link}">
-      ${p.size_w_in}×${p.size_h_in} — ${money(p.price_usd)}
-    </button>`).join('');
-  boxEl.querySelectorAll('button[data-link]').forEach(btn=>btn.addEventListener('click',()=>{ window.location.href = btn.dataset.link; }));
-}
-function setActiveBucket(active){
-  Object.entries(els.containers).forEach(([k,el])=>{
-    if(k===active){ el.classList.remove('opacity-40','pointer-events-none'); }
-    else { el.classList.add('opacity-40','pointer-events-none'); }
-  });
-}
-
-// Public API: call after preview exists
-window.updateOrderOptions = function(genW, genH){
-  if(!CATALOG) return;
-  const bucket = classifyAspectWH(genW, genH);
-  renderBox(els.boxes[bucket], getOptions(currentCollection, bucket));
-  setActiveBucket(bucket);
-};
-
-// Material tabs
-Object.entries(els.tabs).forEach(([id,btn])=>btn.addEventListener('click',()=>{
-  currentCollection=id;
-  Object.values(els.tabs).forEach(b=>b.classList.remove('bg-white/10'));
-  btn.classList.add('bg-white/10');
-  // re-render using a safe default until a preview is generated
-  window.updateOrderOptions(1024,1024);
-}));
-
-// Generate
-const genBtn = document.getElementById('genBtn'), ratioSel=document.getElementById('ratioSel'), previewImg=document.getElementById('previewImg');
-const genUrl=document.getElementById('gen-url'), genRow=document.getElementById('gen-actions'), orderNote=document.getElementById('orderLockExplain');
-genBtn?.addEventListener('click', async ()=>{
-  const ratio = ratioSel.value;
-  genBtn.disabled=true; genBtn.textContent='Generating…'; genRow.classList.add('hidden'); previewImg.removeAttribute('src');
-  try{
-    const url = await generateMockImage(document.getElementById('promptInput').value||'', ratio);
-    setPreviewAspect(ratio); previewImg.src = url;
-    const [w,h] = ratio.split('x').map(Number);
-    updateOrderOptions(w,h);
-    orderNote.textContent = 'Looks great! Only matching sizes are enabled.';
-    // share url
-    const share = new URL(window.location.href); share.searchParams.set('preview', url); share.searchParams.set('ratio', ratio);
-    genUrl.value = share.toString(); genRow.classList.remove('hidden');
-    refreshSigEl();
-  } finally {
-    genBtn.disabled=false; genBtn.textContent='Generate preview';
-  }
-});
-
-// Watermarked actions (client-side only)
-document.getElementById('open-wm')?.addEventListener('click', ()=>alert('Watermark preview opening is stubbed here.'));
-document.getElementById('download-link')?.addEventListener('click', (e)=>{ e.preventDefault(); alert('Download is stubbed here.'); });
-document.getElementById('copy-link')?.addEventListener('click', async ()=>{
-  if(!genUrl?.value) return;
-  await navigator.clipboard.writeText(genUrl.value);
-  const b=document.getElementById('copy-link'); b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy share link',800);
-});
+  // Mock preview button (replace with real API call later)
+  document.getElementById('genBtn').addEventListener('click',()=>{const ratio=document.getElementById('ratioSel').value;const[w,h]=ratio.split('x').map(Number);document.getElementById('previewImg').src=`https://picsum.photos/${w}/${h}?random=${Date.now()}`;window.updateOrderOptions(w,h);});
   </script>
 </body>
 </html>
