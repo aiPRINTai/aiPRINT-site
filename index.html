@@ -1,179 +1,56 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- =========================================================
-       aiPRINT.ai — full landing + generator + checkout front-end
-       ========================================================= -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <title>aiPRINT.ai — Turn any idea into a gallery-worthy print</title>
   <meta name="description" content="Create premium, ready-to-hang fine art prints from your idea. AI + human curation, archival materials, Certificate of Authenticity." />
-
-  <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Signature fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Allura&family=Sacramento&family=Playfair+Display:wght@600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
-
   <style>
-    :root {
-      --bg:#0a0f1d;
-      --card:#131a2a;
-      --muted:#9fb3c8;
-      --ink:#e7eef8;
-    }
-    body {
-      background:var(--bg);
-      color:var(--ink);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-    }
-    .glass {
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
-      backdrop-filter: blur(6px);
-    }
-    .muted { color: var(--muted); }
-    .h1 { font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight:800; line-height:1.05 }
-    .h2 { font-size: clamp(1.4rem, 2.4vw, 2.1rem); font-weight:800; }
-    .btn {
-      background:white; color:black; font-weight:700;
-      padding:.7rem 1rem; border-radius:.6rem;
-      transition: box-shadow .2s, transform .05s;
-    }
-    .btn:hover { box-shadow: 0 8px 24px rgba(0,0,0,.25); }
-    .btn:active { transform: translateY(1px); }
-    .btn-ghost {
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.14);
-      color: var(--ink);
-    }
-    .btn-outline { background:transparent; color:#fff; border:2px solid rgba(255,255,255,.95); }
-    .btn-outline:hover { background:#fff; color:#000; }
-    .btn-outline:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-    .btn[disabled]{opacity:.45; cursor:not-allowed}
-    .badge{font-size:.8rem;color:#b8c7d8}
-    .lock-note{font-size:.85rem;color:#c8d5e7}
-    html{scroll-behavior:smooth}
-
-    /* ---------------------------------------------
-       Preview frame background watermark (subtle grid)
-       --------------------------------------------- */
-    .wm-frame{
-      background-image:
-        repeating-linear-gradient(45deg, rgba(255,255,255,.07) 0 24px, transparent 24px 64px);
-    }
-
-    /* ---------------------------------------------
-       Signature overlay (live/interactive before generate)
-       --------------------------------------------- */
-    .sig-overlay {
-      position:absolute;
-      left:12px;
-      bottom:12px;
-      color:#ffffff;
-      font-size:24px;
-      white-space:nowrap;
-      user-select:none;
-      pointer-events:auto;
-      cursor:grab;
-      text-shadow: 0 1px 2px rgba(0,0,0,.45);
-      line-height:1;
-    }
-    .sig-overlay:active { cursor:grabbing; }
-
-    /* keyboard focus for chosen size */
-    .ring-white { box-shadow: 0 0 0 2px rgba(255,255,255,1) inset; }
-
-    /* utility: visually-hidden (for a11y text if needed) */
-    .visually-hidden {
-      position: absolute !important;
-      height: 1px; width: 1px;
-      overflow: hidden;
-      clip: rect(1px, 1px, 1px, 1px);
-      white-space: nowrap; border: 0; padding: 0; margin: -1px;
-    }
+    :root { --bg:#0a0f1d; --card:#131a2a; --muted:#9fb3c8; --ink:#e7eef8; }
+    body{background:var(--bg);color:var(--ink);font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";}
+    .glass{background: rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter: blur(6px);}
+    .muted{color:var(--muted)} .h1{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:800;line-height:1.05} .h2{font-size:clamp(1.4rem,2.4vw,2.1rem);font-weight:800;}
+    .btn{background:white;color:black;font-weight:700;padding:.7rem 1rem;border-radius:.6rem;transition:box-shadow .2s,transform .05s}
+    .btn:hover{box-shadow:0 8px 24px rgba(0,0,0,.25)} .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:var(--ink)}
+    .wm-frame{background-image:repeating-linear-gradient(45deg, rgba(255,255,255,.07) 0 24px, transparent 24px 64px);}
+    .sig-overlay{position:absolute;left:12px;bottom:12px;color:#fff;font-size:24px;white-space:nowrap;user-select:none;pointer-events:auto;cursor:grab;text-shadow:0 1px 2px rgba(0,0,0,.45);line-height:1}
+    .sig-overlay:active{cursor:grabbing}
   </style>
 </head>
 <body>
-
-  <!-- =========================================================
-       HEADER / NAV
-       ========================================================= -->
   <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
     <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2">
         <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
         <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
       </a>
-
       <nav class="hidden md:flex items-center gap-6 text-base">
-        <a href="#how"       class="hover:text-white px-3 py-2 rounded-md">How it works</a>
+        <a href="#how" class="hover:text-white px-3 py-2 rounded-md">How it works</a>
         <a href="#materials" class="hover:text-white px-3 py-2 rounded-md">Materials</a>
-        <a href="/faq.html"  class="hover:text-white px-3 py-2 rounded-md">FAQ</a>
+        <a href="/faq.html" class="hover:text-white px-3 py-2 rounded-md">FAQ</a>
         <a href="/policies.html" class="hover:text-white px-3 py-2 rounded-md">Policies</a>
-        <a href="/contact.html"  class="hover:text-white px-3 py-2 rounded-md">Contact</a>
+        <a href="/contact.html" class="hover:text-white px-3 py-2 rounded-md">Contact</a>
       </nav>
-
-      <!-- Mobile hamburger -->
-      <button id="navOpen"
-        class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10"
-        aria-label="Open navigation" aria-controls="navSheet" aria-expanded="false">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-      </button>
     </div>
   </header>
 
-  <!-- Mobile Sheet -->
-  <div id="navSheet" class="fixed inset-0 z-[100] hidden" aria-hidden="true">
-    <div id="navBackdrop" class="absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-200"></div>
-    <aside id="navDrawer" class="absolute right-0 top-0 h-full w-80 max-w-[88vw] bg-[#0b1020] border-l border-white/10 translate-x-full transition-transform duration-300 will-change-transform">
-      <div class="h-14 px-4 border-b border-white/10 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
-          <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
-        </div>
-        <button id="navClose" class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 hover:bg-white/10" aria-label="Close navigation">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
-      </div>
-
-      <nav class="px-4 py-4">
-        <ul class="space-y-2 text-white/90 text-base">
-          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="#how">How it works</a></li>
-          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="#materials">Materials</a></li>
-          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/faq.html">FAQ</a></li>
-          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/policies.html">Policies</a></li>
-          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/contact.html">Contact</a></li>
-        </ul>
-        <div class="mt-6 space-y-2">
-          <a href="#create" class="block w-full text-center rounded-lg px-4 py-2 font-semibold bg-white text-black">Create a preview</a>
-          <a href="#order"  class="block w-full text-center rounded-lg px-4 py-2 border border-white/20 hover:bg-white/10">Order</a>
-        </div>
-      </nav>
-    </aside>
-  </div>
-
-  <!-- =========================================================
-       HERO
-       ========================================================= -->
+  <!-- HERO -->
   <section class="max-w-7xl mx-auto px-5 pt-6 pb-12 grid lg:grid-cols-2 gap-10 items-center">
     <div>
       <h1 class="h1">Turn any idea into a <span class="text-indigo-300">gallery-worthy</span> print.</h1>
       <p class="muted mt-4 max-w-xl">Type a prompt. We create the art with AI + a human artist's eye. You pick size &amp; finish. We ship an archival, limited-edition print to your door.</p>
       <div class="flex gap-3 mt-6">
         <a href="#create" class="btn">Create a preview</a>
-        <a href="#how" class="btn-outline inline-flex items-center gap-2" aria-label="See how it works">
+        <a href="#how" class="btn-ghost inline-flex items-center gap-2" aria-label="See how it works">
           See how it works
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </a>
       </div>
-      <p class="badge mt-5">Made in the USA · Archival materials · Certificate of Authenticity · Ready to hang</p>
+      <p class="text-sm text-white/70 mt-5">Made in the USA · Archival materials · Certificate of Authenticity · Ready to hang</p>
     </div>
-
     <div class="grid gap-4">
       <div class="h-64 rounded-2xl overflow-hidden glass">
         <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop" alt="Milky Way over mountains" class="w-full h-full object-cover"/>
@@ -189,33 +66,17 @@
     </div>
   </section>
 
-  <!-- =========================================================
-       HOW IT WORKS
-       ========================================================= -->
+  <!-- HOW IT WORKS -->
   <section id="how" class="max-w-7xl mx-auto px-5 py-12">
     <h2 class="h2 mb-6">How it works</h2>
     <div class="grid md:grid-cols-3 gap-5">
-      <div class="glass rounded-xl p-5">
-        <div class="font-bold">STEP 1</div>
-        <div class="mt-2 text-lg font-extrabold">Describe your idea</div>
-        <p class="muted mt-2">Share a prompt (style, mood, colors). Add an optional reference image.</p>
-      </div>
-      <div class="glass rounded-xl p-5">
-        <div class="font-bold">STEP 2</div>
-        <div class="mt-2 text-lg font-extrabold">We craft your artwork</div>
-        <p class="muted mt-2">Your prompt + creative options generate a preview with our human curation.</p>
-      </div>
-      <div class="glass rounded-xl p-5">
-        <div class="font-bold">STEP 3</div>
-        <div class="mt-2 text-lg font-extrabold">Printed. Signed. Shipped.</div>
-        <p class="muted mt-2">Premium materials, ready to hang. Certificate of Authenticity.</p>
-      </div>
+      <div class="glass rounded-xl p-5"><div class="font-bold">STEP 1</div><div class="mt-2 text-lg font-extrabold">Describe your idea</div><p class="muted mt-2">Share a prompt (style, mood, colors). Add an optional reference image.</p></div>
+      <div class="glass rounded-xl p-5"><div class="font-bold">STEP 2</div><div class="mt-2 text-lg font-extrabold">We craft your artwork</div><p class="muted mt-2">Your prompt + creative options generate a preview with our human curation.</p></div>
+      <div class="glass rounded-xl p-5"><div class="font-bold">STEP 3</div><div class="mt-2 text-lg font-extrabold">Printed. Signed. Shipped.</div><p class="muted mt-2">Premium materials, ready to hang. Certificate of Authenticity.</p></div>
     </div>
   </section>
 
-  <!-- =========================================================
-       MATERIALS
-       ========================================================= -->
+  <!-- MATERIALS -->
   <section id="materials" class="max-w-7xl mx-auto px-5 py-12">
     <h2 class="h2 mb-6">Materials & finishes</h2>
     <div class="grid md:grid-cols-3 gap-5">
@@ -237,20 +98,12 @@
     </div>
   </section>
 
-  <!-- =========================================================
-       CREATE (Generator + Live Signature Overlay — not baked here)
-       ========================================================= -->
+  <!-- CREATE (Preview) -->
   <section id="create" class="max-w-7xl mx-auto px-5 py-14">
     <h2 class="h2 mb-4">Create a preview</h2>
-
     <div class="glass rounded-xl p-5 md:p-6">
-      <!-- Prompt + ratio -->
       <div class="grid lg:grid-cols-[1fr_260px] gap-4">
-        <textarea
-          id="promptInput"
-          class="rounded-lg bg-white/10 border border-white/15 px-3 py-3 text-white/90 min-h-[56px]"
-          placeholder="e.g., photographer in a tent under the Milky Way with a nesting turtle nearby"></textarea>
-
+        <textarea id="promptInput" class="rounded-lg bg-white/10 border border-white/15 px-3 py-3 text-white/90 min-h-[56px]" placeholder="e.g., photographer in a tent under the Milky Way with a nesting turtle nearby"></textarea>
         <div class="space-y-2">
           <label class="text-sm muted block">Aspect ratio</label>
           <select id="ratioSel" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2">
@@ -262,876 +115,220 @@
         </div>
       </div>
 
-      <!-- Creative controls -->
-      <div class="mt-5 grid md:grid-cols-2 gap-4">
-        <label class="flex flex-col gap-1">
-          <span class="text-white/80 text-sm">Style</span>
-          <select id="styleSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
-            <option value="realistic (photo-realistic, natural details)" selected>Realistic (photo-realistic)</option>
-            <option value="artistic (painterly, expressive brushstrokes)">Artistic (painterly)</option>
-            <option value="modern (minimalist, clean, contemporary)">Modern (minimalist)</option>
-            <option value="abstract (conceptual, geometric)">Abstract (conceptual)</option>
-            <option value="vintage (film grain, retro tones)">Vintage (film grain)</option>
-            <option value="futuristic (sci-fi, neon, cyberpunk)">Futuristic (sci-fi)</option>
-            <option value="cartoon / comic (bold lines, flat colors)">Cartoon / Comic</option>
-            <option value="3d render (cinematic, hyper-detailed cgi)">3D Render</option>
-          </select>
-        </label>
-
-        <label class="flex flex-col gap-1">
-          <span class="text-white/80 text-sm">Mood / Atmosphere</span>
-          <select id="moodSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
-            <option value="calm and peaceful" selected>Calm / Peaceful</option>
-            <option value="dreamy and surreal">Dreamy / Surreal</option>
-            <option value="energetic and vibrant">Energetic / Vibrant</option>
-            <option value="dark and dramatic">Dark / Dramatic</option>
-            <option value="joyful and bright">Joyful / Bright</option>
-            <option value="mystical and spiritual">Mystical / Spiritual</option>
-            <option value="moody and atmospheric">Moody / Atmospheric</option>
-            <option value="elegant and luxurious">Elegant / Luxurious</option>
-          </select>
-        </label>
-
-        <label class="flex flex-col gap-1">
-          <span class="text-white/80 text-sm">Lighting</span>
-          <select id="lightSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
-            <option value="natural soft light" selected>Natural / Soft Light</option>
-            <option value="golden hour light (warm sunset glow)">Golden Hour</option>
-            <option value="blue hour light (cool twilight tones)">Blue Hour</option>
-            <option value="nighttime soft light">Nighttime</option>
-            <option value="studio lighting (controlled, professional)">Studio Lighting</option>
-            <option value="harsh midday sun">Harsh Midday Sun</option>
-            <option value="spotlight dramatic light">Spotlight / Dramatic</option>
-            <option value="neon colored lights">Neon / Colored Lights</option>
-          </select>
-        </label>
-
-        <label class="flex flex-col gap-1">
-          <span class="text-white/80 text-sm">Camera & composition</span>
-          <select id="compSel" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/90">
-            <option value="cinematic framing" selected>Cinematic Framing</option>
-            <option value="wide-angle lens perspective">Wide Angle</option>
-            <option value="telephoto look with compressed background">Telephoto</option>
-            <option value="macro close-up details">Macro</option>
-            <option value="aerial drone view">Aerial / Drone View</option>
-            <option value="overhead bird's-eye view">Overhead</option>
-            <option value="long exposure motion effect">Long Exposure</option>
-            <option value="shallow depth of field (blurry background, sharp subject)">Depth of Field</option>
-          </select>
-        </label>
-      </div>
-
-      <!-- Preview frame with LIVE signature overlay (not baked here) -->
       <div class="mt-6">
-        <div
-          id="previewWrap"
-          class="relative w-full bg-black/40 rounded-xl overflow-hidden border border-white/10 grid place-items-center wm-frame"
-          style="aspect-ratio:1/1;"
-        >
+        <div id="previewWrap" class="relative w-full bg-black/40 rounded-xl overflow-hidden border border-white/10 grid place-items-center wm-frame" style="aspect-ratio:1/1;">
           <img id="previewImg" class="max-w-full max-h-full object-contain" alt="Preview" />
-          <!-- LIVE signature overlay (draggable) -->
           <div id="sig" class="sig-overlay hidden">Your Name</div>
         </div>
-
-        <!-- Signature controls (LIVE overlay only) -->
         <div class="mt-3 grid md:grid-cols-[1fr_220px_220px_1fr] gap-3 items-center">
-          <label class="flex items-center gap-2">
-            <input id="sigToggle" type="checkbox"/>
-            <span class="muted text-sm">Show signature on preview</span>
-          </label>
-
+          <label class="flex items-center gap-2"><input id="sigToggle" type="checkbox"/><span class="muted text-sm">Show signature on preview</span></label>
           <input id="sigName" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2" placeholder="Type your name…"/>
-
           <select id="sigFont" class="rounded-lg bg-white/10 border border-white/15 px-3 py-2">
             <option value="Great Vibes" selected>Great Vibes (cursive)</option>
-            <option value="Allura">Allura (cursive)</option>
-            <option value="Sacramento">Sacramento (cursive)</option>
-            <option value="Playfair Display">Playfair Display</option>
-            <option value="Montserrat">Montserrat</option>
+            <option value="Allura">Allura</option><option value="Sacramento">Sacramento</option>
+            <option value="Playfair Display">Playfair Display</option><option value="Montserrat">Montserrat</option>
           </select>
-
           <div class="flex items-center gap-3">
             <input id="sigColor" type="color" value="#ffffff" class="w-12 h-10 rounded" />
-            <div class="flex items-center gap-2">
-              <span class="muted text-sm">Size</span>
-              <input id="sigSize" type="range" min="14" max="96" value="24" />
-            </div>
+            <div class="flex items-center gap-2"><span class="muted text-sm">Size</span><input id="sigSize" type="range" min="14" max="96" value="24" /></div>
           </div>
         </div>
 
-        <!-- Actions (preview/share). Baking happens ONLY at checkout. -->
         <div id="gen-actions" class="hidden mt-4 flex flex-wrap items-center gap-3">
           <input id="gen-url" class="w-full md:w-auto flex-1 rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white/80" readonly />
           <button id="copy-link" class="btn">Copy share link</button>
           <button id="open-wm" class="btn btn-ghost">Open watermarked preview</button>
           <a id="download-link" href="#" class="btn btn-ghost" download="aiPRINT-preview-watermarked.jpg">Download (watermarked)</a>
-          <button id="share-later" class="btn-ghost px-4 py-2 rounded-lg border border-white/20">Share to order later</button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- =========================================================
-       ORDER (shape-locked, selection + Review & Checkout)
-       ========================================================= -->
-<section id="order" class="max-w-7xl mx-auto px-5 py-14">
-  <h2 class="h2 mb-2">Order your print</h2>
-  <p class="lock-note mb-4" id="orderLockExplain">Generate a preview first to unlock ordering.</p>
+  <!-- ORDER -->
+  <section id="order" class="max-w-7xl mx-auto px-5 py-14">
+    <h2 class="h2 mb-2">Order your print</h2>
+    <p class="text-sm text-white/70 mb-4" id="orderLockExplain">Generate a preview first to unlock ordering.</p>
+    <div class="flex gap-2 mb-6">
+      <button id="tab-canvas"  data-collection="canvas"  class="px-3 py-2 rounded-lg border border-white/15 bg-white/10">Canvas</button>
+      <button id="tab-metal"   data-collection="metal"   class="px-3 py-2 rounded-lg border border-white/15">ChromaLuxe Metal</button>
+      <button id="tab-acrylic" data-collection="acrylic" class="px-3 py-2 rounded-lg border border-white/15">Acrylic Facemount</button>
+    </div>
+    <div class="grid md:grid-cols-3 gap-5">
+      <div id="box-square"  class="p-4 rounded-xl border border-white/15 bg-white/5"><h3 class="font-semibold mb-3">Square (1:1)</h3><div class="options space-y-2 text-sm opacity-80">—</div></div>
+      <div id="box-h32"     class="p-4 rounded-xl border border-white/15 bg-white/5"><h3 class="font-semibold mb-3">Horizontal (3:2)</h3><div class="options space-y-2 text-sm opacity-80">—</div></div>
+      <div id="box-v23"     class="p-4 rounded-xl border border-white/15 bg-white/5"><h3 class="font-semibold mb-3">Vertical (2:3)</h3><div class="options space-y-2 text-sm opacity-80">—</div></div>
+    </div>
+  </section>
 
-  <!-- Tabs -->
-  <div class="flex gap-2 mb-5">
-    <button data-tab="canvas"  class="orderTab btn">Canvas</button>
-    <button data-tab="metal"   class="orderTab btn btn-ghost">Metal</button>
-    <button data-tab="acrylic" class="orderTab btn btn-ghost">Acrylic</button>
-  </div>
-
-  <!-- CANVAS -->
-  <div id="tab-canvas" class="grid md:grid-cols-3 gap-5">
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Square (1:1)</div>
-      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="square" data-lookup="CAN-12-SQ" data-label="12×12 — $45">12×12 — $45</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="square" data-lookup="CAN-18-SQ" data-label="18×18 — $95">18×18 — $95</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="square" data-lookup="CAN-24-SQ" data-label="24×24 — $155">24×24 — $155</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="square" data-lookup="CAN-30-SQ" data-label="30×30 — $245">30×30 — $245</button>
-      <button class="btn w-full sizeBtn" data-material="canvas" data-shape="square" data-lookup="CAN-36-SQ" data-label="36×36 — $345">36×36 — $345</button>
-    </div>
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="horizontal" data-lookup="CAN-12x8-LS" data-label="12×8 — $35">12×8 — $35</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="horizontal" data-lookup="CAN-18x12-LS" data-label="18×12 — $65">18×12 — $65</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="horizontal" data-lookup="CAN-24x16-LS" data-label="24×16 — $105">24×16 — $105</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="horizontal" data-lookup="CAN-30x20-LS" data-label="30×20 — $165">30×20 — $165</button>
-      <button class="btn w-full sizeBtn" data-material="canvas" data-shape="horizontal" data-lookup="CAN-36x24-LS" data-label="36×24 — $245">36×24 — $245</button>
-    </div>
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Vertical (2:3)</div>
-      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="vertical" data-lookup="CAN-8x12-PT" data-label="8×12 — $35">8×12 — $35</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="vertical" data-lookup="CAN-12x18-PT" data-label="12×18 — $65">12×18 — $65</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="vertical" data-lookup="CAN-16x24-PT" data-label="16×24 — $105">16×24 — $105</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="vertical" data-lookup="CAN-20x30-PT" data-label="20×30 — $165">20×30 — $165</button>
-      <button class="btn w-full sizeBtn" data-material="canvas" data-shape="vertical" data-lookup="CAN-24x36-PT" data-label="24×36 — $245">24×36 — $245</button>
-    </div>
-  </div>
-
-  <!-- METAL -->
-  <div id="tab-metal" class="hidden grid md:grid-cols-3 gap-5">
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Square (1:1)</div>
-      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="square" data-lookup="MET-12-SQ" data-label="12×12 — $75">12×12 — $75</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="square" data-lookup="MET-18-SQ" data-label="18×18 — $165">18×18 — $165</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="square" data-lookup="MET-24-SQ" data-label="24×24 — $275">24×24 — $275</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="square" data-lookup="MET-30-SQ" data-label="30×30 — $445">30×30 — $445</button>
-      <button class="btn w-full sizeBtn" data-material="metal" data-shape="square" data-lookup="MET-36-SQ" data-label="36×36 — $625">36×36 — $625</button>
-    </div>
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="horizontal" data-lookup="MET-12x8-LS" data-label="12×8 — $55">12×8 — $55</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="horizontal" data-lookup="MET-18x12-LS" data-label="18×12 — $115">18×12 — $115</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="horizontal" data-lookup="MET-24x16-LS" data-label="24×16 — $195">24×16 — $195</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="horizontal" data-lookup="MET-30x20-LS" data-label="30×20 — $295">30×20 — $295</button>
-      <button class="btn w-full sizeBtn" data-material="metal" data-shape="horizontal" data-lookup="MET-36x24-LS" data-label="36×24 — $425">36×24 — $425</button>
-    </div>
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Vertical (2:3)</div>
-      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="vertical" data-lookup="MET-8x12-PT" data-label="8×12 — $55">8×12 — $55</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="vertical" data-lookup="MET-12x18-PT" data-label="12×18 — $115">12×18 — $115</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="vertical" data-lookup="MET-16x24-PT" data-label="16×24 — $195">16×24 — $195</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="vertical" data-lookup="MET-20x30-PT" data-label="20×30 — $295">20×30 — $295</button>
-      <button class="btn w-full sizeBtn" data-material="metal" data-shape="vertical" data-lookup="MET-24x36-PT" data-label="24×36 — $425">24×36 — $425</button>
-    </div>
-  </div>
-
-  <!-- ACRYLIC -->
-  <div id="tab-acrylic" class="hidden grid md:grid-cols-3 gap-5">
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Square (1:1)</div>
-      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="square" data-lookup="ACR-12-SQ" data-label="12×12 — $145">12×12 — $145</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="square" data-lookup="ACR-18-SQ" data-label="18×18 — $295">18×18 — $295</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="square" data-lookup="ACR-24-SQ" data-label="24×24 — $475">24×24 — $475</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="square" data-lookup="ACR-30-SQ" data-label="30×30 — $745">30×30 — $745</button>
-      <button class="btn w-full sizeBtn" data-material="acrylic" data-shape="square" data-lookup="ACR-36-SQ" data-label="36×36 — $995">36×36 — $995</button>
-    </div>
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Horizontal (3:2)</div>
-      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="horizontal" data-lookup="ACR-12x8-LS" data-label="12×8 — $95">12×8 — $95</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="horizontal" data-lookup="ACR-18x12-LS" data-label="18×12 — $195">18×12 — $195</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="horizontal" data-lookup="ACR-24x16-LS" data-label="24×16 — $315">24×16 — $315</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="horizontal" data-lookup="ACR-30x20-LS" data-label="30×20 — $495">30×20 — $495</button>
-      <button class="btn w-full sizeBtn" data-material="acrylic" data-shape="horizontal" data-lookup="ACR-36x24-LS" data-label="36×24 — $695">36×24 — $695</button>
-    </div>
-    <div class="glass rounded-xl p-4">
-      <div class="font-bold mb-2">Vertical (2:3)</div>
-      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="vertical" data-lookup="ACR-8x12-PT" data-label="8×12 — $95">8×12 — $95</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="vertical" data-lookup="ACR-12x18-PT" data-label="12×18 — $195">12×18 — $195</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="vertical" data-lookup="ACR-16x24-PT" data-label="16×24 — $325">16×24 — $325</button>
-      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="vertical" data-lookup="ACR-20x30-PT" data-label="20×30 — $495">20×30 — $495</button>
-      <button class="btn w-full sizeBtn" data-material="acrylic" data-shape="vertical" data-lookup="ACR-24x36-PT" data-label="24×36 — $725">24×36 — $725</button>
-    </div>
-  </div>
-
-  <!-- Selection summary + manual checkout CTA -->
-  <div class="mt-6 flex flex-wrap items-center gap-3">
-    <div id="selectionSummary" class="text-sm muted">Selected: —</div>
-    <button id="reviewBtn" class="btn btn-ghost" disabled>Review & Checkout</button>
-  </div>
-</section>
-
-  <!-- =========================================================
-       FOOTER
-       ========================================================= -->
   <footer class="border-t border-white/10">
     <div class="max-w-7xl mx-auto px-5 py-10 grid md:grid-cols-3 gap-6 text-sm text-white/70">
-      <div>
-        <div class="font-semibold text-white">aiPRINT.ai</div>
-        <p class="mt-2">Archival, ready-to-hang prints from your ideas.</p>
-        <p class="mt-2">© <span id="y"></span> aiPRINT.ai</p>
-      </div>
-      <div>
-        <div class="font-semibold text-white">Explore</div>
-        <ul class="mt-2 space-y-1">
-          <li><a href="#how" class="hover:text-white">How it works</a></li>
-          <li><a href="#materials" class="hover:text-white">Materials</a></li>
-          <li><a href="/faq.html" class="hover:text-white">FAQ</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="font-semibold text-white">Company</div>
-        <ul class="mt-2 space-y-1">
-          <li><a href="/policies.html" class="hover:text-white">Policies</a></li>
-          <li><a href="/contact.html" class="hover:text-white">Contact</a></li>
-        </ul>
-      </div>
+      <div><div class="font-semibold text-white">aiPRINT.ai</div><p class="mt-2">Archival, ready-to-hang prints from your ideas.</p><p class="mt-2">© <span id="y"></span> aiPRINT.ai</p></div>
+      <div><div class="font-semibold text-white">Explore</div><ul class="mt-2 space-y-1"><li><a href="#how" class="hover:text-white">How it works</a></li><li><a href="#materials" class="hover:text-white">Materials</a></li><li><a href="/faq.html" class="hover:text-white">FAQ</a></li></ul></div>
+      <div><div class="font-semibold text-white">Company</div><ul class="mt-2 space-y-1"><li><a href="/policies.html" class="hover:text-white">Policies</a></li><li><a href="/contact.html" class="hover:text-white">Contact</a></li></ul></div>
     </div>
   </footer>
 
-  <!-- =========================================================
-       APP + CHECKOUT LOGIC
-       ========================================================= -->
   <script>
-/* ============================================================
-   aiPRINT.ai — App & Checkout Logic
-   - Live signature overlay (DOM, draggable; NOT baked in preview)
-   - Generate preview (clean in-frame)
-   - Watermarked "open/download" is client-side only
-   - Share links + deep links
-   - Persist preview/signature/selection across Back/Reload
-   - Size lock by aspect ratio; Review & Checkout flow
-   - Final bake occurs on backend at checkout
-   ============================================================ */
-
-/* ---------- DOM helpers ---------- */
-const $ = (q, el=document) => el.querySelector(q);
-const $$ = (q, el=document) => [...el.querySelectorAll(q)];
-/* ---------- Footer year ---------- */
+// Footer year
 document.getElementById('y').textContent = new Date().getFullYear();
 
-/* ---------- Stripe Payment Links (Updated with consistent format) ---------- */
-const STRIPE_LINK = {
-  // Canvas Products
-  'CAN-12-SQ': 'https://buy.stripe.com/7sY4aEY6H4gk01G4bRneIw0N',
-  'CAN-18-SQ': 'https://buy.stripe.com/3cl5kEBPQ0qlub7D4dtdip',
-  'CAN-24-SQ': 'https://buy.stripe.com/7sY6oIgIaB3O8azLehw0j',
-  'CAN-30-SQ': 'https://buy.stripe.com/4gMcNfd666UqCgaNDPelw05',
-  'CAN-36-SQ': 'https://buy.stripe.com/5kQ7sM8PQaZGaf6gY9elw0k',
-  'CAN-12x8-LS': 'https://buy.stripe.com/7lZudRaeaa8SacZfDPelw0J',
-  'CAN-18x12-LS': 'https://buy.stripe.com/00waEY5DE3xegbbDDPelw0J',
-  'CAN-24x16-LS': 'https://buy.stripe.com/9B6cN64zA3xeahZ6Iwehw0g',
-  'CAN-30x20-LS': 'https://buy.stripe.com/4gM4gAaX3Y6JaqF7oY3elw0J',
-  'CAN-36x24-LS': 'https://buy.stripe.com/14A7sM6hH1p6IGl0tGl2oelw0J',
-  'CAN-8x12-PT': 'https://buy.stripe.com/28Eb2z8ae92rsGd7oY3elw0l',
-  'CAN-12x18-PT': 'https://buy.stripe.com/VxodRa2nti2eiffeG1eIw0F',
-  'CAN-16x24-PT': 'https://buy.stripe.com/9B3g7aM0lbatt98YV3elw0s',
-  'CAN-20x30-PT': 'https://buy.stripe.com/3cldRagI02dBnqY9elw0a',
-  'CAN-24x36-PT': 'https://buy.stripe.com/eF4f4HakS2X6xjvelw0K',
-  
-  // Metal Products
-  'MET-12-SQ': 'https://buy.stripe.com/cNleVec22ebSetf23feIw0A',
-  'MET-18-SQ': 'https://buy.stripe.com/9hGaJ2Qjkd7D84RdLJfeIw0F',
-  'MET-24-SQ': 'https://buy.stripe.com/14AdReasaagkD97nqHpfXeIw08',
-  'MET-30-SQ': 'https://buy.stripe.com/00waVeeaagkDg7nxelw0B',
-  'MET-36-SQ': 'https://buy.stripe.com/5kQ7aM8PQaZGat6gY9elw0k',
-  'MET-12x8-LS': 'https://buy.stripe.com/9k2cN68PQ1p89BFV5freIw0A',
-  'MET-18x12-LS': 'https://buy.stripe.com/7sY1ogai0etfILJ5elw02',
-  'MET-24x16-LS': 'https://buy.stripe.com/aFaeVe2rs5FmGWJ37ieIw0',
-  'MET-30x20-LS': 'https://buy.stripe.com/7sY1og3Koft8oeN4G',
-  'MET-36x24-LS': 'https://buy.stripe.com/5kQIZiaPQt4Bie8f0ZbeIw0y',
-  'MET-8x12-PT': 'https://buy.stripe.com/dRm4aA9DEclJKazTnxeIw0x',
-  'MET-12x18-PT': 'https://buy.stripe.com/aFa28ksTvdyRvl454RvHeIw01',
-  'MET-16x24-PT': 'https://buy.stripe.com/dRm9AUc229VCacZ9VHeIw01',
-  'MET-20x30-PT': 'https://buy.stripe.com/9B96oi3vw9VCd7azUIeIw0y',
-  'MET-24x36-PT': 'https://buy.stripe.com/ZudRed669VC1GfdLXeIw0y',
-  
-  // Acrylic Products
-  'ACR-12-SQ': 'https://buy.stripe.com/cNl3cweC28Ry0CgkDPeIw0P',
-  'ACR-18-SQ': 'https://buy.stripe.com/cNl3cwe228Ry0CgkDPeIw0G',
-  'ACR-24-SQ': 'https://buy.stripe.com/7sY7sMcZ2Rty3GgqY9eIw05',
-  'ACR-30-SQ': 'https://buy.stripe.com/4gM14oc22taac2f5eIw06',
-  'ACR-36-SQ': 'https://buy.stripe.com/4IZudEYeaa48I1GI4knelw0G',
-  'ACR-12x8-LS': 'https://buy.stripe.com/9JsrZl0ik9VC5WJ37eIw0g',
-  'ACR-18x12-LS': 'https://buy.stripe.com/dAlAHlVW8WYCOYCc5WJ37eIw0',
-  'ACR-24x16-LS': 'https://buy.stripe.com/7sY14oc221p6ac24melw0p',
-  'ACR-30x20-LS': 'https://buy.stripe.com/7sY14oc221p6ac24melw0G',
-  'ACR-36x24-LS': 'https://buy.stripe.com/eVq3cwfeeebS2KcS6freIw0p',
-  'ACR-8x12-PT': 'https://buy.stripe.com/3cl3cw5DE1p6etf37jelw0q',
-  'ACR-12x18-PT': 'https://buy.stripe.com/3cl14o0227OwTzlfelw0m',
-  'ACR-16x24-PT': 'https://buy.stripe.com/8wM9g88webS2KcVG9pfelw0r',
-  'ACR-20x30-PT': 'https://buy.stripe.com/7sY3cw5DE2laqdb2leIw0a',
-  'ACR-24x36-PT': 'https://buy.stripe.com/7sA4gAaead2aaOfTOacZ9DPeIw05'
-};
-/* ---------- Utilities ---------- */
-function getShapeFromRatio(ratio) {
-  if (ratio === '1024x1024') return 'square';
-  if (ratio === '1536x1024') return 'horizontal';
-  if (ratio === '1024x1536') return 'vertical';
-  return '';
-}
+// ----- Utilities -----
+const $ = (q, el=document) => el.querySelector(q);
+const money = n => `$${Number(n).toLocaleString()}`;
+
 function setPreviewAspect(ratio){
-  const wrap = $('#previewWrap');
-  if (!wrap) return;
-  if (ratio === '1024x1024') wrap.style.aspectRatio = '1 / 1';
-  else if (ratio === '1536x1024') wrap.style.aspectRatio = '3 / 2';
-  else if (ratio === '1024x1536') wrap.style.aspectRatio = '2 / 3';
+  const wrap = $('#previewWrap'); if(!wrap) return;
+  if (ratio === '1024x1024') wrap.style.aspectRatio = '1/1';
+  else if (ratio === '1536x1024') wrap.style.aspectRatio = '3/2';
+  else if (ratio === '1024x1536') wrap.style.aspectRatio = '2/3';
 }
-function lockButtonsToShape(shape) {
-  $$('.sizeBtn').forEach(btn=>{
-    const isMatch = btn.dataset.shape === shape;
-    btn.disabled = !isMatch;
-    btn.classList.toggle('opacity-60', !isMatch);
-    btn.title = isMatch ? '' : 'This preview is a different shape';
-  });
-}
-const toBlobURL = (canvas) => new Promise(res=>{
-  canvas.toBlob(b=>{
-    const url = URL.createObjectURL(b);
-    res(url);
-  }, 'image/jpeg', 0.92);
-});
-
-/* ---------- Mock Image Generation (Replace with your actual API) ---------- */
-async function generateMockImage(prompt, size) {
-  // This is a mock implementation - replace with your actual image generation API
-  console.log('Generating image for:', prompt, size);
-  
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 2000));
-  
-  // Return a placeholder image URL (replace with your actual generated image)
-  const [width, height] = size.split('x').map(Number);
-  return `https://picsum.photos/${width}/${height}?random=${Date.now()}`;
+function getShapeFromRatio(ratio){
+  if (ratio === '1024x1024') return 'square';
+  if (ratio === '1536x1024') return 'h32';
+  if (ratio === '1024x1536') return 'v23';
+  return 'square';
 }
 
-/* ---------- Watermark & Signature (temp preview/download ONLY) ---------- */
-async function drawWatermarked(url, signature) {
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.src = url;
-  await img.decode();
+// ----- Signature overlay (simple) -----
+const sigEl = document.getElementById('sig');
+const sigToggle = document.getElementById('sigToggle');
+const sigName = document.getElementById('sigName');
+const sigFont = document.getElementById('sigFont');
+const sigColor = document.getElementById('sigColor');
+const sigSize = document.getElementById('sigSize');
+const wrap = document.getElementById('previewWrap');
 
-  const c = document.createElement('canvas');
-  const ctx = c.getContext('2d');
-
-  c.width = img.naturalWidth;
-  c.height = img.naturalHeight;
-
-  ctx.drawImage(img, 0, 0, c.width, c.height);
-
-  // tiled brand watermark
-  const text = 'aiPRINT.ai';
-  ctx.save();
-  ctx.globalAlpha = 0.16;
-  ctx.fillStyle = '#ffffff';
-  ctx.font = `${Math.floor(c.width * 0.04)}px Montserrat, sans-serif`;
-  ctx.translate(c.width/2, c.height/2);
-  ctx.rotate(-Math.PI/6);
-  const stepX = Math.floor(c.width * 0.22);
-  const stepY = Math.floor(c.width * 0.12);
-  for (let y = -c.height; y < c.height; y += stepY) {
-    for (let x = -c.width; x < c.width; x += stepX) {
-      ctx.fillText(text, x, y);
-    }
-  }
-  ctx.restore();
-
-  // optional signature
-  if (signature?.text) {
-    ctx.save();
-    ctx.fillStyle = signature.color || '#ffffff';
-    const px = Math.max(0, Math.min(1, signature.px ?? 0.02));
-    const py = Math.max(0, Math.min(1, signature.py ?? 0.02));
-    const sizePx = Math.max(14, signature.size || 24) * (c.width / 1024);
-    ctx.font = `${sizePx}px "${signature.font||'Great Vibes'}", serif`;
-    ctx.shadowColor='rgba(0,0,0,.35)'; ctx.shadowBlur=4;
-    const x = Math.floor(c.width * px);
-    const y = Math.floor(c.height * (1 - py));
-    ctx.fillText(signature.text, x, y);
-    ctx.restore();
-  }
-
-  const dataUrl = c.toDataURL('image/jpeg', 0.92);
-  const blobUrl = await toBlobURL(c);
-  return { dataUrl, blobUrl };
-}
-
-/* ---------- State & Persistence ---------- */
-const STATE_KEY = 'aiprint:last';
-let lastPreview = null;  // { originalUrl, ratio, shape }
-let selected    = null;  // { material, shape, lookup, label }
-
-function saveState() {
-  if (!lastPreview?.originalUrl) return;
-  const sig = Sig.enabled ? {
-    text:  Sig.text || '',
-    font:  Sig.font || 'Great Vibes',
-    color: Sig.color || '#ffffff',
-    size:  Sig.size || 24,
-    px:    Sig.px ?? 0.02,
-    py:    Sig.py ?? 0.02
-  } : null;
-
-  const payload = {
-    originalUrl: lastPreview.originalUrl,
-    ratio:       lastPreview.ratio,
-    shape:       lastPreview.shape,
-    signature:   sig,
-    selected:    selected ? {
-      material: selected.material,
-      shape:    selected.shape,
-      lookup:   selected.lookup,
-      label:    selected.label
-    } : null
-  };
-  try { sessionStorage.setItem(STATE_KEY, JSON.stringify(payload)); }
-  catch(e) { /* storage blocked - ignore */ }
-}
-
-async function restoreStateIfAny() {
-  // If URL has ?preview=..., let deep-link loader handle it
-  const qsHasPreview = new URLSearchParams(location.search).has('preview');
-  if (qsHasPreview) return;
-
-  const raw = sessionStorage.getItem(STATE_KEY);
-  if (!raw) return;
-
-  let s; try { s = JSON.parse(raw); } catch { return; }
-  if (!s?.originalUrl) return;
-
-  try {
-    // show clean image
-    setPreviewAspect(s.ratio || '1024x1024');
-    $('#previewImg').src = s.originalUrl;
-
-    // rebuild a share link
-    const shareUrl = new URL(window.location.href);
-    shareUrl.searchParams.set('preview', s.originalUrl);
-    shareUrl.searchParams.set('ratio',   s.ratio || '1024x1024');
-    shareUrl.searchParams.set('shape',   s.shape || getShapeFromRatio(s.ratio || '1024x1024'));
-    if (s.selected?.lookup) shareUrl.searchParams.set('lookup', s.selected.lookup);
-    $('#gen-url').value = shareUrl.toString();
-    $('#gen-actions').classList.remove('hidden');
-
-    lastPreview = {
-      originalUrl: s.originalUrl,
-      ratio: s.ratio || '1024x1024',
-      shape: s.shape || getShapeFromRatio(s.ratio || '1024x1024')
-    };
-
-    // restore signature UI
-    if (s.signature) {
-      sigToggle.checked = true;
-      Sig.enabled = true;
-      Sig.text = s.signature.text || '';
-      Sig.font = s.signature.font || 'Great Vibes';
-      Sig.color= s.signature.color || '#ffffff';
-      Sig.size = s.signature.size || 24;
-      Sig.px   = s.signature.px ?? 0.02;
-      Sig.py   = s.signature.py ?? 0.02;
-
-      if (sigName)  sigName.value  = Sig.text;
-      if (sigFont)  sigFont.value  = Sig.font;
-      if (sigColor) sigColor.value = Sig.color;
-      if (sigSize)  sigSize.value  = String(Sig.size);
-      refreshSigEl();
-    }
-
-    orderNote.textContent = 'Welcome back! Your preview was restored.';
-    lockButtonsToShape(lastPreview.shape);
-
-    if (s.selected?.lookup) {
-      const btn = document.querySelector(`.sizeBtn[data-lookup="${s.selected.lookup}"]`);
-      if (btn && !btn.disabled) btn.click();
-    }
-  } catch {
-    sessionStorage.removeItem(STATE_KEY);
-  }
-}
-window.addEventListener('beforeunload', saveState);
-document.addEventListener('DOMContentLoaded', restoreStateIfAny);
-window.addEventListener('pageshow', (e) => { if (e.persisted) restoreStateIfAny(); });
-
-/* ---------- Element refs ---------- */
-const genBtn    = $('#genBtn');
-const preview   = $('#previewImg');
-const wrap      = $('#previewWrap');
-
-const genUrl    = $('#gen-url'); // page share URL (not clean image)
-const genRow    = $('#gen-actions');
-
-const ratioSel  = $('#ratioSel');
-const orderNote = $('#orderLockExplain');
-
-const reviewBtn = $('#reviewBtn');
-const summary   = $('#selectionSummary');
-
-/* ---------- Signature overlay model ---------- */
-const sigEl     = $('#sig');
-const sigToggle = $('#sigToggle');
-const sigName   = $('#sigName');
-const sigFont   = $('#sigFont');
-const sigColor  = $('#sigColor');
-const sigSize   = $('#sigSize');
-
-const Sig = {
-  enabled: false,
-  px: 0.02,   // left %
-  py: 0.02,   // bottom %
-  text: 'Your Name',
-  font: 'Great Vibes',
-  color:'#ffffff',
-  size: 24,
-  dragging: null,
-};
-
-function refreshSigEl() {
-  if (!Sig.enabled) { sigEl.classList.add('hidden'); return; }
+const Sig = { enabled:false, text:'Your Name', font:'Great Vibes', color:'#fff', size:24, px:0.02, py:0.02, dragging:null };
+function refreshSigEl(){
+  if(!Sig.enabled){ sigEl.classList.add('hidden'); return; }
   sigEl.classList.remove('hidden');
   sigEl.textContent = Sig.text || ' ';
-
-  // set font inline (no fragile classnames)
   const isSerif = /Playfair/i.test(Sig.font);
-  sigEl.className = 'sig-overlay';
-  sigEl.style.fontFamily = `"${Sig.font}", ${isSerif ? 'serif' : 'cursive'}`;
+  sigEl.style.fontFamily = `"${Sig.font}", ${isSerif?'serif':'cursive'}`;
   sigEl.style.color = Sig.color;
-  sigEl.style.fontSize = `${Sig.size}px`;
-
-  // place using proportional coords inside wrap
-  const W = wrap.clientWidth, H = wrap.clientHeight;
+  sigEl.style.fontSize = Sig.size + 'px';
+  const W=wrap.clientWidth, H=wrap.clientHeight;
   const x = Math.max(6, Math.min(W - 6, Math.floor(Sig.px * W)));
   const y = Math.max(6, Math.min(H - 6, Math.floor((1 - Sig.py) * H)));
-  sigEl.style.left = `${x}px`;
-  const approxTop = y - sigEl.clientHeight + 2;
-  sigEl.style.top  = `${Math.max(6, approxTop)}px`;
+  sigEl.style.left = x + 'px';
+  sigEl.style.top  = (y - sigEl.clientHeight + 2) + 'px';
 }
-
-/* Keep checkout button state updated */
-function setReviewEnabled() {
-  reviewBtn.disabled = !selected;
-}
-
-/* ---------- Signature controls (persist on change) ---------- */
-sigToggle?.addEventListener('change', ()=>{
-  Sig.enabled = !!sigToggle.checked;
-  refreshSigEl(); saveState();
-});
-sigName?.addEventListener('input', ()=>{
-  Sig.text = sigName.value || '';
-  refreshSigEl(); saveState();
-});
-sigFont?.addEventListener('change', ()=>{
-  Sig.font = sigFont.value || 'Great Vibes';
-  refreshSigEl(); saveState();
-});
-sigColor?.addEventListener('input', ()=>{
-  Sig.color = sigColor.value || '#ffffff';
-  refreshSigEl(); saveState();
-});
-sigSize?.addEventListener('input', ()=>{
-  Sig.size = parseInt(sigSize.value || '24',10);
-  refreshSigEl(); saveState();
-});
-
-/* Dragging */
+sigToggle?.addEventListener('change', ()=>{ Sig.enabled = !!sigToggle.checked; refreshSigEl(); });
+sigName?.addEventListener('input', ()=>{ Sig.text = sigName.value; refreshSigEl(); });
+sigFont?.addEventListener('change', ()=>{ Sig.font = sigFont.value; refreshSigEl(); });
+sigColor?.addEventListener('input', ()=>{ Sig.color = sigColor.value; refreshSigEl(); });
+sigSize?.addEventListener('input', ()=>{ Sig.size = parseInt(sigSize.value||'24',10); refreshSigEl(); });
 sigEl?.addEventListener('mousedown', (e)=>{
-  if (!Sig.enabled) return;
-  Sig.dragging = {
-    startX: e.clientX,
-    startY: e.clientY,
-    startLeft: sigEl.offsetLeft,
-    startTop : sigEl.offsetTop
-  };
+  if(!Sig.enabled) return;
+  Sig.dragging={sx:e.clientX, sy:e.clientY, sl:sigEl.offsetLeft, st:sigEl.offsetTop};
   e.preventDefault();
 });
 window.addEventListener('mousemove', (e)=>{
-  if (!Sig.enabled || !Sig.dragging) return;
-  const dx = e.clientX - Sig.dragging.startX;
-  const dy = e.clientY - Sig.dragging.startY;
-
-  const newLeft = Math.max(6, Math.min(wrap.clientWidth - sigEl.clientWidth - 6, Sig.dragging.startLeft + dx));
-  const newTop  = Math.max(6, Math.min(wrap.clientHeight - sigEl.clientHeight - 6, Sig.dragging.startTop  + dy));
-  sigEl.style.left = `${newLeft}px`;
-  sigEl.style.top  = `${newTop}px`;
-
-  // Update proportional coords
-  Sig.px = newLeft / wrap.clientWidth;
-  const baselineY = newTop + sigEl.clientHeight;
-  Sig.py = 1 - (baselineY / wrap.clientHeight);
+  if(!Sig.enabled || !Sig.dragging) return;
+  const dx=e.clientX-Sig.dragging.sx, dy=e.clientY-Sig.dragging.sy;
+  const nl=Math.max(6, Math.min(wrap.clientWidth - sigEl.clientWidth - 6, Sig.dragging.sl + dx));
+  const nt=Math.max(6, Math.min(wrap.clientHeight- sigEl.clientHeight- 6, Sig.dragging.st + dy));
+  sigEl.style.left = nl+'px'; sigEl.style.top=nt+'px';
+  Sig.px = nl / wrap.clientWidth; const baselineY = nt + sigEl.clientHeight; Sig.py = 1 - (baselineY / wrap.clientHeight);
 });
-window.addEventListener('mouseup', ()=>{ Sig.dragging = null; });
+window.addEventListener('mouseup', ()=>{ Sig.dragging=null; });
 window.addEventListener('resize', refreshSigEl);
 
-/* ---------- Prompt builder ---------- */
-function buildPrompt() {
-  const subject = $('#promptInput')?.value?.trim() || '';
-  const style = $('#styleSel')?.value || '';
-  const mood = $('#moodSel')?.value || '';
-  const light = $('#lightSel')?.value || '';
-  const comp = $('#compSel')?.value || '';
-  return `${subject}, ${mood} mood, ${style}, ${light}, ${comp}`
-    .replace(/\s+/g, ' ')
-    .trim();
+// ----- Mock generator (replace with your API) -----
+async function generateMockImage(prompt, size){
+  await new Promise(r=>setTimeout(r,1000));
+  const [w,h]=size.split('x'); return `https://picsum.photos/${w}/${h}?random=${Date.now()}`;
 }
 
-/* ---------- Generate preview (clean in frame, overlay live) ---------- */
-const genHandler = async () => {
-  const subject = buildPrompt();
-  if (!subject) { alert('Please describe what you want.'); return; }
+// ----- Load catalog -----
+let CATALOG=null, currentCollection='canvas';
+fetch('/data/products.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{ CATALOG=d; }).catch(e=>console.error(e));
 
-  const ratio = ratioSel?.value || '1024x1024';
-
-  genBtn.disabled = true;
-  genBtn.textContent='Generating…';
-  genRow.classList.add('hidden');
-  preview.removeAttribute('src');
-
-  try {
-    // Replace this with your actual API call
-    const imageUrl = await generateMockImage(subject, ratio);
-
-    setPreviewAspect(ratio);
-    preview.src = imageUrl;
-
-    const shareUrl = new URL(window.location.href);
-    shareUrl.searchParams.set('preview', imageUrl);
-    shareUrl.searchParams.set('ratio', ratio);
-    shareUrl.searchParams.set('shape', getShapeFromRatio(ratio));
-    genUrl.value = shareUrl.toString();
-    genRow.classList.remove('hidden');
-
-    lastPreview = { originalUrl: imageUrl, ratio, shape: getShapeFromRatio(ratio) };
-    orderNote.textContent = `Looks great! Only ${lastPreview.shape} sizes are available for this preview.`;
-    lockButtonsToShape(lastPreview.shape);
-
-    selected = null;
-    summary.textContent = 'Selected: —';
-    setReviewEnabled();
-
-    refreshSigEl();
-    saveState(); // persist immediately
-  } catch (e) {
-    alert(e.message || String(e));
-  } finally {
-    genBtn.disabled = false;
-    genBtn.textContent='Generate preview';
+const els = {
+  tabs: { canvas:$('#tab-canvas'), metal:$('#tab-metal'), acrylic:$('#tab-acrylic') },
+  boxes: {
+    square: document.querySelector('#box-square .options'),
+    h32:    document.querySelector('#box-h32 .options'),
+    v23:    document.querySelector('#box-v23 .options'),
+  },
+  containers: {
+    square: document.getElementById('box-square'),
+    h32:    document.getElementById('box-h32'),
+    v23:    document.getElementById('box-v23'),
   }
 };
-genBtn?.addEventListener('click', genHandler);
 
-/* ---------- Temporary watermarked actions (client-side only) ---------- */
-$('#open-wm')?.addEventListener('click', async () => {
-  if(!lastPreview?.originalUrl){ alert('Create a preview first.'); return; }
-  const sig = Sig.enabled ? { ...Sig } : null;
-  const { blobUrl } = await drawWatermarked(lastPreview.originalUrl, sig);
-  window.open(blobUrl, '_blank');
-});
-$('#download-link')?.addEventListener('click', async (e) => {
-  if(!lastPreview?.originalUrl){ e.preventDefault(); alert('Create a preview first.'); return; }
-  e.preventDefault();
-  const sig = Sig.enabled ? { ...Sig } : null;
-  const { dataUrl } = await drawWatermarked(lastPreview.originalUrl, sig);
-  $('#download-link').href = dataUrl;
-  $('#download-link').click(); // trigger after href set
-});
+function classifyAspectWH(w,h){ const r=w/h, eps=0.04; if(Math.abs(r-1)<=eps) return 'square'; if(r>1) return 'h32'; return 'v23'; }
+function getOptions(collectionId, bucket){
+  if(!CATALOG) return [];
+  const col = CATALOG.collections.find(c=>c.id===collectionId);
+  if(!col) return [];
+  return col.products.filter(p=>bucket==='square'?p.orientation==='square':bucket==='h32'?p.orientation==='horizontal':p.orientation==='vertical')
+                     .sort((a,b)=>a.price_usd-b.price_usd);
+}
+function renderBox(boxEl, items){
+  if(!boxEl) return;
+  if(!items.length){ boxEl.innerHTML = '<div class="opacity-50">No sizes available</div>'; return; }
+  boxEl.innerHTML = items.map(p=>`
+    <button class="w-full text-left px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15"
+            data-link="${p.stripe_payment_link}">
+      ${p.size_w_in}×${p.size_h_in} — ${money(p.price_usd)}
+    </button>`).join('');
+  boxEl.querySelectorAll('button[data-link]').forEach(btn=>btn.addEventListener('click',()=>{ window.location.href = btn.dataset.link; }));
+}
+function setActiveBucket(active){
+  Object.entries(els.containers).forEach(([k,el])=>{
+    if(k===active){ el.classList.remove('opacity-40','pointer-events-none'); }
+    else { el.classList.add('opacity-40','pointer-events-none'); }
+  });
+}
 
-/* Copy share link (page URL with params; NOT clean image) */
-$('#copy-link')?.addEventListener('click', async ()=>{
-  if(!genUrl?.value){ alert('Nothing to copy yet.'); return; }
-  await navigator.clipboard.writeText(genUrl.value);
-  const b=$('#copy-link');
-  b.textContent='Copied!';
-  setTimeout(()=>b.textContent='Copy share link', 900);
-});
+// Public API: call after preview exists
+window.updateOrderOptions = function(genW, genH){
+  if(!CATALOG) return;
+  const bucket = classifyAspectWH(genW, genH);
+  renderBox(els.boxes[bucket], getOptions(currentCollection, bucket));
+  setActiveBucket(bucket);
+};
 
-/* Share to order later (include selection if present) */
-$('#share-later')?.addEventListener('click', async () => {
-  if (!lastPreview?.originalUrl) return alert('Create a preview first.');
-  const url = new URL(window.location.href);
-  url.searchParams.set('preview', lastPreview.originalUrl);
-  url.searchParams.set('ratio',   lastPreview.ratio);
-  url.searchParams.set('shape',   lastPreview.shape);
-  if (selected?.lookup) url.searchParams.set('lookup', selected.lookup);
-  await navigator.clipboard.writeText(url.toString());
-  alert('Sharable link copied!');
-});
-
-/* ---------- Tabs for materials ---------- */
-const views={canvas:$('#tab-canvas'), metal:$('#tab-metal'), acrylic:$('#tab-acrylic')};
-$$('.orderTab').forEach(btn=>btn.addEventListener('click',()=>{
-  const k=btn.dataset.tab;
-  Object.values(views).forEach(v=>v?.classList.add('hidden'));
-  views[k]?.classList.remove('hidden');
-  $$('.orderTab').forEach(b=>b.classList.add('btn-ghost'));
-  btn.classList.remove('btn-ghost');
+// Material tabs
+Object.entries(els.tabs).forEach(([id,btn])=>btn.addEventListener('click',()=>{
+  currentCollection=id;
+  Object.values(els.tabs).forEach(b=>b.classList.remove('bg-white/10'));
+  btn.classList.add('bg-white/10');
+  // re-render using a safe default until a preview is generated
+  window.updateOrderOptions(1024,1024);
 }));
 
-/* ---------- Size selection ---------- */
-$$('.sizeBtn').forEach(b=>{
-  b.addEventListener('click', ()=>{
-    if(!lastPreview?.originalUrl){ alert('Please generate a preview first.'); return; }
-    if (b.disabled) return;
-    $$('.sizeBtn').forEach(x=>x.classList.remove('ring-2','ring-white'));
-    b.classList.add('ring-2','ring-white');
-    selected = {
-      material: b.dataset.material,
-      shape:    b.dataset.shape,
-      lookup:   b.dataset.lookup,
-      label:    b.dataset.label
-    };
-    summary.textContent = `Selected: ${selected.material.toUpperCase()} • ${selected.label}`;
-    setReviewEnabled();
-    saveState();
-  });
-});
-
-/* ---------- Review & Checkout ----------
-   1) Ensure selection + preview
-   2) POST to your backend to create a Stripe Checkout Session
-      (your backend can BAKE the final image before/after payment)
-   3) Redirect to Stripe Checkout
----------------------------------------- */
-reviewBtn.addEventListener('click', async () => {
-  if (!selected) return alert('Pick a size first.');
-  if (!lastPreview?.originalUrl) return alert('Please generate a preview first.');
-  saveState();
-
-  const fullPrompt = buildPrompt();
-
-  const previewData = {
-    image: lastPreview.originalUrl,
-    prompt: fullPrompt,
-    size: lastPreview.ratio,
-    style: $('#styleSel')?.value || '',
-    mood: $('#moodSel')?.value || '',
-    light: $('#lightSel')?.value || '',
-    comp: $('#compSel')?.value || '',
-    sig: Sig.enabled ? {
-      text: Sig.text || '',
-      font: Sig.font || 'Great Vibes',
-      color: Sig.color || '#ffffff',
-      size: Sig.size || 24,
-      px: Sig.px ?? 0.02,
-      py: Sig.py ?? 0.02
-    } : null
-  };
-
-  reviewBtn.disabled = true;
-  reviewBtn.textContent = 'Creating checkout session...';
-
-  try {
-    // For now, redirect directly to Stripe (replace with your backend call)
-    const stripeUrl = STRIPE_LINK[selected.lookup];
-    if (!stripeUrl) {
-      throw new Error('Payment link not configured for this product');
-    }
-    
-    // In a real implementation, you'd send previewData to your backend here
-    console.log('Order data:', { lookup_key: selected.lookup, preview: previewData });
-    
-    // Redirect to Stripe
-    window.location.href = stripeUrl;
-    
-  } catch (err) {
-    alert(err.message || String(err));
-    reviewBtn.disabled = false;
-    reviewBtn.textContent = 'Review & Checkout';
-  }
-});
-
-/* ---------- Deep-link loader ----------
-   Loads from ?preview=...&ratio=...&shape=...&lookup=...
----------------------------------------- */
-(async function preloadFromQuery(){
-  const sp = new URLSearchParams(location.search);
-  const previewUrl = sp.get('preview');
-  const ratio      = sp.get('ratio') || '1024x1024';
-  const shape      = sp.get('shape') || getShapeFromRatio(ratio);
-  const lookup     = sp.get('lookup');
-
-  if (!previewUrl) return;
-
-  try {
-    setPreviewAspect(ratio);
-    $('#previewImg').src = previewUrl;
-
-    const shareUrl = new URL(window.location.href);
-    shareUrl.searchParams.set('preview', previewUrl);
-    shareUrl.searchParams.set('ratio', ratio);
-    shareUrl.searchParams.set('shape', shape);
-    if (lookup) shareUrl.searchParams.set('lookup', lookup);
-    $('#gen-url').value = shareUrl.toString();
-    $('#gen-actions').classList.remove('hidden');
-
-    lastPreview = { originalUrl: previewUrl, ratio, shape };
-
-    orderNote.textContent = 'Loaded a saved preview. Pick your size & finish.';
-    lockButtonsToShape(shape);
-
+// Generate
+const genBtn = document.getElementById('genBtn'), ratioSel=document.getElementById('ratioSel'), previewImg=document.getElementById('previewImg');
+const genUrl=document.getElementById('gen-url'), genRow=document.getElementById('gen-actions'), orderNote=document.getElementById('orderLockExplain');
+genBtn?.addEventListener('click', async ()=>{
+  const ratio = ratioSel.value;
+  genBtn.disabled=true; genBtn.textContent='Generating…'; genRow.classList.add('hidden'); previewImg.removeAttribute('src');
+  try{
+    const url = await generateMockImage(document.getElementById('promptInput').value||'', ratio);
+    setPreviewAspect(ratio); previewImg.src = url;
+    const [w,h] = ratio.split('x').map(Number);
+    updateOrderOptions(w,h);
+    orderNote.textContent = 'Looks great! Only matching sizes are enabled.';
+    // share url
+    const share = new URL(window.location.href); share.searchParams.set('preview', url); share.searchParams.set('ratio', ratio);
+    genUrl.value = share.toString(); genRow.classList.remove('hidden');
     refreshSigEl();
-    if (lookup) {
-      const btn = document.querySelector(`.sizeBtn[data-lookup="${lookup}"]`);
-      if (btn && !btn.disabled) btn.click();
-    }
-    saveState();
-  } catch(e){
-    console.warn('preload error', e);
+  } finally {
+    genBtn.disabled=false; genBtn.textContent='Generate preview';
   }
-})();
+});
 
-/* ---------- Mobile nav sheet wiring ---------- */
-(() => {
-  const sheet   = document.getElementById('navSheet');
-  const drawer  = document.getElementById('navDrawer');
-  const backdrop= document.getElementById('navBackdrop');
-  const openBtn = document.getElementById('navOpen');
-  const closeBtn= document.getElementById('navClose');
-
-  const openSheet = () => {
-    sheet.classList.remove('hidden');
-    requestAnimationFrame(() => {
-      drawer.classList.remove('translate-x-full');
-      backdrop.classList.remove('opacity-0');
-      document.body.classList.add('overflow-hidden');
-      openBtn.setAttribute('aria-expanded', 'true');
-      sheet.setAttribute('aria-hidden', 'false');
-    });
-  };
-
-  const closeSheet = () => {
-    drawer.classList.add('translate-x-full');
-    backdrop.classList.add('opacity-0');
-    openBtn.setAttribute('aria-expanded', 'false');
-    sheet.setAttribute('aria-hidden', 'true');
-    setTimeout(() => {
-      sheet.classList.add('hidden');
-      document.body.classList.remove('overflow-hidden');
-    }, 250);
-  };
-
-  openBtn?.addEventListener('click', openSheet);
-  closeBtn?.addEventListener('click', closeSheet);
-  backdrop?.addEventListener('click', closeSheet);
-  sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSheet));
-  window.addEventListener('keydown', e => { if (e.key === 'Escape' && !sheet.classList.contains('hidden')) closeSheet(); });
-  window.addEventListener('resize', () => { if (window.innerWidth >= 768 && !sheet.classList.contains('hidden')) closeSheet(); });
-})();
+// Watermarked actions (client-side only)
+document.getElementById('open-wm')?.addEventListener('click', ()=>alert('Watermark preview opening is stubbed here.'));
+document.getElementById('download-link')?.addEventListener('click', (e)=>{ e.preventDefault(); alert('Download is stubbed here.'); });
+document.getElementById('copy-link')?.addEventListener('click', async ()=>{
+  if(!genUrl?.value) return;
+  await navigator.clipboard.writeText(genUrl.value);
+  const b=document.getElementById('copy-link'); b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy share link',800);
+});
   </script>
 </body>
 </html>
