@@ -374,80 +374,107 @@
   <!-- =========================================================
        ORDER (shape-locked, selection + Review & Checkout)
        ========================================================= -->
-  <section id="order" class="max-w-7xl mx-auto px-5 py-14">
-    <h2 class="h2 mb-2">Order your print</h2>
-    <p class="lock-note mb-4" id="orderLockExplain">Generate a preview first to unlock ordering.</p>
+<section id="order" class="max-w-7xl mx-auto px-5 py-14">
+  <h2 class="h2 mb-2">Order your print</h2>
+  <p class="lock-note mb-4" id="orderLockExplain">Generate a preview first to unlock ordering.</p>
 
-    <!-- Tabs -->
-    <div class="flex gap-2 mb-5">
-      <button data-tab="canvas"  class="orderTab btn">Canvas</button>
-      <button data-tab="metal"   class="orderTab btn btn-ghost">Metal</button>
-      <button data-tab="acrylic" class="orderTab btn btn-ghost">Acrylic</button>
-    </div>
+  <!-- Tabs -->
+  <div class="flex gap-2 mb-5">
+    <button data-tab="canvas"  class="orderTab btn">Canvas</button>
+    <button data-tab="metal"   class="orderTab btn btn-ghost">Metal</button>
+    <button data-tab="acrylic" class="orderTab btn btn-ghost">Acrylic</button>
+  </div>
 
-    <!-- CANVAS -->
-    <div id="tab-canvas" class="grid md:grid-cols-3 gap-5">
-      <div class="glass rounded-xl p-4">
-        <div class="font-bold mb-2">Square (1:1)</div>
-        <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="square" data-lookup="CAN-24-SQ" data-label="24×24 — $155">24×24 — $155</button>
-        <button class="btn w-full sizeBtn" data-material="canvas" data-shape="square" data-lookup="CAN-30-SQ" data-label="30×30 — $245">30×30 — $245</button>
-      </div>
-      <div class="glass rounded-xl p-4">
-        <div class="font-bold mb-2">Horizontal (3:2)</div>
-        <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="horizontal" data-lookup="CAN-24x16-LS" data-label="24×16 — $105">24×16 — $105</button>
-        <button class="btn w-full sizeBtn" data-material="canvas" data-shape="horizontal" data-lookup="CAN-30x20-LS" data-label="30×20 — $165">30×20 — $165</button>
-      </div>
-      <div class="glass rounded-xl p-4">
-        <div class="font-bold mb-2">Vertical (2:3)</div>
-        <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="vertical" data-lookup="CAN-16x24-PT" data-label="16×24 — $105">16×24 — $105</button>
-        <button class="btn w-full sizeBtn" data-material="canvas" data-shape="vertical" data-lookup="CAN-20x30-PT" data-label="20×30 — $165">20×30 — $165</button>
-      </div>
+  <!-- CANVAS -->
+  <div id="tab-canvas" class="grid md:grid-cols-3 gap-5">
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Square (1:1)</div>
+      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="square" data-lookup="CAN-12-SQ" data-label="12×12 — $45">12×12 — $45</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="square" data-lookup="CAN-18-SQ" data-label="18×18 — $95">18×18 — $95</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="square" data-lookup="CAN-24-SQ" data-label="24×24 — $155">24×24 — $155</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="square" data-lookup="CAN-30-SQ" data-label="30×30 — $245">30×30 — $245</button>
+      <button class="btn w-full sizeBtn" data-material="canvas" data-shape="square" data-lookup="CAN-36-SQ" data-label="36×36 — $345">36×36 — $345</button>
     </div>
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Horizontal (3:2)</div>
+      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="horizontal" data-lookup="CAN-12x8-LS" data-label="12×8 — $35">12×8 — $35</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="horizontal" data-lookup="CAN-18x12-LS" data-label="18×12 — $65">18×12 — $65</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="horizontal" data-lookup="CAN-24x16-LS" data-label="24×16 — $105">24×16 — $105</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="horizontal" data-lookup="CAN-30x20-LS" data-label="30×20 — $165">30×20 — $165</button>
+      <button class="btn w-full sizeBtn" data-material="canvas" data-shape="horizontal" data-lookup="CAN-36x24-LS" data-label="36×24 — $245">36×24 — $245</button>
+    </div>
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Vertical (2:3)</div>
+      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="vertical" data-lookup="CAN-8x12-PT" data-label="8×12 — $35">8×12 — $35</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="vertical" data-lookup="CAN-12x18-PT" data-label="12×18 — $65">12×18 — $65</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="vertical" data-lookup="CAN-16x24-PT" data-label="16×24 — $105">16×24 — $105</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="canvas" data-shape="vertical" data-lookup="CAN-20x30-PT" data-label="20×30 — $165">20×30 — $165</button>
+      <button class="btn w-full sizeBtn" data-material="canvas" data-shape="vertical" data-lookup="CAN-24x36-PT" data-label="24×36 — $245">24×36 — $245</button>
+    </div>
+  </div>
 
-    <!-- METAL -->
-    <div id="tab-metal" class="hidden grid md:grid-cols-3 gap-5">
-      <div class="glass rounded-xl p-4">
-        <div class="font-bold mb-2">Square (1:1)</div>
-        <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="square" data-lookup="MET-24-SQ" data-label="24×24 — $275">24×24 — $275</button>
-        <button class="btn w-full sizeBtn" data-material="metal" data-shape="square" data-lookup="MET-30-SQ" data-label="30×30 — $445">30×30 — $445</button>
-      </div>
-      <div class="glass rounded-xl p-4">
-        <div class="font-bold mb-2">Horizontal (3:2)</div>
-        <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="horizontal" data-lookup="MET-24x16-LS" data-label="24×16 — $195">24×16 — $195</button>
-        <button class="btn w-full sizeBtn" data-material="metal" data-shape="horizontal" data-lookup="MET-30x20-LS" data-label="30×20 — $295">30×20 — $295</button>
-      </div>
-      <div class="glass rounded-xl p-4">
-        <div class="font-bold mb-2">Vertical (2:3)</div>
-        <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="vertical" data-lookup="MET-16x24-PT" data-label="16×24 — $195">16×24 — $195</button>
-        <button class="btn w-full sizeBtn" data-material="metal" data-shape="vertical" data-lookup="MET-20x30-PT" data-label="20×30 — $295">20×30 — $295</button>
-      </div>
+  <!-- METAL -->
+  <div id="tab-metal" class="hidden grid md:grid-cols-3 gap-5">
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Square (1:1)</div>
+      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="square" data-lookup="MET-12-SQ" data-label="12×12 — $75">12×12 — $75</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="square" data-lookup="MET-18-SQ" data-label="18×18 — $165">18×18 — $165</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="square" data-lookup="MET-24-SQ" data-label="24×24 — $275">24×24 — $275</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="square" data-lookup="MET-30-SQ" data-label="30×30 — $445">30×30 — $445</button>
+      <button class="btn w-full sizeBtn" data-material="metal" data-shape="square" data-lookup="MET-36-SQ" data-label="36×36 — $625">36×36 — $625</button>
     </div>
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Horizontal (3:2)</div>
+      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="horizontal" data-lookup="MET-12x8-LS" data-label="12×8 — $55">12×8 — $55</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="horizontal" data-lookup="MET-18x12-LS" data-label="18×12 — $115">18×12 — $115</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="horizontal" data-lookup="MET-24x16-LS" data-label="24×16 — $195">24×16 — $195</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="horizontal" data-lookup="MET-30x20-LS" data-label="30×20 — $295">30×20 — $295</button>
+      <button class="btn w-full sizeBtn" data-material="metal" data-shape="horizontal" data-lookup="MET-36x24-LS" data-label="36×24 — $425">36×24 — $425</button>
+    </div>
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Vertical (2:3)</div>
+      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="vertical" data-lookup="MET-8x12-PT" data-label="8×12 — $55">8×12 — $55</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="vertical" data-lookup="MET-12x18-PT" data-label="12×18 — $115">12×18 — $115</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="vertical" data-lookup="MET-16x24-PT" data-label="16×24 — $195">16×24 — $195</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="metal" data-shape="vertical" data-lookup="MET-20x30-PT" data-label="20×30 — $295">20×30 — $295</button>
+      <button class="btn w-full sizeBtn" data-material="metal" data-shape="vertical" data-lookup="MET-24x36-PT" data-label="24×36 — $425">24×36 — $425</button>
+    </div>
+  </div>
 
-    <!-- ACRYLIC -->
-    <div id="tab-acrylic" class="hidden grid md:grid-cols-3 gap-5">
-      <div class="glass rounded-xl p-4">
-        <div class="font-bold mb-2">Square (1:1)</div>
-        <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="square" data-lookup="ACR-24-SQ" data-label="24×24 — $475">24×24 — $475</button>
-        <button class="btn w-full sizeBtn" data-material="acrylic" data-shape="square" data-lookup="ACR-30-SQ" data-label="30×30 — $745">30×30 — $745</button>
-      </div>
-      <div class="glass rounded-xl p-4">
-        <div class="font-bold mb-2">Horizontal (3:2)</div>
-        <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="horizontal" data-lookup="ACR-24x16-LS" data-label="24×16 — $315">24×16 — $315</button>
-        <button class="btn w-full sizeBtn" data-material="acrylic" data-shape="horizontal" data-lookup="ACR-30x20-LS" data-label="30×20 — $495">30×20 — $495</button>
-      </div>
-      <div class="glass rounded-xl p-4">
-        <div class="font-bold mb-2">Vertical (2:3)</div>
-        <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="vertical" data-lookup="ACR-16x24-PT" data-label="16×24 — $325">16×24 — $325</button>
-        <button class="btn w-full sizeBtn" data-material="acrylic" data-shape="vertical" data-lookup="ACR-20x30-PT" data-label="20×30 — $495">20×30 — $495</button>
-      </div>
+  <!-- ACRYLIC -->
+  <div id="tab-acrylic" class="hidden grid md:grid-cols-3 gap-5">
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Square (1:1)</div>
+      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="square" data-lookup="ACR-12-SQ" data-label="12×12 — $145">12×12 — $145</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="square" data-lookup="ACR-18-SQ" data-label="18×18 — $295">18×18 — $295</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="square" data-lookup="ACR-24-SQ" data-label="24×24 — $475">24×24 — $475</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="square" data-lookup="ACR-30-SQ" data-label="30×30 — $745">30×30 — $745</button>
+      <button class="btn w-full sizeBtn" data-material="acrylic" data-shape="square" data-lookup="ACR-36-SQ" data-label="36×36 — $995">36×36 — $995</button>
     </div>
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Horizontal (3:2)</div>
+      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="horizontal" data-lookup="ACR-12x8-LS" data-label="12×8 — $95">12×8 — $95</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="horizontal" data-lookup="ACR-18x12-LS" data-label="18×12 — $195">18×12 — $195</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="horizontal" data-lookup="ACR-24x16-LS" data-label="24×16 — $315">24×16 — $315</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="horizontal" data-lookup="ACR-30x20-LS" data-label="30×20 — $495">30×20 — $495</button>
+      <button class="btn w-full sizeBtn" data-material="acrylic" data-shape="horizontal" data-lookup="ACR-36x24-LS" data-label="36×24 — $695">36×24 — $695</button>
+    </div>
+    <div class="glass rounded-xl p-4">
+      <div class="font-bold mb-2">Vertical (2:3)</div>
+      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="vertical" data-lookup="ACR-8x12-PT" data-label="8×12 — $95">8×12 — $95</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="vertical" data-lookup="ACR-12x18-PT" data-label="12×18 — $195">12×18 — $195</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="vertical" data-lookup="ACR-16x24-PT" data-label="16×24 — $325">16×24 — $325</button>
+      <button class="btn w-full mb-2 sizeBtn" data-material="acrylic" data-shape="vertical" data-lookup="ACR-20x30-PT" data-label="20×30 — $495">20×30 — $495</button>
+      <button class="btn w-full sizeBtn" data-material="acrylic" data-shape="vertical" data-lookup="ACR-24x36-PT" data-label="24×36 — $725">24×36 — $725</button>
+    </div>
+  </div>
 
-    <!-- Selection summary + manual checkout CTA -->
-    <div class="mt-6 flex flex-wrap items-center gap-3">
-      <div id="selectionSummary" class="text-sm muted">Selected: —</div>
-      <button id="reviewBtn" class="btn btn-ghost" disabled>Review & Checkout</button>
-    </div>
-  </section>
+  <!-- Selection summary + manual checkout CTA -->
+  <div class="mt-6 flex flex-wrap items-center gap-3">
+    <div id="selectionSummary" class="text-sm muted">Selected: —</div>
+    <button id="reviewBtn" class="btn btn-ghost" disabled>Review & Checkout</button>
+  </div>
+</section>
 
   <!-- =========================================================
        FOOTER
@@ -493,34 +520,64 @@
    ============================================================ */
 
 /* ---------- DOM helpers ---------- */
-const $  = (q, el=document)=>el.querySelector(q);
-const $ = (q, el=document)=>[...el.querySelectorAll(q)];
-
+const $ = (q, el=document) => el.querySelector(q);
+const $$ = (q, el=document) => [...el.querySelectorAll(q)];
 /* ---------- Footer year ---------- */
 document.getElementById('y').textContent = new Date().getFullYear();
 
 /* ---------- Stripe Payment Links (Updated with consistent format) ---------- */
 const STRIPE_LINK = {
-  'CAN-24-SQ': 'https://buy.stripe.com/example1',
-  'CAN-30-SQ': 'https://buy.stripe.com/example2',
-  'CAN-24x16-LS': 'https://buy.stripe.com/example3',
-  'CAN-30x20-LS': 'https://buy.stripe.com/example4',
-  'CAN-16x24-PT': 'https://buy.stripe.com/example5',
-  'CAN-20x30-PT': 'https://buy.stripe.com/example6',
-  'MET-24-SQ': 'https://buy.stripe.com/example7',
-  'MET-30-SQ': 'https://buy.stripe.com/example8',
-  'MET-24x16-LS': 'https://buy.stripe.com/example9',
-  'MET-30x20-LS': 'https://buy.stripe.com/example10',
-  'MET-16x24-PT': 'https://buy.stripe.com/example11',
-  'MET-20x30-PT': 'https://buy.stripe.com/example12',
-  'ACR-24-SQ': 'https://buy.stripe.com/example13',
-  'ACR-30-SQ': 'https://buy.stripe.com/example14',
-  'ACR-24x16-LS': 'https://buy.stripe.com/example15',
-  'ACR-30x20-LS': 'https://buy.stripe.com/example16',
-  'ACR-16x24-PT': 'https://buy.stripe.com/example17',
-  'ACR-20x30-PT': 'https://buy.stripe.com/example18',
+  // Canvas Products
+  'CAN-12-SQ': 'https://buy.stripe.com/7sY4aEY6H4gk01G4bRneIw0N',
+  'CAN-18-SQ': 'https://buy.stripe.com/3cl5kEBPQ0qlub7D4dtdip',
+  'CAN-24-SQ': 'https://buy.stripe.com/7sY6oIgIaB3O8azLehw0j',
+  'CAN-30-SQ': 'https://buy.stripe.com/4gMcNfd666UqCgaNDPelw05',
+  'CAN-36-SQ': 'https://buy.stripe.com/5kQ7sM8PQaZGaf6gY9elw0k',
+  'CAN-12x8-LS': 'https://buy.stripe.com/7lZudRaeaa8SacZfDPelw0J',
+  'CAN-18x12-LS': 'https://buy.stripe.com/00waEY5DE3xegbbDDPelw0J',
+  'CAN-24x16-LS': 'https://buy.stripe.com/9B6cN64zA3xeahZ6Iwehw0g',
+  'CAN-30x20-LS': 'https://buy.stripe.com/4gM4gAaX3Y6JaqF7oY3elw0J',
+  'CAN-36x24-LS': 'https://buy.stripe.com/14A7sM6hH1p6IGl0tGl2oelw0J',
+  'CAN-8x12-PT': 'https://buy.stripe.com/28Eb2z8ae92rsGd7oY3elw0l',
+  'CAN-12x18-PT': 'https://buy.stripe.com/VxodRa2nti2eiffeG1eIw0F',
+  'CAN-16x24-PT': 'https://buy.stripe.com/9B3g7aM0lbatt98YV3elw0s',
+  'CAN-20x30-PT': 'https://buy.stripe.com/3cldRagI02dBnqY9elw0a',
+  'CAN-24x36-PT': 'https://buy.stripe.com/eF4f4HakS2X6xjvelw0K',
+  
+  // Metal Products
+  'MET-12-SQ': 'https://buy.stripe.com/cNleVec22ebSetf23feIw0A',
+  'MET-18-SQ': 'https://buy.stripe.com/9hGaJ2Qjkd7D84RdLJfeIw0F',
+  'MET-24-SQ': 'https://buy.stripe.com/14AdReasaagkD97nqHpfXeIw08',
+  'MET-30-SQ': 'https://buy.stripe.com/00waVeeaagkDg7nxelw0B',
+  'MET-36-SQ': 'https://buy.stripe.com/5kQ7aM8PQaZGat6gY9elw0k',
+  'MET-12x8-LS': 'https://buy.stripe.com/9k2cN68PQ1p89BFV5freIw0A',
+  'MET-18x12-LS': 'https://buy.stripe.com/7sY1ogai0etfILJ5elw02',
+  'MET-24x16-LS': 'https://buy.stripe.com/aFaeVe2rs5FmGWJ37ieIw0',
+  'MET-30x20-LS': 'https://buy.stripe.com/7sY1og3Koft8oeN4G',
+  'MET-36x24-LS': 'https://buy.stripe.com/5kQIZiaPQt4Bie8f0ZbeIw0y',
+  'MET-8x12-PT': 'https://buy.stripe.com/dRm4aA9DEclJKazTnxeIw0x',
+  'MET-12x18-PT': 'https://buy.stripe.com/aFa28ksTvdyRvl454RvHeIw01',
+  'MET-16x24-PT': 'https://buy.stripe.com/dRm9AUc229VCacZ9VHeIw01',
+  'MET-20x30-PT': 'https://buy.stripe.com/9B96oi3vw9VCd7azUIeIw0y',
+  'MET-24x36-PT': 'https://buy.stripe.com/ZudRed669VC1GfdLXeIw0y',
+  
+  // Acrylic Products
+  'ACR-12-SQ': 'https://buy.stripe.com/cNl3cweC28Ry0CgkDPeIw0P',
+  'ACR-18-SQ': 'https://buy.stripe.com/cNl3cwe228Ry0CgkDPeIw0G',
+  'ACR-24-SQ': 'https://buy.stripe.com/7sY7sMcZ2Rty3GgqY9eIw05',
+  'ACR-30-SQ': 'https://buy.stripe.com/4gM14oc22taac2f5eIw06',
+  'ACR-36-SQ': 'https://buy.stripe.com/4IZudEYeaa48I1GI4knelw0G',
+  'ACR-12x8-LS': 'https://buy.stripe.com/9JsrZl0ik9VC5WJ37eIw0g',
+  'ACR-18x12-LS': 'https://buy.stripe.com/dAlAHlVW8WYCOYCc5WJ37eIw0',
+  'ACR-24x16-LS': 'https://buy.stripe.com/7sY14oc221p6ac24melw0p',
+  'ACR-30x20-LS': 'https://buy.stripe.com/7sY14oc221p6ac24melw0G',
+  'ACR-36x24-LS': 'https://buy.stripe.com/eVq3cwfeeebS2KcS6freIw0p',
+  'ACR-8x12-PT': 'https://buy.stripe.com/3cl3cw5DE1p6etf37jelw0q',
+  'ACR-12x18-PT': 'https://buy.stripe.com/3cl14o0227OwTzlfelw0m',
+  'ACR-16x24-PT': 'https://buy.stripe.com/8wM9g88webS2KcVG9pfelw0r',
+  'ACR-20x30-PT': 'https://buy.stripe.com/7sY3cw5DE2laqdb2leIw0a',
+  'ACR-24x36-PT': 'https://buy.stripe.com/7sA4gAaead2aaOfTOacZ9DPeIw05'
 };
-
 /* ---------- Utilities ---------- */
 function getShapeFromRatio(ratio) {
   if (ratio === '1024x1024') return 'square';
@@ -536,7 +593,7 @@ function setPreviewAspect(ratio){
   else if (ratio === '1024x1536') wrap.style.aspectRatio = '2 / 3';
 }
 function lockButtonsToShape(shape) {
-  $('.sizeBtn').forEach(btn=>{
+  $$('.sizeBtn').forEach(btn=>{
     const isMatch = btn.dataset.shape === shape;
     btn.disabled = !isMatch;
     btn.classList.toggle('opacity-60', !isMatch);
@@ -917,20 +974,20 @@ $('#share-later')?.addEventListener('click', async () => {
 
 /* ---------- Tabs for materials ---------- */
 const views={canvas:$('#tab-canvas'), metal:$('#tab-metal'), acrylic:$('#tab-acrylic')};
-$('.orderTab').forEach(btn=>btn.addEventListener('click',()=>{
+$$('.orderTab').forEach(btn=>btn.addEventListener('click',()=>{
   const k=btn.dataset.tab;
   Object.values(views).forEach(v=>v?.classList.add('hidden'));
   views[k]?.classList.remove('hidden');
-  $('.orderTab').forEach(b=>b.classList.add('btn-ghost'));
+  $$('.orderTab').forEach(b=>b.classList.add('btn-ghost'));
   btn.classList.remove('btn-ghost');
 }));
 
 /* ---------- Size selection ---------- */
-$('.sizeBtn').forEach(b=>{
+$$('.sizeBtn').forEach(b=>{
   b.addEventListener('click', ()=>{
     if(!lastPreview?.originalUrl){ alert('Please generate a preview first.'); return; }
     if (b.disabled) return;
-    $('.sizeBtn').forEach(x=>x.classList.remove('ring-2','ring-white'));
+    $$('.sizeBtn').forEach(x=>x.classList.remove('ring-2','ring-white'));
     b.classList.add('ring-2','ring-white');
     selected = {
       material: b.dataset.material,
