@@ -1,109 +1,696 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>aiPRINT — Shop</title>
-  <meta name="description" content="Fine Art Canvas, ChromaLuxe Metal, and Acrylic Facemount prints — ready to hang." />
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-[#0b1020] text-white selection:bg-sky-300/40 selection:text-black">
-  <!-- Header -->
-  <header class="sticky top-0 z-50 bg-[#0b1020]/80 backdrop-blur border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2">
-        <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
-        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
-      </a>
-      <nav class="hidden md:flex items-center gap-6 text-base">
-        <a class="hover:text-sky-300" href="/index.html">Home</a>
-        <a class="hover:text-sky-300" href="/materials.html">Materials</a>
-        <a class="text-sky-300" href="/shop.html">Shop</a>
-        <a class="hover:text-sky-300" href="/faq.html">FAQ</a>
-        <a class="hover:text-sky-300" href="/contact.html">Contact</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Main -->
-  <main class="max-w-7xl mx-auto px-5 py-10">
-    <h1 class="text-3xl md:text-4xl font-bold">Shop Gallery-Ready Prints</h1>
-    <p class="opacity-80 mt-2">All pieces are archival and ready to hang. Choose Canvas, ChromaLuxe Metal, or Acrylic Facemount.</p>
-
-    <!-- Tabs -->
-    <div id="collection-tabs" class="mt-6 flex flex-wrap gap-2">
-      <button data-collection="canvas"  class="tab px-3 py-2 rounded-xl border border-white/15 hover:bg-white/10">Canvas</button>
-      <button data-collection="metal"   class="tab px-3 py-2 rounded-xl border border-white/15 hover:bg-white/10">ChromaLuxe Metal</button>
-      <button data-collection="acrylic" class="tab px-3 py-2 rounded-xl border border-white/15 hover:bg-white/10">Acrylic Facemount</button>
-    </div>
-
-    <!-- Tagline -->
-    <p id="collection-tagline" class="mt-3 text-sm opacity-75"></p>
-
-    <!-- Grid -->
-    <div id="products-grid" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-  </main>
-
-  <script>
-  // Safer cross-browser: fetch JSON instead of import assertion.
-  async function loadCatalog() {
-    const res = await fetch('/data/products.json', {cache:'no-cache'});
-    if (!res.ok) throw new Error('Could not load /data/products.json');
-    return await res.json();
-  }
-
-  const $tabs = document.getElementById('collection-tabs');
-  const $grid = document.getElementById('products-grid');
-  const $tagline = document.getElementById('collection-tagline');
-
-  const money = (n)=> `$${Number(n).toLocaleString()}`;
-  const pill = (txt)=> `<span class="text-xs px-2 py-1 rounded-full border border-white/15">${txt}</span>`;
-
-  function productCard(item, collectionName){
-    return `
-      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5 hover:bg-white/[.07] transition">
-        <div class="text-xs opacity-70 mb-1">${collectionName}</div>
-        <h3 class="font-semibold leading-tight">${item.product_name}</h3>
-        <p class="text-sm mt-1 opacity-80">${item.short_desc ?? ''}</p>
-        <div class="flex items-center flex-wrap gap-2 mt-3">
-          <span class="text-xl font-bold">${money(item.price_usd)}</span>
-          ${item.orientation ? pill(item.orientation[0].toUpperCase()+item.orientation.slice(1)) : ''}
-          ${item.aspect_ratio ? pill(item.aspect_ratio) : ''}
-        </div>
-        <a href="${item.stripe_payment_link}"
-           class="mt-4 inline-block px-4 py-2 rounded-xl bg-sky-400 text-black font-semibold hover:brightness-110">
-          Buy now
-        </a>
-        <div class="text-[11px] mt-2 opacity-60">Lookup: ${item.lookup_key}</div>
-      </div>
-    `;
-  }
-
-  function renderCollection(catalog, id='canvas'){
-    const c = catalog.collections.find(x => x.id === id) || catalog.collections[0];
-    // Tag active tab
-    document.querySelectorAll('#collection-tabs .tab').forEach(btn=>{
-      btn.classList.remove('bg-white/10','text-sky-300');
-      if(btn.dataset.collection === c.id){ btn.classList.add('bg-white/10','text-sky-300'); }
-    });
-    // Tagline
-    $tagline.textContent = c.tagline || '';
-    // Grid
-    $grid.innerHTML = c.products.map(p => productCard(p, c.name)).join('');
-  }
-
-  loadCatalog().then(catalog => {
-    // Tab click handlers
-    document.querySelectorAll('#collection-tabs .tab').forEach(btn=>{
-      btn.addEventListener('click', ()=> renderCollection(catalog, btn.dataset.collection));
-    });
-    // Initial render
-    renderCollection(catalog, 'canvas');
-  }).catch(err => {
-    console.error(err);
-    $grid.innerHTML = `<div class="opacity-80">Error loading products. Make sure <code>/data/products.json</code> exists.</div>`;
-  });
-  </script>
-</body>
-</html>
+{
+  "updated_at": "2025-09-26T04:43:17Z",
+  "collections": [
+    {
+      "id": "acrylic",
+      "name": "Museum Collection \u2014 Acrylic Facemount",
+      "tagline": "Museum-grade acrylic facemount with brilliant clarity and polished edges, ready to hang.",
+      "features": [
+        "Ready to hang",
+        "Acrylic Facemount"
+      ],
+      "products": [
+        {
+          "product_name": "Museum Collection \u2013 Acrylic Facemount \u2013 8\" \u00d7 12\"",
+          "size_w_in": 8.0,
+          "size_h_in": 12.0,
+          "orientation": "vertical",
+          "price_usd": 95.0,
+          "finish": "Acrylic Facemount",
+          "ready_to_hang": true,
+          "lookup_key": "ACR-08x12-PT",
+          "sku": "ACR-08x12-PT",
+          "stripe_payment_link": "https://buy.stripe.com/3cI3cw5DE1p6etf37jeIw0o",
+          "short_desc": "Acrylic Facemount, 8\" \u00d7 12\", Vertical \u2013 Ready to Hang",
+          "aspect_ratio": "2:3"
+        },
+        {
+          "product_name": "Museum Collection \u2013 Acrylic Facemount \u2013 12\" \u00d7 8\"",
+          "size_w_in": 12.0,
+          "size_h_in": 8.0,
+          "orientation": "horizontal",
+          "price_usd": 95.0,
+          "finish": "Acrylic Facemount",
+          "ready_to_hang": true,
+          "lookup_key": "ACR-12x8-LS",
+          "sku": "ACR-12x8-LS",
+          "stripe_payment_link": "https://buy.stripe.com/00w14od66gk0cl723feIw0r",
+          "short_desc": "Acrylic Facemount, 12\" \u00d7 8\", Horizontal \u2013 Ready to Hang",
+          "aspect_ratio": "3:2"
+        },
+        {
+          "product_name": "Museum Collection \u2013 Acrylic Facemount \u2013 12\" \u00d7 12\"",
+          "size_w_in": 12.0,
+          "size_h_in": 12.0,
+          "orientation": "square",
+          "price_usd": 145.0,
+          "finish": "Acrylic Facemount",
+          "ready_to_hang": true,
+          "lookup_key": "ACR-12-SQ",
+          "sku": "ACR-12-SQ",
+          "stripe_payment_link": "https://buy.stripe.com/aFadRa5DE3xecl79vHeIw0P",
+          "short_desc": "Acrylic Facemount, 12\" \u00d7 12\", Square \u2013 Ready to Hang",
+          "aspect_ratio": "1:1"
+        },
+        {
+          "product_name": "Museum Collection \u2013 Acrylic Facemount \u2013 12\" \u00d7 18\"",
+          "size_w_in": 12.0,
+          "size_h_in": 18.0,
+          "orientation": "vertical",
+          "price_usd": 195.0,
+          "finish": "Acrylic Facemount",
+          "ready_to_hang": true,
+          "lookup_key": "ACR-12x18-PT",
+          "sku": "ACR-12x18-PT",
+          "stripe_payment_link": "https://buy.stripe.com/3cI14o2rsd7Ocl723feIw0n",
+          "short_desc": "Acrylic Facemount, 12\" \u00d7 18\", Vertical \u2013 Ready to Hang",
+          "aspect_ratio": "2:3"
+        },
+        {
+          "product_name": "Museum Collection \u2013 Acrylic Facemount \u2013 16\" \u00d7 24\"",
+          "size_w_in": 16.0,
+          "size_h_in": 24.0,
+          "orientation": "vertical",
+          "price_usd": 325.0,
+          "finish": "Acrylic Facemount",
+          "ready_to_hang": true,
+          "lookup_key": "ACR-16x24-PT",
+          "sku": "ACR-16x24-PT",
+          "stripe_payment_link": "https://buy.stripe.com/5kQ5kE0jk6JqacZ23feIw09",
+          "short_desc": "Acrylic Facemount, 16\" \u00d7 24\", Vertical \u2013 Ready to Hang",
+          "aspect_ratio": "2:3"
+        },
+        {
+          "product_name": "Museum Collection \u2013 Acrylic Facemount \u2013 18\" \u00d7 12\"",
+          "size_w_in": 18.0,
+          "size_h_in": 12.0,
+          "orientation": "horizontal",
+          "price_usd": 195.0,
+          "finish": "Acrylic Facemount",
+          "ready_to_hang": true,
+          "lookup_key": "ACR-18x12-LS",
+          "sku": "ACR-18x12-LS",
+          "stripe_payment_link": "https://buy.stripe.com/bJefZi0jk9VC5WJ37jeIw0q",
+          "short_desc": "Acrylic Facemount, 18\" \u00d7 12\", Horizontal \u2013 Ready to Hang",
+          "aspect_ratio": "3:2"
+        },
+        {
+          "product_name": "Museum Collection \u2013 Acrylic Facemount \u2013 18\" \u00d7 18\"",
+          "size_w_in": 18.0,
+          "size_h_in": 18.0,
+          "orientation": "square",
+          "price_usd": 295.0,
+          "finish": "Acrylic Facemount",
+          "ready_to_hang": true,
+          "lookup_key": "ACR-18-SQ",
+          "sku": "ACR-18-SQ",
+          "stripe_payment_link": "https://buy.stripe.com/cNi3cwc228Ry0CpbDPeIw0O",
+          "short_desc": "Acrylic Facemount, 18\" \u00d7 18\", Square \u2013 Ready to Hang",
+          "aspect_ratio": "1:1"
+        },
+        {
+          "product_name": "Museum Collection \u2013 Acrylic Facemount \u2013 20\" \u00d7 30\"",
+          "size_w_in": 20.0,
+          "size_h_in": 30.0,
+          "orientation": "vertical",
+          "price_usd": 495.0,
+          "finish": "Acrylic Facemount",
+          "ready_to_hang": true,
+          "lookup_key": "ACR-20x30-PT",
+          "sku": "ACR-20x30-PT",
+          "stripe_payment_link": "https://buy.stripe.com/7sY3cw5DE2tadpb23feIw0a",
+          "short_desc": "Acrylic Facemount, 20\" \u00d7 30\", Vertical \u2013 Ready to Hang",
+          "aspect_ratio": "2:3"
+        },
+        {
+          "product_name": "Museum Collection \u2013 Acrylic Facemount \u2013 24\" \u00d7 16\"",
+          "size_w_in": 24.0,
+          "size_h_in": 16.0,
+          "orientation": "horizontal",
+          "price_usd": 315.0,
+          "finish": "Acrylic Facemount",
+          "ready_to_hang": true,
+          "lookup_key": "ACR-24x16-LS",
+          "sku": "ACR-24x16-LS",
+          "stripe_payment_link": "https://buy.stripe.com/eVq5kE6HI9VC5WJ9vHeIw07",
+          "short_desc": "Acrylic Facemount, 24\" \u00d7 16\", Horizontal \u2013 Ready to Hang",
+          "aspect_ratio": "3:2"
+        },
+        {
+          "product_name": "Museum Collection \u2013 Acrylic Facemount \u2013 24\" \u00d7 24\"",
+          "size_w_in": 24.0,
+          "size_h_in": 24.0,
+          "orientation": "square",
+          "price_usd": 475.0,
+          "finish": "Acrylic Facemount",
+          "ready_to_hang": true,
+          "lookup_key": "ACR-24-SQ",
+          "sku": "ACR-24-SQ",
+          "stripe_payment_link": "https://buy.stripe.com/7sY7sMc228Ry1GtgY9eIw05",
+          "short_desc": "Acrylic Facemount, 24\" \u00d7 24\", Square \u2013 Ready to Hang",
+          "aspect_ratio": "1:1"
+        },
+        {
+          "product_name": "Museum Collection \u2013 Acrylic Facemount \u2013 24\" \u00d7 36\"",
+          "size_w_in": 24.0,
+          "size_h_in": 36.0,
+          "orientation": "vertical",
+          "price_usd": 725.0,
+          "finish": "Acrylic Facemount",
+          "ready_to_hang": true,
+          "lookup_key": "ACR-24x36-PT",
+          "sku": "ACR-24x36-PT",
+          "stripe_payment_link": "https://buy.stripe.com/14A8wQeaad7OacZbDPeIw0m",
+          "short_desc": "Acrylic Facemount, 24\" \u00d7 36\", Vertical \u2013 Ready to Hang",
+          "aspect_ratio": "2:3"
+        },
+        {
+          "product_name": "Museum Collection \u2013 Acrylic Facemount \u2013 30\" \u00d7 20\"",
+          "size_w_in": 30.0,
+          "size_h_in": 20.0,
+          "orientation": "horizontal",
+          "price_usd": 495.0,
+          "finish": "Acrylic Facemount",
+          "ready_to_hang": true,
+          "lookup_key": "ACR-30x20-LS",
+          "sku": "ACR-30x20-LS",
+          "stripe_payment_link": "https://buy.stripe.com/7sY14oc221p6acZ4bneIw04",
+          "short_desc": "Acrylic Facemount, 30\" \u00d7 20\", Horizontal \u2013 Ready to Hang",
+          "aspect_ratio": "3:2"
+        },
+        {
+          "product_name": "Museum Collection \u2013 Acrylic Facemount \u2013 30\" \u00d7 30\"",
+          "size_w_in": 30.0,
+          "size_h_in": 30.0,
+          "orientation": "square",
+          "price_usd": 745.0,
+          "finish": "Acrylic Facemount",
+          "ready_to_hang": true,
+          "lookup_key": "ACR-30-SQ",
+          "sku": "ACR-30-SQ",
+          "stripe_payment_link": "https://buy.stripe.com/4gM14oc222taacZfU5eIw06",
+          "short_desc": "Acrylic Facemount, 30\" \u00d7 30\", Square \u2013 Ready to Hang",
+          "aspect_ratio": "1:1"
+        },
+        {
+          "product_name": "Museum Collection \u2013 Acrylic Facemount \u2013 36\" \u00d7 24\"",
+          "size_w_in": 36.0,
+          "size_h_in": 24.0,
+          "orientation": "horizontal",
+          "price_usd": 725.0,
+          "finish": "Acrylic Facemount",
+          "ready_to_hang": true,
+          "lookup_key": "ACR-36x24-LS",
+          "sku": "ACR-36x24-LS",
+          "stripe_payment_link": "https://buy.stripe.com/eVq3cwfeeebS2Kx5freIw0p",
+          "short_desc": "Acrylic Facemount, 36\" \u00d7 24\", Horizontal \u2013 Ready to Hang",
+          "aspect_ratio": "3:2"
+        },
+        {
+          "product_name": "Museum Collection \u2013 Acrylic Facemount \u2013 36\" \u00d7 36\"",
+          "size_w_in": 36.0,
+          "size_h_in": 36.0,
+          "orientation": "square",
+          "price_usd": 995.0,
+          "finish": "Acrylic Facemount",
+          "ready_to_hang": true,
+          "lookup_key": "ACR-36-SQ",
+          "sku": "ACR-36-SQ",
+          "stripe_payment_link": "https://buy.stripe.com/fZuaEYeaa4Bi1Gt4bneIw0G",
+          "short_desc": "Acrylic Facemount, 36\" \u00d7 36\", Square \u2013 Ready to Hang",
+          "aspect_ratio": "1:1"
+        }
+      ]
+    },
+    {
+      "id": "canvas",
+      "name": "Signature Series \u2014 Fine Art Canvas",
+      "tagline": "Archival fine art canvas with rich texture, gallery-wrapped and ready to hang.",
+      "features": [
+        "Ready to hang",
+        "Fine Art Canvas"
+      ],
+      "products": [
+        {
+          "product_name": "Signature Series \u2013 Fine Art Canvas \u2013 8\" \u00d7 12\"",
+          "size_w_in": 8.0,
+          "size_h_in": 12.0,
+          "orientation": "vertical",
+          "price_usd": 45.0,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "CAN-08x12-PT",
+          "sku": "CAN-08x12-PT",
+          "stripe_payment_link": "https://buy.stripe.com/28EbJ22rsc3Kcl7gY9eIw0H",
+          "short_desc": "Fine Art Canvas, 8\" \u00d7 12\", Vertical \u2013 Ready to Hang",
+          "aspect_ratio": "2:3"
+        },
+        {
+          "product_name": "Signature Series \u2013 Fine Art Canvas \u2013 12\" \u00d7 8\"",
+          "size_w_in": 12.0,
+          "size_h_in": 8.0,
+          "orientation": "horizontal",
+          "price_usd": 45.0,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "CAN-12x08-LS",
+          "sku": "CAN-12x08-LS",
+          "stripe_payment_link": "https://buy.stripe.com/fZudRaeaaebSacZ8rDeIw0K",
+          "short_desc": "Fine Art Canvas, 12\" \u00d7 8\", Horizontal \u2013 Ready to Hang",
+          "aspect_ratio": "3:2"
+        },
+        {
+          "product_name": "Signature Series \u2013 Fine Art Canvas \u2013 12\" \u00d7 12\"",
+          "size_w_in": 12.0,
+          "size_h_in": 12.0,
+          "orientation": "square",
+          "price_usd": 45.0,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "CAN-12-SQ",
+          "sku": "CAN-12-SQ",
+          "stripe_payment_link": "https://buy.stripe.com/7sYaEY6HIgk01Gt4bneIw0N",
+          "short_desc": "Fine Art Canvas, 12\" \u00d7 12\", Square \u2013 Ready to Hang",
+          "aspect_ratio": "1:1"
+        },
+        {
+          "product_name": "Signature Series \u2013 Fine Art Canvas \u2013 12\" \u00d7 18\"",
+          "size_w_in": 12.0,
+          "size_h_in": 18.0,
+          "orientation": "vertical",
+          "price_usd": 65.0,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "CAN-12x18-PT",
+          "sku": "CAN-12x18-PT",
+          "stripe_payment_link": "https://buy.stripe.com/eVqdRa2rs0l2etfeQ1eIw0F",
+          "short_desc": "Fine Art Canvas, 12\" \u00d7 18\", Vertical \u2013 Ready to Hang",
+          "aspect_ratio": "2:3"
+        },
+        {
+          "product_name": "Signature Series \u2013 Fine Art Canvas \u2013 16\" \u00d7 24\"",
+          "size_w_in": 16.0,
+          "size_h_in": 24.0,
+          "orientation": "vertical",
+          "price_usd": 105.0,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "CAN-16x24-PT",
+          "sku": "CAN-16x24-PT",
+          "stripe_payment_link": "https://buy.stripe.com/5kQ7sM0jkgk098V9vHeIw0e",
+          "short_desc": "Fine Art Canvas, 16\" \u00d7 24\", Vertical \u2013 Ready to Hang",
+          "aspect_ratio": "2:3"
+        },
+        {
+          "product_name": "Signature Series \u2013 Fine Art Canvas \u2013 18\" \u00d7 12\"",
+          "size_w_in": 18.0,
+          "size_h_in": 12.0,
+          "orientation": "horizontal",
+          "price_usd": 65.0,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "CAN-18x12-LS",
+          "sku": "CAN-18x12-LS",
+          "stripe_payment_link": "https://buy.stripe.com/00waEY5DE3xedpbbDPeIw0J",
+          "short_desc": "Fine Art Canvas, 18\" \u00d7 12\", Horizontal \u2013 Ready to Hang",
+          "aspect_ratio": "3:2"
+        },
+        {
+          "product_name": "Signature Series \u2013 Fine Art Canvas \u2013 18\" \u00d7 18\"",
+          "size_w_in": 18.0,
+          "size_h_in": 18.0,
+          "orientation": "square",
+          "price_usd": 95.0,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "CAN-18-SQ",
+          "sku": "CAN-18-SQ",
+          "stripe_payment_link": "https://buy.stripe.com/3cI5kE8PQ0l2dpb7nzeIw0M",
+          "short_desc": "Fine Art Canvas, 18\" \u00d7 18\", Square \u2013 Ready to Hang",
+          "aspect_ratio": "1:1"
+        },
+        {
+          "product_name": "Signature Series \u2013 Fine Art Canvas \u2013 20\" \u00d7 30\"",
+          "size_w_in": 20.0,
+          "size_h_in": 30.0,
+          "orientation": "vertical",
+          "price_usd": 165.0,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "CAN-20x30-PT",
+          "sku": "CAN-20x30-PT",
+          "stripe_payment_link": "https://buy.stripe.com/3cIdRagii0l2gBngY9eIw0l",
+          "short_desc": "Fine Art Canvas, 20\" \u00d7 30\", Vertical \u2013 Ready to Hang",
+          "aspect_ratio": "2:3"
+        },
+        {
+          "product_name": "Signature Series \u2013 Fine Art Canvas \u2013 24\" \u00d7 16\"",
+          "size_w_in": 24.0,
+          "size_h_in": 16.0,
+          "orientation": "horizontal",
+          "price_usd": 105.0,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "CAN-24x16-LS",
+          "sku": "CAN-24x16-LS",
+          "stripe_payment_link": "https://buy.stripe.com/9B6cN64zA3xeacZfU5eIw0g",
+          "short_desc": "Fine Art Canvas, 24\" \u00d7 16\", Horizontal \u2013 Ready to Hang",
+          "aspect_ratio": "3:2"
+        },
+        {
+          "product_name": "Signature Series \u2013 Fine Art Canvas \u2013 24\" \u00d7 24\"",
+          "size_w_in": 24.0,
+          "size_h_in": 24.0,
+          "orientation": "square",
+          "price_usd": 155.0,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "CAN-24-SQ",
+          "sku": "CAN-24-SQ",
+          "stripe_payment_link": "https://buy.stripe.com/7sY6oIgiiebS3OBazLeIw0j",
+          "short_desc": "Fine Art Canvas, 24\" \u00d7 24\", Square \u2013 Ready to Hang",
+          "aspect_ratio": "1:1"
+        },
+        {
+          "product_name": "Signature Series \u2013 Fine Art Canvas \u2013 24\" \u00d7 36\"",
+          "size_w_in": 24.0,
+          "size_h_in": 36.0,
+          "orientation": "vertical",
+          "price_usd": 245.0,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "CAN-24x36-PT",
+          "sku": "CAN-24x36-PT",
+          "stripe_payment_link": "https://buy.stripe.com/aFafZi6HIebS2Kx6jveIw0E",
+          "short_desc": "Fine Art Canvas, 24\" \u00d7 36\" Vertical \u2013 Ready to Hang",
+          "aspect_ratio": "2:3"
+        },
+        {
+          "product_name": "Signature Series \u2013 Fine Art Canvas \u2013 30\" \u00d7 20\"",
+          "size_w_in": 30.0,
+          "size_h_in": 20.0,
+          "orientation": "horizontal",
+          "price_usd": 165.0,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "CAN-30x20-LS",
+          "sku": "CAN-30x20-LS",
+          "stripe_payment_link": "https://buy.stripe.com/4gM4gAaXY6Jqcl78rDeIw0k",
+          "short_desc": "Fine Art Canvas, 30\" \u00d7 20\", Horizontal \u2013 Ready to Hang",
+          "aspect_ratio": "3:2"
+        },
+        {
+          "product_name": "Signature Series \u2013 Fine Art Canvas \u2013 30\" \u00d7 30\"",
+          "size_w_in": 30.0,
+          "size_h_in": 30.0,
+          "orientation": "square",
+          "price_usd": 245.0,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "CAN-30-SQ",
+          "sku": "CAN-30-SQ",
+          "stripe_payment_link": "https://buy.stripe.com/4gMcN6d666Jq0CpbDPeIw0h",
+          "short_desc": "Fine Art Canvas, 30\" \u00d7 30\", Square \u2013 Ready to Hang",
+          "aspect_ratio": "1:1"
+        },
+        {
+          "product_name": "Signature Series \u2013 Fine Art Canvas \u2013 36\" \u00d7 24\"",
+          "size_w_in": 36.0,
+          "size_h_in": 24.0,
+          "orientation": "horizontal",
+          "price_usd": 245.0,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "CAN-36x24-LS",
+          "sku": "CAN-36x24-LS",
+          "stripe_payment_link": "https://buy.stripe.com/14A7sM6HI1p61Gt0ZbeIw0I",
+          "short_desc": "Fine Art Canvas, 36\" \u00d7 24\", Horizontal \u2013 Ready to Hang",
+          "aspect_ratio": "3:2"
+        },
+        {
+          "product_name": "Signature Series \u2013 Fine Art Canvas \u2013 36\" \u00d7 36\"",
+          "size_w_in": 36.0,
+          "size_h_in": 36.0,
+          "orientation": "square",
+          "price_usd": 345.0,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "CAN-36-SQ",
+          "sku": "CAN-36-SQ",
+          "stripe_payment_link": "https://buy.stripe.com/5kQ7sM8PQaZGetfgY9eIw0L",
+          "short_desc": "Fine Art Canvas, 36\" \u00d7 36\", Square \u2013 Ready to Hang",
+          "aspect_ratio": "1:1"
+        },
+        {
+          "product_name": "Product Name",
+          "size_w_in": NaN,
+          "size_h_in": NaN,
+          "orientation": "horizontal",
+          "price_usd": NaN,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "Lookup Key",
+          "sku": "Lookup Key",
+          "stripe_payment_link": "PAYMENT LINK",
+          "short_desc": "Price Description",
+          "aspect_ratio": ""
+        },
+        {
+          "product_name": "Product Name",
+          "size_w_in": NaN,
+          "size_h_in": NaN,
+          "orientation": "horizontal",
+          "price_usd": NaN,
+          "finish": "Fine Art Canvas",
+          "ready_to_hang": true,
+          "lookup_key": "Lookup Key",
+          "sku": "Lookup Key",
+          "stripe_payment_link": "PAYMENT LINK",
+          "short_desc": "Price Description",
+          "aspect_ratio": ""
+        }
+      ]
+    },
+    {
+      "id": "metal",
+      "name": "Gallery Edition \u2014 ChromaLuxe Metal",
+      "tagline": "Vibrant ChromaLuxe aluminum with glossy finish, exceptional depth, ready to hang.",
+      "features": [
+        "Ready to hang",
+        "Glossy ChromaLuxe"
+      ],
+      "products": [
+        {
+          "product_name": "Gallery Edition \u2013 ChromaLuxe Metal \u2013 8\" \u00d7 12\"",
+          "size_w_in": 8.0,
+          "size_h_in": 12.0,
+          "orientation": "vertical",
+          "price_usd": 55.0,
+          "finish": "ChromaLuxe Metal",
+          "ready_to_hang": true,
+          "lookup_key": "MET-08x12-PT",
+          "sku": "MET-08x12-PT",
+          "stripe_payment_link": "https://buy.stripe.com/dRm4gA5DEc3KacZ7nzeIw0x",
+          "short_desc": "ChromaLuxe Metal, 8\" \u00d7 12\", Vertical \u2013 Ready to Hang",
+          "aspect_ratio": "2:3"
+        },
+        {
+          "product_name": "Gallery Edition \u2013 ChromaLuxe Metal \u2013 12\" \u00d7 8\"",
+          "size_w_in": 12.0,
+          "size_h_in": 8.0,
+          "orientation": "horizontal",
+          "price_usd": 55.0,
+          "finish": "ChromaLuxe Metal",
+          "ready_to_hang": true,
+          "lookup_key": "MET-12x08-LS",
+          "sku": "MET-12x08-LS",
+          "stripe_payment_link": "https://buy.stripe.com/8x2cN68PQ1p698V5freIw0A",
+          "short_desc": "ChromaLuxe Metal, 12\" \u00d7 8\", Horizontal \u2013 Ready to Hang",
+          "aspect_ratio": "3:2"
+        },
+        {
+          "product_name": "Gallery Edition \u2013 ChromaLuxe Metal \u2013 12\" \u00d7 12\"",
+          "size_w_in": 12.0,
+          "size_h_in": 12.0,
+          "orientation": "square",
+          "price_usd": 75.0,
+          "finish": "ChromaLuxe Metal",
+          "ready_to_hang": true,
+          "lookup_key": "MET-12-SQ",
+          "sku": "MET-12-SQ",
+          "stripe_payment_link": "https://buy.stripe.com/cNieVec22ebSetf23feIw0D",
+          "short_desc": "ChromaLuxe Metal, 12\" \u00d7 12\", Square \u2013 Ready to Hang",
+          "aspect_ratio": "1:1"
+        },
+        {
+          "product_name": "Gallery Edition \u2013 ChromaLuxe Metal \u2013 12\" \u00d7 18\"",
+          "size_w_in": 12.0,
+          "size_h_in": 18.0,
+          "orientation": "vertical",
+          "price_usd": 115.0,
+          "finish": "ChromaLuxe Metal",
+          "ready_to_hang": true,
+          "lookup_key": "MET-12x18-PT",
+          "sku": "MET-12x18-PT",
+          "stripe_payment_link": "https://buy.stripe.com/aFa28s3vw8Ry84R6jveIw0w",
+          "short_desc": "ChromaLuxe Metal, 12\" \u00d7 18\", Vertical \u2013 Ready to Hang",
+          "aspect_ratio": "2:3"
+        },
+        {
+          "product_name": "Gallery Edition \u2013 ChromaLuxe Metal \u2013 16\" \u00d7 24\"",
+          "size_w_in": 16.0,
+          "size_h_in": 24.0,
+          "orientation": "vertical",
+          "price_usd": 195.0,
+          "finish": "ChromaLuxe Metal",
+          "ready_to_hang": true,
+          "lookup_key": "MET-16x24-PT",
+          "sku": "MET-16x24-PT",
+          "stripe_payment_link": "https://buy.stripe.com/dRm9AUc229VCacZ9vHeIw01",
+          "short_desc": "ChromaLuxe Metal, 16\" \u00d7 24\", Vertical \u2013 Ready to Hang",
+          "aspect_ratio": "2:3"
+        },
+        {
+          "product_name": "Gallery Edition \u2013 ChromaLuxe Metal \u2013 18\" \u00d7 12\"",
+          "size_w_in": 18.0,
+          "size_h_in": 12.0,
+          "orientation": "horizontal",
+          "price_usd": 115.0,
+          "finish": "ChromaLuxe Metal",
+          "ready_to_hang": true,
+          "lookup_key": "MET-18x12-LS",
+          "sku": "MET-18x12-LS",
+          "stripe_payment_link": "https://buy.stripe.com/7sY14ogiigk0etffU5eIw0z",
+          "short_desc": "ChromaLuxe Metal, 18\" \u00d7 12\", Horizontal \u2013 Ready to Hang",
+          "aspect_ratio": "3:2"
+        },
+        {
+          "product_name": "Gallery Edition \u2013 ChromaLuxe Metal \u2013 18\" \u00d7 18\"",
+          "size_w_in": 18.0,
+          "size_h_in": 18.0,
+          "orientation": "square",
+          "price_usd": 165.0,
+          "finish": "ChromaLuxe Metal",
+          "ready_to_hang": true,
+          "lookup_key": "MET-18-SQ",
+          "sku": "MET-18-SQ",
+          "stripe_payment_link": "https://buy.stripe.com/5kQbJ20jkd7O84RdLXeIw0C",
+          "short_desc": "ChromaLuxe Metal, 18\" \u00d7 18\", Square \u2013 Ready to Hang",
+          "aspect_ratio": "1:1"
+        },
+        {
+          "product_name": "Gallery Edition \u2013 ChromaLuxe Metal \u2013 20\" \u00d7 30\"",
+          "size_w_in": 20.0,
+          "size_h_in": 30.0,
+          "orientation": "vertical",
+          "price_usd": 295.0,
+          "finish": "ChromaLuxe Metal",
+          "ready_to_hang": true,
+          "lookup_key": "MET-20x30-PT",
+          "sku": "MET-20x30-PT",
+          "stripe_payment_link": "https://buy.stripe.com/9B66oI3vw9VCcl7azLeIw00",
+          "short_desc": "ChromaLuxe Metal, 20\" \u00d7 30\", Vertical \u2013 Ready to Hang",
+          "aspect_ratio": "2:3"
+        },
+        {
+          "product_name": "Gallery Edition \u2013 ChromaLuxe Metal \u2013 24\" \u00d7 16\"",
+          "size_w_in": 24.0,
+          "size_h_in": 16.0,
+          "orientation": "horizontal",
+          "price_usd": 195.0,
+          "finish": "ChromaLuxe Metal",
+          "ready_to_hang": true,
+          "lookup_key": "MET-24x16-LS",
+          "sku": "MET-24x16-LS",
+          "stripe_payment_link": "https://buy.stripe.com/aFaeVe2rs5Fm5WJ37jeIw03",
+          "short_desc": "ChromaLuxe Metal, 24\" \u00d7 16\", Horizontal \u2013 Ready to Hang",
+          "aspect_ratio": "3:2"
+        },
+        {
+          "product_name": "Gallery Edition \u2013 ChromaLuxe Metal \u2013 24\" \u00d7 24\"",
+          "size_w_in": 24.0,
+          "size_h_in": 24.0,
+          "orientation": "square",
+          "price_usd": 275.0,
+          "finish": "ChromaLuxe Metal",
+          "ready_to_hang": true,
+          "lookup_key": "MET-24-SQ",
+          "sku": "MET-24-SQ",
+          "stripe_payment_link": "https://buy.stripe.com/14AdRaeaa2tafxjazLeIw0c",
+          "short_desc": "ChromaLuxe Metal, 24\" \u00d7 24\", Square \u2013 Ready to Hang",
+          "aspect_ratio": "1:1"
+        },
+        {
+          "product_name": "Gallery Edition \u2013 ChromaLuxe Metal \u2013 24\" \u00d7 36\"",
+          "size_w_in": 24.0,
+          "size_h_in": 36.0,
+          "orientation": "vertical",
+          "price_usd": 425.0,
+          "finish": "ChromaLuxe Metal",
+          "ready_to_hang": true,
+          "lookup_key": "MET-24x36-PT",
+          "sku": "MET-24x36-PT",
+          "stripe_payment_link": "https://buy.stripe.com/fZudRad669VC1GtdLXeIw0v",
+          "short_desc": "ChromaLuxe Metal, 24\" \u00d7 36\", Vertical \u2013 Ready to Hang",
+          "aspect_ratio": "2:3"
+        },
+        {
+          "product_name": "Gallery Edition \u2013 ChromaLuxe Metal \u2013 30\" \u00d7 20\"",
+          "size_w_in": 30.0,
+          "size_h_in": 20.0,
+          "orientation": "horizontal",
+          "price_usd": 295.0,
+          "finish": "ChromaLuxe Metal",
+          "ready_to_hang": true,
+          "lookup_key": "MET-30x20-LS",
+          "sku": "MET-30x20-LS",
+          "stripe_payment_link": "https://buy.stripe.com/7sY14oc221p6acZ4bneIw04",
+          "short_desc": "ChromaLuxe Metal, 30\" \u00d7 20\", Horizontal \u2013 Ready to Hang",
+          "aspect_ratio": "3:2"
+        },
+        {
+          "product_name": "Gallery Edition \u2013 ChromaLuxe Metal \u2013 30\" \u00d7 30\"",
+          "size_w_in": 30.0,
+          "size_h_in": 30.0,
+          "orientation": "square",
+          "price_usd": 445.0,
+          "finish": "ChromaLuxe Metal",
+          "ready_to_hang": true,
+          "lookup_key": "MET-30-SQ",
+          "sku": "MET-30-SQ",
+          "stripe_payment_link": "https://buy.stripe.com/00weVeeaagk0fxj7nzeIw0b",
+          "short_desc": "ChromaLuxe Metal, 30\" \u00d7 30\", Square \u2013 Ready to Hang",
+          "aspect_ratio": "1:1"
+        },
+        {
+          "product_name": "Gallery Edition \u2013 ChromaLuxe Metal \u2013 36\" \u00d7 24\"",
+          "size_w_in": 36.0,
+          "size_h_in": 24.0,
+          "orientation": "horizontal",
+          "price_usd": 425.0,
+          "finish": "ChromaLuxe Metal",
+          "ready_to_hang": true,
+          "lookup_key": "MET-36x24-LS",
+          "sku": "MET-36x24-LS",
+          "stripe_payment_link": "https://buy.stripe.com/5kQfZi8PQ4Bietf0ZbeIw0y",
+          "short_desc": "ChromaLuxe Metal, 36\" \u00d7 24\", Horizontal \u2013 Ready to Hang",
+          "aspect_ratio": "3:2"
+        },
+        {
+          "product_name": "Gallery Edition \u2013 ChromaLuxe Metal \u2013 36\" \u00d7 36\"",
+          "size_w_in": 36.0,
+          "size_h_in": 36.0,
+          "orientation": "square",
+          "price_usd": 645.0,
+          "finish": "ChromaLuxe Metal",
+          "ready_to_hang": true,
+          "lookup_key": "MET-36-SQ",
+          "sku": "MET-36-SQ",
+          "stripe_payment_link": "https://buy.stripe.com/eVq6oI7LM8Ry4SF8rDeIw0B",
+          "short_desc": "ChromaLuxe Metal, 36\" \u00d7 36\", Square \u2013 Ready to Hang",
+          "aspect_ratio": "1:1"
+        }
+      ]
+    }
+  ]
+}
