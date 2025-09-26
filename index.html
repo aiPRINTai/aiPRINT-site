@@ -19,7 +19,7 @@
     .muted{color:var(--muted)}
     .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
     .btn{background:#fff;color:#000;font-weight:700;padding:.7rem 1rem;border-radius:.6rem;cursor:pointer;border:none;}
-    .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#e7eef8;cursor:pointer;}
+    .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#e7eef8;cursor:pointer;padding:.7rem 1rem;border-radius:.6rem;}
     .btn:disabled,.btn.disabled{opacity:0.5;cursor:not-allowed;filter:saturate(0.5);}
     .ringy{box-shadow:0 0 0 2px #fff inset}
     .spinner{border:2px solid #333;border-top:2px solid #fff;border-radius:50%;width:20px;height:20px;animation:spin 1s linear infinite;}
@@ -28,7 +28,8 @@
     .material-canvas{background:#8B4513;color:white;}
     .material-metal{background:#708090;color:white;}
     .material-acrylic{background:#4169E1;color:white;}
-
+    
+    /* Visual improvements */
     .sizeBtn:hover:not(.disabled) {
       transform: translateX(2px);
       box-shadow: 0 0 0 1px rgba(255,255,255,0.3);
@@ -36,7 +37,7 @@
     .sizeBtn.ringy {
       background: rgba(255,255,255,0.15);
       border-color: white;
-    }    
+    }
   </style>
 </head>
 <body>
@@ -151,8 +152,8 @@
         <!-- Controls -->
         <div class="mt-4 flex flex-wrap gap-3">
           <button id="selectBtn" class="btn">Select this image</button>
-          <button id="regenerateBtn" class="btn-ghost px-4 py-2 rounded-md">Generate another</button>
-          <button id="startOverBtn" class="btn-ghost px-4 py-2 rounded-md">Start over</button>
+          <button id="regenerateBtn" class="btn-ghost">Generate another</button>
+          <button id="startOverBtn" class="btn-ghost">Start over</button>
         </div>
       </div>
 
@@ -178,23 +179,30 @@
     <h2 class="h2 mb-2">Order your print</h2>
     <p id="orderMsg" class="text-sm text-gray-300 mb-6">Generate and select a preview to unlock ordering.</p>
 
-    <!-- Aspect groups with ALL products -->
+    <!-- Material tabs -->
+    <div class="flex gap-2 mb-5">
+      <button class="orderTab px-4 py-2 rounded bg-white/10 font-semibold" data-tab="canvas">Canvas</button>
+      <button class="orderTab px-4 py-2 rounded border border-white/15" data-tab="metal">Metal</button>
+      <button class="orderTab px-4 py-2 rounded border border-white/15" data-tab="acrylic">Acrylic</button>
+    </div>
+
+    <!-- Aspect groups -->
     <div class="grid md:grid-cols-3 gap-5">
       <div id="grp-square" class="glass rounded-xl p-4">
         <div class="font-bold mb-3">Square (1:1)</div>
-        <div class="opts space-y-2" data-bucket="square">
+        <div class="opts space-y-1" data-bucket="square">
           <div class="text-xs text-gray-400">Loading products...</div>
         </div>
       </div>
       <div id="grp-h32" class="glass rounded-xl p-4">
         <div class="font-bold mb-3">Horizontal (3:2)</div>
-        <div class="opts space-y-2" data-bucket="h32">
+        <div class="opts space-y-1" data-bucket="h32">
           <div class="text-xs text-gray-400">Loading products...</div>
         </div>
       </div>
       <div id="grp-v23" class="glass rounded-xl p-4">
         <div class="font-bold mb-3">Vertical (2:3)</div>
-        <div class="opts space-y-2" data-bucket="v23">
+        <div class="opts space-y-1" data-bucket="v23">
           <div class="text-xs text-gray-400">Loading products...</div>
         </div>
       </div>
@@ -223,6 +231,7 @@
 
     // Global state
     let CATALOG = null;
+    let currentCollection = 'canvas';
     let currentPreview = null;
     let selected = null;
 
@@ -262,6 +271,16 @@
           ) || [];
         });
         
+        // Debug: Show product counts
+        catalog.collections.forEach(c => {
+          console.log(`${c.id}: ${c.products.length} products`);
+          const byOrientation = {};
+          c.products.forEach(p => {
+            byOrientation[p.orientation] = (byOrientation[p.orientation] || 0) + 1;
+          });
+          console.log(`  Breakdown:`, byOrientation);
+        });
+        
         return catalog;
       } catch (error) {
         console.error('❌ Failed to load catalog:', error);
@@ -269,93 +288,57 @@
       }
     }
 
-    // Get all products for a specific aspect ratio bucket
-    function getAllProductsForBucket(bucket) {
+    // Get products for a specific collection and bucket
+    function getProductsFor(collectionId, bucket) {
       if (!CATALOG) return [];
+      const col = CATALOG.collections?.find(c => c.id === collectionId);
+      if (!col) {
+        console.log(`Collection ${collectionId} not found`);
+        return [];
+      }
+      
       const orient = bucket === 'square' ? 'square' : (bucket === 'h32' ? 'horizontal' : 'vertical');
+      const products = col.products?.filter(p => p.orientation === orient) || [];
       
-      let allProducts = [];
-      
-      // Gather products from all collections
-      CATALOG.collections?.forEach(collection => {
-        const products = collection.products?.filter(p => p.orientation === orient) || [];
-        // Add collection info to each product
-        products.forEach(p => {
-          allProducts.push({
-            ...p,
-            collection_id: collection.id,
-            collection_name: collection.name
-          });
-        });
-      });
-      
-      // Sort by size first (smallest to largest), then by material (canvas, metal, acrylic)
-      const materialOrder = { 'canvas': 1, 'metal': 2, 'acrylic': 3 };
-      allProducts.sort((a, b) => {
-        // First sort by size (using the larger dimension)
+      // Sort by size (smallest to largest)
+      products.sort((a, b) => {
         const sizeA = Math.max(a.size_w_in, a.size_h_in);
         const sizeB = Math.max(b.size_w_in, b.size_h_in);
-        if (sizeA !== sizeB) return sizeA - sizeB;
-        
-        // Then by material
-        return (materialOrder[a.collection_id] || 99) - (materialOrder[b.collection_id] || 99);
+        return sizeA - sizeB;
       });
       
-      return allProducts;
+      console.log(`Found ${products.length} ${collectionId} products for ${bucket}`);
+      return products;
     }
 
-    // Get material display name and class
-    function getMaterialInfo(collectionId) {
-      switch(collectionId) {
-        case 'canvas': return { name: 'Canvas', class: 'material-canvas' };
-        case 'metal': return { name: 'Metal', class: 'material-metal' };
-        case 'acrylic': return { name: 'Acrylic', class: 'material-acrylic' };
-        default: return { name: collectionId, class: '' };
-      }
-    }
-
-    // Product rendering - now shows ALL products
+    // Product rendering
     function renderBucket(bucket) {
       const box = $(`.opts[data-bucket="${bucket}"]`);
       if (!box) return;
 
-      const items = getAllProductsForBucket(bucket);
+      const items = getProductsFor(currentCollection, bucket);
+      
       if (!items.length) {
         box.innerHTML = '<div class="opacity-60 text-sm">No sizes available</div>';
         return;
       }
 
-      // Group by size for better organization
-      const sizeGroups = {};
-      items.forEach(item => {
-        const sizeKey = `${item.size_w_in}×${item.size_h_in}`;
-        if (!sizeGroups[sizeKey]) sizeGroups[sizeKey] = [];
-        sizeGroups[sizeKey].push(item);
-      });
-
-      let html = '';
-      Object.entries(sizeGroups).forEach(([size, products]) => {
-        html += `<div class="mb-3">`;
-        html += `<div class="text-xs text-gray-400 mb-1">${size}"</div>`;
-        
-        products.forEach(p => {
-          const materialInfo = getMaterialInfo(p.collection_id);
-          html += `
-            <button class="sizeBtn w-full mb-1 px-3 py-2 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-left disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                    data-material="${p.collection_id}"
-                    data-shape="${bucket}"
-                    data-lookup="${p.lookup_key}"
-                    data-label="${materialInfo.name} ${p.size_w_in}×${p.size_h_in} — ${formatMoney(p.price_usd)}"
-                    data-link="${p.stripe_payment_link}">
-              <span class="${materialInfo.class} material-badge">${materialInfo.name.toUpperCase()}</span>
-              <span class="text-white">${formatMoney(p.price_usd)}</span>
-            </button>
-          `;
-        });
-        html += `</div>`;
-      });
-
-      box.innerHTML = html;
+      // Render all items for this material and aspect ratio
+      const materialName = currentCollection.toUpperCase();
+      const materialClass = currentCollection === 'canvas' ? 'material-canvas' : 
+                           currentCollection === 'metal' ? 'material-metal' : 'material-acrylic';
+      
+      box.innerHTML = items.map(p => `
+        <button class="sizeBtn w-full mb-2 px-3 py-2 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-left text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled"
+                data-material="${currentCollection}"
+                data-shape="${bucket}"
+                data-lookup="${p.lookup_key}"
+                data-label="${materialName} ${p.size_w_in}×${p.size_h_in} — ${formatMoney(p.price_usd)}"
+                data-link="${p.stripe_payment_link}">
+          <span class="${materialClass} material-badge">${materialName}</span>
+          <span class="text-white">${p.size_w_in}×${p.size_h_in}" — ${formatMoney(p.price_usd)}</span>
+        </button>
+      `).join('');
 
       // Add click handlers
       box.querySelectorAll('.sizeBtn').forEach(btn => {
@@ -521,8 +504,8 @@
       
       const shapeNames = { square: 'Square', h32: 'Horizontal', v23: 'Vertical' };
       $('#orderMsg').innerHTML = `
-        <strong>✓ Image selected!</strong> Choose from ${shapeNames[currentPreview.shape]} sizes below. 
-        <span class="text-xs">(15 options: 5 sizes × 3 materials)</span>
+        <strong>✓ Image selected!</strong> ${shapeNames[currentPreview.shape]} sizes are now available below.
+        Choose your material and size (5 sizes per material).
       `;
       
       // Scroll to order section
@@ -553,6 +536,37 @@
       selected = null;
       $('#selectionSummary').textContent = 'Selected: —';
       $('#reviewBtn').classList.add('disabled');
+    });
+
+    // Material tabs
+    $$('.orderTab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Update tab styles
+        $$('.orderTab').forEach(x => {
+          x.classList.remove('bg-white/10', 'font-semibold');
+          x.classList.add('border', 'border-white/15');
+        });
+        btn.classList.add('bg-white/10', 'font-semibold');
+        btn.classList.remove('border', 'border-white/15');
+        
+        // Change current collection
+        currentCollection = btn.dataset.tab;
+        console.log('📋 Switched to:', currentCollection);
+        
+        // Re-render all buckets with new material
+        renderAllBuckets();
+        
+        // Re-apply enabled state if preview is selected
+        if (currentPreview) {
+          setActiveOnly(currentPreview.shape);
+          setButtonsEnabled(currentPreview.shape);
+        }
+        
+        // Clear selection when switching materials
+        selected = null;
+        $('#selectionSummary').textContent = 'Selected: —';
+        $('#reviewBtn').classList.add('disabled');
+      });
     });
 
     // Checkout
@@ -607,7 +621,11 @@
         renderAllBuckets();
         setActiveOnly(null);
         setButtonsEnabled(null);
-        console.log('✅ App ready! Total products:', CATALOG.collections.reduce((sum, c) => sum + c.products.length, 0));
+        
+        // Show total products
+        const totalProducts = CATALOG.collections.reduce((sum, c) => sum + c.products.length, 0);
+        console.log(`✅ App ready! ${totalProducts} total products loaded`);
+        
       } catch (e) {
         console.error('❌ Failed to initialize:', e);
         $('#orderMsg').textContent = 'Could not load products. Please refresh the page.';
