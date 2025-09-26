@@ -40,18 +40,21 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: `No active price found for lookup_key ${lookup_key}` });
     }
 
-    const metadata = {
-      lookup_key,
-      preview_url: preview.image || '',
-      prompt: preview.prompt || '',
-      ratio: preview.size || '',
-      style: preview.style || '',
-      mood: preview.mood || '',
-      light: preview.light || '',
-      composition: preview.comp || '',
-      medium: preview.medium || '',
-      signature_json: preview.sig ? JSON.stringify(preview.sig) : ''
-    };
+    const metadata: {
+  lookup_key,
+  preview_url: preview.image || '',
+  prompt: preview.prompt || '',
+  ratio: preview.size || '',
+  style: preview.style || '',
+  mood: preview.mood || '',
+  light: preview.light || '',
+  composition: preview.comp || '',
+  medium: preview.medium || '',
+  signature_json: preview.sig ? JSON.stringify(preview.sig) : '',
+  // Add product details
+  product_name: price.product?.name || '',
+  product_description: price.product?.description || ''
+};
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
