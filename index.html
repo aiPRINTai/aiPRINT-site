@@ -9,11 +9,11 @@
   <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Signature fonts (for the little preview signature control; optional) -->
+  <!-- Signature fonts (optional) -->
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Allura&family=Sacramento&family=Playfair+Display:wght@600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
 
   <style>
-    :root { --bg:#0a0f1d; --card:#131a2a; --ink:#e7eef8; --muted:#9fb3c8; }
+    :root { --bg:#0a0f1d; --ink:#e7eef8; --muted:#9fb3c8; }
     html,body{background:var(--bg);color:var(--ink);}
     body{font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;}
     .h1{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:800;line-height:1.05}
@@ -162,7 +162,6 @@
 
   <!-- APP SCRIPT -->
   <script>
-  /* =============== small helpers =============== */
   const $ = (q, el=document) => el.querySelector(q);
   const $$ = (q, el=document) => [...el.querySelectorAll(q)];
   document.getElementById('y').textContent = new Date().getFullYear();
@@ -173,7 +172,7 @@
 
   let CATALOG = null;
   let currentCollection = 'canvas';
-  let lastPreview = null; // {w,h, shape:'square'|'h32'|'v23'}
+  let lastPreview = null; // { w, h, shape:'square'|'h32'|'v23' }
   let selected = null;
 
   const formatMoney = n => `$${Number(n).toLocaleString()}`;
@@ -183,21 +182,18 @@
     return r > 1 ? 'h32' : 'v23';
   };
 
-  /* =============== Load products.json (multi-URL fallback) =============== */
   async function loadCatalog(){
-    const fallbacks = [
+    const urls = [
       '/data/products.json',
       '/public/data/products.json',
-      // GitHub raw fallbacks (repo: aiPRINTai/aiPRINT-site)
       'https://raw.githubusercontent.com/aiPRINTai/aiPRINT-site/main/data/products.json',
       'https://raw.githubusercontent.com/aiPRINTai/aiPRINT-site/main/public/data/products.json'
     ];
-    for (const url of fallbacks){
+    for (const url of urls){
       try{
         const r = await fetch(url, {cache:'no-cache'});
         if (!r.ok) continue;
         const j = await r.json();
-        // sanitize: drop any invalid rows (e.g., NaN placeholders)
         j.collections.forEach(c=>{
           c.products = c.products.filter(p =>
             Number.isFinite(p.size_w_in) &&
@@ -209,30 +205,25 @@
         });
         console.log('Loaded catalog from:', url);
         return j;
-      }catch(e){ /* try next url */ }
+      }catch(e){}
     }
     throw new Error('Could not load products.json from any source.');
   }
 
-  /* =============== Rendering =============== */
   function getProductsFor(collectionId, bucket){
     if (!CATALOG) return [];
     const col = CATALOG.collections.find(c => c.id === collectionId);
     if (!col) return [];
     const orient = bucket === 'square' ? 'square' : (bucket === 'h32' ? 'horizontal' : 'vertical');
-    return col.products
-      .filter(p => p.orientation === orient)
-      .sort((a,b) => a.price_usd - b.price_usd);
+    return col.products.filter(p => p.orientation === orient).sort((a,b)=>a.price_usd-b.price_usd);
   }
 
   function renderBucket(bucket){
     const box = $(`.opts[data-bucket="${bucket}"]`);
     if (!box) return;
     const items = getProductsFor(currentCollection, bucket);
-    if (!items.length) {
-      box.innerHTML = '<div class="opacity-60">No sizes</div>';
-      return;
-    }
+    if (!items.length) { box.innerHTML = '<div class="opacity-60">No sizes</div>'; return; }
+
     box.innerHTML = items.map(p => `
       <button class="sizeBtn w-full mb-2 last:mb-0 px-3 py-2 rounded bg-white text-black hover:opacity-90"
               data-material="${currentCollection}"
@@ -244,11 +235,10 @@
       </button>
     `).join('');
 
-    // wire clicks
     box.querySelectorAll('.sizeBtn').forEach(b=>{
       b.addEventListener('click', ()=>{
         if (!lastPreview) { alert('Generate a preview first.'); return; }
-        if (b.disabled) return;
+        if (b.classList.contains('disabled')) return; // ignore until unlocked
         $$('.sizeBtn').forEach(x=>x.classList.remove('ringy'));
         b.classList.add('ringy');
         selected = {
@@ -264,63 +254,70 @@
     });
   }
 
-  function renderAllBuckets(){
-    ['square','h32','v23'].forEach(renderBucket);
-  }
+  function renderAllBuckets(){ ['square','h32','v23'].forEach(renderBucket); }
 
   function setActiveOnly(bucket){
     [['square','#grp-square'], ['h32','#grp-h32'], ['v23','#grp-v23']].forEach(([k,sel])=>{
-      const el = $(sel);
-      if (k === bucket) el.classList.remove('opacity-50','pointer-events-none');
+      const el = document.querySelector(sel);
+      if (!bucket || k === bucket) el.classList.remove('opacity-50','pointer-events-none');
       else el.classList.add('opacity-50','pointer-events-none');
     });
   }
 
-  /* =============== Tabs =============== */
+  // NEW: make buttons visible but disabled until the right aspect is known
+  function setButtonsEnabled(enabledBucket){
+    document.querySelectorAll('.sizeBtn').forEach(btn=>{
+      const shape = btn.dataset.shape;
+      const enabled = !!enabledBucket && shape === enabledBucket;
+      btn.classList.toggle('disabled', !enabled);
+    });
+  }
+
+  // Material tabs
   $$('.orderTab').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       $$('.orderTab').forEach(x=>x.classList.remove('bg-white/10'));
       btn.classList.add('bg-white/10');
       currentCollection = btn.dataset.tab;
       renderAllBuckets();
-      // keep aspect lock
-      setActiveOnly(lastPreview ? lastPreview.shape : 'square');
+      setActiveOnly(lastPreview ? lastPreview.shape : null);
+      setButtonsEnabled(lastPreview ? lastPreview.shape : null);
     });
   });
 
-  /* =============== Generate preview (mock) =============== */
+  // Generate preview (mock)
   const genBtn = $('#genBtn'), preview = $('#previewImg'), wrap = $('#previewWrap'), ratioSel = $('#ratioSel');
   function setWrapAspect(ratio){
     if (ratio === '1024x1024') wrap.style.aspectRatio = '1 / 1';
     else if (ratio === '1536x1024') wrap.style.aspectRatio = '3 / 2';
     else wrap.style.aspectRatio = '2 / 3';
   }
-
-  genBtn.addEventListener('click', async ()=>{
+  genBtn.addEventListener('click', ()=>{
     const ratio = ratioSel.value;
     const [w,h] = ratio.split('x').map(Number);
     setWrapAspect(ratio);
-    // mock image URL (swap with your real generator later)
-    preview.src = `https://picsum.photos/${w}/${h}?random=${Date.now()}`;
+    preview.src = `https://picsum.photos/${w}/${h}?random=${Date.now()}`; // mock image
     lastPreview = { w, h, shape: classifyAspect(w,h) };
     setActiveOnly(lastPreview.shape);
+    setButtonsEnabled(lastPreview.shape); // unlock matching aspect
     orderMsg.textContent = `Looks great! Only ${ lastPreview.shape === 'square' ? 'square' : (lastPreview.shape === 'h32' ? 'horizontal' : 'vertical') } sizes are available for this preview.`;
   });
 
-  /* =============== Review & Checkout =============== */
+  // Review & Checkout (direct to Stripe Payment Link)
   reviewBtn.addEventListener('click', ()=>{
     if (!selected) return alert('Pick a size first.');
     if (!lastPreview) return alert('Generate a preview first.');
-    // Direct to Stripe Payment Link
     window.location.href = selected.link;
   });
 
-  /* =============== Boot =============== */
+  // Boot
   (async () => {
     try {
       CATALOG = await loadCatalog();
       renderAllBuckets();
-      setActiveOnly('square'); // default hint before preview exists
+      // show everything, but gray-out all buttons until a preview is made
+      setActiveOnly(null);
+      setButtonsEnabled(null);
     } catch (e) {
       console.error(e);
       orderMsg.textContent = 'Could not load products. Please refresh.';
