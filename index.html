@@ -9,7 +9,7 @@
   <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Signature fonts (optional) -->
+  <!-- Signature fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Allura&family=Sacramento&family=Playfair+Display:wght@600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
 
   <style>
@@ -24,7 +24,16 @@
     .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#e7eef8}
     .ringy{box-shadow:0 0 0 2px #fff inset}
     .wm{background-image:repeating-linear-gradient(45deg, rgba(255,255,255,.07) 0 24px, transparent 24px 64px);}
-    .disabled{opacity:.45;pointer-events:none}
+    .disabled{
+      background: rgba(255,255,255,.08) !important;
+      color: #9fb3c8 !important;
+      border: 1px solid rgba(255,255,255,.18) !important;
+      cursor: not-allowed !important;
+      box-shadow: none !important;
+      filter: saturate(0.1);
+      opacity: .8;
+    }
+    .disabled:hover{opacity:.8 !important;}
   </style>
 </head>
 <body>
@@ -172,7 +181,7 @@
 
   let CATALOG = null;
   let currentCollection = 'canvas';
-  let lastPreview = null; // { w, h, shape:'square'|'h32'|'v23' }
+  let lastPreview = null;
   let selected = null;
 
   const formatMoney = n => `$${Number(n).toLocaleString()}`;
@@ -203,7 +212,6 @@
             p.stripe_payment_link && typeof p.stripe_payment_link === 'string'
           );
         });
-        console.log('Loaded catalog from:', url);
         return j;
       }catch(e){}
     }
@@ -238,7 +246,7 @@
     box.querySelectorAll('.sizeBtn').forEach(b=>{
       b.addEventListener('click', ()=>{
         if (!lastPreview) { alert('Generate a preview first.'); return; }
-        if (b.classList.contains('disabled')) return; // ignore until unlocked
+        if (b.classList.contains('disabled')) return;
         $$('.sizeBtn').forEach(x=>x.classList.remove('ringy'));
         b.classList.add('ringy');
         selected = {
@@ -264,12 +272,14 @@
     });
   }
 
-  // NEW: make buttons visible but disabled until the right aspect is known
+  // Updated helper: make all buttons visible but disabled until unlocked
   function setButtonsEnabled(enabledBucket){
     document.querySelectorAll('.sizeBtn').forEach(btn=>{
       const shape = btn.dataset.shape;
       const enabled = !!enabledBucket && shape === enabledBucket;
       btn.classList.toggle('disabled', !enabled);
+      btn.setAttribute('aria-disabled', String(!enabled));
+      btn.tabIndex = enabled ? 0 : -1;
     });
   }
 
@@ -285,7 +295,7 @@
     });
   });
 
-  // Generate preview (mock)
+  // Generate preview
   const genBtn = $('#genBtn'), preview = $('#previewImg'), wrap = $('#previewWrap'), ratioSel = $('#ratioSel');
   function setWrapAspect(ratio){
     if (ratio === '1024x1024') wrap.style.aspectRatio = '1 / 1';
@@ -296,14 +306,14 @@
     const ratio = ratioSel.value;
     const [w,h] = ratio.split('x').map(Number);
     setWrapAspect(ratio);
-    preview.src = `https://picsum.photos/${w}/${h}?random=${Date.now()}`; // mock image
+    preview.src = `https://picsum.photos/${w}/${h}?random=${Date.now()}`;
     lastPreview = { w, h, shape: classifyAspect(w,h) };
     setActiveOnly(lastPreview.shape);
-    setButtonsEnabled(lastPreview.shape); // unlock matching aspect
+    setButtonsEnabled(lastPreview.shape);
     orderMsg.textContent = `Looks great! Only ${ lastPreview.shape === 'square' ? 'square' : (lastPreview.shape === 'h32' ? 'horizontal' : 'vertical') } sizes are available for this preview.`;
   });
 
-  // Review & Checkout (direct to Stripe Payment Link)
+  // Checkout
   reviewBtn.addEventListener('click', ()=>{
     if (!selected) return alert('Pick a size first.');
     if (!lastPreview) return alert('Generate a preview first.');
@@ -315,7 +325,6 @@
     try {
       CATALOG = await loadCatalog();
       renderAllBuckets();
-      // show everything, but gray-out all buttons until a preview is made
       setActiveOnly(null);
       setButtonsEnabled(null);
     } catch (e) {
@@ -323,6 +332,7 @@
       orderMsg.textContent = 'Could not load products. Please refresh.';
     }
   })();
+ 
   </script>
 </body>
 </html>
