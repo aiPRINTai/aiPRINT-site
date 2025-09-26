@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>aiPRINT — Shop</title>
+  <meta name="description" content="Fine Art Canvas, ChromaLuxe Metal, and Acrylic Facemount prints — ready to hang." />
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0b1020] text-white selection:bg-sky-300/40 selection:text-black">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-[#0b1020]/80 backdrop-blur border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2">
+        <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
+        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-base">
+        <a class="hover:text-sky-300" href="/index.html">Home</a>
+        <a class="hover:text-sky-300" href="/materials.html">Materials</a>
+        <a class="text-sky-300" href="/shop.html">Shop</a>
+        <a class="hover:text-sky-300" href="/faq.html">FAQ</a>
+        <a class="hover:text-sky-300" href="/contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-7xl mx-auto px-5 py-10">
+    <h1 class="text-3xl md:text-4xl font-bold">Shop Gallery-Ready Prints</h1>
+    <p class="opacity-80 mt-2">All pieces are archival and ready to hang. Choose Canvas, ChromaLuxe Metal, or Acrylic Facemount.</p>
+
+    <!-- Tabs -->
+    <div id="collection-tabs" class="mt-6 flex flex-wrap gap-2">
+      <button data-collection="canvas"  class="tab px-3 py-2 rounded-xl border border-white/15 hover:bg-white/10">Canvas</button>
+      <button data-collection="metal"   class="tab px-3 py-2 rounded-xl border border-white/15 hover:bg-white/10">ChromaLuxe Metal</button>
+      <button data-collection="acrylic" class="tab px-3 py-2 rounded-xl border border-white/15 hover:bg-white/10">Acrylic Facemount</button>
+    </div>
+
+    <!-- Tagline -->
+    <p id="collection-tagline" class="mt-3 text-sm opacity-75"></p>
+
+    <!-- Grid -->
+    <div id="products-grid" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  </main>
+
+  <script>
+  // Safer cross-browser: fetch JSON instead of import assertion.
+  async function loadCatalog() {
+    const res = await fetch('/data/products.json', {cache:'no-cache'});
+    if (!res.ok) throw new Error('Could not load /data/products.json');
+    return await res.json();
+  }
+
+  const $tabs = document.getElementById('collection-tabs');
+  const $grid = document.getElementById('products-grid');
+  const $tagline = document.getElementById('collection-tagline');
+
+  const money = (n)=> `$${Number(n).toLocaleString()}`;
+  const pill = (txt)=> `<span class="text-xs px-2 py-1 rounded-full border border-white/15">${txt}</span>`;
+
+  function productCard(item, collectionName){
+    return `
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5 hover:bg-white/[.07] transition">
+        <div class="text-xs opacity-70 mb-1">${collectionName}</div>
+        <h3 class="font-semibold leading-tight">${item.product_name}</h3>
+        <p class="text-sm mt-1 opacity-80">${item.short_desc ?? ''}</p>
+        <div class="flex items-center flex-wrap gap-2 mt-3">
+          <span class="text-xl font-bold">${money(item.price_usd)}</span>
+          ${item.orientation ? pill(item.orientation[0].toUpperCase()+item.orientation.slice(1)) : ''}
+          ${item.aspect_ratio ? pill(item.aspect_ratio) : ''}
+        </div>
+        <a href="${item.stripe_payment_link}"
+           class="mt-4 inline-block px-4 py-2 rounded-xl bg-sky-400 text-black font-semibold hover:brightness-110">
+          Buy now
+        </a>
+        <div class="text-[11px] mt-2 opacity-60">Lookup: ${item.lookup_key}</div>
+      </div>
+    `;
+  }
+
+  function renderCollection(catalog, id='canvas'){
+    const c = catalog.collections.find(x => x.id === id) || catalog.collections[0];
+    // Tag active tab
+    document.querySelectorAll('#collection-tabs .tab').forEach(btn=>{
+      btn.classList.remove('bg-white/10','text-sky-300');
+      if(btn.dataset.collection === c.id){ btn.classList.add('bg-white/10','text-sky-300'); }
+    });
+    // Tagline
+    $tagline.textContent = c.tagline || '';
+    // Grid
+    $grid.innerHTML = c.products.map(p => productCard(p, c.name)).join('');
+  }
+
+  loadCatalog().then(catalog => {
+    // Tab click handlers
+    document.querySelectorAll('#collection-tabs .tab').forEach(btn=>{
+      btn.addEventListener('click', ()=> renderCollection(catalog, btn.dataset.collection));
+    });
+    // Initial render
+    renderCollection(catalog, 'canvas');
+  }).catch(err => {
+    console.error(err);
+    $grid.innerHTML = `<div class="opacity-80">Error loading products. Make sure <code>/data/products.json</code> exists.</div>`;
+  });
+  </script>
+</body>
+</html>
