@@ -9,18 +9,22 @@
   <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Signature fonts -->
+  <!-- Signature fonts (for the little preview signature control; optional) -->
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Allura&family=Sacramento&family=Playfair+Display:wght@600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
 
   <style>
-    body { background:#0a0f1d; color:#e7eef8; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
-    .glass { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px); }
-    .muted { color: #9fb3c8; }
-    .h1 { font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight:800; line-height:1.05 }
-    .h2 { font-size: clamp(1.4rem, 2.4vw, 2.1rem); font-weight:800; }
-    .btn { background:white; color:black; font-weight:700; padding:.7rem 1rem; border-radius:.6rem; }
-    .btn-ghost { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); color:#e7eef8; }
-    .sig-overlay { position:absolute; left:12px; bottom:12px; color:#fff; font-size:24px; pointer-events:auto; }
+    :root { --bg:#0a0f1d; --card:#131a2a; --ink:#e7eef8; --muted:#9fb3c8; }
+    html,body{background:var(--bg);color:var(--ink);}
+    body{font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;}
+    .h1{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:800;line-height:1.05}
+    .h2{font-size:clamp(1.4rem,2.4vw,2.1rem);font-weight:800;}
+    .muted{color:var(--muted)}
+    .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
+    .btn{background:#fff;color:#000;font-weight:700;padding:.7rem 1rem;border-radius:.6rem}
+    .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#e7eef8}
+    .ringy{box-shadow:0 0 0 2px #fff inset}
+    .wm{background-image:repeating-linear-gradient(45deg, rgba(255,255,255,.07) 0 24px, transparent 24px 64px);}
+    .disabled{opacity:.45;pointer-events:none}
   </style>
 </head>
 <body>
@@ -46,110 +50,282 @@
   <section class="max-w-7xl mx-auto px-5 pt-6 pb-12 grid lg:grid-cols-2 gap-10 items-center">
     <div>
       <h1 class="h1">Turn any idea into a <span class="text-indigo-300">gallery-worthy</span> print.</h1>
-      <p class="muted mt-4 max-w-xl">Type a prompt. We create the art with AI + a human artist's eye. You pick size & finish. We ship an archival, limited-edition print to your door.</p>
+      <p class="muted mt-4 max-w-xl">Type a prompt. We create the art with AI + a human artist’s eye. You pick size & finish. We ship an archival, limited-edition print to your door.</p>
       <div class="flex gap-3 mt-6">
         <a href="#create" class="btn">Create a preview</a>
         <a href="#how" class="btn-ghost">See how it works</a>
       </div>
       <p class="mt-5 text-sm text-gray-400">Made in the USA · Archival materials · Certificate of Authenticity · Ready to hang</p>
     </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section id="how" class="max-w-7xl mx-auto px-5 py-12">
-    <h2 class="h2 mb-6">How it works</h2>
-    <div class="grid md:grid-cols-3 gap-5">
-      <div class="glass rounded-xl p-5"><div class="font-bold">STEP 1</div><div class="mt-2 font-extrabold">Describe your idea</div><p class="muted">Share a prompt (style, mood, colors).</p></div>
-      <div class="glass rounded-xl p-5"><div class="font-bold">STEP 2</div><div class="mt-2 font-extrabold">We craft your artwork</div><p class="muted">Your prompt generates a preview with our curation.</p></div>
-      <div class="glass rounded-xl p-5"><div class="font-bold">STEP 3</div><div class="mt-2 font-extrabold">Printed. Signed. Shipped.</div><p class="muted">Premium materials, ready to hang.</p></div>
+    <div class="grid gap-4">
+      <div class="h-64 rounded-2xl overflow-hidden glass">
+        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop" class="w-full h-full object-cover" alt="">
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="h-36 rounded-2xl overflow-hidden glass">
+          <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover" alt="">
+        </div>
+        <div class="h-36 rounded-2xl overflow-hidden glass">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover" alt="">
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- PREVIEW -->
+  <!-- HOW -->
+  <section id="how" class="max-w-7xl mx-auto px-5 py-12">
+    <h2 class="h2 mb-6">How it works</h2>
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="glass rounded-xl p-5">
+        <div class="font-bold">STEP 1</div>
+        <div class="mt-2 font-extrabold">Describe your idea</div>
+        <p class="muted">Share a prompt (style, mood, colors). Add an optional reference image.</p>
+      </div>
+      <div class="glass rounded-xl p-5">
+        <div class="font-bold">STEP 2</div>
+        <div class="mt-2 font-extrabold">We craft your artwork</div>
+        <p class="muted">Your prompt generates a preview with our human curation.</p>
+      </div>
+      <div class="glass rounded-xl p-5">
+        <div class="font-bold">STEP 3</div>
+        <div class="mt-2 font-extrabold">Printed. Signed. Shipped.</div>
+        <p class="muted">Premium materials, ready to hang. Certificate of Authenticity.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CREATE -->
   <section id="create" class="max-w-7xl mx-auto px-5 py-14">
     <h2 class="h2 mb-4">Create a preview</h2>
-    <div class="glass rounded-xl p-5">
-      <textarea id="promptInput" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-3" placeholder="Describe your idea..."></textarea>
-      <div class="mt-4">
-        <label class="text-sm muted">Aspect ratio</label>
-        <select id="ratioSel" class="rounded bg-white/10 border px-2 py-1">
-          <option value="1024x1024">Square (1:1)</option>
-          <option value="1536x1024">Horizontal (3:2)</option>
-          <option value="1024x1536">Vertical (2:3)</option>
-        </select>
-        <button id="genBtn" class="btn ml-3">Generate preview</button>
+    <div class="glass rounded-xl p-5 md:p-6">
+      <div class="grid lg:grid-cols-[1fr_260px] gap-4">
+        <textarea id="promptInput" class="rounded-lg bg-white/10 border border-white/15 px-3 py-3 min-h-[56px]" placeholder="e.g., photographer on a beach surrounded by wildlife"></textarea>
+        <div class="space-y-2">
+          <label class="text-sm muted block">Aspect ratio</label>
+          <select id="ratioSel" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2">
+            <option value="1024x1024">Square (1:1)</option>
+            <option value="1536x1024">Horizontal 3:2</option>
+            <option value="1024x1536">Vertical 2:3</option>
+          </select>
+          <button id="genBtn" class="btn w-full">Generate preview</button>
+        </div>
       </div>
-      <div class="mt-6 relative w-full bg-black/40 rounded-xl overflow-hidden border border-white/10 grid place-items-center" style="aspect-ratio:1/1;">
-        <img id="previewImg" class="max-w-full max-h-full object-contain" alt="Preview"/>
+
+      <div class="mt-6">
+        <div id="previewWrap" class="relative w-full bg-black/40 rounded-xl overflow-hidden border border-white/10 grid place-items-center wm" style="aspect-ratio:1/1;">
+          <img id="previewImg" class="max-w-full max-h-full object-contain" alt="Preview" />
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ORDER -->
   <section id="order" class="max-w-7xl mx-auto px-5 py-14">
-    <h2 class="h2 mb-4">Order your print</h2>
-    <p class="opacity-70 mb-6">Generate a preview first to unlock ordering.</p>
+    <h2 class="h2 mb-2">Order your print</h2>
+    <p id="orderMsg" class="text-sm text-gray-300 mb-4">Generate a preview first to unlock ordering.</p>
+
     <!-- Material tabs -->
-    <div class="flex gap-2 mb-6">
-      <button id="tab-canvas"  class="px-3 py-2 rounded bg-white/10">Canvas</button>
-      <button id="tab-metal"   class="px-3 py-2 rounded border border-white/15">Metal</button>
-      <button id="tab-acrylic" class="px-3 py-2 rounded border border-white/15">Acrylic</button>
+    <div class="flex gap-2 mb-5">
+      <button class="orderTab px-3 py-2 rounded bg-white/10" data-tab="canvas">Canvas</button>
+      <button class="orderTab px-3 py-2 rounded border border-white/15" data-tab="metal">Metal</button>
+      <button class="orderTab px-3 py-2 rounded border border-white/15" data-tab="acrylic">Acrylic</button>
     </div>
-    <!-- Aspect ratio boxes -->
+
+    <!-- Aspect groups -->
     <div class="grid md:grid-cols-3 gap-5">
-      <div id="box-square" class="p-4 rounded-xl border border-white/15 bg-white/5"><h3 class="font-semibold mb-3">Square (1:1)</h3><div class="options">—</div></div>
-      <div id="box-h32" class="p-4 rounded-xl border border-white/15 bg-white/5"><h3 class="font-semibold mb-3">Horizontal (3:2)</h3><div class="options">—</div></div>
-      <div id="box-v23" class="p-4 rounded-xl border border-white/15 bg-white/5"><h3 class="font-semibold mb-3">Vertical (2:3)</h3><div class="options">—</div></div>
+      <div id="grp-square" class="glass rounded-xl p-4">
+        <div class="font-bold mb-2">Square (1:1)</div>
+        <div class="opts" data-bucket="square">—</div>
+      </div>
+      <div id="grp-h32" class="glass rounded-xl p-4">
+        <div class="font-bold mb-2">Horizontal (3:2)</div>
+        <div class="opts" data-bucket="h32">—</div>
+      </div>
+      <div id="grp-v23" class="glass rounded-xl p-4">
+        <div class="font-bold mb-2">Vertical (2:3)</div>
+        <div class="opts" data-bucket="v23">—</div>
+      </div>
+    </div>
+
+    <div class="mt-6 flex items-center gap-3">
+      <div id="selectionSummary" class="text-sm text-gray-300">Selected: —</div>
+      <button id="reviewBtn" class="btn btn-ghost disabled">Review & Checkout</button>
     </div>
   </section>
 
   <!-- FOOTER -->
-  <footer class="border-t border-white/10 mt-10">
-    <div class="max-w-7xl mx-auto px-5 py-10 text-sm text-gray-400">© <span id="y"></span> aiPRINT.ai</div>
+  <footer class="border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-5 py-10 text-sm text-white/70">
+      © <span id="y"></span> aiPRINT.ai
+    </div>
   </footer>
 
-  <!-- SCRIPT -->
+  <!-- APP SCRIPT -->
   <script>
+  /* =============== small helpers =============== */
+  const $ = (q, el=document) => el.querySelector(q);
+  const $$ = (q, el=document) => [...el.querySelectorAll(q)];
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  const els = {
-    tabs: {
-      canvas: document.querySelector('#tab-canvas'),
-      metal: document.querySelector('#tab-metal'),
-      acrylic: document.querySelector('#tab-acrylic'),
-    },
-    boxes: {
-      square: document.querySelector('#box-square .options'),
-      h32: document.querySelector('#box-h32 .options'),
-      v23: document.querySelector('#box-v23 .options'),
-    },
-    containers: {
-      square: document.querySelector('#box-square'),
-      h32: document.querySelector('#box-h32'),
-      v23: document.querySelector('#box-v23'),
-    }
-  };
+  const orderMsg = $('#orderMsg');
+  const reviewBtn = $('#reviewBtn');
+  const summary = $('#selectionSummary');
 
   let CATALOG = null;
   let currentCollection = 'canvas';
+  let lastPreview = null; // {w,h, shape:'square'|'h32'|'v23'}
+  let selected = null;
 
-  // TEMP: Load from GitHub Raw
-  const CATALOG_URL = 'https://raw.githubusercontent.com/aiPRINTai/aiPRINT-site/main/public/data/products.json';
-  fetch(CATALOG_URL, {cache:'no-cache'})
-    .then(r => r.json())
-    .then(data => { CATALOG = data; })
-    .catch(err => console.error('Error loading products.json', err));
+  const formatMoney = n => `$${Number(n).toLocaleString()}`;
+  const classifyAspect = (w,h) => {
+    const r = w/h, eps=0.04;
+    if (Math.abs(r-1) <= eps) return 'square';
+    return r > 1 ? 'h32' : 'v23';
+  };
 
-  const money = n => `$${Number(n).toLocaleString()}`;
-  function classifyAspect(w,h){const r=w/h;const eps=0.04;if(Math.abs(r-1)<=eps)return'square';if(r>1)return'h32';return'v23';}
-  function getOptions(colId,bucket){if(!CATALOG)return[];const col=CATALOG.collections.find(c=>c.id===colId);if(!col)return[];return col.products.filter(p=>bucket==='square'?p.orientation==='square':bucket==='h32'?p.orientation==='horizontal':p.orientation==='vertical').sort((a,b)=>a.price_usd-b.price_usd);}
-  function renderBox(boxEl,items){if(!items.length){boxEl.innerHTML='<div class="opacity-50">No sizes</div>';return;}boxEl.innerHTML=items.map(p=>`<button class="w-full px-3 py-2 rounded bg-white/10 hover:bg-white/20 border border-white/15" data-link="${p.stripe_payment_link}">${p.size_w_in}×${p.size_h_in} — ${money(p.price_usd)}</button>`).join('');boxEl.querySelectorAll('button').forEach(btn=>{btn.addEventListener('click',()=>window.location.href=btn.dataset.link);});}
-  function setActiveBucket(active){Object.entries(els.containers).forEach(([k,el])=>{if(k===active)el.classList.remove('opacity-40','pointer-events-none');else el.classList.add('opacity-40','pointer-events-none');});}
-  window.updateOrderOptions=function(w,h){if(!CATALOG)return;const bucket=classifyAspect(w,h);const options=getOptions(currentCollection,bucket);renderBox(els.boxes[bucket],options);setActiveBucket(bucket);};
-  Object.entries(els.tabs).forEach(([id,btn])=>{btn.addEventListener('click',()=>{currentCollection=id;window.updateOrderOptions(1024,1024);Object.values(els.tabs).forEach(b=>b.classList.remove('bg-white/10'));btn.classList.add('bg-white/10');});});
+  /* =============== Load products.json (multi-URL fallback) =============== */
+  async function loadCatalog(){
+    const fallbacks = [
+      '/data/products.json',
+      '/public/data/products.json',
+      // GitHub raw fallbacks (repo: aiPRINTai/aiPRINT-site)
+      'https://raw.githubusercontent.com/aiPRINTai/aiPRINT-site/main/data/products.json',
+      'https://raw.githubusercontent.com/aiPRINTai/aiPRINT-site/main/public/data/products.json'
+    ];
+    for (const url of fallbacks){
+      try{
+        const r = await fetch(url, {cache:'no-cache'});
+        if (!r.ok) continue;
+        const j = await r.json();
+        // sanitize: drop any invalid rows (e.g., NaN placeholders)
+        j.collections.forEach(c=>{
+          c.products = c.products.filter(p =>
+            Number.isFinite(p.size_w_in) &&
+            Number.isFinite(p.size_h_in) &&
+            Number.isFinite(p.price_usd) &&
+            p.orientation && /^(square|horizontal|vertical)$/.test(p.orientation) &&
+            p.stripe_payment_link && typeof p.stripe_payment_link === 'string'
+          );
+        });
+        console.log('Loaded catalog from:', url);
+        return j;
+      }catch(e){ /* try next url */ }
+    }
+    throw new Error('Could not load products.json from any source.');
+  }
 
-  // Mock preview button (replace with real API call later)
-  document.getElementById('genBtn').addEventListener('click',()=>{const ratio=document.getElementById('ratioSel').value;const[w,h]=ratio.split('x').map(Number);document.getElementById('previewImg').src=`https://picsum.photos/${w}/${h}?random=${Date.now()}`;window.updateOrderOptions(w,h);});
+  /* =============== Rendering =============== */
+  function getProductsFor(collectionId, bucket){
+    if (!CATALOG) return [];
+    const col = CATALOG.collections.find(c => c.id === collectionId);
+    if (!col) return [];
+    const orient = bucket === 'square' ? 'square' : (bucket === 'h32' ? 'horizontal' : 'vertical');
+    return col.products
+      .filter(p => p.orientation === orient)
+      .sort((a,b) => a.price_usd - b.price_usd);
+  }
+
+  function renderBucket(bucket){
+    const box = $(`.opts[data-bucket="${bucket}"]`);
+    if (!box) return;
+    const items = getProductsFor(currentCollection, bucket);
+    if (!items.length) {
+      box.innerHTML = '<div class="opacity-60">No sizes</div>';
+      return;
+    }
+    box.innerHTML = items.map(p => `
+      <button class="sizeBtn w-full mb-2 last:mb-0 px-3 py-2 rounded bg-white text-black hover:opacity-90"
+              data-material="${currentCollection}"
+              data-shape="${bucket}"
+              data-lookup="${p.lookup_key}"
+              data-label="${p.size_w_in}×${p.size_h_in} — ${formatMoney(p.price_usd)}"
+              data-link="${p.stripe_payment_link}">
+        ${p.size_w_in}×${p.size_h_in} — ${formatMoney(p.price_usd)}
+      </button>
+    `).join('');
+
+    // wire clicks
+    box.querySelectorAll('.sizeBtn').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        if (!lastPreview) { alert('Generate a preview first.'); return; }
+        if (b.disabled) return;
+        $$('.sizeBtn').forEach(x=>x.classList.remove('ringy'));
+        b.classList.add('ringy');
+        selected = {
+          material: b.dataset.material,
+          shape: b.dataset.shape,
+          lookup: b.dataset.lookup,
+          label: b.dataset.label,
+          link: b.dataset.link
+        };
+        summary.textContent = `Selected: ${selected.material.toUpperCase()} • ${selected.label}`;
+        reviewBtn.classList.remove('disabled');
+      });
+    });
+  }
+
+  function renderAllBuckets(){
+    ['square','h32','v23'].forEach(renderBucket);
+  }
+
+  function setActiveOnly(bucket){
+    [['square','#grp-square'], ['h32','#grp-h32'], ['v23','#grp-v23']].forEach(([k,sel])=>{
+      const el = $(sel);
+      if (k === bucket) el.classList.remove('opacity-50','pointer-events-none');
+      else el.classList.add('opacity-50','pointer-events-none');
+    });
+  }
+
+  /* =============== Tabs =============== */
+  $$('.orderTab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      $$('.orderTab').forEach(x=>x.classList.remove('bg-white/10'));
+      btn.classList.add('bg-white/10');
+      currentCollection = btn.dataset.tab;
+      renderAllBuckets();
+      // keep aspect lock
+      setActiveOnly(lastPreview ? lastPreview.shape : 'square');
+    });
+  });
+
+  /* =============== Generate preview (mock) =============== */
+  const genBtn = $('#genBtn'), preview = $('#previewImg'), wrap = $('#previewWrap'), ratioSel = $('#ratioSel');
+  function setWrapAspect(ratio){
+    if (ratio === '1024x1024') wrap.style.aspectRatio = '1 / 1';
+    else if (ratio === '1536x1024') wrap.style.aspectRatio = '3 / 2';
+    else wrap.style.aspectRatio = '2 / 3';
+  }
+
+  genBtn.addEventListener('click', async ()=>{
+    const ratio = ratioSel.value;
+    const [w,h] = ratio.split('x').map(Number);
+    setWrapAspect(ratio);
+    // mock image URL (swap with your real generator later)
+    preview.src = `https://picsum.photos/${w}/${h}?random=${Date.now()}`;
+    lastPreview = { w, h, shape: classifyAspect(w,h) };
+    setActiveOnly(lastPreview.shape);
+    orderMsg.textContent = `Looks great! Only ${ lastPreview.shape === 'square' ? 'square' : (lastPreview.shape === 'h32' ? 'horizontal' : 'vertical') } sizes are available for this preview.`;
+  });
+
+  /* =============== Review & Checkout =============== */
+  reviewBtn.addEventListener('click', ()=>{
+    if (!selected) return alert('Pick a size first.');
+    if (!lastPreview) return alert('Generate a preview first.');
+    // Direct to Stripe Payment Link
+    window.location.href = selected.link;
+  });
+
+  /* =============== Boot =============== */
+  (async () => {
+    try {
+      CATALOG = await loadCatalog();
+      renderAllBuckets();
+      setActiveOnly('square'); // default hint before preview exists
+    } catch (e) {
+      console.error(e);
+      orderMsg.textContent = 'Could not load products. Please refresh.';
+    }
+  })();
   </script>
 </body>
 </html>
