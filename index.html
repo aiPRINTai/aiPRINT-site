@@ -252,7 +252,7 @@
       console.log('📦 Loading product catalog...');
       
       try {
-        const response = await fetch('/data/products.json');
+        const response = await fetch('/products.json');
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         
         const catalog = await response.json();
