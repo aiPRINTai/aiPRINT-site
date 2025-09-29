@@ -178,6 +178,35 @@
       background: rgba(255,255,255,0.15);
       border-color: white;
     }
+    
+    /* Materials showcase styling */
+    .material-showcase {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      aspect-ratio: 4/3;
+    }
+    
+    .material-showcase img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .material-showcase:hover img {
+      transform: scale(1.05);
+    }
+    
+    .material-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+      padding: 20px;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -247,21 +276,41 @@
     </div>
   </section>
 
-  <!-- Materials Preview -->
+  <!-- Materials Preview with Actual Product Images -->
   <section id="materials" class="max-w-7xl mx-auto px-5 py-12">
     <h2 class="h2 mb-6">Materials & finishes</h2>
-    <div class="grid md:grid-cols-3 gap-5">
-      <div class="glass rounded-xl p-5">
-        <div class="text-lg font-extrabold">Signature Series – Fine Art Canvas</div>
-        <p class="muted mt-2">Archival fine-art canvas with rich texture and deep color, gallery-wrapped and ready to hang.</p>
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Canvas -->
+      <div>
+        <div class="material-showcase">
+          <img src="/materials/canvas-ocean.jpg" alt="Fine Art Canvas Example">
+          <div class="material-info">
+            <div class="text-lg font-extrabold">Signature Series – Fine Art Canvas</div>
+          </div>
+        </div>
+        <p class="muted mt-3 text-sm">Archival fine-art canvas with rich texture and deep color, gallery-wrapped and ready to hang.</p>
       </div>
-      <div class="glass rounded-xl p-5">
-        <div class="text-lg font-extrabold">Gallery Edition – ChromaLuxe Metal</div>
-        <p class="muted mt-2">Vibrant aluminum print with durable float mount. Sleek modern look, ready to hang.</p>
+      
+      <!-- Metal -->
+      <div>
+        <div class="material-showcase">
+          <img src="/materials/metal-desert.jpg" alt="ChromaLuxe Metal Example">
+          <div class="material-info">
+            <div class="text-lg font-extrabold">Gallery Edition – ChromaLuxe Metal</div>
+          </div>
+        </div>
+        <p class="muted mt-3 text-sm">Vibrant aluminum print with durable float mount. Sleek modern look, ready to hang.</p>
       </div>
-      <div class="glass rounded-xl p-5">
-        <div class="text-lg font-extrabold">Museum Collection – Acrylic Facemount</div>
-        <p class="muted mt-2">Museum-grade acrylic facemount with brilliant clarity and depth, polished edges, ready to hang.</p>
+      
+      <!-- Acrylic -->
+      <div>
+        <div class="material-showcase">
+          <img src="/materials/acrylic-forest.jpg" alt="Acrylic Facemount Example">
+          <div class="material-info">
+            <div class="text-lg font-extrabold">Museum Collection – Acrylic Facemount</div>
+          </div>
+        </div>
+        <p class="muted mt-3 text-sm">Museum-grade acrylic facemount with brilliant clarity and depth, polished edges, ready to hang.</p>
       </div>
     </div>
   </section>
@@ -568,10 +617,11 @@
 
     const formatMoney = n => `$${Number(n).toLocaleString()}`;
 
+    // FIXED: Aspect classification to match bucket names
     const classifyAspect = (w, h) => {
       const r = w / h;
       if (Math.abs(r - 1) <= 0.1) return 'square';
-      return r > 1 ? 'horizontal' : 'vertical';
+      return r > 1 ? 'h32' : 'v23';  // Changed from 'horizontal'/'vertical'
     };
 
     // Show/hide elements
@@ -699,8 +749,8 @@
         name: 'Modern Living Room',
         placements: {
           square: { top: '15%', left: '50%', width: '22%', maxWidth: '300px', transform: 'translateX(-50%)' },
-          horizontal: { top: '13%', left: '50%', width: '30%', maxWidth: '400px', transform: 'translateX(-50%)' },
-          vertical: { top: '10%', left: '50%', width: '18%', maxWidth: '250px', transform: 'translateX(-50%)' }
+          h32: { top: '13%', left: '50%', width: '30%', maxWidth: '400px', transform: 'translateX(-50%)' },
+          v23: { top: '10%', left: '50%', width: '18%', maxWidth: '250px', transform: 'translateX(-50%)' }
         }
       },
       room2: {
@@ -708,8 +758,8 @@
         name: 'Minimalist Space',
         placements: {
           square: { top: '18%', left: '50%', width: '25%', maxWidth: '320px', transform: 'translateX(-50%)' },
-          horizontal: { top: '16%', left: '50%', width: '33%', maxWidth: '420px', transform: 'translateX(-50%)' },
-          vertical: { top: '14%', left: '50%', width: '20%', maxWidth: '260px', transform: 'translateX(-50%)' }
+          h32: { top: '16%', left: '50%', width: '33%', maxWidth: '420px', transform: 'translateX(-50%)' },
+          v23: { top: '14%', left: '50%', width: '20%', maxWidth: '260px', transform: 'translateX(-50%)' }
         }
       },
       room3: {
@@ -717,8 +767,8 @@
         name: 'Cozy Living Area',
         placements: {
           square: { top: '15%', left: '50%', width: '26%', maxWidth: '340px', transform: 'translateX(-50%)' },
-          horizontal: { top: '13%', left: '50%', width: '36%', maxWidth: '450px', transform: 'translateX(-50%)' },
-          vertical: { top: '10%', left: '50%', width: '21%', maxWidth: '280px', transform: 'translateX(-50%)' }
+          h32: { top: '13%', left: '50%', width: '36%', maxWidth: '450px', transform: 'translateX(-50%)' },
+          v23: { top: '10%', left: '50%', width: '21%', maxWidth: '280px', transform: 'translateX(-50%)' }
         }
       },
       room4: {
@@ -726,8 +776,8 @@
         name: 'Bright Living Space',
         placements: {
           square: { top: '12%', left: '50%', width: '24%', maxWidth: '320px', transform: 'translateX(-50%)' },
-          horizontal: { top: '10%', left: '50%', width: '34%', maxWidth: '430px', transform: 'translateX(-50%)' },
-          vertical: { top: '8%', left: '50%', width: '19%', maxWidth: '260px', transform: 'translateX(-50%)' }
+          h32: { top: '10%', left: '50%', width: '34%', maxWidth: '430px', transform: 'translateX(-50%)' },
+          v23: { top: '8%', left: '50%', width: '19%', maxWidth: '260px', transform: 'translateX(-50%)' }
         }
       },
       room5: {
@@ -735,8 +785,8 @@
         name: 'Sage Accent Room',
         placements: {
           square: { top: '20%', left: '50%', width: '23%', maxWidth: '310px', transform: 'translateX(-50%)' },
-          horizontal: { top: '18%', left: '50%', width: '32%', maxWidth: '410px', transform: 'translateX(-50%)' },
-          vertical: { top: '16%', left: '50%', width: '18%', maxWidth: '250px', transform: 'translateX(-50%)' }
+          h32: { top: '18%', left: '50%', width: '32%', maxWidth: '410px', transform: 'translateX(-50%)' },
+          v23: { top: '16%', left: '50%', width: '18%', maxWidth: '250px', transform: 'translateX(-50%)' }
         }
       }
     };
@@ -1241,7 +1291,7 @@
       setActiveOnly(currentPreview.shape);
       setButtonsEnabled(currentPreview.shape);
       
-      const shapeNames = { square: 'Square', horizontal: 'Horizontal', vertical: 'Vertical' };
+      const shapeNames = { square: 'Square', h32: 'Horizontal', v23: 'Vertical' };
       $('#orderMsg').innerHTML = `
         <strong>✓ Image selected!</strong> ${shapeNames[currentPreview.shape]} sizes are now available below.
         Choose your material and size.
