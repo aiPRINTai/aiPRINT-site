@@ -56,6 +56,99 @@
       background-size: 1.5em 1.5em;
       padding-right: 2.5rem;
     }
+    
+    /* Preview container styling */
+    .preview-container {
+      background: #1a1f2e;
+      background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.02) 35px, rgba(255,255,255,.02) 70px),
+        repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,.02) 35px, rgba(255,255,255,.02) 70px);
+    }
+    
+    /* Watermark styles */
+    .watermark-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      font-size: 5rem;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.15);
+      text-transform: uppercase;
+      letter-spacing: 1rem;
+      pointer-events: none;
+      text-shadow: 0 0 20px rgba(0,0,0,0.5);
+      z-index: 5;
+      user-select: none;
+    }
+    
+    /* Signature styles */
+    .signature-controls {
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .signature-control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .signature-control-group label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.6);
+    }
+    
+    .moveable-signature {
+      position: absolute;
+      cursor: move;
+      user-select: none;
+      text-shadow: 0 0 10px rgba(0,0,0,0.8);
+      transition: opacity 0.3s;
+      z-index: 10;
+    }
+    
+    .moveable-signature:hover {
+      opacity: 0.8;
+    }
+    
+    /* Font families for signature */
+    .font-elegant { font-family: 'Georgia', serif; }
+    .font-script { font-family: 'Brush Script MT', cursive; }
+    .font-modern { font-family: 'Arial', sans-serif; }
+    .font-classic { font-family: 'Times New Roman', serif; }
+    .font-bold { font-family: 'Impact', sans-serif; }
+    
+    /* Share modal styles */
+    .share-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #1a1f2e;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      padding: 24px;
+      z-index: 100;
+      max-width: 500px;
+      width: 90%;
+    }
+    
+    .share-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 99;
+    }
   </style>
 </head>
 <body>
@@ -262,29 +355,62 @@
         </div>
       </div>
 
-      <!-- Signature option -->
-      <div class="p-3 rounded-lg bg-white/5 border border-white/10 mb-6">
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input type="checkbox" id="signatureCheck" class="w-4 h-4 rounded" checked>
-          <span class="text-sm">Show signature on preview</span>
-        </label>
-        <input type="text" id="signatureInput" class="mt-2 w-full rounded bg-white/10 border border-white/15 px-2 py-1 text-sm text-white" 
-               placeholder="Your name..." value="">
+      <!-- Enhanced Signature Controls -->
+      <div class="signature-controls mb-6">
+        <div class="signature-control-group">
+          <label>Signature</label>
+          <input type="text" id="signatureInput" class="rounded bg-white/10 border border-white/15 px-2 py-1 text-sm text-white" 
+                 placeholder="Your name..." value="">
+        </div>
+        
+        <div class="signature-control-group">
+          <label>Font</label>
+          <select id="signatureFont" class="rounded bg-white/10 border border-white/15 px-2 py-1 text-sm text-white">
+            <option value="font-elegant">Elegant</option>
+            <option value="font-script">Script</option>
+            <option value="font-modern">Modern</option>
+            <option value="font-classic">Classic</option>
+            <option value="font-bold">Bold</option>
+          </select>
+        </div>
+        
+        <div class="signature-control-group">
+          <label>Color</label>
+          <select id="signatureColor" class="rounded bg-white/10 border border-white/15 px-2 py-1 text-sm text-white">
+            <option value="white">White</option>
+            <option value="black">Black</option>
+            <option value="gold">Gold</option>
+            <option value="silver">Silver</option>
+          </select>
+        </div>
+        
+        <div class="signature-control-group">
+          <label>Size</label>
+          <input type="range" id="signatureSize" min="12" max="36" value="18" 
+                 class="w-24 accent-white">
+        </div>
       </div>
 
       <!-- Preview Section -->
       <div id="previewSection" class="mt-6 hidden">
-        <div id="previewWrap" class="relative w-full max-w-2xl mx-auto bg-black/40 rounded-xl overflow-hidden border border-white/10 flex items-center justify-center" style="aspect-ratio:1/1;">
-          <img id="previewImg" class="w-full h-full object-cover" alt="Preview" />
-          <div id="signatureOverlay" class="absolute bottom-4 right-4 text-white/70 text-sm hidden"></div>
+        <div id="previewWrap" class="preview-container relative w-full max-w-2xl mx-auto rounded-xl overflow-hidden border border-white/10 flex items-center justify-center p-4" style="aspect-ratio:1/1;">
+          <img id="previewImg" class="w-full h-full object-contain" alt="Preview" />
+          <div class="watermark-overlay">PREVIEW</div>
+          <div id="signatureOverlay" class="moveable-signature font-elegant" style="color: white; font-size: 18px; bottom: 20px; right: 20px;">
+            <!-- Signature will appear here -->
+          </div>
         </div>
 
         <!-- Controls -->
         <div class="mt-4 flex flex-wrap gap-3 justify-center">
           <button id="selectBtn" class="btn">Select this image</button>
+          <button id="shareBtn" class="btn-ghost">Share/Save</button>
           <button id="regenerateBtn" class="btn-ghost">Generate another</button>
           <button id="startOverBtn" class="btn-ghost">Start over</button>
         </div>
+        
+        <!-- Info text -->
+        <p class="text-center text-xs text-gray-500 mt-3">Preview shows the full artwork with watermark. Final print will be produced at selected size.</p>
       </div>
 
       <!-- Loading state -->
@@ -304,6 +430,25 @@
       </div>
     </div>
   </section>
+
+  <!-- Share Modal (hidden by default) -->
+  <div id="shareModal" class="hidden">
+    <div class="share-modal-backdrop" onclick="closeShareModal()"></div>
+    <div class="share-modal">
+      <h3 class="text-xl font-bold mb-4">Share or Save Your Design</h3>
+      <p class="text-sm text-gray-400 mb-4">Use this link to return to your design later or share it with others:</p>
+      
+      <div class="bg-black/40 rounded-lg p-3 mb-4">
+        <input type="text" id="shareLink" class="w-full bg-transparent text-white text-sm" readonly>
+      </div>
+      
+      <div class="flex gap-3">
+        <button onclick="copyShareLink()" class="btn-ghost flex-1">Copy Link</button>
+        <button onclick="emailShareLink()" class="btn-ghost flex-1">Email to Me</button>
+        <button onclick="closeShareModal()" class="btn flex-1">Done</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ORDER -->
   <section id="order" class="max-w-7xl mx-auto px-5 py-14">
@@ -365,6 +510,7 @@
     let currentCollection = 'canvas';
     let currentPreview = null;
     let selected = null;
+    let signaturePosition = { x: null, y: null };
 
     const formatMoney = n => `$${Number(n).toLocaleString()}`;
 
@@ -398,11 +544,11 @@
       if (medium) modifiers.push(medium);
       
       // For photo-realistic, add quality modifiers
-     if (style === 'Realistic (photo-realistic)') {
-  modifiers.push('photorealistic style');
-} else if (style === 'Hyper-realistic') {
-  modifiers.push('hyperrealistic style');
-}
+      if (style === 'Realistic (photo-realistic)') {
+        modifiers.push('photorealistic style', 'highly detailed', '8k resolution');
+      } else if (style === 'Hyper-realistic') {
+        modifiers.push('hyperrealistic style', 'ultra detailed', '8k resolution');
+      }
       
       // Combine prompt with modifiers
       if (modifiers.length > 0) {
@@ -411,6 +557,183 @@
       
       return prompt;
     }
+
+    // Enhanced signature functionality
+    function initSignatureControls() {
+      const signatureOverlay = $('#signatureOverlay');
+      let isDragging = false;
+      let startX, startY, initialX, initialY;
+      
+      // Update signature text
+      $('#signatureInput').addEventListener('input', (e) => {
+        signatureOverlay.textContent = e.target.value;
+        signatureOverlay.style.display = e.target.value ? 'block' : 'none';
+      });
+      
+      // Update font
+      $('#signatureFont').addEventListener('change', (e) => {
+        signatureOverlay.className = `moveable-signature ${e.target.value}`;
+      });
+      
+      // Update color
+      $('#signatureColor').addEventListener('change', (e) => {
+        const colors = {
+          'white': '#FFFFFF',
+          'black': '#000000',
+          'gold': '#FFD700',
+          'silver': '#C0C0C0'
+        };
+        signatureOverlay.style.color = colors[e.target.value];
+      });
+      
+      // Update size
+      $('#signatureSize').addEventListener('input', (e) => {
+        signatureOverlay.style.fontSize = `${e.target.value}px`;
+      });
+      
+      // Make signature draggable
+      signatureOverlay.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        const rect = signatureOverlay.getBoundingClientRect();
+        const parentRect = $('#previewWrap').getBoundingClientRect();
+        
+        startX = e.clientX;
+        startY = e.clientY;
+        initialX = rect.left - parentRect.left;
+        initialY = rect.top - parentRect.top;
+        
+        signatureOverlay.style.cursor = 'grabbing';
+      });
+      
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+        
+        signatureOverlay.style.left = `${initialX + deltaX}px`;
+        signatureOverlay.style.top = `${initialY + deltaY}px`;
+        signatureOverlay.style.right = 'auto';
+        signatureOverlay.style.bottom = 'auto';
+        
+        signaturePosition = {
+          x: initialX + deltaX,
+          y: initialY + deltaY
+        };
+      });
+      
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+        signatureOverlay.style.cursor = 'move';
+      });
+    }
+
+    // Share/Save functionality
+    function generateShareLink() {
+      if (!currentPreview) return null;
+      
+      const data = {
+        preview: currentPreview,
+        prompt: $('#promptInput').value,
+        style: $('#styleSelect').value,
+        mood: $('#moodSelect').value,
+        lighting: $('#lightingSelect').value,
+        camera: $('#cameraSelect').value,
+        medium: $('#mediumSelect').value,
+        signature: {
+          text: $('#signatureInput').value,
+          font: $('#signatureFont').value,
+          color: $('#signatureColor').value,
+          size: $('#signatureSize').value,
+          position: signaturePosition
+        }
+      };
+      
+      const encoded = btoa(JSON.stringify(data));
+      return `${window.location.origin}${window.location.pathname}?share=${encoded}`;
+    }
+    
+    function loadFromShareLink() {
+      const params = new URLSearchParams(window.location.search);
+      const shareData = params.get('share');
+      
+      if (!shareData) return false;
+      
+      try {
+        const data = JSON.parse(atob(shareData));
+        
+        // Restore all settings
+        $('#promptInput').value = data.prompt;
+        $('#styleSelect').value = data.style;
+        $('#moodSelect').value = data.mood || '';
+        $('#lightingSelect').value = data.lighting || '';
+        $('#cameraSelect').value = data.camera || '';
+        $('#mediumSelect').value = data.medium;
+        
+        // Restore signature
+        if (data.signature) {
+          $('#signatureInput').value = data.signature.text;
+          $('#signatureFont').value = data.signature.font;
+          $('#signatureColor').value = data.signature.color;
+          $('#signatureSize').value = data.signature.size;
+          
+          if (data.signature.position) {
+            signaturePosition = data.signature.position;
+            const signatureOverlay = $('#signatureOverlay');
+            signatureOverlay.style.left = `${signaturePosition.x}px`;
+            signatureOverlay.style.top = `${signaturePosition.y}px`;
+            signatureOverlay.style.right = 'auto';
+            signatureOverlay.style.bottom = 'auto';
+          }
+        }
+        
+        // Restore preview
+        if (data.preview) {
+          currentPreview = data.preview;
+          $('#previewImg').src = data.preview.url;
+          setWrapAspect(data.preview.size);
+          show($('#previewSection'));
+          
+          // Apply signature display
+          const signatureOverlay = $('#signatureOverlay');
+          signatureOverlay.textContent = data.signature?.text || '';
+          signatureOverlay.style.display = data.signature?.text ? 'block' : 'none';
+        }
+        
+        return true;
+      } catch (e) {
+        console.error('Failed to load share data:', e);
+        return false;
+      }
+    }
+    
+    window.openShareModal = function() {
+      const link = generateShareLink();
+      if (!link) {
+        alert('Please generate a preview first');
+        return;
+      }
+      
+      $('#shareLink').value = link;
+      show($('#shareModal'));
+    };
+    
+    window.closeShareModal = function() {
+      hide($('#shareModal'));
+    };
+    
+    window.copyShareLink = function() {
+      $('#shareLink').select();
+      document.execCommand('copy');
+      alert('Link copied to clipboard!');
+    };
+    
+    window.emailShareLink = function() {
+      const link = $('#shareLink').value;
+      const subject = 'My aiPRINT.ai Design';
+      const body = `Check out my custom artwork design:\n\n${link}`;
+      window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    };
 
     // Load product catalog
     async function loadCatalog() {
@@ -436,16 +759,6 @@
           ) || [];
         });
         
-        // Debug: Show product counts
-        catalog.collections.forEach(c => {
-          console.log(`${c.id}: ${c.products.length} products`);
-          const byOrientation = {};
-          c.products.forEach(p => {
-            byOrientation[p.orientation] = (byOrientation[p.orientation] || 0) + 1;
-          });
-          console.log(`  Breakdown:`, byOrientation);
-        });
-        
         return catalog;
       } catch (error) {
         console.error('❌ Failed to load catalog:', error);
@@ -457,22 +770,18 @@
     function getProductsFor(collectionId, bucket) {
       if (!CATALOG) return [];
       const col = CATALOG.collections?.find(c => c.id === collectionId);
-      if (!col) {
-        console.log(`Collection ${collectionId} not found`);
-        return [];
-      }
+      if (!col) return [];
       
       const orient = bucket === 'square' ? 'square' : (bucket === 'h32' ? 'horizontal' : 'vertical');
       const products = col.products?.filter(p => p.orientation === orient) || [];
       
-      // Sort by size (smallest to largest)
+      // Sort by size
       products.sort((a, b) => {
         const sizeA = Math.max(a.size_w_in, a.size_h_in);
         const sizeB = Math.max(b.size_w_in, b.size_h_in);
         return sizeA - sizeB;
       });
       
-      console.log(`Found ${products.length} ${collectionId} products for ${bucket}`);
       return products;
     }
 
@@ -488,7 +797,6 @@
         return;
       }
 
-      // Render all items for this material and aspect ratio
       const materialName = currentCollection.toUpperCase();
       const materialClass = currentCollection === 'canvas' ? 'material-canvas' : 
                            currentCollection === 'metal' ? 'material-metal' : 'material-acrylic';
@@ -528,7 +836,6 @@
 
           $('#selectionSummary').textContent = `Selected: ${selected.label}`;
           $('#reviewBtn').classList.remove('disabled');
-          console.log('🛒 Product selected:', selected);
         });
       });
     }
@@ -629,7 +936,7 @@
         $('#genBtn').disabled = true;
         $('#genBtn').textContent = 'Generating...';
 
-        // Build enhanced prompt with dropdown selections
+        // Build enhanced prompt
         const enhancedPrompt = buildEnhancedPrompt();
         console.log('Enhanced prompt:', enhancedPrompt);
 
@@ -649,10 +956,10 @@
         setWrapAspect(ratio);
         
         // Handle signature
-        if ($('#signatureCheck').checked && $('#signatureInput').value) {
-          $('#signatureOverlay').textContent = $('#signatureInput').value;
-          show($('#signatureOverlay'));
-        }
+        const signatureText = $('#signatureInput').value;
+        const signatureOverlay = $('#signatureOverlay');
+        signatureOverlay.textContent = signatureText;
+        signatureOverlay.style.display = signatureText ? 'block' : 'none';
         
         hide($('#loadingState'));
         show($('#previewSection'));
@@ -680,13 +987,17 @@
       const shapeNames = { square: 'Square', h32: 'Horizontal', v23: 'Vertical' };
       $('#orderMsg').innerHTML = `
         <strong>✓ Image selected!</strong> ${shapeNames[currentPreview.shape]} sizes are now available below.
-        Choose your material and size (5 sizes per material).
+        Choose your material and size.
       `;
       
       // Scroll to order section
       document.querySelector('#order').scrollIntoView({ behavior: 'smooth' });
       
       console.log('✅ Image selected, ordering unlocked for:', currentPreview.shape);
+    });
+
+    $('#shareBtn').addEventListener('click', () => {
+      openShareModal();
     });
 
     $('#regenerateBtn').addEventListener('click', () => {
@@ -707,6 +1018,13 @@
       $('#cameraSelect').selectedIndex = 0;
       $('#mediumSelect').selectedIndex = 0;
       
+      // Reset signature
+      $('#signatureInput').value = '';
+      $('#signatureFont').selectedIndex = 0;
+      $('#signatureColor').selectedIndex = 0;
+      $('#signatureSize').value = 18;
+      signaturePosition = { x: null, y: null };
+      
       // Reset ordering
       setActiveOnly(null);
       setButtonsEnabled(null);
@@ -718,37 +1036,6 @@
       selected = null;
       $('#selectionSummary').textContent = 'Selected: —';
       $('#reviewBtn').classList.add('disabled');
-    });
-
-    // Signature checkbox handler
-    $('#signatureCheck')?.addEventListener('change', (e) => {
-      const input = $('#signatureInput');
-      const overlay = $('#signatureOverlay');
-      if (e.target.checked) {
-        input.disabled = false;
-        input.style.opacity = '1';
-        if (currentPreview && input.value) {
-          overlay.textContent = input.value;
-          show(overlay);
-        }
-      } else {
-        input.disabled = true;
-        input.style.opacity = '0.5';
-        hide(overlay);
-      }
-    });
-
-    // Signature input handler
-    $('#signatureInput')?.addEventListener('input', (e) => {
-      const overlay = $('#signatureOverlay');
-      if ($('#signatureCheck').checked && currentPreview) {
-        if (e.target.value) {
-          overlay.textContent = e.target.value;
-          show(overlay);
-        } else {
-          hide(overlay);
-        }
-      }
     });
 
     // Material tabs
@@ -793,12 +1080,21 @@
       
       // Go directly to Stripe payment link
       if (selected.link) {
-        // Optional: Store preview data in sessionStorage for later retrieval
-        sessionStorage.setItem('aiprint_order', JSON.stringify({
+        // Store complete order data including signature settings
+        const orderData = {
           preview: currentPreview,
           product: selected,
+          signature: {
+            text: $('#signatureInput').value,
+            font: $('#signatureFont').value,
+            color: $('#signatureColor').value,
+            size: $('#signatureSize').value,
+            position: signaturePosition
+          },
           timestamp: Date.now()
-        }));
+        };
+        
+        sessionStorage.setItem('aiprint_order', JSON.stringify(orderData));
         
         // Redirect to Stripe
         window.location.href = selected.link;
@@ -811,10 +1107,21 @@
     (async () => {
       try {
         console.log('🏁 Initializing...');
+        
+        // Initialize signature controls
+        initSignatureControls();
+        
+        // Load from share link if present
+        const loadedFromShare = loadFromShareLink();
+        
+        // Load catalog
         CATALOG = await loadCatalog();
         renderAllBuckets();
-        setActiveOnly(null);
-        setButtonsEnabled(null);
+        
+        if (!loadedFromShare) {
+          setActiveOnly(null);
+          setButtonsEnabled(null);
+        }
         
         // Show total products
         const totalProducts = CATALOG.collections.reduce((sum, c) => sum + c.products.length, 0);
