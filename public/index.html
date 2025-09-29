@@ -612,51 +612,131 @@
       return prompt;
     }
 
-    // Room mockup configurations
+    // Save preview to localStorage
+    function savePreviewToStorage() {
+      if (!currentPreview) return;
+      
+      const previewData = {
+        preview: currentPreview,
+        prompt: $('#promptInput').value,
+        settings: {
+          style: $('#styleSelect').value,
+          mood: $('#moodSelect').value,
+          lighting: $('#lightingSelect').value,
+          camera: $('#cameraSelect').value,
+          medium: $('#mediumSelect').value,
+          signature: {
+            text: $('#signatureInput').value,
+            font: $('#signatureFont').value,
+            color: $('#signatureColor').value,
+            size: $('#signatureSize').value,
+            position: signaturePosition
+          }
+        },
+        timestamp: Date.now()
+      };
+      
+      localStorage.setItem('aiprint_last_preview', JSON.stringify(previewData));
+      console.log('💾 Preview saved to localStorage');
+    }
+
+    // Load saved preview
+    function loadSavedPreview() {
+      const savedData = localStorage.getItem('aiprint_last_preview');
+      if (!savedData) return false;
+      
+      try {
+        const data = JSON.parse(savedData);
+        
+        // Check if less than 24 hours old
+        if (Date.now() - data.timestamp > 24 * 60 * 60 * 1000) {
+          localStorage.removeItem('aiprint_last_preview');
+          return false;
+        }
+        
+        // Restore everything
+        currentPreview = data.preview;
+        $('#promptInput').value = data.prompt;
+        $('#styleSelect').value = data.settings.style;
+        $('#moodSelect').value = data.settings.mood || '';
+        $('#lightingSelect').value = data.settings.lighting || '';
+        $('#cameraSelect').value = data.settings.camera || '';
+        $('#mediumSelect').value = data.settings.medium;
+        
+        // Restore signature
+        $('#signatureInput').value = data.settings.signature.text || '';
+        $('#signatureFont').value = data.settings.signature.font || 'font-elegant';
+        $('#signatureColor').value = data.settings.signature.color || 'white';
+        $('#signatureSize').value = data.settings.signature.size || 18;
+        
+        if (data.settings.signature.position) {
+          signaturePosition = data.settings.signature.position;
+        }
+        
+        // Show preview
+        $('#previewImg').src = data.preview.url;
+        setWrapAspect(data.preview.size);
+        show($('#previewSection'));
+        
+        // Apply signature
+        const signatureOverlay = $('#signatureOverlay');
+        signatureOverlay.textContent = data.settings.signature.text || '';
+        signatureOverlay.style.display = data.settings.signature.text ? 'block' : 'none';
+        
+        console.log('✅ Previous design restored from localStorage');
+        return true;
+      } catch (e) {
+        console.error('Failed to restore preview:', e);
+        localStorage.removeItem('aiprint_last_preview');
+        return false;
+      }
+    }
+
+    // Room mockup configurations - adjusted to prevent overlap
     const mockupRooms = {
       room1: {
         image: '/rooms/room1-neutral-console.jpg',
         name: 'Modern Living Room',
         placements: {
-          square: { top: '20%', left: '50%', width: '25%', transform: 'translateX(-50%)' },
-          horizontal: { top: '18%', left: '50%', width: '35%', transform: 'translateX(-50%)' },
-          vertical: { top: '15%', left: '50%', width: '20%', transform: 'translateX(-50%)' }
+          square: { top: '15%', left: '50%', width: '22%', maxWidth: '300px', transform: 'translateX(-50%)' },
+          horizontal: { top: '13%', left: '50%', width: '30%', maxWidth: '400px', transform: 'translateX(-50%)' },
+          vertical: { top: '10%', left: '50%', width: '18%', maxWidth: '250px', transform: 'translateX(-50%)' }
         }
       },
       room2: {
         image: '/rooms/room2-gray-console.jpg',
         name: 'Minimalist Space',
         placements: {
-          square: { top: '22%', left: '50%', width: '28%', transform: 'translateX(-50%)' },
-          horizontal: { top: '20%', left: '50%', width: '38%', transform: 'translateX(-50%)' },
-          vertical: { top: '18%', left: '50%', width: '22%', transform: 'translateX(-50%)' }
+          square: { top: '18%', left: '50%', width: '25%', maxWidth: '320px', transform: 'translateX(-50%)' },
+          horizontal: { top: '16%', left: '50%', width: '33%', maxWidth: '420px', transform: 'translateX(-50%)' },
+          vertical: { top: '14%', left: '50%', width: '20%', maxWidth: '260px', transform: 'translateX(-50%)' }
         }
       },
       room3: {
         image: '/rooms/room3-sofa-wall.jpg',
         name: 'Cozy Living Area',
         placements: {
-          square: { top: '18%', left: '50%', width: '30%', transform: 'translateX(-50%)' },
-          horizontal: { top: '16%', left: '50%', width: '42%', transform: 'translateX(-50%)' },
-          vertical: { top: '12%', left: '50%', width: '24%', transform: 'translateX(-50%)' }
+          square: { top: '15%', left: '50%', width: '26%', maxWidth: '340px', transform: 'translateX(-50%)' },
+          horizontal: { top: '13%', left: '50%', width: '36%', maxWidth: '450px', transform: 'translateX(-50%)' },
+          vertical: { top: '10%', left: '50%', width: '21%', maxWidth: '280px', transform: 'translateX(-50%)' }
         }
       },
       room4: {
         image: '/rooms/room4-light-sofa.jpg',
         name: 'Bright Living Space',
         placements: {
-          square: { top: '15%', left: '50%', width: '28%', transform: 'translateX(-50%)' },
-          horizontal: { top: '13%', left: '50%', width: '40%', transform: 'translateX(-50%)' },
-          vertical: { top: '10%', left: '50%', width: '22%', transform: 'translateX(-50%)' }
+          square: { top: '12%', left: '50%', width: '24%', maxWidth: '320px', transform: 'translateX(-50%)' },
+          horizontal: { top: '10%', left: '50%', width: '34%', maxWidth: '430px', transform: 'translateX(-50%)' },
+          vertical: { top: '8%', left: '50%', width: '19%', maxWidth: '260px', transform: 'translateX(-50%)' }
         }
       },
       room5: {
         image: '/rooms/room5-sage-green.jpg',
         name: 'Sage Accent Room',
         placements: {
-          square: { top: '25%', left: '50%', width: '26%', transform: 'translateX(-50%)' },
-          horizontal: { top: '23%', left: '50%', width: '36%', transform: 'translateX(-50%)' },
-          vertical: { top: '20%', left: '50%', width: '20%', transform: 'translateX(-50%)' }
+          square: { top: '20%', left: '50%', width: '23%', maxWidth: '310px', transform: 'translateX(-50%)' },
+          horizontal: { top: '18%', left: '50%', width: '32%', maxWidth: '410px', transform: 'translateX(-50%)' },
+          vertical: { top: '16%', left: '50%', width: '18%', maxWidth: '250px', transform: 'translateX(-50%)' }
         }
       }
     };
@@ -667,10 +747,10 @@
       '16x16': { scale: 0.85, shadow: '0 10px 25px rgba(0,0,0,0.25)' },
       '24x24': { scale: 1.0, shadow: '0 15px 35px rgba(0,0,0,0.3)' },
       '30x30': { scale: 1.15, shadow: '0 20px 40px rgba(0,0,0,0.3)' },
-      '36x36': { scale: 1.3, shadow: '0 25px 50px rgba(0,0,0,0.35)' }
+      '36x36': { scale: 1.2, shadow: '0 25px 50px rgba(0,0,0,0.35)' }
     };
 
-    // Function to show artwork in room
+    // Function to show artwork in room - with size capping
     function showArtworkInRoom(roomKey, printSize = '24x24') {
       const room = mockupRooms[roomKey];
       if (!room || !currentPreview) return '';
@@ -679,13 +759,17 @@
       const placement = room.placements[aspectRatio];
       const sizeAdj = sizeAdjustments[printSize] || { scale: 1, shadow: '0 15px 35px rgba(0,0,0,0.3)' };
       
+      // Cap the scale for very large sizes
+      const cappedScale = Math.min(sizeAdj.scale, 1.2);
+      
       return `
         <div class="relative w-full max-w-4xl mx-auto">
           <img src="${room.image}" class="w-full rounded-xl" alt="${room.name}">
           <div class="absolute artwork-placement" style="
             top: ${placement.top};
             left: ${placement.left};
-            width: calc(${placement.width} * ${sizeAdj.scale});
+            width: calc(${placement.width} * ${cappedScale});
+            max-width: ${placement.maxWidth || '500px'};
             transform: ${placement.transform};
             filter: drop-shadow(${sizeAdj.shadow});
           ">
@@ -1135,6 +1219,9 @@
         show($('#previewSection'));
         
         console.log('✅ Preview ready:', currentPreview);
+        
+        // Save to localStorage
+        savePreviewToStorage();
 
       } catch (error) {
         console.error('❌ Generation failed:', error);
@@ -1210,6 +1297,9 @@
       selected = null;
       $('#selectionSummary').textContent = 'Selected: —';
       $('#reviewBtn').classList.add('disabled');
+      
+      // Clear localStorage
+      localStorage.removeItem('aiprint_last_preview');
     });
 
     // Material tabs
@@ -1259,6 +1349,9 @@
 
       console.log('🛒 Processing checkout:', selected);
       
+      // Save to localStorage before redirecting
+      savePreviewToStorage();
+      
       // Go directly to Stripe payment link
       if (selected.link) {
         // Store complete order data including signature settings
@@ -1292,14 +1385,17 @@
         // Initialize signature controls
         initSignatureControls();
         
-        // Load from share link if present
+        // Try to load from localStorage first
+        const loadedFromStorage = loadSavedPreview();
+        
+        // Then check for share link
         const loadedFromShare = loadFromShareLink();
         
         // Load catalog
         CATALOG = await loadCatalog();
         renderAllBuckets();
         
-        if (!loadedFromShare) {
+        if (!loadedFromStorage && !loadedFromShare) {
           setActiveOnly(null);
           setButtonsEnabled(null);
         }
