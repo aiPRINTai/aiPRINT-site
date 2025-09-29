@@ -678,8 +678,8 @@
       });
     });
 
-    // Checkout
-    $('#reviewBtn').addEventListener('click', async () => {
+ // Checkout - Direct to Stripe
+    $('#reviewBtn').addEventListener('click', () => {
       if (!selected || !currentPreview) {
         alert('Please generate a preview and select a size first.');
         return;
@@ -687,38 +687,19 @@
 
       console.log('🛒 Processing checkout:', selected);
       
-      // Create checkout session
-      try {
-        $('#reviewBtn').disabled = true;
-        $('#reviewBtn').textContent = 'Creating checkout...';
+      // Go directly to Stripe payment link
+      if (selected.link) {
+        // Optional: Store preview data in sessionStorage for later retrieval
+        sessionStorage.setItem('aiprint_order', JSON.stringify({
+          preview: currentPreview,
+          product: selected,
+          timestamp: Date.now()
+        }));
         
-        const response = await fetch('/api/create-checkout-session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            lookup_key: selected.lookup,
-            preview: {
-              image: currentPreview.url,
-              prompt: currentPreview.prompt,
-              size: currentPreview.size,
-              ratio: currentPreview.shape
-            }
-          })
-        });
-
-        const data = await response.json();
-        
-        if (data.url) {
-          // Redirect to Stripe Checkout
-          window.location.href = data.url;
-        } else {
-          throw new Error(data.error || 'Failed to create checkout session');
-        }
-      } catch (error) {
-        console.error('Checkout error:', error);
-        alert('Failed to create checkout. Please try again.');
-        $('#reviewBtn').disabled = false;
-        $('#reviewBtn').textContent = 'Review & Checkout';
+        // Redirect to Stripe
+        window.location.href = selected.link;
+      } else {
+        alert('Payment link not available. Please try another product.');
       }
     });
 
