@@ -398,9 +398,11 @@
       if (medium) modifiers.push(medium);
       
       // For photo-realistic, add quality modifiers
-      if (style === 'Realistic (photo-realistic)' || style === 'Hyper-realistic') {
-        modifiers.push('high detail', '8k resolution', 'photographic quality');
-      }
+     if (style === 'Realistic (photo-realistic)') {
+  modifiers.push('photorealistic style');
+} else if (style === 'Hyper-realistic') {
+  modifiers.push('hyperrealistic style');
+}
       
       // Combine prompt with modifiers
       if (modifiers.length > 0) {
