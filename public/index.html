@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>aiPRINT.ai — Turn any idea into a gallery-worthy print</title>
+  <meta name="description" content="Create premium, ready-to-hang fine art prints from your idea. AI + human curation, archival materials, Certificate of Authenticity." />
+  <link rel="icon" href="/favicon.ico" />
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root { --bg:#0a0f1d; --ink:#e7eef8; --muted:#9fb3c8; }
+    html,body{background:var(--bg);color:var(--ink);}
+    body{font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;}
+    .h1{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:800;line-height:1.05}
+    .h2{font-size:clamp(1.4rem,2.4vw,2.1rem);font-weight:800;}
+    .muted{color:var(--muted)}
+    .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
+    .btn{background:#fff;color:#000;font-weight:700;padding:.7rem 1rem;border-radius:.6rem;cursor:pointer;border:none;}
+    .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#e7eef8;cursor:pointer;padding:.7rem 1rem;border-radius:.6rem;}
+    .btn:disabled,.btn.disabled{opacity:0.5;cursor:not-allowed;filter:saturate(0.5);}
+    .ringy{box-shadow:0 0 0 2px #fff inset}
+    .spinner{border:2px solid #333;border-top:2px solid #fff;border-radius:50%;width:20px;height:20px;animation:spin 1s linear infinite;}
+    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    .material-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;margin-right:4px;}
+    .material-canvas{background:#8B4513;color:white;}
+    .material-metal{background:#708090;color:white;}
+    .material-acrylic{background:#4169E1;color:white;}
+    
+    /* Visual improvements */
+    .sizeBtn:hover:not(.disabled) {
+      transform: translateX(2px);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.3);
+    }
+    .sizeBtn.ringy {
+      background: rgba(255,255,255,0.15);
+      border-color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2">
+        <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
+        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-base">
+        <a href="#how" class="hover:text-white">How it works</a>
+        <a href="#materials" class="hover:text-white">Materials</a>
+        <a href="/faq.html" class="hover:text-white">FAQ</a>
+        <a href="/policies.html" class="hover:text-white">Policies</a>
+        <a href="/contact.html" class="hover:text-white">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="max-w-7xl mx-auto px-5 pt-6 pb-12 grid lg:grid-cols-2 gap-10 items-center">
+    <div>
+      <h1 class="h1">Turn any idea into a <span class="text-indigo-300">gallery-worthy</span> print.</h1>
+      <p class="muted mt-4 max-w-xl">Type a prompt. We create the art with AI + a human artist's eye. You pick size & finish. We ship an archival, limited-edition print to your door.</p>
+      <div class="flex gap-3 mt-6">
+        <a href="#create" class="btn">Create a preview</a>
+        <a href="#how" class="btn-ghost">See how it works</a>
+      </div>
+      <p class="mt-5 text-sm text-gray-400">Made in the USA · Archival materials · Certificate of Authenticity · Ready to hang</p>
+    </div>
+    <div class="grid gap-4">
+      <div class="h-64 rounded-2xl overflow-hidden glass">
+        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop" class="w-full h-full object-cover" alt="">
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="h-36 rounded-2xl overflow-hidden glass">
+          <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover" alt="">
+        </div>
+        <div class="h-36 rounded-2xl overflow-hidden glass">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover" alt="">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section id="how" class="max-w-7xl mx-auto px-5 py-12">
+    <h2 class="h2 mb-6">How it works</h2>
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="glass rounded-xl p-5">
+        <div class="font-bold text-xs tracking-widest text-white/60">STEP 1</div>
+        <div class="mt-2 font-extrabold">Describe your idea</div>
+        <p class="muted">Share a prompt (style, mood, colors). Add an optional reference image.</p>
+      </div>
+      <div class="glass rounded-xl p-5">
+        <div class="font-bold text-xs tracking-widest text-white/60">STEP 2</div>
+        <div class="mt-2 font-extrabold">We craft your artwork</div>
+        <p class="muted">Your prompt generates a preview with our human curation.</p>
+      </div>
+      <div class="glass rounded-xl p-5">
+        <div class="font-bold text-xs tracking-widest text-white/60">STEP 3</div>
+        <div class="mt-2 font-extrabold">Printed. Signed. Shipped.</div>
+        <p class="muted">Premium materials, ready to hang. Certificate of Authenticity.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Materials Preview -->
+  <section id="materials" class="max-w-7xl mx-auto px-5 py-12">
+    <h2 class="h2 mb-6">Materials & finishes</h2>
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="glass rounded-xl p-5">
+        <div class="text-lg font-extrabold">Signature Series – Fine Art Canvas</div>
+        <p class="muted mt-2">Archival fine-art canvas with rich texture and deep color, gallery-wrapped and ready to hang.</p>
+      </div>
+      <div class="glass rounded-xl p-5">
+        <div class="text-lg font-extrabold">Gallery Edition – ChromaLuxe Metal</div>
+        <p class="muted mt-2">Vibrant aluminum print with durable float mount. Sleek modern look, ready to hang.</p>
+      </div>
+      <div class="glass rounded-xl p-5">
+        <div class="text-lg font-extrabold">Museum Collection – Acrylic Facemount</div>
+        <p class="muted mt-2">Museum-grade acrylic facemount with brilliant clarity and depth, polished edges, ready to hang.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CREATE -->
+  <section id="create" class="max-w-7xl mx-auto px-5 py-14">
+    <h2 class="h2 mb-4">Create a preview</h2>
+    <div class="glass rounded-xl p-5 md:p-6">
+      <div class="grid lg:grid-cols-[1fr_260px] gap-4">
+        <textarea id="promptInput" class="rounded-lg bg-white/10 border border-white/15 px-3 py-3 min-h-[56px] text-white" placeholder="e.g., photographer on jeep in mountains"></textarea>
+        <div class="space-y-2">
+          <label class="text-sm muted block">Aspect ratio</label>
+          <select id="ratioSel" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white">
+            <option value="1024x1024">Square (1:1)</option>
+            <option value="1536x1024">Horizontal (3:2)</option>
+            <option value="1024x1536">Vertical (2:3)</option>
+          </select>
+          <button id="genBtn" class="btn w-full">Generate preview</button>
+        </div>
+      </div>
+
+      <!-- Preview Section -->
+      <div id="previewSection" class="mt-6 hidden">
+        <div id="previewWrap" class="relative w-full bg-black/40 rounded-xl overflow-hidden border border-white/10 grid place-items-center" style="aspect-ratio:1/1;">
+          <img id="previewImg" class="max-w-full max-h-full object-contain" alt="Preview" />
+        </div>
+
+        <!-- Controls -->
+        <div class="mt-4 flex flex-wrap gap-3">
+          <button id="selectBtn" class="btn">Select this image</button>
+          <button id="regenerateBtn" class="btn-ghost">Generate another</button>
+          <button id="startOverBtn" class="btn-ghost">Start over</button>
+        </div>
+      </div>
+
+      <!-- Loading state -->
+      <div id="loadingState" class="mt-6 hidden">
+        <div class="bg-black/40 rounded-xl border border-white/10 p-8 text-center">
+          <div class="spinner mx-auto"></div>
+          <p class="mt-4 muted">Generating your artwork...</p>
+        </div>
+      </div>
+
+      <!-- Error state -->
+      <div id="errorState" class="mt-6 hidden">
+        <div class="bg-red-900/20 border border-red-500/30 rounded-xl p-4">
+          <p class="text-red-300" id="errorMessage"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ORDER -->
+  <section id="order" class="max-w-7xl mx-auto px-5 py-14">
+    <h2 class="h2 mb-2">Order your print</h2>
+    <p id="orderMsg" class="text-sm text-gray-300 mb-6">Generate and select a preview to unlock ordering.</p>
+
+    <!-- Material tabs -->
+    <div class="flex gap-2 mb-5">
+      <button class="orderTab px-4 py-2 rounded bg-white/10 font-semibold" data-tab="canvas">Canvas</button>
+      <button class="orderTab px-4 py-2 rounded border border-white/15" data-tab="metal">Metal</button>
+      <button class="orderTab px-4 py-2 rounded border border-white/15" data-tab="acrylic">Acrylic</button>
+    </div>
+
+    <!-- Aspect groups -->
+    <div class="grid md:grid-cols-3 gap-5">
+      <div id="grp-square" class="glass rounded-xl p-4">
+        <div class="font-bold mb-3">Square (1:1)</div>
+        <div class="opts space-y-1" data-bucket="square">
+          <div class="text-xs text-gray-400">Loading products...</div>
+        </div>
+      </div>
+      <div id="grp-h32" class="glass rounded-xl p-4">
+        <div class="font-bold mb-3">Horizontal (3:2)</div>
+        <div class="opts space-y-1" data-bucket="h32">
+          <div class="text-xs text-gray-400">Loading products...</div>
+        </div>
+      </div>
+      <div id="grp-v23" class="glass rounded-xl p-4">
+        <div class="font-bold mb-3">Vertical (2:3)</div>
+        <div class="opts space-y-1" data-bucket="v23">
+          <div class="text-xs text-gray-400">Loading products...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 flex items-center gap-3">
+      <div id="selectionSummary" class="text-sm text-gray-300">Selected: —</div>
+      <button id="reviewBtn" class="btn disabled">Review & Checkout</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-5 py-10 text-sm text-white/70">
+      © <span id="y"></span> aiPRINT.ai — All rights reserved.
+    </div>
+  </footer>
+
+  <!-- APP SCRIPT -->
+  <script>
+    console.log('🚀 aiPRINT.ai loading...');
+    
+    const $ = (q, el = document) => el.querySelector(q);
+    const $$ = (q, el = document) => [...el.querySelectorAll(q)];
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Global state
+    let CATALOG = null;
+    let currentCollection = 'canvas';
+    let currentPreview = null;
+    let selected = null;
+
+    const formatMoney = n => `$${Number(n).toLocaleString()}`;
+
+    const classifyAspect = (w, h) => {
+      const r = w / h;
+      if (Math.abs(r - 1) <= 0.1) return 'square';
+      return r > 1 ? 'h32' : 'v23';
+    };
+
+    // Show/hide elements
+    const show = el => el?.classList.remove('hidden');
+    const hide = el => el?.classList.add('hidden');
+
+    // Load product catalog
+    async function loadCatalog() {
+      console.log('📦 Loading product catalog...');
+      
+      try {
+        const response = await fetch('/products.json');
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const catalog = await response.json();
+        console.log('✅ Catalog loaded:', catalog.collections?.length, 'collections');
+        
+        // Clean the catalog
+        catalog.collections?.forEach(c => {
+          c.products = c.products?.filter(p =>
+            Number.isFinite(p.size_w_in) &&
+            Number.isFinite(p.size_h_in) &&
+            Number.isFinite(p.price_usd) &&
+            p.orientation &&
+            p.stripe_payment_link &&
+            typeof p.stripe_payment_link === 'string' &&
+            p.stripe_payment_link.includes('stripe.com')
+          ) || [];
+        });
+        
+        // Debug: Show product counts
+        catalog.collections.forEach(c => {
+          console.log(`${c.id}: ${c.products.length} products`);
+          const byOrientation = {};
+          c.products.forEach(p => {
+            byOrientation[p.orientation] = (byOrientation[p.orientation] || 0) + 1;
+          });
+          console.log(`  Breakdown:`, byOrientation);
+        });
+        
+        return catalog;
+      } catch (error) {
+        console.error('❌ Failed to load catalog:', error);
+        throw error;
+      }
+    }
+
+    // Get products for a specific collection and bucket
+    function getProductsFor(collectionId, bucket) {
+      if (!CATALOG) return [];
+      const col = CATALOG.collections?.find(c => c.id === collectionId);
+      if (!col) {
+        console.log(`Collection ${collectionId} not found`);
+        return [];
+      }
+      
+      const orient = bucket === 'square' ? 'square' : (bucket === 'h32' ? 'horizontal' : 'vertical');
+      const products = col.products?.filter(p => p.orientation === orient) || [];
+      
+      // Sort by size (smallest to largest)
+      products.sort((a, b) => {
+        const sizeA = Math.max(a.size_w_in, a.size_h_in);
+        const sizeB = Math.max(b.size_w_in, b.size_h_in);
+        return sizeA - sizeB;
+      });
+      
+      console.log(`Found ${products.length} ${collectionId} products for ${bucket}`);
+      return products;
+    }
+
+    // Product rendering
+    function renderBucket(bucket) {
+      const box = $(`.opts[data-bucket="${bucket}"]`);
+      if (!box) return;
+
+      const items = getProductsFor(currentCollection, bucket);
+      
+      if (!items.length) {
+        box.innerHTML = '<div class="opacity-60 text-sm">No sizes available</div>';
+        return;
+      }
+
+      // Render all items for this material and aspect ratio
+      const materialName = currentCollection.toUpperCase();
+      const materialClass = currentCollection === 'canvas' ? 'material-canvas' : 
+                           currentCollection === 'metal' ? 'material-metal' : 'material-acrylic';
+      
+      box.innerHTML = items.map(p => `
+        <button class="sizeBtn w-full mb-2 px-3 py-2 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-left text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled"
+                data-material="${currentCollection}"
+                data-shape="${bucket}"
+                data-lookup="${p.lookup_key}"
+                data-label="${materialName} ${p.size_w_in}×${p.size_h_in} — ${formatMoney(p.price_usd)}"
+                data-link="${p.stripe_payment_link}">
+          <span class="${materialClass} material-badge">${materialName}</span>
+          <span class="text-white">${p.size_w_in}×${p.size_h_in}" — ${formatMoney(p.price_usd)}</span>
+        </button>
+      `).join('');
+
+      // Add click handlers
+      box.querySelectorAll('.sizeBtn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (!currentPreview) {
+            alert('Please generate and select a preview first.');
+            return;
+          }
+          if (btn.classList.contains('disabled')) return;
+
+          // Update selection
+          $$('.sizeBtn').forEach(x => x.classList.remove('ringy', 'bg-white/20'));
+          btn.classList.add('ringy', 'bg-white/20');
+
+          selected = {
+            material: btn.dataset.material,
+            shape: btn.dataset.shape,
+            lookup: btn.dataset.lookup,
+            label: btn.dataset.label,
+            link: btn.dataset.link
+          };
+
+          $('#selectionSummary').textContent = `Selected: ${selected.label}`;
+          $('#reviewBtn').classList.remove('disabled');
+          console.log('🛒 Product selected:', selected);
+        });
+      });
+    }
+
+    function renderAllBuckets() {
+      ['square', 'h32', 'v23'].forEach(renderBucket);
+    }
+
+    function setActiveOnly(bucket) {
+      const groups = [['square', '#grp-square'], ['h32', '#grp-h32'], ['v23', '#grp-v23']];
+      groups.forEach(([k, sel]) => {
+        const el = $(sel);
+        if (!el) return;
+        
+        if (!bucket || k === bucket) {
+          el.classList.remove('opacity-30', 'pointer-events-none');
+        } else {
+          el.classList.add('opacity-30', 'pointer-events-none');
+        }
+      });
+    }
+
+    function setButtonsEnabled(enabledBucket) {
+      $$('.sizeBtn').forEach(btn => {
+        const shape = btn.dataset.shape;
+        const enabled = !!enabledBucket && shape === enabledBucket;
+        if (enabled) {
+          btn.classList.remove('disabled');
+          btn.disabled = false;
+        } else {
+          btn.classList.add('disabled');
+          btn.disabled = true;
+        }
+      });
+    }
+
+    // Generate image
+    async function generateImage(prompt, size) {
+      console.log('🎨 Generating image:', prompt, size);
+      
+      try {
+        const response = await fetch('/api/generate-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt, size })
+        });
+
+        if (!response.ok) {
+          const error = await response.text();
+          throw new Error(`Generation failed: ${error}`);
+        }
+
+        const data = await response.json();
+        console.log('✅ Image generated:', data);
+        
+        if (!data.ok || !data.image) {
+          throw new Error(data.error || 'No image returned');
+        }
+
+        return {
+          url: data.image,
+          width: data.width || 1024,
+          height: data.height || 1024,
+          prompt: prompt,
+          size: size
+        };
+      } catch (error) {
+        console.error('❌ Generation error:', error);
+        throw error;
+      }
+    }
+
+    // Set preview aspect ratio
+    function setWrapAspect(ratio) {
+      const wrap = $('#previewWrap');
+      if (!wrap) return;
+      
+      if (ratio === '1024x1024') wrap.style.aspectRatio = '1 / 1';
+      else if (ratio === '1536x1024') wrap.style.aspectRatio = '3 / 2';
+      else wrap.style.aspectRatio = '2 / 3';
+    }
+
+    // Event handlers
+    $('#genBtn').addEventListener('click', async () => {
+      const prompt = $('#promptInput').value.trim();
+      const ratio = $('#ratioSel').value;
+
+      if (!prompt) {
+        alert('Please enter a prompt');
+        return;
+      }
+
+      try {
+        // Show loading
+        hide($('#previewSection'));
+        hide($('#errorState'));
+        show($('#loadingState'));
+        $('#genBtn').disabled = true;
+        $('#genBtn').textContent = 'Generating...';
+
+        const result = await generateImage(prompt, ratio);
+
+        currentPreview = {
+          url: result.url,
+          width: result.width,
+          height: result.height,
+          prompt: prompt,
+          size: ratio,
+          shape: classifyAspect(result.width, result.height)
+        };
+
+        // Update preview
+        $('#previewImg').src = result.url;
+        setWrapAspect(ratio);
+        
+        hide($('#loadingState'));
+        show($('#previewSection'));
+        
+        console.log('✅ Preview ready:', currentPreview);
+
+      } catch (error) {
+        console.error('❌ Generation failed:', error);
+        hide($('#loadingState'));
+        $('#errorMessage').textContent = error.message || 'Failed to generate image';
+        show($('#errorState'));
+      } finally {
+        $('#genBtn').disabled = false;
+        $('#genBtn').textContent = 'Generate preview';
+      }
+    });
+
+    $('#selectBtn').addEventListener('click', () => {
+      if (!currentPreview) return;
+
+      // Enable ordering for this aspect ratio
+      setActiveOnly(currentPreview.shape);
+      setButtonsEnabled(currentPreview.shape);
+      
+      const shapeNames = { square: 'Square', h32: 'Horizontal', v23: 'Vertical' };
+      $('#orderMsg').innerHTML = `
+        <strong>✓ Image selected!</strong> ${shapeNames[currentPreview.shape]} sizes are now available below.
+        Choose your material and size (5 sizes per material).
+      `;
+      
+      // Scroll to order section
+      document.querySelector('#order').scrollIntoView({ behavior: 'smooth' });
+      
+      console.log('✅ Image selected, ordering unlocked for:', currentPreview.shape);
+    });
+
+    $('#regenerateBtn').addEventListener('click', () => {
+      $('#genBtn').click();
+    });
+
+    $('#startOverBtn').addEventListener('click', () => {
+      currentPreview = null;
+      hide($('#previewSection'));
+      hide($('#errorState'));
+      $('#promptInput').value = '';
+      $('#ratioSel').selectedIndex = 0;
+      
+      // Reset ordering
+      setActiveOnly(null);
+      setButtonsEnabled(null);
+      $('#orderMsg').textContent = 'Generate and select a preview to unlock ordering.';
+      
+      $$('.sizeBtn').forEach(x => {
+        x.classList.remove('ringy', 'bg-white/20');
+      });
+      selected = null;
+      $('#selectionSummary').textContent = 'Selected: —';
+      $('#reviewBtn').classList.add('disabled');
+    });
+
+    // Material tabs
+    $$('.orderTab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Update tab styles
+        $$('.orderTab').forEach(x => {
+          x.classList.remove('bg-white/10', 'font-semibold');
+          x.classList.add('border', 'border-white/15');
+        });
+        btn.classList.add('bg-white/10', 'font-semibold');
+        btn.classList.remove('border', 'border-white/15');
+        
+        // Change current collection
+        currentCollection = btn.dataset.tab;
+        console.log('📋 Switched to:', currentCollection);
+        
+        // Re-render all buckets with new material
+        renderAllBuckets();
+        
+        // Re-apply enabled state if preview is selected
+        if (currentPreview) {
+          setActiveOnly(currentPreview.shape);
+          setButtonsEnabled(currentPreview.shape);
+        }
+        
+        // Clear selection when switching materials
+        selected = null;
+        $('#selectionSummary').textContent = 'Selected: —';
+        $('#reviewBtn').classList.add('disabled');
+      });
+    });
+
+    // Checkout
+    $('#reviewBtn').addEventListener('click', async () => {
+      if (!selected || !currentPreview) {
+        alert('Please generate a preview and select a size first.');
+        return;
+      }
+
+      console.log('🛒 Processing checkout:', selected);
+      
+      // Create checkout session
+      try {
+        $('#reviewBtn').disabled = true;
+        $('#reviewBtn').textContent = 'Creating checkout...';
+        
+        const response = await fetch('/api/create-checkout-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            lookup_key: selected.lookup,
+            preview: {
+              image: currentPreview.url,
+              prompt: currentPreview.prompt,
+              size: currentPreview.size,
+              ratio: currentPreview.shape
+            }
+          })
+        });
+
+        const data = await response.json();
+        
+        if (data.url) {
+          // Redirect to Stripe Checkout
+          window.location.href = data.url;
+        } else {
+          throw new Error(data.error || 'Failed to create checkout session');
+        }
+      } catch (error) {
+        console.error('Checkout error:', error);
+        alert('Failed to create checkout. Please try again.');
+        $('#reviewBtn').disabled = false;
+        $('#reviewBtn').textContent = 'Review & Checkout';
+      }
+    });
+
+    // Initialize
+    (async () => {
+      try {
+        console.log('🏁 Initializing...');
+        CATALOG = await loadCatalog();
+        renderAllBuckets();
+        setActiveOnly(null);
+        setButtonsEnabled(null);
+        
+        // Show total products
+        const totalProducts = CATALOG.collections.reduce((sum, c) => sum + c.products.length, 0);
+        console.log(`✅ App ready! ${totalProducts} total products loaded`);
+        
+      } catch (e) {
+        console.error('❌ Failed to initialize:', e);
+        $('#orderMsg').textContent = 'Could not load products. Please refresh the page.';
+      }
+    })();
+
+  </script>
+</body>
+</html>
