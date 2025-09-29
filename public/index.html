@@ -38,6 +38,24 @@
       background: rgba(255,255,255,0.15);
       border-color: white;
     }
+    
+    /* Dropdown styling */
+    .dropdown-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 6px;
+      display: block;
+    }
+    
+    select {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.5rem center;
+      background-repeat: no-repeat;
+      background-size: 1.5em 1.5em;
+      padding-right: 2.5rem;
+    }
   </style>
 </head>
 <body>
@@ -127,80 +145,142 @@
   </section>
 
   <!-- CREATE -->
- <!-- Replace the CREATE section in your index.html with this improved version -->
-
-  <!-- CREATE -->
   <section id="create" class="max-w-7xl mx-auto px-5 py-14">
     <h2 class="h2 mb-4">Create a preview</h2>
     <div class="glass rounded-xl p-5 md:p-6">
-      <div class="grid lg:grid-cols-[1fr_320px] gap-6">
-        <!-- Prompt area -->
+      <!-- Prompt input -->
+      <div class="mb-6">
+        <label class="text-sm muted block mb-2">Describe your artwork</label>
+        <textarea id="promptInput" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-3 min-h-[80px] text-white resize-none" 
+                  placeholder="e.g., photographer on jeep in mountains, golden hour lighting"></textarea>
+      </div>
+
+      <!-- Style dropdowns grid -->
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+        <!-- Style -->
         <div>
-          <label class="text-sm muted block mb-2">Describe your artwork</label>
-          <textarea id="promptInput" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-3 min-h-[100px] text-white resize-none" 
-                    placeholder="e.g., photographer on jeep in mountains, golden hour lighting, misty atmosphere"></textarea>
-          
-          <!-- Signature option -->
-          <div class="mt-4 p-3 rounded-lg bg-white/5 border border-white/10">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" id="signatureCheck" class="w-4 h-4 rounded" checked>
-              <span class="text-sm">Show signature on preview</span>
-            </label>
-            <input type="text" id="signatureInput" class="mt-2 w-full rounded bg-white/10 border border-white/15 px-2 py-1 text-sm text-white" 
-                   placeholder="Your name..." value="">
-          </div>
+          <label class="dropdown-label">Style</label>
+          <select id="styleSelect" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white text-sm">
+            <option value="Realistic (photo-realistic)" selected>Realistic (photo-realistic)</option>
+            <option value="Hyper-realistic">Hyper-realistic</option>
+            <option value="Painterly">Painterly</option>
+            <option value="Abstract">Abstract</option>
+            <option value="Impressionistic">Impressionistic</option>
+            <option value="Minimalist">Minimalist</option>
+            <option value="Surreal">Surreal</option>
+            <option value="Conceptual / Artistic">Conceptual / Artistic</option>
+            <option value="Sketch / Illustration">Sketch / Illustration</option>
+            <option value="3D Render / CGI">3D Render / CGI</option>
+          </select>
+        </div>
+
+        <!-- Mood -->
+        <div>
+          <label class="dropdown-label">Mood / Atmosphere</label>
+          <select id="moodSelect" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white text-sm">
+            <option value="">Select mood...</option>
+            <option value="Calm / Peaceful">Calm / Peaceful</option>
+            <option value="Dramatic / Intense">Dramatic / Intense</option>
+            <option value="Moody / Atmospheric">Moody / Atmospheric</option>
+            <option value="Bright / Uplifting">Bright / Uplifting</option>
+            <option value="Mysterious">Mysterious</option>
+            <option value="Energetic / Dynamic">Energetic / Dynamic</option>
+            <option value="Romantic">Romantic</option>
+            <option value="Nostalgic">Nostalgic</option>
+            <option value="Dark / Gritty">Dark / Gritty</option>
+            <option value="Dreamlike / Ethereal">Dreamlike / Ethereal</option>
+          </select>
+        </div>
+
+        <!-- Lighting -->
+        <div>
+          <label class="dropdown-label">Lighting</label>
+          <select id="lightingSelect" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white text-sm">
+            <option value="">Select lighting...</option>
+            <option value="Natural / Soft Light">Natural / Soft Light</option>
+            <option value="Golden Hour / Warm Glow">Golden Hour / Warm Glow</option>
+            <option value="Blue Hour / Cool Tones">Blue Hour / Cool Tones</option>
+            <option value="Dramatic Shadows / High Contrast">Dramatic Shadows / High Contrast</option>
+            <option value="Studio Lighting">Studio Lighting</option>
+            <option value="Backlit / Rim Light">Backlit / Rim Light</option>
+            <option value="Overcast / Diffused Light">Overcast / Diffused Light</option>
+            <option value="Harsh Midday Sun">Harsh Midday Sun</option>
+            <option value="Candlelight / Low Light">Candlelight / Low Light</option>
+            <option value="Neon / Artificial Light">Neon / Artificial Light</option>
+          </select>
+        </div>
+
+        <!-- Camera -->
+        <div>
+          <label class="dropdown-label">Camera & Composition</label>
+          <select id="cameraSelect" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white text-sm">
+            <option value="">Select camera...</option>
+            <option value="Cinematic Framing">Cinematic Framing</option>
+            <option value="Wide Angle / Expansive">Wide Angle / Expansive</option>
+            <option value="Telephoto / Compressed">Telephoto / Compressed</option>
+            <option value="Macro / Close Detail">Macro / Close Detail</option>
+            <option value="Aerial / Drone View">Aerial / Drone View</option>
+            <option value="Eye-Level / Natural Perspective">Eye-Level / Natural Perspective</option>
+            <option value="Low Angle (Looking Up)">Low Angle (Looking Up)</option>
+            <option value="High Angle (Looking Down)">High Angle (Looking Down)</option>
+            <option value="Rule of Thirds">Rule of Thirds</option>
+            <option value="Symmetry / Centered">Symmetry / Centered</option>
+          </select>
+        </div>
+
+        <!-- Medium -->
+        <div>
+          <label class="dropdown-label">Medium / Output</label>
+          <select id="mediumSelect" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white text-sm">
+            <option value="Photograph / Realistic" selected>Photograph / Realistic</option>
+            <option value="Digital Painting">Digital Painting</option>
+            <option value="Oil Painting">Oil Painting</option>
+            <option value="Watercolor">Watercolor</option>
+            <option value="Ink / Sketch">Ink / Sketch</option>
+            <option value="Mixed Media">Mixed Media</option>
+            <option value="Collage">Collage</option>
+            <option value="Sculpture / 3D Model">Sculpture / 3D Model</option>
+            <option value="Printmaking Style">Printmaking Style</option>
+            <option value="Poster / Graphic Design">Poster / Graphic Design</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Aspect ratio and Generate button -->
+      <div class="grid md:grid-cols-[1fr_auto] gap-4 mb-6">
+        <div>
+          <label class="dropdown-label">Aspect Ratio</label>
+          <select id="ratioSel" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white">
+            <option value="1024x1024">Square (1:1)</option>
+            <option value="1536x1024">Horizontal (3:2)</option>
+            <option value="1024x1536">Vertical (2:3)</option>
+          </select>
         </div>
         
-        <!-- Controls -->
-        <div>
-          <div class="space-y-3">
-            <div>
-              <label class="text-sm muted block mb-1">Aspect ratio</label>
-              <select id="ratioSel" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white">
-                <option value="1024x1024">Square (1:1)</option>
-                <option value="1536x1024">Horizontal (3:2)</option>
-                <option value="1024x1536">Vertical (2:3)</option>
-              </select>
-            </div>
-            
-            <div>
-              <label class="text-sm muted block mb-1">Style preset (optional)</label>
-              <select id="stylePreset" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white">
-                <option value="">No preset - use my description</option>
-                <option value="vibrant">Vibrant & Colorful</option>
-                <option value="moody">Moody & Dramatic</option>
-                <option value="minimal">Minimal & Clean</option>
-                <option value="vintage">Vintage Film</option>
-                <option value="ethereal">Ethereal & Dreamy</option>
-              </select>
-            </div>
-            
-            <div>
-              <label class="text-sm muted block mb-1">Size slider</label>
-              <input type="range" id="sizeSlider" min="0" max="100" value="50" 
-                     class="w-full accent-white">
-              <div class="flex justify-between text-xs muted mt-1">
-                <span>Compact</span>
-                <span id="sizeValue">Medium</span>
-                <span>Large</span>
-              </div>
-            </div>
-            
-            <button id="genBtn" class="btn w-full mt-2">Generate preview</button>
-          </div>
+        <div class="flex items-end">
+          <button id="genBtn" class="btn px-8">Generate preview</button>
         </div>
+      </div>
+
+      <!-- Signature option -->
+      <div class="p-3 rounded-lg bg-white/5 border border-white/10 mb-6">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" id="signatureCheck" class="w-4 h-4 rounded" checked>
+          <span class="text-sm">Show signature on preview</span>
+        </label>
+        <input type="text" id="signatureInput" class="mt-2 w-full rounded bg-white/10 border border-white/15 px-2 py-1 text-sm text-white" 
+               placeholder="Your name..." value="">
       </div>
 
       <!-- Preview Section -->
       <div id="previewSection" class="mt-6 hidden">
-        <div id="previewWrap" class="relative w-full bg-black/40 rounded-xl overflow-hidden border border-white/10 grid place-items-center" style="aspect-ratio:1/1;">
-          <img id="previewImg" class="max-w-full max-h-full object-contain" alt="Preview" />
-          <!-- Signature overlay (will be positioned with JS) -->
+        <div id="previewWrap" class="relative w-full max-w-2xl mx-auto bg-black/40 rounded-xl overflow-hidden border border-white/10 flex items-center justify-center" style="aspect-ratio:1/1;">
+          <img id="previewImg" class="w-full h-full object-cover" alt="Preview" />
           <div id="signatureOverlay" class="absolute bottom-4 right-4 text-white/70 text-sm hidden"></div>
         </div>
 
         <!-- Controls -->
-        <div class="mt-4 flex flex-wrap gap-3">
+        <div class="mt-4 flex flex-wrap gap-3 justify-center">
           <button id="selectBtn" class="btn">Select this image</button>
           <button id="regenerateBtn" class="btn-ghost">Generate another</button>
           <button id="startOverBtn" class="btn-ghost">Start over</button>
@@ -297,6 +377,38 @@
     // Show/hide elements
     const show = el => el?.classList.remove('hidden');
     const hide = el => el?.classList.add('hidden');
+
+    // Build enhanced prompt from dropdowns
+    function buildEnhancedPrompt() {
+      let prompt = $('#promptInput').value.trim();
+      
+      // Add style modifiers
+      const style = $('#styleSelect').value;
+      const mood = $('#moodSelect').value;
+      const lighting = $('#lightingSelect').value;
+      const camera = $('#cameraSelect').value;
+      const medium = $('#mediumSelect').value;
+      
+      // Build modifiers array
+      const modifiers = [];
+      if (style) modifiers.push(style);
+      if (mood) modifiers.push(mood);
+      if (lighting) modifiers.push(lighting);
+      if (camera) modifiers.push(camera);
+      if (medium) modifiers.push(medium);
+      
+      // For photo-realistic, add quality modifiers
+      if (style === 'Realistic (photo-realistic)' || style === 'Hyper-realistic') {
+        modifiers.push('high detail', '8k resolution', 'photographic quality');
+      }
+      
+      // Combine prompt with modifiers
+      if (modifiers.length > 0) {
+        prompt = `${prompt}, ${modifiers.join(', ')}`;
+      }
+      
+      return prompt;
+    }
 
     // Load product catalog
     async function loadCatalog() {
@@ -476,8 +588,8 @@
 
         return {
           url: data.image,
-          width: data.width || 1024,
-          height: data.height || 1024,
+          width: data.width || parseInt(size.split('x')[0]),
+          height: data.height || parseInt(size.split('x')[1]),
           prompt: prompt,
           size: size
         };
@@ -499,10 +611,10 @@
 
     // Event handlers
     $('#genBtn').addEventListener('click', async () => {
-      const prompt = $('#promptInput').value.trim();
+      const basePrompt = $('#promptInput').value.trim();
       const ratio = $('#ratioSel').value;
 
-      if (!prompt) {
+      if (!basePrompt) {
         alert('Please enter a prompt');
         return;
       }
@@ -515,13 +627,17 @@
         $('#genBtn').disabled = true;
         $('#genBtn').textContent = 'Generating...';
 
-        const result = await generateImage(prompt, ratio);
+        // Build enhanced prompt with dropdown selections
+        const enhancedPrompt = buildEnhancedPrompt();
+        console.log('Enhanced prompt:', enhancedPrompt);
+
+        const result = await generateImage(enhancedPrompt, ratio);
 
         currentPreview = {
           url: result.url,
           width: result.width,
           height: result.height,
-          prompt: prompt,
+          prompt: enhancedPrompt,
           size: ratio,
           shape: classifyAspect(result.width, result.height)
         };
@@ -529,6 +645,12 @@
         // Update preview
         $('#previewImg').src = result.url;
         setWrapAspect(ratio);
+        
+        // Handle signature
+        if ($('#signatureCheck').checked && $('#signatureInput').value) {
+          $('#signatureOverlay').textContent = $('#signatureInput').value;
+          show($('#signatureOverlay'));
+        }
         
         hide($('#loadingState'));
         show($('#previewSection'));
@@ -576,6 +698,13 @@
       $('#promptInput').value = '';
       $('#ratioSel').selectedIndex = 0;
       
+      // Reset dropdowns
+      $('#styleSelect').selectedIndex = 0;
+      $('#moodSelect').selectedIndex = 0;
+      $('#lightingSelect').selectedIndex = 0;
+      $('#cameraSelect').selectedIndex = 0;
+      $('#mediumSelect').selectedIndex = 0;
+      
       // Reset ordering
       setActiveOnly(null);
       setButtonsEnabled(null);
@@ -588,14 +717,6 @@
       $('#selectionSummary').textContent = 'Selected: —';
       $('#reviewBtn').classList.add('disabled');
     });
-// Add these new event handlers AFTER your existing event handlers (around line 400)
-
-    // Size slider handler
-    $('#sizeSlider')?.addEventListener('input', (e) => {
-      const val = e.target.value;
-      const label = val < 33 ? 'Compact' : val < 66 ? 'Medium' : 'Large';
-      $('#sizeValue').textContent = label;
-    });
 
     // Signature checkbox handler
     $('#signatureCheck')?.addEventListener('change', (e) => {
@@ -606,12 +727,12 @@
         input.style.opacity = '1';
         if (currentPreview && input.value) {
           overlay.textContent = input.value;
-          overlay.classList.remove('hidden');
+          show(overlay);
         }
       } else {
         input.disabled = true;
         input.style.opacity = '0.5';
-        overlay.classList.add('hidden');
+        hide(overlay);
       }
     });
 
@@ -621,32 +742,13 @@
       if ($('#signatureCheck').checked && currentPreview) {
         if (e.target.value) {
           overlay.textContent = e.target.value;
-          overlay.classList.remove('hidden');
+          show(overlay);
         } else {
-          overlay.classList.add('hidden');
+          hide(overlay);
         }
       }
     });
 
-    // Style preset handler
-    $('#stylePreset')?.addEventListener('change', (e) => {
-      const prompt = $('#promptInput');
-      const preset = e.target.value;
-      
-      // Add style modifier to prompt if preset selected
-      if (preset) {
-        const styleModifiers = {
-          'vibrant': ', vibrant colors, high saturation, colorful palette',
-          'moody': ', moody atmosphere, dramatic lighting, cinematic',
-          'minimal': ', minimal composition, clean lines, simple',
-          'vintage': ', vintage film aesthetic, grain, retro colors',
-          'ethereal': ', ethereal lighting, dreamy atmosphere, soft focus'
-        };
-        
-        // You can append this to the prompt when generating
-        console.log('Style preset selected:', styleModifiers[preset]);
-      }
-    });
     // Material tabs
     $$('.orderTab').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -678,7 +780,7 @@
       });
     });
 
- // Checkout - Direct to Stripe
+    // Checkout - Direct to Stripe
     $('#reviewBtn').addEventListener('click', () => {
       if (!selected || !currentPreview) {
         alert('Please generate a preview and select a size first.');
