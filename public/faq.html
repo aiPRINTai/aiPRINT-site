@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head> 
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FAQ | aiPRINT.ai — Questions & Answers</title>
+  <meta name="description" content="Answers about AI image generation, materials, sizing, shipping, returns, usage rights, signatures, and payments for aiPRINT.ai prints." />
+  <link rel="icon" href="/favicon.ico" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root { --bg:#0a0f1d; --ink:#e7eef8; --muted:#9fb3c8; }
+    html,body{background:var(--bg);color:var(--ink);}
+    body{font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;}
+    .h1{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:800;line-height:1.05}
+    .h2{font-size:clamp(1.4rem,2.4vw,2.1rem);font-weight:800;}
+    .muted{color:var(--muted)}
+    .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
+    .btn{background:#fff;color:#000;font-weight:700;padding:.7rem 1rem;border-radius:.6rem;cursor:pointer;border:none;}
+    .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#e7eef8;cursor:pointer;padding:.7rem 1rem;border-radius:.6rem;}
+    details[open] summary svg { transform: rotate(180deg); }
+    summary::-webkit-details-marker { display: none; }
+    summary { cursor: pointer; user-select: none; }
+    details { transition: all 0.3s ease; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2">
+        <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
+        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-base">
+        <a href="/" class="hover:text-white">Home</a>
+        <a href="/#how" class="hover:text-white">How it works</a>
+        <a href="/#materials" class="hover:text-white">Materials</a>
+        <a href="/faq.html" class="hover:text-white font-semibold">FAQ</a>
+        <a href="/policies.html" class="hover:text-white">Policies</a>
+        <a href="/contact.html" class="hover:text-white">Contact</a>
+      </nav>
+
+      <!-- Mobile hamburger -->
+      <button id="navOpen" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Nav Sheet -->
+  <div id="navSheet" class="fixed inset-0 z-[100] hidden">
+    <div id="navBackdrop" class="absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-200"></div>
+    <aside id="navDrawer" class="absolute right-0 top-0 h-full w-80 max-w-[88vw] bg-[#0b1020] border-l border-white/10 translate-x-full transition-transform duration-300">
+      <div class="h-14 px-4 border-b border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
+          <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+        </div>
+        <button id="navClose" class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 hover:bg-white/10">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <nav class="px-4 py-4">
+        <ul class="space-y-2 text-white/90 text-base">
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/">Home</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/#how">How it works</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/#materials">Materials</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/faq.html">FAQ</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/policies.html">Policies</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/contact.html">Contact</a></li>
+        </ul>
+        <div class="mt-6 space-y-2">
+          <a href="/#create" class="block w-full text-center rounded-lg px-4 py-2 font-semibold bg-white text-black">Create a preview</a>
+        </div>
+      </nav>
+    </aside>
+  </div>
+
+  <main class="max-w-6xl mx-auto px-5 py-12">
+    <!-- Hero -->
+    <section class="mb-12">
+      <h1 class="h1 mb-4">Frequently Asked Questions</h1>
+      <p class="muted text-lg max-w-3xl">
+        Everything you need to know about creating your artwork, materials, sizing, shipping, and more. 
+        Can't find your answer? <a href="/contact.html" class="text-white underline">Contact us</a>.
+      </p>
+    </section>
+
+    <!-- FAQ Categories in 2-column grid -->
+    <section class="grid lg:grid-cols-2 gap-8">
+      
+      <!-- Ordering & Image Generation -->
+      <div class="space-y-6">
+        <h2 class="h2 text-2xl">Creating Your Art</h2>
+        
+        <div class="glass rounded-xl p-6 space-y-4">
+          <details class="group border-b border-white/10 pb-4" open>
+            <summary class="flex items-start justify-between">
+              <span class="font-semibold">How does the AI generation work?</span>
+              <svg class="w-5 h-5 opacity-60 transition-transform mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/>
+              </svg>
+            </summary>
+            <p class="muted mt-3">
+              Describe your vision using the text prompt and style dropdowns. Our AI creates a unique, high-resolution artwork 
+              based on your specifications. Each piece is one-of-a-kind and exclusive to you.
+            </p>
+          </details>
+
+          <details class="group border-b border-white/10 pb-4">
+            <summary class="flex items-start justify-between">
+              <span class="font-semibold">Can I regenerate if I don't like the preview?</span>
+              <svg class="w-5 h-5 opacity-60 transition-transform mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/>
+              </svg>
+            </summary>
+            <p class="muted mt-3">
+              Yes! Click "Generate another" to create a new version with the same settings, or "Start over" to adjust your prompt 
+              and style options. Generate as many times as you need until you're happy.
+            </p>
+          </details>
+
+          <details class="group border-b border-white/10 pb-4">
+            <summary class="flex items-start justify-between">
+              <span class="font-semibold">What are the aspect ratios?</span>
+              <svg class="w-5 h-5 opacity-60 transition-transform mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/>
+              </svg>
+            </summary>
+            <p class="muted mt-3">
+              Choose from Square (1:1) for Instagram-ready art, Horizontal (3:2) for landscape scenes, or Vertical (2:3) for portraits. 
+              Your chosen ratio determines which print sizes are available.
+            </p>
+          </details>
+
+          <details class="group pb-4">
+            <summary class="flex items-start justify-between">
+              <span class="font-semibold">Can I add my signature?</span>
+              <svg class="w-5 h-5 opacity-60 transition-transform mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/>
+              </svg>
+            </summary>
+            <p class="muted mt-3">
+              Yes! Toggle "Show signature on preview" and type your name. Your signature will be tastefully embedded 
+              in the final print, making it uniquely yours.
+            </p>
+          </details>
+        </div>
+      </div>
+
+      <!-- Materials & Quality -->
+      <div class="space-y-6">
+        <h2 class="h2 text-2xl">Materials & Quality</h2>
+        
+        <div class="glass rounded-xl p-6 space-y-4">
+          <details class="group border-b border-white/10 pb-4" open>
+            <summary class="flex items-start justify-between">
+              <span class="font-semibold">What are the three finishes?</span>
+              <svg class="w-5 h-5 opacity-60 transition-transform mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/>
+              </svg>
+            </summary>
+            <div class="muted mt-3 space-y-2">
+              <p><strong class="text-white">Canvas:</strong> Classic gallery-wrapped canvas with rich texture and deep colors.</p>
+              <p><strong class="text-white">Metal:</strong> Vibrant ChromaLuxe aluminum with glossy finish and exceptional depth.</p>
+              <p><strong class="text-white">Acrylic:</strong> Museum-grade facemount with brilliant clarity and polished edges.</p>
+            </div>
+          </details>
+
+          <details class="group border-b border-white/10 pb-4">
+            <summary class="flex items-start justify-between">
+              <span class="font-semibold">Are prints ready to hang?</span>
+              <svg class="w-5 h-5 opacity-60 transition-transform mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/>
+              </svg>
+            </summary>
+            <p class="muted mt-3">
+              Yes! All prints arrive ready to hang with appropriate mounting hardware included. Canvas is gallery-wrapped, 
+              metal has float mounts, and acrylic includes standoffs.
+            </p>
+          </details>
+
+          <details class="group border-b border-white/10 pb-4">
+            <summary class="flex items-start justify-between">
+              <span class="font-semibold">How large can I print?</span>
+              <svg class="w-5 h-5 opacity-60 transition-transform mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/>
+              </svg>
+            </summary>
+            <p class="muted mt-3">
+              Currently up to 36" on the longest side. Our AI upscales intelligently to ensure crisp, gallery-quality 
+              results even at large sizes. Each material offers 5 size options per aspect ratio.
+            </p>
+          </details>
+
+          <details class="group pb-4">
+            <summary class="flex items-start justify-between">
+              <span class="font-semibold">What's included with my order?</span>
+              <svg class="w-5 h-5 opacity-60 transition-transform mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/>
+              </svg>
+            </summary>
+            <p class="muted mt-3">
+              Your custom print on premium materials, mounting hardware, protective packaging, and a Certificate of Authenticity 
+              confirming this is a unique, limited-edition piece.
+            </p>
+          </details>
+        </div>
+      </div>
+
+      <!-- Shipping & Returns -->
+      <div class="space-y-6">
+        <h2 class="h2 text-2xl">Shipping & Returns</h2>
+        
+        <div class="glass rounded-xl p-6 space-y-4">
+          <details class="group border-b border-white/10 pb-4" open>
+            <summary class="flex items-start justify-between">
+              <span class="font-semibold">How long does production take?</span>
+              <svg class="w-5 h-5 opacity-60 transition-transform mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/>
+              </svg>
+            </summary>
+            <p class="muted mt-3">
+              Production takes 3-5 business days, with shipping typically 3-7 days depending on location. 
+              Most orders arrive within 7-14 days total. Rush options available.
+            </p>
+          </details>
+
+          <details class="group border-b border-white/10 pb-4">
+            <summary class="flex items-start justify-between">
+              <span class="font-semibold">Do you ship internationally?</span>
+              <svg class="w-5 h-5 opacity-60 transition-transform mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/>
+              </svg>
+            </summary>
+            <p class="muted mt-3">
+              Currently shipping within the USA only. International shipping coming soon. 
+              Join our mailing list to be notified when we expand.
+            </p>
+          </details>
+
+          <details class="group border-b border-white/10 pb-4">
+            <summary class="flex items-start justify-between">
+              <span class="font-semibold">What if my print arrives damaged?</span>
+              <svg class="w-5 h-5 opacity-60 transition-transform mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/>
+              </svg>
+            </summary>
+            <p class="muted mt-3">
+              Contact us immediately with photos of the damage and packaging. We'll send a replacement at no cost. 
+              Our packaging is museum-grade, but accidents happen and we'll make it right.
+            </p>
+          </details>
+
+          <details class="group pb-4">
+            <summary class="flex items-start justify-between">
+              <span class="font-semibold">Can I return or exchange?</span>
+              <svg class="w-5 h-5 opacity-60 transition-transform mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/>
+              </svg>
+            </summary>
+            <p class="muted mt-3">
+              Since each piece is custom-made, we can't accept returns for buyer's remorse. However, we offer a 30-day 
+              satisfaction guarantee - if you're not happy, contact us and we'll work to make it right.
+            </p>
+          </details>
+        </div>
+      </div>
+
+      <!-- Pricing & Payment -->
+      <div class="space-y-6">
+        <h2 class="h2 text-2xl">Pricing & Payment</h2>
+        
+        <div class="glass rounded-xl p-6 space-y-4">
+          <details class="group border-b border-white/10 pb-4" open>
+            <summary class="flex items-start justify-between">
+              <span class="font-semibold">How is pricing determined?</span>
+              <svg class="w-5 h-5 opacity-60 transition-transform mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/>
+              </svg>
+            </summary>
+            <p class="muted mt-3">
+              Pricing is based on size and material. Canvas is most affordable, metal is mid-range, and acrylic is premium. 
+              All prices shown include the custom artwork, production, and mounting hardware.
+            </p>
+          </details>
+
+          <details class="group border-b border-white/10 pb-4">
+            <summary class="flex items-start justify-between">
+              <span class="font-semibold">What payment methods do you accept?</span>
+              <svg class="w-5 h-5 opacity-60 transition-transform mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/>
+              </svg>
+            </summary>
+            <p class="muted mt-3">
+              We accept all major credit cards, Apple Pay, and Google Pay through Stripe's secure checkout. 
+              Your payment information is never stored on our servers.
+            </p>
+          </details>
+
+          <details class="group border-b border-white/10 pb-4">
+            <summary class="flex items-start justify-between">
+              <span class="font-semibold">Is there a bulk discount?</span>
+              <svg class="w-5 h-5 opacity-60 transition-transform mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/>
+              </svg>
+            </summary>
+            <p class="muted mt-3">
+              For orders of 5+ prints, contact us for custom pricing. We work with interior designers, businesses, 
+              and collectors on large projects.
+            </p>
+          </details>
+
+          <details class="group pb-4">
+            <summary class="flex items-start justify-between">
+              <span class="font-semibold">Do you offer gift cards?</span>
+              <svg class="w-5 h-5 opacity-60 transition-transform mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/>
+              </svg>
+            </summary>
+            <p class="muted mt-3">
+              Not yet, but they're coming soon! Perfect for the art lover who wants to create their own custom piece. 
+              Join our mailing list for updates.
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="mt-16 text-center">
+      <div class="glass rounded-2xl p-8 md:p-12">
+        <h2 class="h2 mb-4">Still have questions?</h2>
+        <p class="muted text-lg mb-6">We're here to help with any questions about your custom artwork.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/contact.html" class="btn">Contact Support</a>
+          <a href="/#create" class="btn-ghost">Create Your Art</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/10 mt-20">
+    <div class="max-w-7xl mx-auto px-5 py-10 text-sm text-white/70">
+      © <span id="y"></span> aiPRINT.ai — All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+    
+    // Mobile menu
+    (() => {
+      const sheet = document.getElementById('navSheet');
+      const drawer = document.getElementById('navDrawer');
+      const backdrop = document.getElementById('navBackdrop');
+      const openBtn = document.getElementById('navOpen');
+      const closeBtn = document.getElementById('navClose');
+
+      const openSheet = () => {
+        sheet.classList.remove('hidden');
+        requestAnimationFrame(() => {
+          drawer.classList.remove('translate-x-full');
+          backdrop.classList.remove('opacity-0');
+          document.body.classList.add('overflow-hidden');
+        });
+      };
+
+      const closeSheet = () => {
+        drawer.classList.add('translate-x-full');
+        backdrop.classList.add('opacity-0');
+        setTimeout(() => {
+          sheet.classList.add('hidden');
+          document.body.classList.remove('overflow-hidden');
+        }, 250);
+      };
+
+      openBtn?.addEventListener('click', openSheet);
+      closeBtn?.addEventListener('click', closeSheet);
+      backdrop?.addEventListener('click', closeSheet);
+      sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSheet));
+      window.addEventListener('keydown', (e) => { 
+        if (e.key === 'Escape' && !sheet.classList.contains('hidden')) closeSheet(); 
+      });
+    })();
+  </script>
+</body>
+</html>
