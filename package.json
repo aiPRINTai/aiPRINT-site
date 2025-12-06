@@ -3,6 +3,10 @@
   "type": "module",
   "dependencies": {
     "stripe": "^16.6.0",
-    "@vercel/blob": "latest"
+    "@vercel/blob": "latest",
+    "@vercel/postgres": "^0.10.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^10.0.0"
   }
 }
