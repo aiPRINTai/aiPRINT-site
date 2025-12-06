@@ -2,7 +2,8 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "stripe": "^16.6.0",
-    "@vercel/blob": "latest"
+    "@vercel/blob": "latest",
+    "googleapis": "^167.0.0",
+    "stripe": "^16.6.0"
   }
 }
