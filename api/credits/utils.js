@@ -172,28 +172,44 @@ export async function addCreditsToUser(userId, amount, description, stripePaymen
 export function getCreditPackages() {
   return [
     {
-      id: 'credits_25',
-      credits: 25,
+      id: 'credits_5',
+      credits: 5,
       price: 5.00,
-      pricePerCredit: 0.20,
+      pricePerCredit: 1.00,
       popular: false,
-      lookupKey: 'CREDITS-25'
+      lookupKey: 'CREDITS-5'
     },
     {
-      id: 'credits_100',
-      credits: 100,
+      id: 'credits_10',
+      credits: 10,
+      price: 10.00,
+      pricePerCredit: 1.00,
+      popular: false,
+      lookupKey: 'CREDITS-10'
+    },
+    {
+      id: 'credits_15',
+      credits: 15,
       price: 15.00,
-      pricePerCredit: 0.15,
+      pricePerCredit: 1.00,
       popular: true,
-      lookupKey: 'CREDITS-100'
+      lookupKey: 'CREDITS-15'
     },
     {
-      id: 'credits_500',
-      credits: 500,
-      price: 50.00,
-      pricePerCredit: 0.10,
+      id: 'credits_20',
+      credits: 20,
+      price: 20.00,
+      pricePerCredit: 1.00,
       popular: false,
-      lookupKey: 'CREDITS-500'
+      lookupKey: 'CREDITS-20'
+    },
+    {
+      id: 'credits_50',
+      credits: 50,
+      price: 50.00,
+      pricePerCredit: 1.00,
+      popular: false,
+      lookupKey: 'CREDITS-50'
     }
   ];
 }
