@@ -1,5 +1,8 @@
-// api/generate-image.js - Google Gemini (Nano Banana) Version
+// api/generate-image.js - Google Gemini (Nano Banana) Version with Credits
 import { put } from '@vercel/blob';
+import { canUserGenerate, deductCreditsForGeneration } from './credits/utils.js';
+import { recordGeneration } from './db/index.js';
+import { getUserFromRequest, getClientIp } from './auth/utils.js';
 
 const ALLOWED_SIZES = new Set(['1024x1024', '1024x1536', '1536x1024']);
 
@@ -93,6 +96,21 @@ export default async function handler(req, res) {
     return res.status(400).json({ ok: false, error: 'Please provide a prompt' });
   }
 
+  // Check if user can generate (has credits or within anonymous limit)
+  const creditCheck = await canUserGenerate(req);
+
+  if (!creditCheck.allowed) {
+    const statusCode = creditCheck.reason === 'Insufficient credits' ? 402 : 429;
+    return res.status(statusCode).json({
+      ok: false,
+      error: creditCheck.reason,
+      needsCredits: creditCheck.reason === 'Insufficient credits',
+      needsSignup: creditCheck.isAnonymous && creditCheck.remainingGenerations === 0,
+      remainingCredits: creditCheck.remainingCredits,
+      remainingGenerations: creditCheck.remainingGenerations
+    });
+  }
+
   const size = ALLOWED_SIZES.has(rawSize) ? rawSize : '1024x1024';
   const [w, h] = size.split('x').map(n => parseInt(n, 10));
 
@@ -147,6 +165,27 @@ export default async function handler(req, res) {
       contentType: 'application/json'
     });
 
+    // Deduct credits and record generation
+    const tokenData = getUserFromRequest(req);
+    const ipAddress = getClientIp(req);
+
+    const creditResult = await deductCreditsForGeneration(req, {
+      prompt,
+      imageUrl: url,
+      size,
+      sessionId: req.body.sessionId
+    });
+
+    // Record generation in database
+    await recordGeneration(
+      tokenData?.userId || null,
+      ipAddress,
+      prompt,
+      url,
+      size,
+      0.035 // Cost per generation
+    );
+
     return res.status(200).json({
       ok: true,
       image: url,
@@ -154,7 +193,13 @@ export default async function handler(req, res) {
       width: w,
       height: h,
       prompt,
-      size
+      size,
+      credits: {
+        newBalance: creditResult.newBalance,
+        creditsUsed: creditResult.creditsUsed,
+        remainingGenerations: creditResult.remainingGenerations,
+        isAnonymous: creditResult.isAnonymous
+      }
     });
 
   } catch (uploadErr) {

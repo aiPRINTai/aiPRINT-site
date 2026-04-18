@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Account - aiPRINT.ai</title>
+  <link rel="icon" href="/favicon.ico" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root { --bg:#0a0f1d; --ink:#e7eef8; --muted:#9fb3c8; }
+    html,body{background:var(--bg);color:var(--ink);min-height:100vh;}
+    body{font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;}
+    .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
+    .btn{background:#fff;color:#000;font-weight:700;padding:.7rem 1rem;border-radius:.6rem;cursor:pointer;border:none;}
+    .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#e7eef8;cursor:pointer;padding:.7rem 1rem;border-radius:.6rem;}
+    .spinner{border:2px solid #333;border-top:2px solid #fff;border-radius:50%;width:20px;height:20px;animation:spin 1s linear infinite;margin:0 auto;}
+    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2">
+        <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
+        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+      </a>
+      <div id="authButton"></div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-4xl mx-auto px-5 py-12">
+    <div id="loadingState" class="text-center py-20">
+      <div class="spinner"></div>
+      <p class="mt-4 text-gray-400">Loading your account...</p>
+    </div>
+
+    <div id="notAuthenticatedState" class="hidden text-center py-20">
+      <h2 class="text-3xl font-bold mb-4">Please log in</h2>
+      <p class="text-gray-400 mb-6">You need to be logged in to view your account.</p>
+      <button onclick="auth.showLoginModal()" class="btn">Login</button>
+    </div>
+
+    <div id="accountContent" class="hidden space-y-8">
+      <!-- Header -->
+      <div>
+        <h1 class="text-4xl font-bold mb-2">My Account</h1>
+        <p class="text-gray-400" id="userEmail"></p>
+      </div>
+
+      <!-- Credits Balance -->
+      <div class="glass rounded-xl p-6">
+        <div class="flex justify-between items-start mb-4">
+          <div>
+            <h2 class="text-2xl font-bold mb-1">Credits Balance</h2>
+            <p class="text-gray-400 text-sm">1 credit = 1 image generation</p>
+          </div>
+          <div class="text-right">
+            <div class="text-5xl font-bold text-yellow-400" id="creditsBalance">-</div>
+            <p class="text-sm text-gray-400 mt-1">credits remaining</p>
+          </div>
+        </div>
+        <button onclick="credits.showPurchaseModal()" class="btn w-full">
+          Buy More Credits
+        </button>
+      </div>
+
+      <!-- Recent Activity -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4">Recent Activity</h2>
+        <div id="activityContainer" class="space-y-3">
+          <div class="text-center py-8 glass rounded-xl">
+            <div class="spinner"></div>
+            <p class="mt-2 text-gray-400">Loading activity...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Purchase History -->
+      <div>
+        <h2 class="text-2xl font-bold mb-4">Credit History</h2>
+        <div id="historyContainer" class="space-y-2">
+          <div class="text-center py-8 glass rounded-xl">
+            <div class="spinner"></div>
+            <p class="mt-2 text-gray-400">Loading history...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Account Actions -->
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-4">Account Actions</h2>
+        <button onclick="auth.logout()" class="btn-ghost text-red-400 hover:bg-red-500/10">
+          Logout
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/credits.js"></script>
+  <script>
+    // Wait for auth to initialize
+    setTimeout(async () => {
+      const loadingState = document.getElementById('loadingState');
+      const notAuthState = document.getElementById('notAuthenticatedState');
+      const accountContent = document.getElementById('accountContent');
+
+      if (!auth.isAuthenticated()) {
+        loadingState.classList.add('hidden');
+        notAuthState.classList.remove('hidden');
+        return;
+      }
+
+      // Show account content
+      loadingState.classList.add('hidden');
+      accountContent.classList.remove('hidden');
+
+      // Display user info
+      document.getElementById('userEmail').textContent = auth.user.email;
+      document.getElementById('creditsBalance').textContent = auth.user.credits_balance;
+
+      // Load credit history
+      try {
+        const historyResp = await fetch('/api/credits/history', {
+          headers: auth.getAuthHeader()
+        });
+
+        if (historyResp.ok) {
+          const historyData = await historyResp.json();
+          const historyContainer = document.getElementById('historyContainer');
+
+          if (historyData.history.length === 0) {
+            historyContainer.innerHTML = '<div class="glass rounded-xl p-4 text-center text-gray-400">No credit history yet</div>';
+          } else {
+            historyContainer.innerHTML = historyData.history.map(item => {
+              const isPositive = item.amount > 0;
+              const date = new Date(item.created_at).toLocaleDateString();
+              const time = new Date(item.created_at).toLocaleTimeString();
+
+              let typeLabel = item.type;
+              let icon = '•';
+
+              if (item.type === 'signup_bonus') {
+                typeLabel = 'Signup Bonus';
+                icon = '🎁';
+              } else if (item.type === 'purchase') {
+                typeLabel = 'Credits Purchased';
+                icon = '💳';
+              } else if (item.type === 'generation_use') {
+                typeLabel = 'Image Generated';
+                icon = '🎨';
+              }
+
+              return `
+                <div class="glass rounded-lg p-4 flex justify-between items-center">
+                  <div class="flex items-center gap-3">
+                    <span class="text-2xl">${icon}</span>
+                    <div>
+                      <div class="font-medium">${typeLabel}</div>
+                      <div class="text-sm text-gray-400">${date} at ${time}</div>
+                      ${item.description ? `<div class="text-xs text-gray-500 mt-1">${item.description}</div>` : ''}
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <div class="font-bold text-lg ${isPositive ? 'text-green-400' : 'text-red-400'}">
+                      ${isPositive ? '+' : ''}${item.amount}
+                    </div>
+                    <div class="text-xs text-gray-400">credits</div>
+                  </div>
+                </div>
+              `;
+            }).join('');
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load history:', error);
+      }
+
+      // Load recent generations
+      try {
+        const generationsResp = await fetch('/api/user/generations', {
+          headers: auth.getAuthHeader()
+        });
+
+        if (generationsResp.ok) {
+          const generationsData = await generationsResp.json();
+          const activityContainer = document.getElementById('activityContainer');
+
+          if (generationsData.generations && generationsData.generations.length > 0) {
+            activityContainer.innerHTML = generationsData.generations.slice(0, 5).map(gen => {
+              const date = new Date(gen.created_at).toLocaleDateString();
+              return `
+                <div class="glass rounded-lg p-4 flex gap-4">
+                  ${gen.image_url ? `<img src="${gen.image_url}" class="w-20 h-20 rounded object-cover" />` : ''}
+                  <div class="flex-1">
+                    <div class="font-medium">${gen.prompt.substring(0, 100)}${gen.prompt.length > 100 ? '...' : ''}</div>
+                    <div class="text-sm text-gray-400 mt-1">${date} · ${gen.size}</div>
+                  </div>
+                </div>
+              `;
+            }).join('');
+          } else {
+            activityContainer.innerHTML = '<div class="glass rounded-xl p-4 text-center text-gray-400">No generations yet. <a href="/" class="text-white hover:underline">Create your first one!</a></div>';
+          }
+        } else {
+          // API endpoint doesn't exist yet, show placeholder
+          document.getElementById('activityContainer').innerHTML = '<div class="glass rounded-xl p-4 text-center text-gray-400">Generation history coming soon!</div>';
+        }
+      } catch (error) {
+        console.error('Failed to load generations:', error);
+        document.getElementById('activityContainer').innerHTML = '<div class="glass rounded-xl p-4 text-center text-gray-400">Generation history coming soon!</div>';
+      }
+
+      // Check for purchase success
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('credits_purchased') === 'true') {
+        auth.showToast('Credits added successfully! 🎉', 'success');
+        // Reload balance
+        credits.loadBalance().then(balance => {
+          document.getElementById('creditsBalance').textContent = balance;
+        });
+      }
+    }, 500);
+  </script>
+</body>
+</html>

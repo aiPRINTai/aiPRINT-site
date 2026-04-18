@@ -225,6 +225,7 @@
         <a href="/policies.html" class="hover:text-white">Policies</a>
         <a href="/contact.html" class="hover:text-white">Contact</a>
       </nav>
+      <div id="authButton"></div>
     </div>
   </header>
 
@@ -318,6 +319,10 @@
   <!-- CREATE -->
   <section id="create" class="max-w-7xl mx-auto px-5 py-14">
     <h2 class="h2 mb-4">Create a preview</h2>
+
+    <!-- Anonymous Limit Message -->
+    <div id="anonymousLimitMessage" class="hidden mb-4"></div>
+
     <div class="glass rounded-xl p-5 md:p-6">
       <!-- Prompt input -->
       <div class="mb-6">
@@ -1179,24 +1184,54 @@
     // Generate image
     async function generateImage(prompt, size) {
       console.log('🎨 Generating image:', prompt, size);
-      
+
       try {
+        const headers = { 'Content-Type': 'application/json' };
+
+        // Add auth token if available
+        if (window.auth && window.auth.isAuthenticated()) {
+          Object.assign(headers, window.auth.getAuthHeader());
+        }
+
         const response = await fetch('/api/generate-image', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers,
           body: JSON.stringify({ prompt, size })
         });
 
+        // Handle credit-related errors
         if (!response.ok) {
-          const error = await response.text();
-          throw new Error(`Generation failed: ${error}`);
+          const errorData = await response.json();
+
+          // Out of credits (authenticated user)
+          if (response.status === 402 && errorData.needsCredits) {
+            if (window.credits) {
+              window.credits.showInsufficientCreditsModal();
+            }
+            throw new Error('Insufficient credits');
+          }
+
+          // Daily limit reached (anonymous user)
+          if (response.status === 429 && errorData.needsSignup) {
+            if (window.auth) {
+              window.auth.showSignupModal();
+            }
+            throw new Error('Daily limit reached. Please sign up for more credits.');
+          }
+
+          throw new Error(errorData.error || 'Generation failed');
         }
 
         const data = await response.json();
         console.log('✅ Image generated:', data);
-        
+
         if (!data.ok || !data.image) {
           throw new Error(data.error || 'No image returned');
+        }
+
+        // Update credits UI
+        if (data.credits && window.credits) {
+          window.credits.updateGenerationUI(data.credits);
         }
 
         return {
@@ -1461,5 +1496,10 @@
     })();
 
   </script>
+
+  <!-- Auth and Credits System -->
+  <script src="/js/auth.js"></script>
+  <script src="/js/credits.js"></script>
+
 </body>
 </html>
