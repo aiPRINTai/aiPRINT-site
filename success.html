@@ -3,133 +3,214 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>aiPRINT.ai — Order Confirmed</title>
+  <title>aiPRINT.ai — Order Confirmed 🎉</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
   <style>
     :root { --bg:#0a0f1d; --ink:#e7eef8; }
     body { background:var(--bg); color:var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
     .glass { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px); }
-    .muted { color:#b8c7d8 }
+    .muted { color:#9fb3c8; }
+    .gradient-text { background: linear-gradient(135deg,#c7d2fe,#818cf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    .fade-up { animation: fadeUp .5s ease forwards; }
+    .coa-font { font-family: 'Playfair Display', Georgia, serif; }
+    .checkmark { width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg,#4ade80,#22c55e); display:flex; align-items:center; justify-content:center; font-size:2rem; margin:0 auto; }
   </style>
 </head>
 <body class="min-h-screen">
-  <header class="sticky top-0 z-10 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
+
+  <header class="sticky top-0 z-10 bg-[#0b1020]/90 backdrop-blur border-b border-white/10">
     <div class="max-w-5xl mx-auto px-5 h-14 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2">
-        <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
-        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+        <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center text-xs">AI</span>
+        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span></span>
       </a>
-      <a href="/" class="text-sm underline">Back to home</a>
+      <a href="/" class="text-sm text-gray-400 hover:text-white transition-colors">← Back to home</a>
     </div>
   </header>
 
-  <main class="max-w-5xl mx-auto px-5 py-8">
-    <h1 class="text-3xl font-extrabold">Thank you! Your order is confirmed.</h1>
-    <p class="muted mt-2">We’ve emailed a receipt. Below are the details we’ll use to make your print.</p>
+  <main class="max-w-5xl mx-auto px-5 py-12">
 
-    <div id="content" class="mt-6 grid md:grid-cols-[340px_1fr] gap-6 items-start">
-      <div class="glass rounded-xl p-3">
-        <img id="prevImg" class="w-full h-auto rounded-lg" alt="Your artwork preview"/>
-      </div>
+    <!-- Success Header -->
+    <div class="text-center mb-12 fade-up">
+      <div class="checkmark mb-5">✓</div>
+      <h1 class="text-4xl font-extrabold mb-3">Your order is confirmed!</h1>
+      <p class="muted text-lg max-w-md mx-auto">We're already working on your print. You'll receive a shipping confirmation email when it's on its way.</p>
+    </div>
+
+    <div id="content" class="grid md:grid-cols-[360px_1fr] gap-8 items-start fade-up">
+
+      <!-- Left: Artwork Preview -->
       <div class="space-y-4">
-        <div class="glass rounded-xl p-4">
-          <div class="font-bold text-lg mb-2">Order Summary</div>
-          <div class="grid grid-cols-2 gap-y-2 text-sm">
-            <div class="muted">Order ID</div><div id="orderId" class="font-mono"></div>
+        <div class="glass rounded-2xl p-4">
+          <div class="text-xs font-semibold text-indigo-300 uppercase tracking-widest mb-3">Your Artwork</div>
+          <img id="prevImg" class="w-full h-auto rounded-xl" alt="Your artwork preview"/>
+        </div>
+
+        <!-- Certificate of Authenticity teaser -->
+        <div class="glass rounded-2xl p-5 coa-font">
+          <div class="text-center">
+            <div class="text-xs tracking-widest text-gray-400 uppercase mb-2">Certificate of Authenticity</div>
+            <div class="text-lg font-bold mb-1">Original AI Artwork</div>
+            <div class="w-12 h-px bg-white/30 mx-auto my-3"></div>
+            <div class="text-xs text-gray-400 leading-relaxed">This print is a unique, limited-edition work produced under human artistic curation. No two prints are identical.</div>
+            <div class="mt-4 text-xs text-indigo-300 font-semibold">📜 Certificate ships with your print</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Order Details -->
+      <div class="space-y-5">
+
+        <!-- Order Summary -->
+        <div class="glass rounded-2xl p-6">
+          <div class="font-bold text-lg mb-4 flex items-center gap-2">
+            📦 Order Summary
+          </div>
+          <div class="grid grid-cols-2 gap-y-3 text-sm">
+            <div class="muted">Order ID</div><div id="orderId" class="font-mono text-xs break-all"></div>
             <div class="muted">Email</div><div id="email"></div>
-            <div class="muted">Finish / Size</div><div id="finish"></div>
-            <div class="muted">Total</div><div id="total"></div>
+            <div class="muted">Finish / Size</div><div id="finish" class="font-semibold"></div>
+            <div class="muted">Total</div><div id="total" class="font-bold text-lg text-white"></div>
             <div class="muted">Tax</div><div id="tax"></div>
           </div>
         </div>
 
-        <div class="glass rounded-xl p-4">
-          <div class="font-bold text-lg mb-2">Shipping</div>
-          <div id="shipName"></div>
-          <div id="shipAddr" class="text-sm whitespace-pre-line muted"></div>
+        <!-- Shipping -->
+        <div class="glass rounded-2xl p-6">
+          <div class="font-bold text-lg mb-4">🚚 Shipping To</div>
+          <div id="shipName" class="font-semibold"></div>
+          <div id="shipAddr" class="text-sm whitespace-pre-line muted mt-1"></div>
+          <div class="mt-4 pt-4 border-t border-white/10 text-sm text-gray-400">
+            <div class="flex items-center gap-2 mb-1.5"><span class="text-yellow-400">⏱</span> Production: 3–7 business days</div>
+            <div class="flex items-center gap-2"><span class="text-blue-400">📬</span> Shipping: 3–7 business days after production</div>
+          </div>
         </div>
 
-        <div class="glass rounded-xl p-4">
-          <div class="font-bold text-lg mb-2">Your Selections</div>
-          <div class="text-sm grid grid-cols-2 gap-y-2">
-            <div class="muted">Prompt</div><div id="prompt"></div>
-            <div class="muted">Aspect ratio</div><div id="ratio"></div>
+        <!-- Creative Selections -->
+        <div class="glass rounded-2xl p-6">
+          <div class="font-bold text-lg mb-4">🎨 Your Creative Settings</div>
+          <div class="text-sm grid grid-cols-2 gap-y-2.5">
+            <div class="muted">Prompt</div><div id="prompt" class="italic text-gray-300"></div>
             <div class="muted">Style</div><div id="style"></div>
             <div class="muted">Mood</div><div id="mood"></div>
             <div class="muted">Lighting</div><div id="light"></div>
             <div class="muted">Composition</div><div id="comp"></div>
             <div class="muted">Medium</div><div id="medium"></div>
           </div>
-          <div id="sigWrap" class="text-sm mt-3 hidden">
-            <div class="muted">Signature overlay</div>
-            <pre id="sig" class="mt-1 p-2 rounded bg-black/30 overflow-x-auto"></pre>
+          <div id="sigWrap" class="text-sm mt-4 pt-4 border-t border-white/10 hidden">
+            <div class="muted mb-1">Artist Signature</div>
+            <div id="sig" class="text-indigo-300 font-semibold"></div>
           </div>
         </div>
+
+        <!-- What Happens Next -->
+        <div class="glass rounded-2xl p-6">
+          <div class="font-bold text-lg mb-4">What happens next</div>
+          <div class="space-y-4">
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-300 flex items-center justify-center font-bold text-sm flex-shrink-0">1</div>
+              <div>
+                <div class="font-semibold text-sm">Our team reviews your artwork</div>
+                <div class="text-xs text-gray-500 mt-0.5">A human artist inspects the AI-generated image for quality before production begins.</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-300 flex items-center justify-center font-bold text-sm flex-shrink-0">2</div>
+              <div>
+                <div class="font-semibold text-sm">Production on archival materials</div>
+                <div class="text-xs text-gray-500 mt-0.5">Printed at our USA studio on museum-grade materials. Your signature is embedded in the print.</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-full bg-green-500/20 text-green-300 flex items-center justify-center font-bold text-sm flex-shrink-0">3</div>
+              <div>
+                <div class="font-semibold text-sm">Packed and shipped to you</div>
+                <div class="text-xs text-gray-500 mt-0.5">Museum-quality packaging with Certificate of Authenticity. Ready to hang from day one.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Create Another -->
+        <div class="text-center pt-2">
+          <a href="/" class="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 font-semibold transition-colors">
+            ✨ Create another print
+          </a>
+        </div>
+
       </div>
     </div>
 
-    <div id="error" class="hidden mt-6 text-red-300"></div>
+    <div id="error" class="hidden mt-6 glass rounded-xl p-4 text-red-300"></div>
   </main>
 
+  <footer class="border-t border-white/10 mt-16">
+    <div class="max-w-5xl mx-auto px-5 py-6 text-sm text-gray-600 text-center">
+      Questions? Email <a href="mailto:support@aiprint.ai" class="text-gray-400 hover:text-white transition-colors">support@aiprint.ai</a>
+      · We respond within 24 hours.
+    </div>
+  </footer>
+
   <script>
-    const $ = (q, el=document)=>el.querySelector(q);
-    function qparam(name){ return new URLSearchParams(location.search).get(name); }
+    const $ = (q, el=document) => el.querySelector(q);
 
     async function load() {
-      const id = qparam('session_id');
-      if(!id){ showErr('Missing session_id in URL.'); return; }
+      const id = new URLSearchParams(location.search).get('session_id');
+      if (!id) { showErr('Missing session_id in URL.'); return; }
 
       try {
         const r = await fetch(`/api/session?id=${encodeURIComponent(id)}`);
         const data = await r.json();
-        if(!r.ok) throw new Error(data?.error || 'Failed to load session');
+        if (!r.ok) throw new Error(data?.error || 'Failed to load session');
 
-        // Preview image
         const prevUrl = data?.metadata?.preview_url || '';
-        if(prevUrl) $('#prevImg').src = prevUrl;
+        if (prevUrl) $('#prevImg').src = prevUrl;
+        else $('#prevImg').style.display = 'none';
 
-        // Order basics
         $('#orderId').textContent = data.id || '';
         $('#email').textContent = data.customer_email || '';
 
-        // Size / finish: prefer Stripe line item description, fall back to lookup key
         const li = (data.line_items && data.line_items[0]) || null;
-        const finish = li?.description || data?.metadata?.lookup_key || 'Custom print';
-        $('#finish').textContent = finish;
+        $('#finish').textContent = li?.description || data?.metadata?.lookup_key || 'Custom print';
 
-        // Money
-        function fmt(amount, currency){ return (amount/100).toLocaleString(undefined, { style:'currency', currency: (currency||'usd').toUpperCase() }); }
+        function fmt(amount, currency) {
+          return (amount/100).toLocaleString(undefined, { style:'currency', currency: (currency||'usd').toUpperCase() });
+        }
         $('#total').textContent = fmt(data.amount_total || 0, data.currency || 'usd');
         $('#tax').textContent   = fmt(data.tax_amount || 0, data.currency || 'usd');
 
-        // Shipping
         const s = data.shipping || {};
         $('#shipName').textContent = s?.name || '';
         const a = s?.address || {};
         $('#shipAddr').textContent = [a.line1, a.line2, `${a.city||''}${a.city?', ':''}${a.state||''} ${a.postal_code||''}`, a.country || ''].filter(Boolean).join('\n');
 
-        // Creative selections
         const m = data.metadata || {};
-        $('#prompt').textContent = m.prompt || '';
-        $('#ratio').textContent  = m.ratio || '';
-        $('#style').textContent  = m.style || '';
-        $('#mood').textContent   = m.mood || '';
-        $('#light').textContent  = m.light || '';
-        $('#comp').textContent   = m.composition || '';
-        $('#medium').textContent = m.medium || '';
+        $('#prompt').textContent = m.prompt || '—';
+        $('#style').textContent  = m.style || '—';
+        $('#mood').textContent   = m.mood || '—';
+        $('#light').textContent  = m.light || '—';
+        $('#comp').textContent   = m.composition || '—';
+        $('#medium').textContent = m.medium || '—';
 
         if (m.signature_json) {
-          $('#sigWrap').classList.remove('hidden');
-          $('#sig').textContent = m.signature_json;
+          try {
+            const sig = JSON.parse(m.signature_json);
+            if (sig.text) {
+              $('#sigWrap').classList.remove('hidden');
+              $('#sig').textContent = sig.text;
+            }
+          } catch(e) {}
         }
       } catch (e) {
         showErr(e.message || String(e));
       }
     }
 
-    function showErr(msg){
+    function showErr(msg) {
       const el = $('#error');
-      el.textContent = msg;
+      el.textContent = 'Could not load order details: ' + msg + '. Please check your email for confirmation.';
       el.classList.remove('hidden');
     }
 
