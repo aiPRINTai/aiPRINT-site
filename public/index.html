@@ -934,31 +934,47 @@
     <div class="text-center mb-8">
       <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Step 2 · Pick your print</div><div class="section-label-line right"></div></div>
       <h2 class="h2 mt-3">Now make it real</h2>
-      <p id="orderMsg" class="muted mt-3 max-w-2xl mx-auto">Generate and select a preview above to unlock ordering. Three materials, three orientations, hand-picked sizes — only the finishes and dimensions that actually look great in person.</p>
+      <p id="orderMsg" class="muted mt-3 max-w-2xl mx-auto">Generate and select a preview above to unlock ordering. Compare Canvas, Metal, and Acrylic side-by-side — same sizes, your call on finish.</p>
     </div>
 
-    <div class="flex gap-2 mb-6">
-      <button class="orderTab px-5 py-2.5 rounded-lg bg-white/10 font-semibold text-sm" data-tab="canvas">Canvas</button>
-      <button class="orderTab px-5 py-2.5 rounded-lg border border-white/15 text-sm" data-tab="metal">Metal</button>
-      <button class="orderTab px-5 py-2.5 rounded-lg border border-white/15 text-sm" data-tab="acrylic">Acrylic</button>
+    <!-- Orientation indicator: shows the orientation locked in by the selected preview -->
+    <div id="orientationBar" class="flex items-center justify-center gap-3 mb-6 text-sm text-gray-300">
+      <span id="orientationChipIdle">Pick an orientation when you generate a preview above to see your sizes here.</span>
+      <span id="orientationChip" class="hidden inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15">
+        <span class="text-indigo-300" aria-hidden="true">●</span>
+        <span class="text-white font-semibold" id="orientationChipText">—</span>
+        <span class="text-gray-400 text-xs">based on your preview</span>
+      </span>
     </div>
 
     <div class="grid md:grid-cols-3 gap-5">
-      <div id="grp-square" class="glass rounded-xl p-4">
-        <div class="font-bold mb-3">Square (1:1)</div>
-        <div class="opts space-y-1" data-bucket="square">
+      <div id="grp-canvas" class="glass rounded-xl p-4">
+        <div class="flex items-baseline justify-between mb-1">
+          <div class="font-bold">Canvas</div>
+          <span class="material-badge material-canvas">CANVAS</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-3">Gallery-wrap, ready to hang.</p>
+        <div class="opts space-y-1" data-material="canvas">
           <div class="text-xs text-gray-400">Loading products...</div>
         </div>
       </div>
-      <div id="grp-h32" class="glass rounded-xl p-4">
-        <div class="font-bold mb-3">Horizontal (3:2)</div>
-        <div class="opts space-y-1" data-bucket="h32">
+      <div id="grp-metal" class="glass rounded-xl p-4">
+        <div class="flex items-baseline justify-between mb-1">
+          <div class="font-bold">Metal</div>
+          <span class="material-badge material-metal">METAL</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-3">Aluminum dye-sublimation, vivid &amp; durable.</p>
+        <div class="opts space-y-1" data-material="metal">
           <div class="text-xs text-gray-400">Loading products...</div>
         </div>
       </div>
-      <div id="grp-v23" class="glass rounded-xl p-4">
-        <div class="font-bold mb-3">Vertical (2:3)</div>
-        <div class="opts space-y-1" data-bucket="v23">
+      <div id="grp-acrylic" class="glass rounded-xl p-4">
+        <div class="flex items-baseline justify-between mb-1">
+          <div class="font-bold">Acrylic</div>
+          <span class="material-badge material-acrylic">ACRYLIC</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-3">Museum facemount, polished edges.</p>
+        <div class="opts space-y-1" data-material="acrylic">
           <div class="text-xs text-gray-400">Loading products...</div>
         </div>
       </div>
@@ -1910,20 +1926,27 @@
       return products;
     }
 
-    function renderBucket(bucket) {
-      const box = $(`.opts[data-bucket="${bucket}"]`);
+    // Human label for each shape bucket
+    const SHAPE_LABEL = { square: 'Square (1:1)', h32: 'Horizontal (3:2)', v23: 'Vertical (2:3)' };
+    const MATERIAL_CLASS = { canvas: 'material-canvas', metal: 'material-metal', acrylic: 'material-acrylic' };
+
+    // Render one material column at the given orientation bucket.
+    // `enabled` controls whether the size buttons are clickable — they're disabled
+    // until the customer has selected a preview image above.
+    function renderMaterial(material, bucket, enabled) {
+      const box = $(`.opts[data-material="${material}"]`);
       if (!box) return;
-      const items = getProductsFor(currentCollection, bucket);
+      const items = getProductsFor(material, bucket);
       if (!items.length) { box.innerHTML = '<div class="opacity-60 text-sm">No sizes available</div>'; return; }
-      const materialClass = currentCollection === 'canvas' ? 'material-canvas' : currentCollection === 'metal' ? 'material-metal' : 'material-acrylic';
+      const materialClass = MATERIAL_CLASS[material] || 'material-canvas';
       box.innerHTML = items.map(p => `
-        <button class="sizeBtn w-full mb-2 px-3 py-2 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-left text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled"
-                data-material="${currentCollection}" data-shape="${bucket}"
+        <button class="sizeBtn w-full mb-2 px-3 py-2 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-left text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed${enabled ? '' : ' disabled'}"
+                data-material="${material}" data-shape="${bucket}"
                 data-size="${p.size_w_in}x${p.size_h_in}"
                 data-lookup="${p.lookup_key}"
-                data-label="${currentCollection.toUpperCase()} ${p.size_w_in}×${p.size_h_in} — ${formatMoney(p.price_usd)}"
+                data-label="${material.toUpperCase()} ${p.size_w_in}×${p.size_h_in} — ${formatMoney(p.price_usd)}"
                 data-link="${p.stripe_payment_link}">
-          <span class="${materialClass} material-badge">${currentCollection.toUpperCase()}</span>
+          <span class="${materialClass} material-badge">${material.toUpperCase()}</span>
           <span class="text-white">${p.size_w_in}×${p.size_h_in}" — ${formatMoney(p.price_usd)}</span>
         </button>
       `).join('');
@@ -1934,6 +1957,8 @@
           $$('.sizeBtn').forEach(x => x.classList.remove('ringy', 'bg-white/20'));
           btn.classList.add('ringy', 'bg-white/20');
           selected = { material: btn.dataset.material, shape: btn.dataset.shape, size: btn.dataset.size, lookup: btn.dataset.lookup, label: btn.dataset.label, link: btn.dataset.link };
+          // Drive the wall mockup's frame styling off the selected material
+          currentCollection = selected.material;
           $('#selectionSummary').textContent = `Selected: ${selected.label}`;
           $('#reviewBtn').classList.remove('disabled');
           const activeRoom = $('.room-tab.active')?.dataset.room || 'room1';
@@ -1942,23 +1967,30 @@
       });
     }
 
-    function renderAllBuckets() { ['square', 'h32', 'v23'].forEach(renderBucket); }
-
-    function setActiveOnly(bucket) {
-      [['square', '#grp-square'], ['h32', '#grp-h32'], ['v23', '#grp-v23']].forEach(([k, sel]) => {
-        const el = $(sel);
-        if (!el) return;
-        if (!bucket || k === bucket) el.classList.remove('opacity-30', 'pointer-events-none');
-        else el.classList.add('opacity-30', 'pointer-events-none');
-      });
+    // Render all three material columns at the currently active orientation.
+    // When no preview is selected, we show square sizes as a teaser with disabled
+    // buttons so the price range is visible but not clickable.
+    function renderMaterialColumns(bucket, enabled) {
+      const resolved = bucket || 'square';
+      ['canvas', 'metal', 'acrylic'].forEach(m => renderMaterial(m, resolved, !!enabled));
+      const chip = $('#orientationChip');
+      const chipIdle = $('#orientationChipIdle');
+      const chipText = $('#orientationChipText');
+      if (bucket && chip && chipText) {
+        chipText.textContent = SHAPE_LABEL[bucket] || '';
+        chip.classList.remove('hidden');
+        if (chipIdle) chipIdle.classList.add('hidden');
+      } else if (chip) {
+        chip.classList.add('hidden');
+        if (chipIdle) chipIdle.classList.remove('hidden');
+      }
     }
 
+    // Back-compat shims so callers elsewhere in the file keep working.
+    function renderAllBuckets() { renderMaterialColumns(null, false); }
+    function setActiveOnly() { /* no-op: we no longer gray out columns */ }
     function setButtonsEnabled(enabledBucket) {
-      $$('.sizeBtn').forEach(btn => {
-        const enabled = !!enabledBucket && btn.dataset.shape === enabledBucket;
-        if (enabled) { btn.classList.remove('disabled'); btn.disabled = false; }
-        else { btn.classList.add('disabled'); btn.disabled = true; }
-      });
+      renderMaterialColumns(enabledBucket || null, !!enabledBucket);
     }
 
     async function generateImage(prompt, size) {
@@ -2173,25 +2205,8 @@
       localStorage.removeItem('aiprint_last_preview');
     });
 
-    $$('.orderTab').forEach(btn => {
-      btn.addEventListener('click', () => {
-        $$('.orderTab').forEach(x => { x.classList.remove('bg-white/10', 'font-semibold'); x.classList.add('border', 'border-white/15'); });
-        btn.classList.add('bg-white/10', 'font-semibold'); btn.classList.remove('border', 'border-white/15');
-        currentCollection = btn.dataset.tab;
-        renderAllBuckets();
-        if (currentPreview) {
-          setActiveOnly(currentPreview.shape);
-          setButtonsEnabled(currentPreview.shape);
-          const activeBucket = $(`#grp-${currentPreview.shape === 'square' ? 'square' : (currentPreview.shape === 'horizontal' ? 'h32' : 'v23')}`);
-          if (activeBucket) activeBucket.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-        const prevSize = selected?.size || '24x24';
-        selected = null; $('#selectionSummary').textContent = 'Selected: —'; $('#reviewBtn').classList.add('disabled');
-        if ($('#roomMockupSection') && !$('#roomMockupSection').classList.contains('hidden')) {
-          updateMockup($('.room-tab.active')?.dataset.room || 'room1', prevSize);
-        }
-      });
-    });
+    // Material tabs were removed in favor of three material columns side-by-side;
+    // selecting a size button now drives `currentCollection` directly.
 
     $('#reviewBtn').addEventListener('click', async () => {
       if (!selected || !currentPreview) { alert('Please generate a preview and select a size first.'); return; }
