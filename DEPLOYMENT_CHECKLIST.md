@@ -4,12 +4,13 @@
 
 All code is complete and pushed to branch: `claude/add-credits-system-01AgMjLq8Gd9F4Pi9ivFNuA2`
 
-**Credit packages configured:**
-- 5 credits: $5.00
-- 10 credits: $10.00
-- 15 credits: $15.00 ⭐ Most Popular
-- 20 credits: $20.00
-- 50 credits: $50.00
+**Credit packages configured ($0.20 per credit):**
+- 25 credits: $5.00
+- 50 credits: $10.00 ⭐ Most Popular
+- 100 credits: $20.00
+- 250 credits: $50.00
+
+Stripe products use dynamic `unit_amount` pricing — no Stripe dashboard SKUs required.
 
 ---
 
@@ -68,36 +69,12 @@ openssl rand -base64 32
 
 ---
 
-### STEP 4: Create Stripe Products (10 min)
+### STEP 4: Stripe Products (no action required)
 
-Go to: https://dashboard.stripe.com/products
+Credit pack pricing is now sent dynamically to Stripe via `unit_amount` in `/api/credits/purchase.js`. The `lookupKey` field on each package is informational only — Stripe does not need pre-created products for credit packs.
 
-**Create 5 products with these EXACT lookup keys:**
-
-#### Product 1:
-- Name: `5 Credits`
-- Price: `$5.00` (one-time)
-- Lookup key: `CREDITS-5` ⚠️ Must be exact!
-
-#### Product 2:
-- Name: `10 Credits`
-- Price: `$10.00` (one-time)
-- Lookup key: `CREDITS-10` ⚠️ Must be exact!
-
-#### Product 3:
-- Name: `15 Credits`
-- Price: `$15.00` (one-time)
-- Lookup key: `CREDITS-15` ⚠️ Must be exact!
-
-#### Product 4:
-- Name: `20 Credits`
-- Price: `$20.00` (one-time)
-- Lookup key: `CREDITS-20` ⚠️ Must be exact!
-
-#### Product 5:
-- Name: `50 Credits`
-- Price: `$50.00` (one-time)
-- Lookup key: `CREDITS-50` ⚠️ Must be exact!
+If you ever want to switch back to fixed Stripe SKUs, the lookup keys are:
+`CREDITS-25`, `CREDITS-50`, `CREDITS-100`, `CREDITS-250`.
 
 ---
 
@@ -106,12 +83,12 @@ Go to: https://dashboard.stripe.com/products
 After all steps complete:
 
 - [ ] Visit site anonymously
-- [ ] Generate 3 images (should work)
-- [ ] Try 4th image (should show signup prompt)
-- [ ] Sign up (should get 10 free credits)
+- [ ] Generate 1 image (should work)
+- [ ] Try 2nd image (should show signup prompt — anonymous limit is 1/day)
+- [ ] Sign up (should get 5 free credits)
 - [ ] Generate image (credits should decrease)
 - [ ] Visit `/account.html` (see balance and history)
-- [ ] Click "Buy Credits" (see all 5 packages)
+- [ ] Click "Buy Credits" (see all 4 packages, $0.20/credit)
 - [ ] Test purchase with Stripe test card: `4242 4242 4242 4242`
 - [ ] Verify credits added after purchase
 
@@ -139,13 +116,13 @@ After all steps complete:
 ## 📊 What This Gives You
 
 **Cost Protection:**
-- Anonymous: 3 free/day (IP tracked)
-- Registered: 10 free on signup
+- Anonymous: 1 free/day (IP tracked)
+- Registered: 5 free on signup
 - All generations tracked in database
 
 **Revenue:**
-- At $1/credit, you make **$0.96-$0.97 profit per credit**
-- Example: User buys 50 credits = $50 revenue - $1.75 cost = **$48.25 profit**
+- At $0.20/credit (~$0.04 raw cost), you net ~**$0.16 per credit** (~80% margin)
+- Example: User buys 250 credits = $50 revenue - $10 cost = **$40 profit**
 
 **Analytics:**
 - Every generation logged
