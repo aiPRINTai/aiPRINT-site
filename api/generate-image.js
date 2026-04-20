@@ -48,12 +48,13 @@ function slugify(s) {
 async function generateImage({ prompt, size, apiKey, signal, referenceImages = [] }) {
   const aspectRatio = SIZE_TO_ASPECT_RATIO[size] || '1:1';
 
-  // Build the parts array: text prompt first, then any reference images as
-  // inlineData parts. Gemini 2.5 Flash Image (Nano Banana) supports multi-image
-  // input natively in a single request.
-  const parts = [{ text: prompt }];
+  // Build the request parts array: text prompt first, then any reference
+  // images as inlineData parts. Gemini 2.5 Flash Image (Nano Banana) supports
+  // multi-image input natively in a single request.
+  // Named `reqParts` to avoid colliding with the response `parts` below.
+  const reqParts = [{ text: prompt }];
   for (const ref of referenceImages) {
-    parts.push({ inlineData: { mimeType: ref.mimeType, data: ref.data } });
+    reqParts.push({ inlineData: { mimeType: ref.mimeType, data: ref.data } });
   }
 
   const resp = await fetch(
@@ -65,7 +66,7 @@ async function generateImage({ prompt, size, apiKey, signal, referenceImages = [
         'x-goog-api-key': apiKey
       },
       body: JSON.stringify({
-        contents: [{ parts }],
+        contents: [{ parts: reqParts }],
         generationConfig: {
           responseModalities: ['TEXT', 'IMAGE'],
           imageConfig: {
