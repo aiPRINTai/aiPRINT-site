@@ -1,7 +1,8 @@
 {
   "version": 2,
   "functions": {
-    "api/webhook.js": { "maxDuration": 10 }
+    "api/webhook.js": { "maxDuration": 10 },
+    "api/generate-image.js": { "maxDuration": 60 }
   },
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },

@@ -13,6 +13,30 @@ const SIZE_TO_ASPECT_RATIO = {
   '1024x1536': '2:3'
 };
 
+// Reference-image limits (server-side mirror of the client's caps; the client
+// already resizes to ~1024px JPEG before upload).
+const REF_MAX_COUNT = 3;
+const REF_ALLOWED_MIME = new Set(['image/jpeg', 'image/png', 'image/webp']);
+// 4 MB of base64 per ref ≈ 3 MB of binary; with a 4.5 MB Vercel body cap
+// this gives us comfortable headroom even for 3 references.
+const REF_MAX_BASE64_LEN = 4 * 1024 * 1024;
+
+function sanitizeReferenceImages(raw) {
+  if (!Array.isArray(raw) || raw.length === 0) return [];
+  const out = [];
+  for (const item of raw.slice(0, REF_MAX_COUNT)) {
+    if (!item || typeof item !== 'object') continue;
+    const mimeType = String(item.mimeType || '').toLowerCase();
+    const data = typeof item.data === 'string' ? item.data : '';
+    if (!REF_ALLOWED_MIME.has(mimeType)) continue;
+    if (!data || data.length > REF_MAX_BASE64_LEN) continue;
+    // Cheap sanity check: base64 chars only.
+    if (!/^[A-Za-z0-9+/=\s]+$/.test(data)) continue;
+    out.push({ mimeType, data });
+  }
+  return out;
+}
+
 function slugify(s) {
   return (s || '')
     .toLowerCase()
@@ -21,8 +45,16 @@ function slugify(s) {
     .slice(0, 60) || 'image';
 }
 
-async function generateImage({ prompt, size, apiKey, signal }) {
+async function generateImage({ prompt, size, apiKey, signal, referenceImages = [] }) {
   const aspectRatio = SIZE_TO_ASPECT_RATIO[size] || '1:1';
+
+  // Build the parts array: text prompt first, then any reference images as
+  // inlineData parts. Gemini 2.5 Flash Image (Nano Banana) supports multi-image
+  // input natively in a single request.
+  const parts = [{ text: prompt }];
+  for (const ref of referenceImages) {
+    parts.push({ inlineData: { mimeType: ref.mimeType, data: ref.data } });
+  }
 
   const resp = await fetch(
     'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent',
@@ -33,7 +65,7 @@ async function generateImage({ prompt, size, apiKey, signal }) {
         'x-goog-api-key': apiKey
       },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
+        contents: [{ parts }],
         generationConfig: {
           responseModalities: ['TEXT', 'IMAGE'],
           imageConfig: {
@@ -73,12 +105,31 @@ export default async function handler(req, res) {
     return res.status(500).json({ ok: false, error: 'Missing env GOOGLE_GEMINI_API_KEY' });
   }
 
-  const { prompt: rawPrompt, size: rawSize = '1024x1024' } = req.body || {};
+  const {
+    prompt: rawPrompt,
+    size: rawSize = '1024x1024',
+    referenceImages: rawRefs,
+    referenceConsent
+  } = req.body || {};
   const prompt = (rawPrompt || '').trim();
 
   if (!prompt) {
     return res.status(400).json({ ok: false, error: 'Please provide a prompt' });
   }
+
+  // Reference images: validate, then require explicit consent if any are present.
+  const referenceImages = sanitizeReferenceImages(rawRefs);
+  if (referenceImages.length > 0 && referenceConsent !== true) {
+    return res.status(400).json({
+      ok: false,
+      error: 'Please confirm the reference-image consent checkbox before generating.'
+    });
+  }
+  // Lightly augment the prompt so the model treats the inputs as references
+  // rather than as the canvas to edit.
+  const enhancedPrompt = referenceImages.length > 0
+    ? `${prompt}\n\n[The attached image(s) are visual references — use the people, pets, objects, or styles shown as inspiration in this new scene. Do not copy them verbatim; produce an original artwork based on the description.]`
+    : prompt;
 
   // Check if user can generate (has credits or within anonymous limit)
   const creditCheck = await canUserGenerate(req);
@@ -98,18 +149,19 @@ export default async function handler(req, res) {
   const size = ALLOWED_SIZES.has(rawSize) ? rawSize : '1024x1024';
   const [w, h] = size.split('x').map(n => parseInt(n, 10));
 
-  // Timeout + retry (2 tries)
+  // Timeout + retry (2 tries). Multi-image input requests can be slower, so
+  // give the upstream a longer window when references are attached.
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), 45000);
+  const timer = setTimeout(() => ctrl.abort(), referenceImages.length > 0 ? 55000 : 45000);
 
   let buffer;
   try {
     try {
-      buffer = await generateImage({ prompt, size, apiKey, signal: ctrl.signal });
+      buffer = await generateImage({ prompt: enhancedPrompt, size, apiKey, signal: ctrl.signal, referenceImages });
     } catch (e) {
       // Quick retry once
       if (process.env.DEBUG_LOGS) console.log('First attempt failed, retrying:', e.message);
-      buffer = await generateImage({ prompt, size, apiKey, signal: ctrl.signal });
+      buffer = await generateImage({ prompt: enhancedPrompt, size, apiKey, signal: ctrl.signal, referenceImages });
     }
   } catch (err) {
     clearTimeout(timer);

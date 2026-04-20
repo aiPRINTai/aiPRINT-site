@@ -626,6 +626,41 @@
                   placeholder="e.g., a wise fox in a velvet jacket sipping tea by a fireplace — storybook, painterly"></textarea>
       </div>
 
+      <!-- Reference images (optional) -->
+      <!-- Lets users upload up to 3 photos the model will use as visual inspiration.
+           Images are resized client-side to max 1024px edge + JPEG-encoded before upload,
+           to stay well under the Vercel 4.5 MB request-body limit. A consent checkbox
+           appears once any file is staged — required before generate unlocks. -->
+      <div class="mb-7" id="refImagesWrap">
+        <div class="flex items-center justify-between mb-2 gap-3 flex-wrap">
+          <label class="text-base font-semibold text-gray-200">Reference images <span class="text-xs font-normal text-gray-500">(optional, up to 3)</span></label>
+          <button type="button" id="toggleRefImages" class="text-sm text-indigo-300 hover:text-indigo-200 font-medium inline-flex items-center gap-2">
+            <span id="toggleRefImagesIcon">+</span> Add reference photos
+          </button>
+        </div>
+        <div id="refImagesPanel" class="hidden">
+          <p class="text-sm text-gray-400 mb-3">Upload up to 3 images to guide the AI — a pet, a place, an object, or yourself. Results take inspiration from references; they will not be an exact likeness. <a href="/policies.html#references" class="underline hover:text-white" target="_blank" rel="noopener">See our reference image policy</a>.</p>
+          <div class="flex flex-wrap items-start gap-3 mb-3">
+            <label for="refFileInput" id="refAddBtn"
+                   class="cursor-pointer inline-flex flex-col items-center justify-center gap-1 w-24 h-24 rounded-xl border-2 border-dashed border-white/20 hover:border-indigo-400/60 hover:bg-white/5 text-gray-400 hover:text-indigo-300 transition-colors">
+              <span class="text-2xl leading-none">+</span>
+              <span class="text-xs">Add image</span>
+            </label>
+            <input id="refFileInput" type="file" accept="image/jpeg,image/png,image/webp" multiple class="hidden" />
+            <div id="refThumbs" class="flex flex-wrap gap-3"></div>
+          </div>
+          <p id="refError" class="text-sm text-red-400 mb-3 hidden"></p>
+          <div id="refConsentWrap" class="hidden p-3 bg-amber-500/5 border border-amber-500/20 rounded-lg">
+            <label class="flex items-start gap-3 text-sm text-gray-200 cursor-pointer">
+              <input type="checkbox" id="refConsent" class="mt-1 w-4 h-4 accent-indigo-400" />
+              <span>
+                <strong class="text-white">I confirm</strong> that I own or have permission to use these images; any identifiable person shown is 18+ and has consented to their likeness being used in AI-generated art; no minors are depicted; and I will not use the output to deceive, impersonate, or sexualize any real person. I accept the <a href="/policies.html#references" class="underline hover:text-white" target="_blank" rel="noopener">Reference Images policy</a> and <a href="/policies.html#terms" class="underline hover:text-white" target="_blank" rel="noopener">Acceptable Use terms</a>.
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+
       <!-- Style dropdowns grid (mobile: 1-col stack for breathing room; tablet+ : grid) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
         <div>
@@ -1988,11 +2023,141 @@
       renderMaterialColumns(enabledBucket || null, !!enabledBucket);
     }
 
+    // ===== Reference image upload =====
+    // Staged (pre-upload) reference images: [{ id, name, mimeType, data (base64, no prefix), dataUrl, bytes }]
+    const refImages = [];
+    const REF_MAX_COUNT = 3;
+    const REF_MAX_BYTES = 8 * 1024 * 1024;        // 8 MB per source file
+    const REF_RESIZE_MAX_EDGE = 1024;             // max longer-edge px after resize
+    const REF_OUTPUT_MIME = 'image/jpeg';
+    const REF_OUTPUT_QUALITY = 0.85;
+
+    function showRefError(msg) {
+      const el = $('#refError');
+      if (!el) return;
+      if (!msg) { el.classList.add('hidden'); el.textContent = ''; return; }
+      el.textContent = msg;
+      el.classList.remove('hidden');
+    }
+
+    // Resize + re-encode to JPEG in-browser. Keeps payloads small enough for Vercel's
+    // 4.5MB body cap even with 3 images + base64 overhead.
+    async function resizeImageFile(file) {
+      const dataUrl = await new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = () => resolve(r.result);
+        r.onerror = reject;
+        r.readAsDataURL(file);
+      });
+      const img = await new Promise((resolve, reject) => {
+        const i = new Image();
+        i.onload = () => resolve(i);
+        i.onerror = reject;
+        i.src = dataUrl;
+      });
+      const longer = Math.max(img.naturalWidth, img.naturalHeight);
+      const scale = longer > REF_RESIZE_MAX_EDGE ? (REF_RESIZE_MAX_EDGE / longer) : 1;
+      const w = Math.round(img.naturalWidth * scale);
+      const h = Math.round(img.naturalHeight * scale);
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      const outDataUrl = canvas.toDataURL(REF_OUTPUT_MIME, REF_OUTPUT_QUALITY);
+      // Strip the "data:image/jpeg;base64," prefix for the API payload.
+      const base64 = outDataUrl.split(',')[1] || '';
+      // Rough bytes: base64 length * 3/4
+      const bytes = Math.floor(base64.length * 0.75);
+      return { base64, dataUrl: outDataUrl, bytes };
+    }
+
+    function renderRefThumbs() {
+      const host = $('#refThumbs');
+      if (!host) return;
+      host.innerHTML = refImages.map((r) => `
+        <div class="relative w-24 h-24 rounded-xl overflow-hidden border border-white/15 group" data-id="${r.id}">
+          <img src="${r.dataUrl}" alt="${r.name}" class="w-full h-full object-cover" />
+          <button type="button" data-remove="${r.id}" aria-label="Remove ${r.name}"
+                  class="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/70 hover:bg-red-500 text-white text-sm leading-none flex items-center justify-center transition-colors">×</button>
+        </div>
+      `).join('');
+      host.querySelectorAll('[data-remove]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-remove');
+          const i = refImages.findIndex(r => r.id === id);
+          if (i >= 0) refImages.splice(i, 1);
+          refreshRefUI();
+        });
+      });
+    }
+
+    function refreshRefUI() {
+      renderRefThumbs();
+      const addBtn = $('#refAddBtn');
+      if (addBtn) addBtn.style.display = refImages.length >= REF_MAX_COUNT ? 'none' : '';
+      const consentWrap = $('#refConsentWrap');
+      if (consentWrap) {
+        if (refImages.length > 0) consentWrap.classList.remove('hidden');
+        else { consentWrap.classList.add('hidden'); const cb = $('#refConsent'); if (cb) cb.checked = false; }
+      }
+      if (refImages.length === 0) showRefError('');
+    }
+
+    async function handleRefFiles(files) {
+      showRefError('');
+      const list = Array.from(files || []);
+      for (const f of list) {
+        if (refImages.length >= REF_MAX_COUNT) { showRefError(`Max ${REF_MAX_COUNT} images.`); break; }
+        if (!/^image\/(jpeg|png|webp)$/.test(f.type)) { showRefError(`"${f.name}" is not a supported image (JPEG, PNG, WebP only).`); continue; }
+        if (f.size > REF_MAX_BYTES) { showRefError(`"${f.name}" is larger than 8 MB.`); continue; }
+        try {
+          const { base64, dataUrl, bytes } = await resizeImageFile(f);
+          refImages.push({
+            id: `ref_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+            name: f.name,
+            mimeType: REF_OUTPUT_MIME,
+            data: base64,
+            dataUrl,
+            bytes
+          });
+        } catch (e) {
+          showRefError(`Couldn't read "${f.name}". Try a different image.`);
+        }
+      }
+      refreshRefUI();
+    }
+
+    (function wireRefImages() {
+      const toggle = $('#toggleRefImages');
+      const panel = $('#refImagesPanel');
+      const icon = $('#toggleRefImagesIcon');
+      if (toggle && panel) {
+        toggle.addEventListener('click', () => {
+          panel.classList.toggle('hidden');
+          if (icon) icon.textContent = panel.classList.contains('hidden') ? '+' : '−';
+        });
+      }
+      const input = $('#refFileInput');
+      if (input) {
+        input.addEventListener('change', async (e) => {
+          await handleRefFiles(e.target.files);
+          e.target.value = ''; // allow re-selecting the same file
+        });
+      }
+    })();
+    // ===== end Reference image upload =====
+
     async function generateImage(prompt, size) {
       try {
         const headers = { 'Content-Type': 'application/json' };
         if (window.auth && window.auth.isAuthenticated()) Object.assign(headers, window.auth.getAuthHeader());
-        const response = await fetch('/api/generate-image', { method: 'POST', headers, body: JSON.stringify({ prompt, size }) });
+        // Include reference images (if any) — server-side validates size/count/mime again.
+        const payload = { prompt, size };
+        if (refImages.length > 0) {
+          payload.referenceImages = refImages.map(r => ({ mimeType: r.mimeType, data: r.data }));
+          payload.referenceConsent = !!$('#refConsent')?.checked;
+        }
+        const response = await fetch('/api/generate-image', { method: 'POST', headers, body: JSON.stringify(payload) });
         if (!response.ok) {
           const errorData = await response.json();
           if (response.status === 402 && errorData.needsCredits && window.credits) window.credits.showInsufficientCreditsModal();
@@ -2066,6 +2231,14 @@
     $('#genBtn').addEventListener('click', async () => {
       const basePrompt = $('#promptInput').value.trim();
       if (!basePrompt) { alert('Please enter a prompt'); return; }
+      // If the user has staged reference images, the consent box must be ticked.
+      if (refImages.length > 0 && !$('#refConsent')?.checked) {
+        showRefError('Please confirm the reference-image consent checkbox before generating.');
+        $('#refImagesPanel')?.classList.remove('hidden');
+        const icon = $('#toggleRefImagesIcon'); if (icon) icon.textContent = '−';
+        $('#refConsentWrap')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
       // Anonymous users get 1 free preview; backend enforces the limit and
       // returns needsSignup:true once exhausted.
       const ratio = $('#ratioSel').value;
@@ -2192,6 +2365,14 @@
       $('#signatureInput').value = ''; $('#signatureFont').selectedIndex = 0;
       $('#signatureColor').selectedIndex = 0; $('#signatureSize').value = 18;
       signaturePosition = { x: null, y: null };
+      // Clear staged reference images and consent
+      refImages.length = 0;
+      refreshRefUI();
+      const refPanel = $('#refImagesPanel');
+      if (refPanel && !refPanel.classList.contains('hidden')) {
+        refPanel.classList.add('hidden');
+        const icon = $('#toggleRefImagesIcon'); if (icon) icon.textContent = '+';
+      }
       setActiveOnly(null); setButtonsEnabled(null);
       $('#orderMsg').textContent = 'Generate and select a preview above to unlock ordering.';
       $$('.sizeBtn').forEach(x => x.classList.remove('ringy', 'bg-white/20'));

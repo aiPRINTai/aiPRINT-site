@@ -259,6 +259,10 @@
                 <span class="text-blue-400">•</span>
                 <span>Your artwork preferences and generated images</span>
               </li>
+              <li class="flex gap-3">
+                <span class="text-blue-400">•</span>
+                <span>Reference images you choose to upload (used only to generate that one preview, then discarded — see <a href="#references" class="underline hover:text-white">Reference Images</a>)</span>
+              </li>
             </ul>
           </div>
 
@@ -301,13 +305,59 @@
         </div>
       </section>
 
+      <!-- Reference Images -->
+      <section id="references">
+        <h2 class="h2 mb-6">Reference Images</h2>
+        <div class="glass rounded-xl p-8 space-y-6">
+          <div>
+            <h3 class="text-xl font-semibold mb-3">What "reference images" are</h3>
+            <p class="muted">When you generate a preview, you may optionally upload up to <strong class="text-white">3 reference images</strong> (JPEG, PNG, or WebP, up to 8&nbsp;MB each) to give the AI a visual starting point — for example, a pet you want featured, a landscape you like, or an object you want included in the scene. The AI uses your text prompt and the references together to compose a new, original image.</p>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Your responsibility for what you upload</h3>
+            <p class="muted mb-3">By uploading a reference image you represent and warrant that <strong class="text-white">all of the following are true</strong>:</p>
+            <ul class="space-y-2 muted">
+              <li class="flex gap-3"><span class="text-amber-400">•</span><span>You either own the image, or have the rights and permission to use it for AI generation.</span></li>
+              <li class="flex gap-3"><span class="text-amber-400">•</span><span>If the image shows any identifiable person, that person is <strong class="text-white">18 or older</strong> and has given you explicit, informed consent to use their likeness in AI-generated artwork. If the person is yourself, no separate consent is required.</span></li>
+              <li class="flex gap-3"><span class="text-amber-400">•</span><span>The image does not depict a minor in any context, even if you are the parent or guardian.</span></li>
+              <li class="flex gap-3"><span class="text-amber-400">•</span><span>The image is not of a celebrity, public figure, or other person you don't personally know and have permission from.</span></li>
+              <li class="flex gap-3"><span class="text-amber-400">•</span><span>You will not use the generated output to deceive, defame, harass, impersonate, or sexually depict any real person.</span></li>
+            </ul>
+            <p class="muted mt-3 text-sm">You — not aiPRINT — are legally responsible for the images you upload and for how you use the resulting artwork. You agree to indemnify and hold aiPRINT harmless from any claim arising from your uploads or your use of the output.</p>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-3">How we handle reference images</h3>
+            <ul class="space-y-2 muted">
+              <li class="flex gap-3"><span class="text-blue-400">•</span><span><strong class="text-white">Use:</strong> Reference images are sent only to our AI generation provider (Google Gemini) for the single purpose of generating your preview.</span></li>
+              <li class="flex gap-3"><span class="text-blue-400">•</span><span><strong class="text-white">Storage:</strong> We do not save your reference images on aiPRINT servers. They are passed through to the model and discarded as soon as the request completes.</span></li>
+              <li class="flex gap-3"><span class="text-blue-400">•</span><span><strong class="text-white">Training:</strong> We do not use your reference images, prompts, or generated outputs to train AI models.</span></li>
+              <li class="flex gap-3"><span class="text-blue-400">•</span><span><strong class="text-white">Sharing:</strong> We do not sell, share, or repurpose your uploads. The third-party model provider's own data-handling terms also apply to the brief moment they process your image.</span></li>
+              <li class="flex gap-3"><span class="text-blue-400">•</span><span><strong class="text-white">Moderation:</strong> Both your text prompt and your uploads are subject to automated and manual content-safety checks. We may refuse to process — or after-the-fact remove — any image that appears to violate our acceptable-use rules.</span></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold mb-3">Likeness limits — what to expect</h3>
+            <p class="muted">AI generation is interpretive, not photographic. The model uses your reference as inspiration; the person, pet, or object in the output may not be an exact match. Reference images make a result <em>feel</em> like the source — they do not produce a guaranteed exact likeness. Because of the custom nature of AI generation, "the result didn't look enough like my reference" is not a basis for a refund (see <a href="#credits" class="underline hover:text-white">Credits & Account</a>).</p>
+          </div>
+
+          <div class="p-4 bg-amber-500/10 rounded-lg border border-amber-500/20">
+            <p class="text-sm">
+              <strong>In short:</strong> upload only images you have the right to use, only of adults who have agreed, and never of children or non-consenting people. We don't store your uploads, and we don't use them to train AI.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <!-- Terms of Service -->
       <section>
         <h2 class="h2 mb-6">Terms of Service</h2>
         <div class="glass rounded-xl p-8 space-y-6">
           <div>
             <h3 class="text-xl font-semibold mb-3">Acceptable Use</h3>
-            <p class="muted mb-3">When using our service, you agree not to create content that:</p>
+            <p class="muted mb-3">When using our service — including any text prompt or uploaded reference image — you agree not to create or submit content that:</p>
             <ul class="space-y-2 muted">
               <li class="flex gap-3">
                 <span class="text-red-400">•</span>
@@ -315,17 +365,30 @@
               </li>
               <li class="flex gap-3">
                 <span class="text-red-400">•</span>
-                <span>Violates intellectual property rights</span>
+                <span>Violates intellectual property rights (including third-party photographs you don't own)</span>
               </li>
               <li class="flex gap-3">
                 <span class="text-red-400">•</span>
-                <span>Contains explicit adult content</span>
+                <span>Contains explicit adult content, nudity, or sexual content involving any person</span>
               </li>
               <li class="flex gap-3">
                 <span class="text-red-400">•</span>
-                <span>Promotes discrimination or violence</span>
+                <span>Depicts or references any minor (anyone under 18), in any context</span>
+              </li>
+              <li class="flex gap-3">
+                <span class="text-red-400">•</span>
+                <span>Depicts a real, identifiable person without their explicit, informed consent — including celebrities, public figures, and private individuals</span>
+              </li>
+              <li class="flex gap-3">
+                <span class="text-red-400">•</span>
+                <span>Is intended to deceive, defame, harass, impersonate, or create misleading "deepfake" content</span>
+              </li>
+              <li class="flex gap-3">
+                <span class="text-red-400">•</span>
+                <span>Promotes discrimination, hatred, or violence</span>
               </li>
             </ul>
+            <p class="muted mt-3 text-sm">We may refuse, cancel, or delete any generation that violates these rules, with no credit refund for the violating request. Repeated or egregious violations will result in account termination and may be reported to law enforcement.</p>
           </div>
 
           <div>
@@ -376,7 +439,7 @@
       <!-- Last Updated -->
       <section class="text-center">
         <p class="text-sm muted">
-          Last updated: April 2026 · Effective immediately
+          Last updated: April 2026 · Effective immediately · Reference-image upload terms added April 2026
         </p>
       </section>
     </div>
