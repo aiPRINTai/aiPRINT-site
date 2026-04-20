@@ -14,3 +14,13 @@ pnpm-debug.log*
 .env.*
 .env.local
 .vercel
+.env*.local
+
+# Local Claude Code config (per-machine)
+.claude/
+
+# Source imagery / working docs (kept out of the repo, stored elsewhere)
+AiPrint Imagery/
+aiPRINT-Lightroom-Shot-List.xlsx
+competitor-analysis.csv
+positioning-summary.md
