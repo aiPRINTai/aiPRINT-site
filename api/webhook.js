@@ -85,11 +85,18 @@ export default async function handler(req, res) {
           return res.status(200).json({ received: true, duplicate: true });
         }
 
+        // In Stripe API 2024-06-20+, shipping moved from `shipping_details`
+        // to `collected_information.shipping_details`. Webhook payloads still
+        // sometimes ship the legacy field too, so we check both.
+        const shipDetails = s.collected_information?.shipping_details
+          || s.shipping_details
+          || null;
+
         const order = {
           stripe_session_id: s.id,
           customer_email: s.customer_details?.email || '',
-          customer_name: s.shipping_details?.name || s.customer_details?.name || '',
-          shipping_address: s.shipping_details?.address || null,
+          customer_name: shipDetails?.name || s.customer_details?.name || '',
+          shipping_address: shipDetails?.address || null,
           lookup_key: m.lookup_key,
           preview_url: m.preview_url,
           // clean_url = the unwatermarked print master. For pre-watermark-feature

@@ -2,8 +2,9 @@
 // Auth: requires `Authorization: Bearer <ADMIN_PASSWORD>` header.
 // Set ADMIN_PASSWORD in Vercel env vars (use a long random string).
 
-import { listOrders, updateOrder, getOrderStats, getOrderById } from '../db/index.js';
+import { listOrders, updateOrder, getOrderStats, getOrderById, setOrderShipping } from '../db/index.js';
 import { sendShippingNotificationEmail, sendOrderConfirmationEmail } from '../_email.js';
+import { stripe } from '../_stripe.js';
 
 function unauthorized(res) {
   return res.status(401).json({ error: 'Unauthorized' });
@@ -54,6 +55,37 @@ export default async function handler(req, res) {
         const r = await sendShippingNotificationEmail(order);
         if (r?.error) return res.status(502).json({ error: r.error.message || 'Email failed' });
         return res.status(200).json({ ok: true, sent_to: order.customer_email });
+      }
+      if (action === 'refresh_shipping') {
+        // Re-pull the Checkout Session from Stripe and write the shipping
+        // block back to the order. Repairs orders whose webhook stored a null
+        // address (e.g. because of the Stripe API 2024-06-20 shipping field
+        // move from `shipping_details` to `collected_information.shipping_details`).
+        if (!order.stripe_session_id) {
+          return res.status(400).json({ error: 'Order has no stripe_session_id' });
+        }
+        try {
+          const session = await stripe.checkout.sessions.retrieve(order.stripe_session_id, {
+            expand: ['collected_information']
+          });
+          const shipDetails =
+            session?.collected_information?.shipping_details ||
+            session?.shipping_details ||
+            null;
+          if (!shipDetails?.address) {
+            return res.status(404).json({
+              error: 'Stripe session has no shipping address — was shipping collection enabled at checkout?'
+            });
+          }
+          const updated = await setOrderShipping(id, {
+            customer_name: shipDetails.name || session?.customer_details?.name || null,
+            shipping_address: shipDetails.address
+          });
+          return res.status(200).json({ ok: true, order: updated });
+        } catch (err) {
+          console.error('refresh_shipping error:', err?.message || err);
+          return res.status(502).json({ error: err?.message || 'Stripe lookup failed' });
+        }
       }
       return res.status(400).json({ error: `Unknown action: ${action}` });
     }

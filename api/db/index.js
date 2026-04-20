@@ -273,6 +273,21 @@ export async function updateOrder(id, { status, tracking_number, carrier, admin_
   return r.rows[0] || null;
 }
 
+// One-off / self-heal: writes the shipping block back onto an existing order.
+// Used by the admin "Refresh from Stripe" action when a webhook stored a null
+// address (e.g. because of the Stripe API 2024-06-20 shipping field move).
+export async function setOrderShipping(id, { customer_name, shipping_address }) {
+  const r = await sql`
+    UPDATE orders SET
+      customer_name    = COALESCE(${customer_name ?? null}, customer_name),
+      shipping_address = COALESCE(${shipping_address ? JSON.stringify(shipping_address) : null}::jsonb, shipping_address),
+      updated_at       = CURRENT_TIMESTAMP
+    WHERE id = ${id}
+    RETURNING *
+  `;
+  return r.rows[0] || null;
+}
+
 export async function getOrderStats() {
   const r = await sql`
     SELECT
