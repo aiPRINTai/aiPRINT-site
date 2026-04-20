@@ -1533,40 +1533,94 @@
       }
     }
 
+    // Per-room wall geometry: `centerY` is the vertical center of the hanging zone
+    // (above the sofa/console), and `pctPerInch` is the % of room-image width that
+    // corresponds to 1 real inch of print width. Calibrated so a 24"-wide print
+    // looks correct for the sofa's ≈7ft (84") scale reference.
     const mockupRooms = {
-      room1: { image: '/rooms/room1-neutral-console.jpg', name: 'Modern Living Room', placements: { square: { top: '15%', left: '50%', width: '22%', maxWidth: '300px', transform: 'translateX(-50%)' }, h32: { top: '13%', left: '50%', width: '30%', maxWidth: '400px', transform: 'translateX(-50%)' }, v23: { top: '10%', left: '50%', width: '18%', maxWidth: '250px', transform: 'translateX(-50%)' } } },
-      room2: { image: '/rooms/room2-gray-console.jpg', name: 'Minimalist Space', placements: { square: { top: '18%', left: '50%', width: '25%', maxWidth: '320px', transform: 'translateX(-50%)' }, h32: { top: '16%', left: '50%', width: '33%', maxWidth: '420px', transform: 'translateX(-50%)' }, v23: { top: '14%', left: '50%', width: '20%', maxWidth: '260px', transform: 'translateX(-50%)' } } },
-      room3: { image: '/rooms/room3-sofa-wall.jpg', name: 'Cozy Living Area', placements: { square: { top: '15%', left: '50%', width: '26%', maxWidth: '340px', transform: 'translateX(-50%)' }, h32: { top: '13%', left: '50%', width: '36%', maxWidth: '450px', transform: 'translateX(-50%)' }, v23: { top: '10%', left: '50%', width: '21%', maxWidth: '280px', transform: 'translateX(-50%)' } } },
-      room4: { image: '/rooms/room4-light-sofa.jpg', name: 'Bright Living Space', placements: { square: { top: '12%', left: '50%', width: '24%', maxWidth: '320px', transform: 'translateX(-50%)' }, h32: { top: '10%', left: '50%', width: '34%', maxWidth: '430px', transform: 'translateX(-50%)' }, v23: { top: '8%', left: '50%', width: '19%', maxWidth: '260px', transform: 'translateX(-50%)' } } },
-      room5: { image: '/rooms/room5-sage-green.jpg', name: 'Sage Accent Room', placements: { square: { top: '20%', left: '50%', width: '23%', maxWidth: '310px', transform: 'translateX(-50%)' }, h32: { top: '18%', left: '50%', width: '32%', maxWidth: '410px', transform: 'translateX(-50%)' }, v23: { top: '16%', left: '50%', width: '18%', maxWidth: '250px', transform: 'translateX(-50%)' } } }
+      room1: { image: '/rooms/room1-neutral-console.jpg', name: 'Modern Living Room', centerX: '50%', centerY: '28%', pctPerInch: 0.95 },
+      room2: { image: '/rooms/room2-gray-console.jpg',    name: 'Minimalist Space',   centerX: '50%', centerY: '32%', pctPerInch: 1.05 },
+      room3: { image: '/rooms/room3-sofa-wall.jpg',       name: 'Cozy Living Area',   centerX: '50%', centerY: '29%', pctPerInch: 1.10 },
+      room4: { image: '/rooms/room4-light-sofa.jpg',      name: 'Bright Living Space',centerX: '50%', centerY: '24%', pctPerInch: 1.00 },
+      room5: { image: '/rooms/room5-sage-green.jpg',      name: 'Sage Accent Room',   centerX: '50%', centerY: '33%', pctPerInch: 0.98 }
     };
 
-    // Real linear ratio: 12" → 36" is 3×. Scale values reflect that visually
-    // (relative to the 24×24 baseline of 1.0).
-    const sizeAdjustments = {
-      '12x12': { scale: 0.50, shadow: '0 6px 14px rgba(0,0,0,0.25)', label: '12×12"', sub: 'Compact accent' },
-      '16x16': { scale: 0.70, shadow: '0 8px 18px rgba(0,0,0,0.28)', label: '16×16"', sub: 'Hallway / nook' },
-      '24x24': { scale: 1.00, shadow: '0 15px 32px rgba(0,0,0,0.30)', label: '24×24"', sub: 'Above a desk' },
-      '30x30': { scale: 1.25, shadow: '0 20px 40px rgba(0,0,0,0.32)', label: '30×30"', sub: 'Statement piece' },
-      '36x36': { scale: 1.50, shadow: '0 26px 52px rgba(0,0,0,0.38)', label: '36×36"', sub: 'Above the sofa' }
+    // Real print sizes per orientation, matching the product catalog 1:1.
+    // Each size renders at a frame whose width AND aspect-ratio are driven by
+    // actual inches — so a 36×24 horizontal frame truly looks landscape, and a
+    // 16×24 vertical frame truly looks portrait.
+    const MOCKUP_SIZES = {
+      square: [
+        { w: 12, h: 12, label: '12×12"', sub: 'Compact accent' },
+        { w: 18, h: 18, label: '18×18"', sub: 'Accent piece' },
+        { w: 24, h: 24, label: '24×24"', sub: 'Above a desk' },
+        { w: 30, h: 30, label: '30×30"', sub: 'Statement piece' },
+        { w: 36, h: 36, label: '36×36"', sub: 'Above the sofa' }
+      ],
+      h32: [
+        { w: 12, h: 8,  label: '12×8"',  sub: 'Compact accent' },
+        { w: 18, h: 12, label: '18×12"', sub: 'Hallway / nook' },
+        { w: 24, h: 16, label: '24×16"', sub: 'Above a desk' },
+        { w: 30, h: 20, label: '30×20"', sub: 'Statement piece' },
+        { w: 36, h: 24, label: '36×24"', sub: 'Above the sofa' }
+      ],
+      v23: [
+        { w: 8,  h: 12, label: '8×12"',  sub: 'Compact accent' },
+        { w: 12, h: 18, label: '12×18"', sub: 'Hallway / nook' },
+        { w: 16, h: 24, label: '16×24"', sub: 'Above a desk' },
+        { w: 20, h: 30, label: '20×30"', sub: 'Statement piece' },
+        { w: 24, h: 36, label: '24×36"', sub: 'Above the sofa' }
+      ]
     };
+    const MOCKUP_DEFAULT_SIZE = { square: '24x24', h32: '24x16', v23: '16x24' };
+
+    function getCurrentShape() {
+      const s = currentPreview?.shape;
+      return (s === 'square' || s === 'h32' || s === 'v23') ? s : 'square';
+    }
+
+    function getMockupSizeList() { return MOCKUP_SIZES[getCurrentShape()] || MOCKUP_SIZES.square; }
+
+    function parseSizeKey(key) {
+      const [w, h] = String(key || '').split('x').map(n => parseInt(n, 10));
+      return Number.isFinite(w) && Number.isFinite(h) ? { w, h } : null;
+    }
+
+    function findSizeInList(list, key) {
+      const parsed = parseSizeKey(key);
+      if (!parsed) return null;
+      return list.find(s => s.w === parsed.w && s.h === parsed.h) || null;
+    }
+
+    // Shadow tier scales with the print's longest edge.
+    function shadowForMaxEdge(maxEdge) {
+      if (maxEdge <= 14) return '0 6px 14px rgba(0,0,0,0.25)';
+      if (maxEdge <= 20) return '0 10px 22px rgba(0,0,0,0.28)';
+      if (maxEdge <= 28) return '0 15px 32px rgba(0,0,0,0.30)';
+      if (maxEdge <= 33) return '0 20px 40px rgba(0,0,0,0.32)';
+      return '0 26px 52px rgba(0,0,0,0.38)';
+    }
 
     let currentMockupSize = '24x24';
 
-    function showArtworkInRoom(roomKey, printSize = '24x24') {
+    function showArtworkInRoom(roomKey, printSize) {
       const room = mockupRooms[roomKey];
       if (!room || !currentPreview) return '';
-      const aspectRatio = currentPreview.shape || 'square';
-      const placement = room.placements[aspectRatio];
-      const sizeAdj = sizeAdjustments[printSize] || sizeAdjustments['24x24'];
-      const scale = sizeAdj.scale;
-      // Scale max-width too so 36×36 actually feels big and 12×12 feels small
-      const maxW = parseInt(placement.maxWidth || '300') * scale;
+      const list = getMockupSizeList();
+      const size = findSizeInList(list, printSize) || findSizeInList(list, MOCKUP_DEFAULT_SIZE[getCurrentShape()]) || list[2] || list[0];
+      if (!size) return '';
+      // Width scales linearly with real inches so 12" feels small and 36" feels big.
+      const widthPct = Math.max(4, room.pctPerInch * size.w);
+      // Cap scale so ultra-wide prints don't exceed the room — proportional to room
+      // aspect; at 24"×24" in room1 (~23%) this is well under 60%.
+      const cappedWidth = Math.min(widthPct, 60);
+      const aspect = `${size.w} / ${size.h}`;
+      const shadow = shadowForMaxEdge(Math.max(size.w, size.h));
       return `
         <div class="relative w-full max-w-4xl mx-auto">
           <img src="${room.image}" class="w-full rounded-xl block" alt="${room.name}"/>
-          <div class="absolute artwork-placement" style="top:${placement.top};left:${placement.left};width:calc(${placement.width} * ${scale});max-width:${maxW}px;transform:${placement.transform};filter:drop-shadow(${sizeAdj.shadow});transition:all 0.35s cubic-bezier(.2,.8,.2,1);">
-            <img src="${currentPreview.url}" class="w-full block artwork-frame-${currentCollection}"/>
+          <div class="absolute artwork-placement" style="top:${room.centerY};left:${room.centerX};width:${cappedWidth}%;aspect-ratio:${aspect};transform:translate(-50%,-50%);filter:drop-shadow(${shadow});transition:all 0.35s cubic-bezier(.2,.8,.2,1);">
+            <img src="${currentPreview.url}" class="block artwork-frame-${currentCollection}" style="width:100%;height:100%;object-fit:cover;display:block;"/>
           </div>
           <div class="scale-ref"><span class="scale-ref-label">≈ 7 ft sofa</span></div>
         </div>`;
@@ -1575,12 +1629,19 @@
     function renderSizePills() {
       const row = $('#sizePillRow');
       if (!row) return;
-      row.innerHTML = Object.entries(sizeAdjustments).map(([key, v]) =>
-        `<button type="button" data-size="${key}" class="size-pill rounded-full px-4 py-2 text-sm ${key === currentMockupSize ? 'active' : ''}">
-          <span class="font-semibold">${v.label}</span>
-          <span class="text-xs opacity-75 ml-1">· ${v.sub}</span>
-        </button>`
-      ).join('');
+      const list = getMockupSizeList();
+      // If the current size doesn't belong to the active orientation, reset to this
+      // orientation's default (so switching from portrait to landscape gives a sensible start).
+      if (!findSizeInList(list, currentMockupSize)) {
+        currentMockupSize = MOCKUP_DEFAULT_SIZE[getCurrentShape()] || '24x24';
+      }
+      row.innerHTML = list.map(s => {
+        const key = `${s.w}x${s.h}`;
+        return `<button type="button" data-size="${key}" class="size-pill rounded-full px-4 py-2 text-sm ${key === currentMockupSize ? 'active' : ''}">
+          <span class="font-semibold">${s.label}</span>
+          <span class="text-xs opacity-75 ml-1">· ${s.sub}</span>
+        </button>`;
+      }).join('');
       row.querySelectorAll('.size-pill').forEach(btn => {
         btn.addEventListener('click', () => {
           currentMockupSize = btn.dataset.size;
@@ -1593,13 +1654,14 @@
     }
 
     function updateMockup(roomKey, printSize) {
-      // Only update currentMockupSize when we recognize the size
-      if (printSize && sizeAdjustments[printSize]) {
+      const list = getMockupSizeList();
+      if (printSize && findSizeInList(list, printSize)) {
         currentMockupSize = printSize;
-        // Sync the pill row active state
         document.querySelectorAll('#sizePillRow .size-pill').forEach(b => {
           b.classList.toggle('active', b.dataset.size === currentMockupSize);
         });
+      } else if (!findSizeInList(list, currentMockupSize)) {
+        currentMockupSize = MOCKUP_DEFAULT_SIZE[getCurrentShape()] || '24x24';
       }
       const mockupDisplay = $('#mockupDisplay');
       if (mockupDisplay) {
