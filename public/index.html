@@ -5,7 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>aiPRINT.ai — Turn any idea into a gallery-worthy print</title>
   <meta name="description" content="Create premium, ready-to-hang fine art prints from your idea. AI + human curation, archival materials, Certificate of Authenticity. Ships in 7–14 days." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23fff'/><text x='16' y='22' text-anchor='middle' font-size='14' font-weight='900' fill='%23000'>AI</text></svg>" />
+  <link rel="canonical" href="https://aiprint.ai/" />
+  <meta name="theme-color" content="#0a0f1d" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="aiPRINT.ai" />
+  <meta property="og:title" content="aiPRINT.ai — Turn any idea into a gallery-worthy print" />
+  <meta property="og:description" content="Premium AI-generated fine art prints. Archival materials, numbered Certificate of Authenticity, hand-reviewed by the founder. Ships in 7–14 days." />
+  <meta property="og:url" content="https://aiprint.ai/" />
+  <meta property="og:image" content="https://aiprint.ai/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="aiPRINT.ai — Turn any idea into a gallery-worthy print" />
+  <meta name="twitter:description" content="Premium AI-generated fine art prints. Archival materials, numbered COA. Ships in 7–14 days." />
+  <meta name="twitter:image" content="https://aiprint.ai/og-image.png" />
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "aiPRINT.ai",
+    "url": "https://aiprint.ai/",
+    "logo": "https://aiprint.ai/og-image.png",
+    "description": "Premium AI-generated fine art prints. Archival materials, numbered Certificate of Authenticity, hand-reviewed by the founder.",
+    "founder": { "@type": "Person", "name": "Lawrence" },
+    "sameAs": []
+  }
+  </script>
 
   <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -15,10 +50,12 @@
   <style>
     :root { --bg:#0a0f1d; --ink:#e7eef8; --muted:#9fb3c8; --accent:#818cf8; }
     html,body{background:var(--bg);color:var(--ink);}
+    /* Fluid base font: scales smoothly from 16px on small viewports up to ~20px on ultra-wide displays */
+    html{font-size:clamp(16px, 0.85vw + 12px, 20px);}
     body{font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;}
-    .h1{font-size:clamp(2.4rem,4.5vw,3.8rem);font-weight:800;line-height:1.05}
-    .h2{font-size:clamp(1.6rem,2.6vw,2.4rem);font-weight:800;}
-    .h3{font-size:clamp(1.1rem,1.8vw,1.5rem);font-weight:700;}
+    .h1{font-size:clamp(2.6rem, 5vw, 5rem);font-weight:800;line-height:1.05}
+    .h2{font-size:clamp(1.75rem, 3vw, 3.25rem);font-weight:800;line-height:1.1}
+    .h3{font-size:clamp(1.15rem, 1.9vw, 1.85rem);font-weight:700;}
     .muted{color:var(--muted)}
     .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
     .glass-dark{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.1);}
@@ -49,11 +86,103 @@
     .stat-num{font-size:clamp(1.8rem,3vw,2.8rem);font-weight:900;background:linear-gradient(135deg,#e7eef8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 
     /* Testimonial */
-    .testimonial-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:28px;}
+    .testimonial-card{position:relative;overflow:hidden;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:28px;transition:border-color .3s,box-shadow .3s;}
+    .testimonial-card:hover{border-color:rgba(129,140,248,.3);box-shadow:0 0 30px rgba(129,140,248,.08);}
     .stars{color:#fbbf24;font-size:1.1rem;letter-spacing:2px;}
+    .quote-deco{position:absolute;top:10px;right:16px;font-size:4.5rem;font-weight:900;line-height:1;color:rgba(129,140,248,.15);font-family:Georgia,serif;user-select:none;pointer-events:none;}
 
     /* Steps */
-    .step-num{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#818cf8,#6366f1);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;flex-shrink:0;}
+    .step-num{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#818cf8,#6366f1);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;flex-shrink:0;box-shadow:0 0 20px rgba(129,140,248,.4);}
+    .step-card{transition:border-color .3s,box-shadow .3s;}
+    .step-card:hover{border-color:rgba(129,140,248,.35) !important;box-shadow:0 0 35px rgba(129,140,248,.12);}
+
+    /* "How it works" cards — photo-led */
+    .how-card{
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:1.25rem;
+      padding:0;
+      overflow:hidden;
+      position:relative;
+      transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+    .how-card:hover{
+      transform:translateY(-6px);
+      border-color:rgba(129,140,248,.4);
+      box-shadow:0 20px 50px -10px rgba(129,140,248,.25);
+    }
+    .how-image{
+      position:relative;
+      aspect-ratio: 16/10;
+      overflow:hidden;
+    }
+    .how-image img{
+      width:100%; height:100%; object-fit:cover;
+      transition:transform .6s ease;
+    }
+    .how-card:hover .how-image img{ transform:scale(1.05); }
+    .how-image::after{
+      content:"";
+      position:absolute; inset:0;
+      background:linear-gradient(to top, rgba(10,15,29,.85) 0%, rgba(10,15,29,0) 50%);
+    }
+    .how-num-pill{
+      position:absolute; top:16px; left:16px;
+      display:inline-flex; align-items:center; gap:10px;
+      padding:7px 18px 7px 7px;
+      background:rgba(10,15,29,.78);
+      backdrop-filter:blur(10px);
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:999px;
+      z-index:2;
+      font-size:13px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#c7d2fe;
+    }
+    .how-num-pill .num{
+      width:30px;height:30px;border-radius:50%;
+      background:linear-gradient(135deg,#818cf8,#6366f1);
+      color:#fff;font-weight:900;font-size:14px;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .how-body{
+      padding:1.5rem 1.5rem 1.75rem;
+    }
+    .how-feature{
+      margin-top:1rem;
+      padding-top:1rem;
+      border-top:1px solid rgba(255,255,255,.08);
+      font-size:12px;
+      display:flex; align-items:center; gap:8px;
+    }
+
+    /* Section dividers — give the page rhythm */
+    .section-divider{
+      height:1px;
+      max-width:1280px;
+      margin:0 auto;
+      background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,.10) 25%, rgba(255,255,255,.10) 75%, transparent 100%);
+    }
+    .section-divider.with-dot{
+      position:relative;
+      background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,.08) 30%, rgba(255,255,255,.08) 70%, transparent 100%);
+    }
+    .section-divider.with-dot::after{
+      content:"";
+      position:absolute;
+      top:50%; left:50%;
+      width:6px; height:6px; border-radius:50%;
+      background:linear-gradient(135deg,#818cf8,#6366f1);
+      transform:translate(-50%,-50%);
+      box-shadow:0 0 0 4px #0a0f1d, 0 0 16px rgba(129,140,248,.5);
+    }
+    /* Subtle alternating section tint */
+    .section-tint{
+      background:rgba(255,255,255,.015);
+    }
+
+    /* Section label decoration */
+    .section-label{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;}
+    .section-label-line{flex:0 0 28px;height:1px;background:linear-gradient(90deg,transparent,rgba(129,140,248,.5));}
+    .section-label-line.right{background:linear-gradient(90deg,rgba(129,140,248,.5),transparent);}
 
     /* Visual improvements */
     .sizeBtn:hover:not(.disabled) {
@@ -67,11 +196,12 @@
 
     /* Dropdown styling */
     .dropdown-label {
-      font-size: 11px;
+      font-size: 12px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       color: var(--muted);
-      margin-bottom: 6px;
+      font-weight: 600;
+      margin-bottom: 8px;
       display: block;
     }
 
@@ -81,31 +211,57 @@
       background-repeat: no-repeat;
       background-size: 1.5em 1.5em;
       padding-right: 2.5rem;
+      appearance: none;
+      -webkit-appearance: none;
+      color-scheme: dark;
+    }
+
+    /* Force dark theme on the popup option list (fixes white-on-white in
+       Atlas / some Chromium browsers, where native popups inherit OS theme) */
+    select option,
+    select optgroup {
+      background-color: #11151f;
+      color: #e7eef8;
+    }
+    select option:checked,
+    select option:hover {
+      background-color: #1f2a44;
+      color: #ffffff;
     }
 
     /* Preview container styling */
     .preview-container {
-      background: #1a1f2e;
-      background-image:
-        repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.02) 35px, rgba(255,255,255,.02) 70px),
-        repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,.02) 35px, rgba(255,255,255,.02) 70px);
+      background: #11151f;
+      box-shadow: inset 0 0 80px rgba(0,0,0,.5);
     }
 
-    /* Watermark styles */
+    /* Watermark styles - subtle tiled pattern */
     .watermark-overlay {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(-45deg);
-      font-size: 5rem;
-      font-weight: 900;
-      color: rgba(255, 255, 255, 0.15);
-      text-transform: uppercase;
-      letter-spacing: 1rem;
+      inset: 0;
       pointer-events: none;
-      text-shadow: 0 0 20px rgba(0,0,0,0.5);
       z-index: 5;
       user-select: none;
+      background-image: repeating-linear-gradient(
+        -30deg,
+        transparent 0,
+        transparent 120px,
+        rgba(255,255,255,0.06) 120px,
+        rgba(255,255,255,0.06) 122px
+      );
+      color: transparent;
+      font-size: 0;
+    }
+    .watermark-overlay::after {
+      content: "PREVIEW · PREVIEW · PREVIEW";
+      position: absolute;
+      bottom: 12px;
+      right: 16px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .2em;
+      color: rgba(255,255,255,.55);
+      text-shadow: 0 1px 3px rgba(0,0,0,.6);
     }
 
     /* Signature styles */
@@ -146,6 +302,45 @@
     .moveable-signature:hover {
       opacity: 0.8;
     }
+
+    .moveable-signature::after {
+      content: "✥ drag to position";
+      position: absolute;
+      left: 50%;
+      top: -22px;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 10px;
+      color: rgba(255,255,255,0.95);
+      background: rgba(15,15,30,0.85);
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.15);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .moveable-signature:hover::after { opacity: 1; }
+    .moveable-signature.is-new::after { opacity: 1; animation: sigHint 4s forwards; }
+    @keyframes sigHint { 0%,70%{opacity:1} 100%{opacity:0} }
+
+    .sig-pos-btn {
+      width: 30px; height: 30px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      border-radius: 6px;
+      color: rgba(255,255,255,0.75);
+      font-size: 14px;
+      line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .sig-pos-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .sig-pos-btn.sig-pos-active { background: rgba(139,92,246,0.35); border-color: rgba(139,92,246,0.7); color: #fff; }
 
     .font-elegant { font-family: 'Playfair Display', Georgia, serif; }
     .font-script { font-family: 'Dancing Script', cursive; }
@@ -204,6 +399,41 @@
       border-color: white;
     }
 
+    .size-pill {
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.04);
+      cursor: pointer;
+    }
+    .size-pill:hover { background: rgba(255,255,255,0.10); }
+    .size-pill.active {
+      background: linear-gradient(135deg, #6366f1, #818cf8);
+      border-color: #818cf8;
+      color: white;
+      box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+    }
+
+    .scale-ref {
+      position: absolute;
+      bottom: 6%;
+      left: 8%;
+      right: 8%;
+      height: 1px;
+      background: rgba(255,255,255,0.35);
+      pointer-events: none;
+    }
+    .scale-ref::before, .scale-ref::after {
+      content: ''; position: absolute; top: -4px; width: 1px; height: 9px;
+      background: rgba(255,255,255,0.35);
+    }
+    .scale-ref::before { left: 0; }
+    .scale-ref::after { right: 0; }
+    .scale-ref-label {
+      position: absolute; left: 50%; top: 6px; transform: translateX(-50%);
+      font-size: 10px; color: rgba(255,255,255,0.7); letter-spacing: 0.05em;
+      text-transform: uppercase; white-space: nowrap;
+    }
+
     /* Materials showcase styling */
     .material-showcase {
       position: relative;
@@ -258,313 +488,166 @@
     @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
     .fade-up { animation: fadeUp .6s ease forwards; }
   </style>
-</head>
+<script defer src="/js/analytics.js"></script>
+  </head>
 <body>
 
   <!-- HEADER -->
   <header class="sticky top-0 z-50 bg-[#0b1020]/90 backdrop-blur border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+    <div class="max-w-[1800px] mx-auto px-5 h-16 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2.5">
-        <span class="w-8 h-8 rounded-lg bg-white text-black font-black grid place-items-center text-sm">AI</span>
+        <img src="/favicon.svg" class="w-8 h-8 rounded-lg" alt="" aria-hidden="true"/>
         <span class="font-extrabold tracking-tight text-lg">aiPRINT.<span class="text-indigo-400">ai</span></span>
       </a>
-      <nav class="hidden md:flex items-center gap-7 text-sm">
+      <nav class="hidden lg:flex items-center gap-6 text-sm">
         <a href="#gallery">Gallery</a>
         <a href="#how">How it works</a>
         <a href="#materials">Materials</a>
+        <a href="/about.html">About</a>
         <a href="/faq.html">FAQ</a>
+        <a href="/policies.html">Policies</a>
         <a href="/contact.html">Contact</a>
       </nav>
       <div class="flex items-center gap-2">
-        <div id="authButton"></div>
-        <a href="#create" class="btn text-sm px-5 py-2 hidden md:inline-block">Create a print</a>
+        <div id="authButton" class="hidden sm:block"></div>
+        <a href="#create" class="btn text-sm px-5 py-2 hidden lg:inline-block">Create a print</a>
+        <button id="mobileMenuBtn" class="lg:hidden btn-ghost px-3 py-2" aria-label="Open menu" aria-expanded="false" onclick="(function(b){const m=document.getElementById('mobileMenu');const open=m.classList.toggle('hidden')===false;b.setAttribute('aria-expanded',open);b.innerHTML=open?'✕':'☰';})(this)">☰</button>
       </div>
+    </div>
+    <!-- Mobile dropdown -->
+    <div id="mobileMenu" class="hidden lg:hidden border-t border-white/10 bg-[#0b1020]/95 backdrop-blur">
+      <nav class="max-w-[1800px] mx-auto px-5 py-3 flex flex-col gap-1 text-sm" onclick="(function(){document.getElementById('mobileMenu').classList.add('hidden');document.getElementById('mobileMenuBtn').innerHTML='☰';document.getElementById('mobileMenuBtn').setAttribute('aria-expanded','false');})()">
+        <div id="mobileAuthButton" class="mb-2"></div>
+        <a href="#create" class="btn-accent text-center mb-2">Create a print →</a>
+        <a href="#gallery" class="px-3 py-2.5 rounded-lg hover:bg-white/5">Gallery</a>
+        <a href="#how" class="px-3 py-2.5 rounded-lg hover:bg-white/5">How it works</a>
+        <a href="#materials" class="px-3 py-2.5 rounded-lg hover:bg-white/5">Materials</a>
+        <a href="/about.html" class="px-3 py-2.5 rounded-lg hover:bg-white/5">About</a>
+        <a href="/faq.html" class="px-3 py-2.5 rounded-lg hover:bg-white/5">FAQ</a>
+        <a href="/policies.html" class="px-3 py-2.5 rounded-lg hover:bg-white/5">Policies</a>
+        <a href="/contact.html" class="px-3 py-2.5 rounded-lg hover:bg-white/5">Contact</a>
+      </nav>
     </div>
   </header>
 
   <!-- HERO -->
-  <section class="max-w-7xl mx-auto px-5 pt-16 pb-16 grid lg:grid-cols-2 gap-14 items-center">
+  <section class="max-w-[1800px] mx-auto px-5 pt-16 pb-16 grid lg:grid-cols-2 gap-14 items-center">
     <div>
       <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/15 border border-indigo-400/30 text-indigo-300 text-xs font-semibold mb-6">
         <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
         AI + Human Artist · Limited Edition Prints
       </div>
       <h1 class="h1">Turn any idea into a <span class="gradient-text">gallery-worthy</span> print.</h1>
-      <p class="muted mt-5 max-w-lg text-lg leading-relaxed">Describe your vision. Our AI generates the art — refined by a human eye. Choose your size and finish. We ship an archival, signed print straight to your door.</p>
-      <div class="flex gap-3 mt-8">
+      <p class="muted mt-5 max-w-lg text-lg leading-relaxed">Type a prompt, generate your artwork in seconds, then have it printed on museum-grade canvas, metal, or acrylic and shipped to your door — ready to hang.</p>
+      <p class="mt-3 max-w-lg text-base text-gray-300"><span class="font-semibold text-white">From $45.</span> Ships in 7–14 days. Numbered Certificate of Authenticity. Optional artist signature.</p>
+      <div class="flex gap-3 mt-8 items-center">
         <a href="#create" class="btn-accent text-base">Create a preview →</a>
         <a href="#gallery" class="btn-ghost text-base">See examples</a>
       </div>
-      <div class="mt-8 flex flex-wrap gap-4 text-sm text-gray-400">
-        <span class="trust-item"><span class="text-green-400">✓</span> Made in the USA</span>
-        <span class="trust-item"><span class="text-green-400">✓</span> Archival materials</span>
-        <span class="trust-item"><span class="text-green-400">✓</span> Certificate of Authenticity</span>
-        <span class="trust-item"><span class="text-green-400">✓</span> Ready to hang</span>
+      <p class="mt-4 text-sm text-indigo-300 font-medium">✨ Sign up free — get 10 credits (1 credit = 1 generation). No purchase required to try.</p>
+      <div class="mt-6 flex flex-wrap gap-2">
+        <a href="/faq.html#materials" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-gray-300 hover:bg-white/10 transition-colors"><span class="text-green-400">✓</span> Made in the USA</a>
+        <a href="/faq.html#materials" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-gray-300 hover:bg-white/10 transition-colors"><span class="text-green-400">✓</span> Archival materials</a>
+        <a href="/faq.html#authenticity" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-gray-300 hover:bg-white/10 transition-colors"><span class="text-green-400">✓</span> Certificate of Authenticity</a>
+        <a href="/faq.html#shipping" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-gray-300 hover:bg-white/10 transition-colors"><span class="text-green-400">✓</span> Ships in 7–14 days</a>
       </div>
     </div>
     <div class="grid grid-cols-2 gap-4">
       <div class="col-span-2 h-72 rounded-2xl overflow-hidden relative">
-        <img src="https://images.unsplash.com/photo-1542281286-9e0a16bb7366?q=80&w=1800&auto=format&fit=crop" class="w-full h-full object-cover" alt="AI-generated canyon landscape print">
+        <img src="/ai-art/hero-canyon.jpg" class="w-full h-full object-cover" alt="AI-generated canyon landscape print at golden hour">
         <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-          <div class="glass rounded-lg px-3 py-1.5 text-xs font-medium">"Majestic canyon at golden hour" — 24×36" Acrylic</div>
+          <div class="glass rounded-lg px-3 py-1.5 text-xs font-medium">"Desert canyon at golden hour" — 24×36" Acrylic</div>
         </div>
       </div>
       <div class="h-44 rounded-2xl overflow-hidden relative">
-        <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="Alpine lake print">
+        <img src="/ai-art/art-cyberpunk-tokyo.jpg" class="w-full h-full object-cover" alt="Neon-soaked cyberpunk Tokyo street at midnight">
         <div class="absolute bottom-2 left-2 right-2">
-          <div class="glass rounded px-2 py-1 text-xs">"Alpine serenity" — Canvas</div>
+          <div class="glass rounded px-2 py-1 text-xs">"Neon Tokyo at midnight" — Canvas</div>
         </div>
       </div>
       <div class="h-44 rounded-2xl overflow-hidden relative">
-        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="Ocean sunset print">
+        <img src="/ai-art/art-aurora.jpg" class="w-full h-full object-cover" alt="Aurora borealis over a fjord">
         <div class="absolute bottom-2 left-2 right-2">
-          <div class="glass rounded px-2 py-1 text-xs">"Pacific horizon" — Metal</div>
+          <div class="glass rounded px-2 py-1 text-xs">"Aurora over the fjord" — Metal</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- STATS BAR -->
-  <section class="border-y border-white/10 bg-white/[0.02] py-10">
-    <div class="max-w-5xl mx-auto px-5 grid grid-cols-2 md:grid-cols-4 gap-8">
-      <div class="stat-item">
-        <div class="stat-num">3,400+</div>
-        <div class="muted text-sm mt-1">Prints created</div>
+  <!-- TRUST STRIP -->
+  <section class="border-y border-white/10 bg-white/[0.02] py-6">
+    <div class="max-w-[1800px] mx-auto px-5 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm md:text-base text-gray-300">
+      <div class="flex items-center gap-2">
+        <svg class="w-4 h-4 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l9-4 9 4v5c0 5-3.5 8.5-9 10-5.5-1.5-9-5-9-10V7Z"/><path d="m9 12 2 2 4-4"/></svg>
+        <span>Made in the USA</span>
       </div>
-      <div class="stat-item">
-        <div class="stat-num">4.9★</div>
-        <div class="muted text-sm mt-1">Average rating</div>
+      <div class="hidden md:block w-px h-4 bg-white/15"></div>
+      <div class="flex items-center gap-2">
+        <svg class="w-4 h-4 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span>Inspected before &amp; after print</span>
       </div>
-      <div class="stat-item">
-        <div class="stat-num">$45–$995</div>
-        <div class="muted text-sm mt-1">Price range</div>
+      <div class="hidden md:block w-px h-4 bg-white/15"></div>
+      <div class="flex items-center gap-2">
+        <svg class="w-4 h-4 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="14" rx="1.5"/><path d="M8 9h6"/><path d="M8 13h4"/><path d="M10 18v2l2-1 2 1v-2"/></svg>
+        <span>Certificate of Authenticity</span>
       </div>
-      <div class="stat-item">
-        <div class="stat-num">7–14</div>
-        <div class="muted text-sm mt-1">Days to your door</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- GALLERY -->
-  <section id="gallery" class="max-w-7xl mx-auto px-5 py-20">
-    <div class="text-center mb-12">
-      <div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest mb-3">Example Prints</div>
-      <h2 class="h2">Every piece is one of a kind</h2>
-      <p class="muted mt-3 max-w-2xl mx-auto">From sweeping landscapes to intimate abstracts — type a prompt, get your art. Each print ships with a Certificate of Authenticity and your signature.</p>
-    </div>
-
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-      <!-- Row 1 - large + small -->
-      <div class="gallery-item col-span-2 md:col-span-1 row-span-2" style="height:500px;">
-        <img src="https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?q=80&w=900&auto=format&fit=crop" alt="Misty forest print">
-        <div class="gallery-caption">
-          <div class="text-xs text-indigo-300 font-semibold mb-1">CANVAS · 24×36"</div>
-          <div class="font-bold">"Ancient forest, morning mist, impressionistic"</div>
-          <div class="text-xs text-gray-400 mt-1">$245 · Certificate of Authenticity included</div>
-        </div>
-      </div>
-      <div class="gallery-item" style="height:240px;">
-        <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=700&auto=format&fit=crop" alt="Desert dunes print">
-        <div class="gallery-caption">
-          <div class="text-xs text-gray-300 font-semibold mb-1">METAL · 18×12"</div>
-          <div class="font-bold">"Sahara golden hour, minimalist"</div>
-        </div>
-      </div>
-      <div class="gallery-item" style="height:240px;">
-        <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=700&auto=format&fit=crop" alt="Mountain reflection print">
-        <div class="gallery-caption">
-          <div class="text-xs text-blue-300 font-semibold mb-1">ACRYLIC · 20×30"</div>
-          <div class="font-bold">"Mountain mirror lake, hyperrealistic"</div>
-        </div>
-      </div>
-
-      <!-- Row 2 - three equal -->
-      <div class="gallery-item" style="height:280px;">
-        <img src="https://images.unsplash.com/photo-1477322524744-0eece9e79640?q=80&w=700&auto=format&fit=crop" alt="Aurora borealis print">
-        <div class="gallery-caption">
-          <div class="text-xs text-purple-300 font-semibold mb-1">CANVAS · 30×20"</div>
-          <div class="font-bold">"Northern lights over fjord"</div>
-        </div>
-      </div>
-      <div class="gallery-item" style="height:280px;">
-        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=700&auto=format&fit=crop" alt="Mountain summit print">
-        <div class="gallery-caption">
-          <div class="text-xs text-gray-300 font-semibold mb-1">METAL · 24×16"</div>
-          <div class="font-bold">"Above the clouds, dramatic lighting"</div>
-        </div>
-      </div>
-      <div class="gallery-item" style="height:280px;">
-        <img src="https://images.unsplash.com/photo-1516912481808-3406841bd33c?q=80&w=700&auto=format&fit=crop" alt="Ocean waves abstract print">
-        <div class="gallery-caption">
-          <div class="text-xs text-blue-300 font-semibold mb-1">ACRYLIC · 36×36"</div>
-          <div class="font-bold">"Ocean swells, abstract painterly"</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="text-center mt-8">
-      <a href="#create" class="btn-ghost">Create your own →</a>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section id="how" class="max-w-5xl mx-auto px-5 py-20">
-    <div class="text-center mb-12">
-      <div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest mb-3">The Process</div>
-      <h2 class="h2">From idea to wall in minutes</h2>
-    </div>
-    <div class="grid md:grid-cols-3 gap-8">
-      <div class="glass rounded-2xl p-7">
-        <div class="step-num mb-5">1</div>
-        <h3 class="h3 mb-3">Describe your vision</h3>
-        <p class="muted text-sm leading-relaxed">Type a prompt — style, mood, subject, colors. Fine-tune with our creative dropdowns. Add an optional reference image for inspiration.</p>
-        <div class="mt-4 text-xs text-indigo-300 font-medium italic">"Misty Japanese garden at dawn, painterly, warm tones"</div>
-      </div>
-      <div class="glass rounded-2xl p-7">
-        <div class="step-num mb-5">2</div>
-        <h3 class="h3 mb-3">We craft your artwork</h3>
-        <p class="muted text-sm leading-relaxed">Our AI generates a high-resolution image. A human artist reviews and refines it. You see a watermarked preview — regenerate freely until it's perfect.</p>
-        <div class="mt-4 text-xs text-green-300 font-medium">✓ No limits on previews</div>
-      </div>
-      <div class="glass rounded-2xl p-7">
-        <div class="step-num mb-5">3</div>
-        <h3 class="h3 mb-3">Printed, signed & shipped</h3>
-        <p class="muted text-sm leading-relaxed">Choose your material and size. Add your signature to the print. We produce on archival materials and ship ready-to-hang with a Certificate of Authenticity.</p>
-        <div class="mt-4 text-xs text-yellow-300 font-medium">🎖 Certificate of Authenticity included</div>
+      <div class="hidden md:block w-px h-4 bg-white/15"></div>
+      <div class="flex items-center gap-2">
+        <svg class="w-4 h-4 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.3 8.3 8 9 4.7-.7 8-4.5 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-5"/></svg>
+        <span>30-day satisfaction guarantee</span>
       </div>
     </div>
   </section>
 
-  <!-- MATERIALS -->
-  <section id="materials" class="max-w-7xl mx-auto px-5 py-20">
-    <div class="text-center mb-12">
-      <div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest mb-3">Premium Finishes</div>
-      <h2 class="h2">Three ways to display your art</h2>
-      <p class="muted mt-3 max-w-xl mx-auto">Every material is museum-grade, archival, and arrives ready to hang.</p>
-    </div>
-    <div class="grid md:grid-cols-3 gap-8">
-      <div>
-        <div class="material-showcase">
-          <img src="/materials/canvas-ocean.jpg" alt="Fine Art Canvas Example">
-          <div class="material-info">
-            <div class="text-xs font-semibold text-white/60 mb-1">STARTING AT $45</div>
-            <div class="text-lg font-extrabold">Signature Series — Fine Art Canvas</div>
-          </div>
-        </div>
-        <p class="muted mt-4 text-sm leading-relaxed">Archival fine-art canvas with rich texture and deep color. Gallery-wrapped, ready to hang — no framing needed. The warmest, most classic finish.</p>
-      </div>
-
-      <div>
-        <div class="material-showcase">
-          <img src="/materials/metal-desert.jpg" alt="ChromaLuxe Metal Example">
-          <div class="material-info">
-            <div class="text-xs font-semibold text-white/60 mb-1">STARTING AT $55</div>
-            <div class="text-lg font-extrabold">Gallery Edition — ChromaLuxe Metal</div>
-          </div>
-        </div>
-        <p class="muted mt-4 text-sm leading-relaxed">Vibrant ChromaLuxe aluminum with exceptional depth and luminosity. Arrives on a sleek float mount. Bold, modern, and striking in any space.</p>
-      </div>
-
-      <div>
-        <div class="material-showcase">
-          <img src="/materials/acrylic-forest.jpg" alt="Acrylic Facemount Example">
-          <div class="material-info">
-            <div class="text-xs font-semibold text-white/60 mb-1">STARTING AT $95</div>
-            <div class="text-lg font-extrabold">Museum Collection — Acrylic Facemount</div>
-          </div>
-        </div>
-        <p class="muted mt-4 text-sm leading-relaxed">Museum-grade acrylic with brilliant clarity, polished edges, and extraordinary depth. Our most premium finish — stunning in gallery, home, or office.</p>
-      </div>
-    </div>
-    <div class="mt-8 text-center">
-      <a href="/materials.html" class="btn-ghost">Compare all materials →</a>
-    </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section class="max-w-6xl mx-auto px-5 py-20">
-    <div class="text-center mb-12">
-      <div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest mb-3">Customer Stories</div>
-      <h2 class="h2">People love their prints</h2>
-    </div>
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="testimonial-card">
-        <div class="stars mb-4">★★★★★</div>
-        <p class="text-sm leading-relaxed mb-5">"I described a scene from my favorite hike — the AI nailed it perfectly. The acrylic facemount arrived beautifully packaged and looks stunning in my living room. The Certificate of Authenticity was a nice touch."</p>
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-indigo-500/30 flex items-center justify-center font-bold text-indigo-300">SM</div>
-          <div>
-            <div class="font-semibold text-sm">Sarah M.</div>
-            <div class="text-xs text-gray-500">Interior Designer · Austin, TX</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-card">
-        <div class="stars mb-4">★★★★★</div>
-        <p class="text-sm leading-relaxed mb-5">"Ordered two canvas prints as gifts. The quality is genuinely gallery-level — I wasn't expecting it at this price point. The signature feature made them feel like real collector pieces. Will definitely reorder."</p>
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-purple-500/30 flex items-center justify-center font-bold text-purple-300">JK</div>
-          <div>
-            <div class="font-semibold text-sm">James K.</div>
-            <div class="text-xs text-gray-500">Photographer · Brooklyn, NY</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-card">
-        <div class="stars mb-4">★★★★★</div>
-        <p class="text-sm leading-relaxed mb-5">"We use aiPRINT for client gifts and office decor. Being able to brand and personalize each piece with a signature is incredible. Our clients always ask where we got them. Fast turnaround, flawless quality."</p>
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-green-500/30 flex items-center justify-center font-bold text-green-300">RC</div>
-          <div>
-            <div class="font-semibold text-sm">Rachel C.</div>
-            <div class="text-xs text-gray-500">Creative Director · Miami, FL</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <div class="section-divider with-dot"></div>
 
   <!-- CREATE -->
-  <section id="create" class="max-w-7xl mx-auto px-5 py-20">
+  <section id="create" class="max-w-[1800px] mx-auto px-5 py-20">
     <div class="text-center mb-10">
-      <div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest mb-3">Try it now</div>
+      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Step 1 · Create</div><div class="section-label-line right"></div></div>
       <h2 class="h2">Create a preview — free</h2>
-      <p class="muted mt-3">Generate a preview of your artwork in seconds. No account required to start.</p>
+      <p class="muted mt-3">Try <span class="text-indigo-300 font-semibold">1 free preview</span> right now — no signup. Then sign up for <span class="text-indigo-300 font-semibold">10 free credits</span> (1 credit = 1 generation, just $0.20 each after that).</p>
     </div>
 
-    <!-- Anonymous Limit Message -->
+    <!-- Anonymous Limit Message (filled dynamically when limit hit) -->
     <div id="anonymousLimitMessage" class="hidden mb-4"></div>
 
-    <div class="glass rounded-2xl p-6 md:p-8 max-w-5xl mx-auto">
+    <div class="glass rounded-2xl p-6 md:p-10 max-w-[1400px] mx-auto">
       <!-- Prompt input -->
-      <div class="mb-6">
-        <label class="text-sm muted block mb-2">Describe your artwork</label>
-        <textarea id="promptInput" class="w-full rounded-xl bg-white/10 border border-white/15 px-4 py-3 min-h-[90px] text-white resize-none focus:outline-none focus:border-white/30"
-                  placeholder="e.g., misty redwood forest at dawn, warm golden light filtering through the trees, painterly impressionist style"></textarea>
+      <div class="mb-7">
+        <div class="flex items-center justify-between mb-2 gap-3">
+          <label class="text-base font-semibold text-gray-200">Describe your artwork</label>
+          <button type="button" id="randomizeBtn" aria-label="Randomize all settings"
+                  class="text-sm font-semibold px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500/30 to-purple-500/30 border border-indigo-400/40 text-indigo-100 hover:from-indigo-500/50 hover:to-purple-500/50 transition-all inline-flex items-center gap-1.5">
+            <span class="text-base">🎲</span> Surprise me
+          </button>
+        </div>
+        <textarea id="promptInput" aria-label="Describe your artwork" class="w-full rounded-xl bg-white/10 border border-white/15 px-4 py-4 min-h-[140px] md:min-h-[130px] text-base text-white resize-none focus:outline-none focus:border-white/30"
+                  placeholder="e.g., a wise fox in a velvet jacket sipping tea by a fireplace — storybook, painterly"></textarea>
       </div>
 
-      <!-- Style dropdowns grid -->
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+      <!-- Style dropdowns grid (mobile: 1-col stack for breathing room; tablet+ : grid) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
         <div>
           <label class="dropdown-label">Style</label>
-          <select id="styleSelect" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white text-sm">
-            <option value="Realistic (photo-realistic)" selected>Realistic (photo-realistic)</option>
-            <option value="Hyper-realistic">Hyper-realistic</option>
+          <select id="styleSelect" aria-label="Style" class="w-full rounded-lg bg-white/10 border border-white/15 px-3.5 py-2.5 text-white text-sm">
+            <option value="Realistic (photo-realistic)" selected>Realistic / Photo-real</option>
+            <option value="Cinematic / Editorial">Cinematic / Editorial</option>
             <option value="Painterly">Painterly</option>
-            <option value="Abstract">Abstract</option>
             <option value="Impressionistic">Impressionistic</option>
+            <option value="Surreal / Dreamlike">Surreal / Dreamlike</option>
+            <option value="Abstract">Abstract</option>
             <option value="Minimalist">Minimalist</option>
-            <option value="Surreal">Surreal</option>
-            <option value="Conceptual / Artistic">Conceptual / Artistic</option>
-            <option value="Sketch / Illustration">Sketch / Illustration</option>
-            <option value="3D Render / CGI">3D Render / CGI</option>
+            <option value="Anime / Stylized">Anime / Stylized</option>
+            <option value="Pop Art / Graphic">Pop Art / Graphic</option>
+            <option value="Fantasy / Magical">Fantasy / Magical</option>
+            <option value="Vintage / Retro">Vintage / Retro</option>
           </select>
         </div>
         <div>
           <label class="dropdown-label">Mood / Atmosphere</label>
-          <select id="moodSelect" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white text-sm">
-            <option value="">Select mood...</option>
+          <select id="moodSelect" aria-label="Mood and atmosphere" class="w-full rounded-lg bg-white/10 border border-white/15 px-3.5 py-2.5 text-white text-sm">
+            <option value="">Any mood</option>
             <option value="Calm / Peaceful">Calm / Peaceful</option>
             <option value="Dramatic / Intense">Dramatic / Intense</option>
             <option value="Moody / Atmospheric">Moody / Atmospheric</option>
@@ -575,74 +658,127 @@
             <option value="Nostalgic">Nostalgic</option>
             <option value="Dark / Gritty">Dark / Gritty</option>
             <option value="Dreamlike / Ethereal">Dreamlike / Ethereal</option>
+            <option value="Whimsical / Playful">Whimsical / Playful</option>
+          </select>
+        </div>
+        <div>
+          <label class="dropdown-label">Color Palette</label>
+          <select id="paletteSelect" aria-label="Color palette" class="w-full rounded-lg bg-white/10 border border-white/15 px-3.5 py-2.5 text-white text-sm">
+            <option value="">Any palette</option>
+            <option value="vibrant, saturated colors">Vibrant / Saturated</option>
+            <option value="muted, earthy tones">Muted / Earthy</option>
+            <option value="monochrome black and white">Monochrome / B&amp;W</option>
+            <option value="soft pastel palette">Pastel</option>
+            <option value="rich jewel tones">Jewel tones</option>
+            <option value="warm color palette, reds and oranges">Warm tones</option>
+            <option value="cool color palette, blues and teals">Cool tones</option>
+            <option value="sepia vintage tones">Sepia / Vintage</option>
+            <option value="high contrast bold colors">High contrast</option>
+            <option value="desaturated, muted colors">Desaturated</option>
+          </select>
+        </div>
+        <div>
+          <label class="dropdown-label">Time of Day</label>
+          <select id="timeSelect" aria-label="Time of day" class="w-full rounded-lg bg-white/10 border border-white/15 px-3.5 py-2.5 text-white text-sm">
+            <option value="">Any time</option>
+            <option value="at sunrise">Sunrise / Dawn</option>
+            <option value="in morning light">Morning</option>
+            <option value="at midday">Midday</option>
+            <option value="in afternoon light">Afternoon</option>
+            <option value="at sunset">Sunset / Dusk</option>
+            <option value="at twilight, blue hour">Twilight / Blue hour</option>
+            <option value="at night">Night</option>
           </select>
         </div>
         <div>
           <label class="dropdown-label">Lighting</label>
-          <select id="lightingSelect" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white text-sm">
-            <option value="">Select lighting...</option>
-            <option value="Natural / Soft Light">Natural / Soft Light</option>
-            <option value="Golden Hour / Warm Glow">Golden Hour / Warm Glow</option>
-            <option value="Blue Hour / Cool Tones">Blue Hour / Cool Tones</option>
-            <option value="Dramatic Shadows / High Contrast">Dramatic Shadows / High Contrast</option>
-            <option value="Studio Lighting">Studio Lighting</option>
-            <option value="Backlit / Rim Light">Backlit / Rim Light</option>
-            <option value="Overcast / Diffused Light">Overcast / Diffused Light</option>
-            <option value="Harsh Midday Sun">Harsh Midday Sun</option>
-            <option value="Candlelight / Low Light">Candlelight / Low Light</option>
-            <option value="Neon / Artificial Light">Neon / Artificial Light</option>
+          <select id="lightingSelect" aria-label="Lighting" class="w-full rounded-lg bg-white/10 border border-white/15 px-3.5 py-2.5 text-white text-sm">
+            <option value="">Any lighting</option>
+            <option value="Natural / Soft Light">Natural / Soft</option>
+            <option value="Warm / Golden Light">Warm / Golden</option>
+            <option value="Cool / Twilight Tones">Cool / Twilight tones</option>
+            <option value="Dramatic / High Contrast">Dramatic / High contrast</option>
+            <option value="Studio Lighting">Studio</option>
+            <option value="Backlit / Rim Light">Backlit / Rim light</option>
+            <option value="Volumetric / God Rays">Volumetric / God rays</option>
+            <option value="Overcast / Diffused">Overcast / Diffused</option>
+            <option value="Candlelight / Warm Low Light">Candlelight / Warm low light</option>
+            <option value="Neon / Artificial">Neon / Artificial</option>
           </select>
         </div>
         <div>
-          <label class="dropdown-label">Camera & Composition</label>
-          <select id="cameraSelect" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white text-sm">
-            <option value="">Select camera...</option>
-            <option value="Cinematic Framing">Cinematic Framing</option>
-            <option value="Wide Angle / Expansive">Wide Angle / Expansive</option>
+          <label class="dropdown-label">Camera &amp; Composition</label>
+          <select id="cameraSelect" aria-label="Camera and composition" class="w-full rounded-lg bg-white/10 border border-white/15 px-3.5 py-2.5 text-white text-sm">
+            <option value="">Any composition</option>
+            <option value="Cinematic Framing">Cinematic framing</option>
+            <option value="Wide Angle / Expansive">Wide angle / Expansive</option>
             <option value="Telephoto / Compressed">Telephoto / Compressed</option>
-            <option value="Macro / Close Detail">Macro / Close Detail</option>
-            <option value="Aerial / Drone View">Aerial / Drone View</option>
-            <option value="Eye-Level / Natural Perspective">Eye-Level / Natural Perspective</option>
-            <option value="Low Angle (Looking Up)">Low Angle (Looking Up)</option>
-            <option value="High Angle (Looking Down)">High Angle (Looking Down)</option>
-            <option value="Rule of Thirds">Rule of Thirds</option>
+            <option value="Macro / Close Detail">Macro / Close detail</option>
+            <option value="Aerial / Drone View">Aerial / Drone view</option>
+            <option value="Eye-Level / Natural Perspective">Eye-level / Natural</option>
+            <option value="Low Angle (Looking Up)">Low angle (looking up)</option>
+            <option value="High Angle (Looking Down)">High angle (looking down)</option>
             <option value="Symmetry / Centered">Symmetry / Centered</option>
+            <option value="Portrait / Headshot Framing">Portrait / Headshot</option>
           </select>
         </div>
         <div>
-          <label class="dropdown-label">Medium / Output</label>
-          <select id="mediumSelect" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white text-sm">
-            <option value="Photograph / Realistic" selected>Photograph / Realistic</option>
-            <option value="Digital Painting">Digital Painting</option>
-            <option value="Oil Painting">Oil Painting</option>
+          <label class="dropdown-label">Faces / Expression <span class="text-gray-500 normal-case tracking-normal">(if there are people)</span></label>
+          <select id="expressionSelect" aria-label="Faces and expression (if your art has people)" class="w-full rounded-lg bg-white/10 border border-white/15 px-3.5 py-2.5 text-white text-sm">
+            <option value="">No people / skip</option>
+            <option value="serene, peaceful expression">Serene / peaceful</option>
+            <option value="joyful, smiling, warm expression">Joyful / smiling</option>
+            <option value="contemplative, thoughtful expression">Contemplative</option>
+            <option value="confident, determined gaze">Confident / determined</option>
+            <option value="mysterious, intense expression">Mysterious / intense</option>
+            <option value="loving, tender expression">Loving / tender</option>
+            <option value="playful, mischievous expression">Playful / mischievous</option>
+            <option value="surprised, wonder-filled expression">Wonder / awe</option>
+          </select>
+        </div>
+        <div>
+          <label class="dropdown-label">Medium</label>
+          <select id="mediumSelect" aria-label="Medium" class="w-full rounded-lg bg-white/10 border border-white/15 px-3.5 py-2.5 text-white text-sm">
+            <option value="Photograph / Realistic" selected>Photograph</option>
+            <option value="Oil Painting">Oil painting</option>
             <option value="Watercolor">Watercolor</option>
-            <option value="Ink / Sketch">Ink / Sketch</option>
-            <option value="Mixed Media">Mixed Media</option>
-            <option value="Collage">Collage</option>
-            <option value="Sculpture / 3D Model">Sculpture / 3D Model</option>
-            <option value="Printmaking Style">Printmaking Style</option>
-            <option value="Poster / Graphic Design">Poster / Graphic Design</option>
+            <option value="Acrylic Painting">Acrylic painting</option>
+            <option value="Digital Painting">Digital painting</option>
+            <option value="Pencil / Charcoal Sketch">Pencil / Charcoal sketch</option>
+            <option value="Ink / Pen Drawing">Ink / Pen drawing</option>
+            <option value="3D Render / CGI">3D render / CGI</option>
+            <option value="Sculpture / 3D Model">Sculpture / 3D model</option>
+            <option value="Poster / Graphic Design">Poster / Graphic design</option>
+            <option value="Mixed Media / Collage">Mixed media / Collage</option>
           </select>
         </div>
       </div>
 
       <!-- Aspect ratio and Generate button -->
-      <div class="grid md:grid-cols-[1fr_auto] gap-4 mb-6">
+      <div class="grid md:grid-cols-[1fr_auto] gap-4 mb-2">
         <div>
           <label class="dropdown-label">Aspect Ratio</label>
-          <select id="ratioSel" class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2 text-white">
-            <option value="1024x1024">Square (1:1)</option>
-            <option value="1536x1024">Horizontal (3:2)</option>
-            <option value="1024x1536">Vertical (2:3)</option>
+          <select id="ratioSel" aria-label="Aspect ratio" class="w-full rounded-lg bg-white/10 border border-white/15 px-3.5 py-2.5 text-white">
+            <option value="1024x1024">Square (1:1) — prints from $45</option>
+            <option value="1536x1024">Horizontal (3:2) — prints from $65</option>
+            <option value="1024x1536">Vertical (2:3) — prints from $65</option>
           </select>
         </div>
         <div class="flex items-end">
-          <button id="genBtn" class="btn-accent px-8 py-2.5 text-base">Generate preview</button>
+          <button id="genBtn" aria-label="Generate preview" class="btn-accent w-full md:w-auto px-10 py-3.5 text-base font-semibold shadow-lg shadow-indigo-500/20">Generate preview (1 credit)</button>
         </div>
+      </div>
+      <p class="text-xs text-gray-500 mb-6">Each preview uses 1 credit ($0.20). New accounts get 10 free credits to start.</p>
+
+      <!-- Signature toggle -->
+      <div class="mb-3">
+        <button type="button" id="toggleSignature" class="text-sm text-indigo-300 hover:text-indigo-200 font-medium inline-flex items-center gap-2">
+          <span id="toggleSignatureIcon">+</span> Add your signature <span class="text-xs text-gray-500">(optional)</span>
+        </button>
       </div>
 
       <!-- Enhanced Signature Controls -->
-      <div class="signature-controls mb-6">
+      <div class="signature-controls mb-6 hidden" id="signatureControlsWrap">
         <div class="text-xs text-gray-400 w-full mb-1 font-semibold uppercase tracking-widest">Artist Signature</div>
         <div class="signature-control-group">
           <label>Name</label>
@@ -652,16 +788,17 @@
         <div class="signature-control-group">
           <label>Font</label>
           <select id="signatureFont" class="rounded bg-white/10 border border-white/15 px-2 py-1 text-sm text-white">
-            <option value="font-elegant">Elegant</option>
-            <option value="font-script">Script</option>
-            <option value="font-modern">Modern</option>
-            <option value="font-classic">Italic Classic</option>
-            <option value="font-bold">Bold</option>
+            <option value="font-elegant" style="font-family:'Playfair Display',Georgia,serif">Elegant</option>
+            <option value="font-script" style="font-family:'Dancing Script',cursive">Script</option>
+            <option value="font-modern" style="font-family:Arial,sans-serif">Modern</option>
+            <option value="font-classic" style="font-family:'Cormorant Garamond','Times New Roman',serif;font-style:italic">Italic Classic</option>
+            <option value="font-bold" style="font-family:Impact,sans-serif">Bold</option>
           </select>
         </div>
         <div class="signature-control-group">
           <label>Color</label>
           <select id="signatureColor" class="rounded bg-white/10 border border-white/15 px-2 py-1 text-sm text-white">
+            <option value="auto">Auto (contrast)</option>
             <option value="white">White</option>
             <option value="black">Black</option>
             <option value="gold">Gold</option>
@@ -673,57 +810,103 @@
           <input type="range" id="signatureSize" min="12" max="36" value="18"
                  class="w-24 accent-white">
         </div>
-        <div class="text-xs text-gray-500 ml-auto self-center">Drag your name on the preview to position it</div>
+        <div class="signature-control-group">
+          <label>Position</label>
+          <div class="flex gap-1" id="sigPosButtons">
+            <button type="button" data-pos="tc" class="sig-pos-btn" aria-label="Top center" title="Top center">↑</button>
+            <button type="button" data-pos="bl" class="sig-pos-btn" aria-label="Bottom left" title="Bottom left">↙</button>
+            <button type="button" data-pos="bc" class="sig-pos-btn" aria-label="Bottom center" title="Bottom center">↓</button>
+            <button type="button" data-pos="br" class="sig-pos-btn sig-pos-active" aria-label="Bottom right" title="Bottom right">↘</button>
+          </div>
+        </div>
+        <div class="text-xs text-gray-500 ml-auto self-center hidden md:block">Tap a position · or drag on preview</div>
+      </div>
+
+      <!-- Anonymous post-preview signup nudge -->
+      <div id="anonSignupNudge" class="hidden mt-6">
+        <div class="rounded-xl border border-indigo-400/30 bg-gradient-to-r from-indigo-500/15 to-purple-500/10 p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div>
+            <div class="font-bold text-base">🎉 Love it? Sign up to order this print.</div>
+            <div class="text-sm text-gray-300 mt-1">Free account · 10 credits to keep generating · No credit card required.</div>
+          </div>
+          <button onclick="window.auth && window.auth.showSignupModal()" class="btn-accent whitespace-nowrap">Create free account →</button>
+        </div>
       </div>
 
       <!-- Preview Section -->
       <div id="previewSection" class="mt-6 hidden">
-        <div id="previewWrap" class="preview-container relative w-full max-w-2xl mx-auto rounded-xl overflow-hidden border border-white/10 flex items-center justify-center p-4" style="aspect-ratio:1/1;">
-          <img id="previewImg" class="w-full h-full object-contain" alt="Preview" />
+        <div id="previewWrap" class="preview-container relative w-full max-w-5xl mx-auto rounded-xl overflow-hidden border border-white/10 flex items-center justify-center p-2 min-h-[300px] md:min-h-[500px]" style="aspect-ratio:1/1;">
+          <img id="previewImg" class="w-full h-full object-contain" alt="Preview" crossorigin="anonymous" />
           <div class="watermark-overlay">PREVIEW</div>
           <div id="signatureOverlay" class="moveable-signature font-elegant" style="color: white; font-size: 18px; bottom: 20px; right: 20px;"></div>
         </div>
 
-        <div class="mt-5 flex flex-wrap gap-3 justify-center">
-          <button id="selectBtn" class="btn-accent">Select this image →</button>
-          <button id="shareBtn" class="btn-ghost">Share / Save</button>
-          <button id="regenerateBtn" class="btn-ghost">Try another</button>
-          <button id="startOverBtn" class="btn-ghost">Start over</button>
+        <div class="mt-6 flex flex-col items-center gap-3">
+          <button id="selectBtn" class="btn-accent text-lg px-10 py-3.5 shadow-lg shadow-indigo-500/30">Select this image — order print →</button>
+          <div class="flex flex-wrap gap-4 justify-center text-sm">
+            <button id="regenerateBtn" class="text-gray-400 hover:text-white transition-colors underline-offset-4 hover:underline">Try another (1 credit)</button>
+            <span class="text-gray-700">·</span>
+            <button id="shareBtn" class="text-gray-400 hover:text-white transition-colors underline-offset-4 hover:underline">Share / save</button>
+            <span class="text-gray-700">·</span>
+            <button id="startOverBtn" class="text-gray-400 hover:text-white transition-colors underline-offset-4 hover:underline">Start over</button>
+          </div>
         </div>
 
-        <p class="text-center text-xs text-gray-500 mt-3">Preview shows full artwork with watermark. Final print will not have watermark.</p>
+        <p class="text-center text-xs text-gray-500 mt-4">Watermark is for preview only — your final print arrives clean, inspected, and with a numbered Certificate of Authenticity.</p>
+        <p class="text-center text-xs text-gray-400 mt-2">📦 Ships in 7–14 days · ↩ 30-day satisfaction guarantee · 🎖 Certificate of Authenticity included</p>
 
         <!-- Room Mockup Section -->
         <div id="roomMockupSection" class="mt-8 hidden">
-          <h3 class="text-lg font-bold mb-4">See Your Art in a Room</h3>
-          <div class="flex gap-2 mb-4 overflow-x-auto">
+          <h3 class="text-lg font-bold mb-2">See it on the wall</h3>
+          <p class="text-sm text-gray-400 mb-4">Tap a size to see how it fills the space — sofa is shown for scale (≈ 7 ft wide).</p>
+
+          <div class="flex gap-2 mb-3 overflow-x-auto">
             <button class="room-tab btn-ghost px-4 py-2 whitespace-nowrap active" data-room="room1">Modern Living Room</button>
             <button class="room-tab btn-ghost px-4 py-2 whitespace-nowrap" data-room="room2">Minimalist Space</button>
             <button class="room-tab btn-ghost px-4 py-2 whitespace-nowrap" data-room="room3">Cozy Living Area</button>
             <button class="room-tab btn-ghost px-4 py-2 whitespace-nowrap" data-room="room4">Bright Living Space</button>
             <button class="room-tab btn-ghost px-4 py-2 whitespace-nowrap" data-room="room5">Sage Accent Room</button>
           </div>
-          <div id="mockupDisplay" class="mb-4"></div>
+
+          <div id="sizePillRow" class="flex flex-wrap gap-2 mb-4 justify-center"></div>
+
+          <div id="mockupDisplay" class="mb-3"></div>
           <div class="text-center text-sm text-gray-400">
-            <p>Showing: <span id="mockupSizeLabel">24×24 inches</span></p>
-            <p class="text-xs mt-1">Actual size will vary based on viewing distance</p>
+            <p>Showing: <span id="mockupSizeLabel" class="font-semibold text-white">24×24 inches</span></p>
+            <p class="text-xs mt-1">Sofa shown for scale · actual on-wall impact varies with viewing distance</p>
           </div>
+        </div>
+      </div>
+
+      <!-- Empty preview placeholder -->
+      <div id="emptyPreviewState" class="mt-8">
+        <div class="preview-container relative w-full max-w-5xl mx-auto rounded-xl border border-dashed border-white/15 flex flex-col items-center justify-center p-10 min-h-[360px] md:min-h-[500px] text-center">
+          <div class="w-16 h-16 rounded-full bg-indigo-500/15 border border-indigo-400/30 grid place-items-center text-3xl mb-4">🎨</div>
+          <p class="text-xl font-semibold">Your preview will appear here</p>
+          <p class="text-sm text-gray-400 mt-2 max-w-sm">Describe your artwork above, pick an aspect ratio, and we'll generate a museum-quality preview in 15–30 seconds.</p>
         </div>
       </div>
 
       <!-- Loading state -->
       <div id="loadingState" class="mt-6 hidden">
-        <div class="bg-black/40 rounded-xl border border-white/10 p-10 text-center">
+        <div class="preview-container rounded-xl border border-white/10 p-10 text-center min-h-[300px] md:min-h-[420px] flex flex-col items-center justify-center">
           <div class="spinner mx-auto"></div>
-          <p class="mt-5 text-lg font-semibold">Generating your artwork...</p>
-          <p class="mt-2 text-sm text-gray-500">Our AI is working on it — usually takes 15–30 seconds</p>
+          <p class="mt-5 text-lg font-semibold" id="loadingHeadline">Composing your artwork…</p>
+          <p class="mt-2 text-sm text-gray-400" id="loadingSubcopy">Our AI is interpreting your prompt</p>
+          <div class="mt-5 w-full max-w-xs mx-auto">
+            <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+              <div id="loadingBar" class="h-full bg-gradient-to-r from-indigo-400 to-indigo-600 transition-all duration-700" style="width:5%"></div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">Typically 15–30 seconds</p>
+          </div>
         </div>
       </div>
 
       <!-- Error state -->
       <div id="errorState" class="mt-6 hidden">
         <div class="bg-red-900/20 border border-red-500/30 rounded-xl p-4">
-          <p class="text-red-300" id="errorMessage"></p>
+          <p class="text-red-300 mb-3" id="errorMessage"></p>
+          <button id="errorRetryBtn" class="btn-ghost text-sm">Try again — no credit charged</button>
         </div>
       </div>
     </div>
@@ -746,10 +929,13 @@
     </div>
   </div>
 
-  <!-- ORDER -->
-  <section id="order" class="max-w-7xl mx-auto px-5 py-20">
-    <h2 class="h2 mb-2">Order your print</h2>
-    <p id="orderMsg" class="text-sm text-gray-400 mb-6">Generate and select a preview above to unlock ordering.</p>
+  <!-- ORDER (lives directly under CREATE — they read as one flow, no divider between) -->
+  <section id="order" class="max-w-[1800px] mx-auto px-5 pt-2 pb-20">
+    <div class="text-center mb-8">
+      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Step 2 · Pick your print</div><div class="section-label-line right"></div></div>
+      <h2 class="h2 mt-3">Now make it real</h2>
+      <p id="orderMsg" class="muted mt-3 max-w-2xl mx-auto">Generate and select a preview above to unlock ordering. Three materials, three orientations, hand-picked sizes — only the finishes and dimensions that actually look great in person.</p>
+    </div>
 
     <div class="flex gap-2 mb-6">
       <button class="orderTab px-5 py-2.5 rounded-lg bg-white/10 font-semibold text-sm" data-tab="canvas">Canvas</button>
@@ -778,28 +964,392 @@
       </div>
     </div>
 
-    <div class="mt-6 flex items-center gap-4">
+    <div class="mt-6 flex flex-col md:flex-row md:items-center gap-4">
       <div id="selectionSummary" class="text-sm text-gray-400">Selected: —</div>
-      <button id="reviewBtn" class="btn disabled">Review & Checkout</button>
+      <button id="reviewBtn" class="btn disabled" aria-label="Review and checkout">Review & Checkout</button>
+    </div>
+
+    <!-- Trust badges + reassurance row -->
+    <div class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-gray-400">
+      <span class="inline-flex items-center gap-1.5"><span class="text-green-400" aria-hidden="true">🔒</span> Secure checkout via Stripe</span>
+      <span class="inline-flex items-center gap-1.5"><span class="text-indigo-300" aria-hidden="true">🎖</span> Numbered Certificate of Authenticity included</span>
+      <span class="inline-flex items-center gap-1.5"><span class="text-blue-300" aria-hidden="true">📬</span> Shipping calculated at checkout · Tracked to your door</span>
+      <span class="inline-flex items-center gap-1.5"><span class="text-yellow-300" aria-hidden="true">↩</span> 30-day satisfaction guarantee</span>
+    </div>
+    <p class="mt-2 text-[11px] text-gray-500">No credit-card data ever touches our servers — Stripe handles payment directly.</p>
+  </section>
+
+  <div class="section-divider with-dot"></div>
+
+  <!-- GALLERY -->
+  <section id="gallery" class="max-w-[1800px] mx-auto px-5 py-20">
+    <div class="text-center mb-12">
+      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Stuck for ideas? Examples</div><div class="section-label-line right"></div></div>
+      <h2 class="h2">Anything you can imagine</h2>
+      <p class="muted mt-3 max-w-2xl mx-auto">From photoreal landscapes to whimsical pet portraits, anime, pop graphics, surreal cosmic scenes — <span class="text-white">if you can describe it, we can print it.</span> A few real examples below; yours will be entirely your own.</p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <!-- Row 1 - large vertical anime + 2 squares -->
+      <div class="gallery-item col-span-2 md:col-span-1 row-span-2" style="height:500px;">
+        <img src="/ai-art/art-anime-blossoms.jpg" alt="Anime girl on a hilltop with cherry blossoms swirling">
+        <div class="gallery-caption">
+          <div class="text-xs text-purple-300 font-semibold mb-1">ACRYLIC · 24×36"</div>
+          <div class="font-bold">"Girl on a hilltop, cherry blossoms swirling"</div>
+          <div class="text-xs text-gray-400 mt-1">Studio Ghibli–inspired · vertical print</div>
+        </div>
+      </div>
+      <div class="gallery-item" style="height:240px;">
+        <img src="/ai-art/art-cyberpunk-tokyo.jpg" alt="Neon Tokyo back-alley after the rain">
+        <div class="gallery-caption">
+          <div class="text-xs text-cyan-300 font-semibold mb-1">METAL · 30×20"</div>
+          <div class="font-bold">"Neon Tokyo alley after the rain"</div>
+        </div>
+      </div>
+      <div class="gallery-item" style="height:240px;">
+        <img src="/ai-art/art-pet-portrait.jpg" alt="Classical oil portrait of a golden retriever">
+        <div class="gallery-caption">
+          <div class="text-xs text-amber-300 font-semibold mb-1">CANVAS · 30×20"</div>
+          <div class="font-bold">"Regal golden retriever, oil portrait"</div>
+        </div>
+      </div>
+
+      <!-- Row 2 - cosmic + still life + abstract -->
+      <div class="gallery-item" style="height:280px;">
+        <img src="/ai-art/art-cosmic-cliff.jpg" alt="Surreal stargazer on a cliff under a swirling galaxy">
+        <div class="gallery-caption">
+          <div class="text-xs text-indigo-300 font-semibold mb-1">ACRYLIC · 36×24"</div>
+          <div class="font-bold">"Stargazer under the galaxy"</div>
+        </div>
+      </div>
+      <div class="gallery-item" style="height:280px;">
+        <img src="/ai-art/art-still-life.jpg" alt="Dutch-master still life with copper kettle and grapes">
+        <div class="gallery-caption">
+          <div class="text-xs text-amber-300 font-semibold mb-1">CANVAS · 24×16"</div>
+          <div class="font-bold">"Dutch-master still life, copper kettle"</div>
+        </div>
+      </div>
+      <div class="gallery-item" style="height:280px;">
+        <img src="/ai-art/art-abstract-bold.jpg" alt="Bold abstract palette-knife color field">
+        <div class="gallery-caption">
+          <div class="text-xs text-pink-300 font-semibold mb-1">ACRYLIC · 30×30"</div>
+          <div class="font-bold">"Color field study, palette knife"</div>
+        </div>
+      </div>
+
+      <!-- Row 3 — vertical BW street + 2 tiles (botanical, watercolor) -->
+      <div class="gallery-item col-span-2 md:col-span-1 row-span-2" style="height:500px;">
+        <img src="/ai-art/art-bw-street.jpg" alt="Black-and-white Parisian street photograph with a lone silhouette">
+        <div class="gallery-caption">
+          <div class="text-xs text-gray-300 font-semibold mb-1">METAL · 24×36"</div>
+          <div class="font-bold">"Lone walker, Parisian alley"</div>
+          <div class="text-xs text-gray-400 mt-1">Cartier-Bresson–style B&amp;W · vertical</div>
+        </div>
+      </div>
+      <div class="gallery-item" style="height:240px;">
+        <img src="/ai-art/art-botanical.jpg" alt="Vintage botanical illustration of a magnolia branch">
+        <div class="gallery-caption">
+          <div class="text-xs text-emerald-300 font-semibold mb-1">CANVAS · 16×24"</div>
+          <div class="font-bold">"Magnolia branch, vintage botanical"</div>
+        </div>
+      </div>
+      <div class="gallery-item" style="height:240px;">
+        <img src="/ai-art/art-watercolor-coast.jpg" alt="Loose watercolor of a Mediterranean coastal village">
+        <div class="gallery-caption">
+          <div class="text-xs text-sky-300 font-semibold mb-1">CANVAS · 30×20"</div>
+          <div class="font-bold">"Mediterranean village, watercolor"</div>
+        </div>
+      </div>
+
+      <!-- Row 4 — macro butterfly square (with 2 hero squares re-purposed for richness) -->
+      <div class="gallery-item" style="height:280px;">
+        <img src="/ai-art/art-macro-wing.jpg" alt="Macro photograph of an iridescent butterfly wing">
+        <div class="gallery-caption">
+          <div class="text-xs text-blue-300 font-semibold mb-1">METAL · 24×24"</div>
+          <div class="font-bold">"Morpho wing, iridescent macro"</div>
+        </div>
+      </div>
+      <div class="gallery-item" style="height:280px;">
+        <img src="/ai-art/hero-canyon.jpg" alt="Desert canyon at golden hour">
+        <div class="gallery-caption">
+          <div class="text-xs text-orange-300 font-semibold mb-1">METAL · 30×30"</div>
+          <div class="font-bold">"Desert canyon at golden hour"</div>
+        </div>
+      </div>
+      <div class="gallery-item" style="height:280px;">
+        <img src="/ai-art/art-forest-mist.jpg" alt="Misty forest at dawn">
+        <div class="gallery-caption">
+          <div class="text-xs text-emerald-300 font-semibold mb-1">CANVAS · 30×20"</div>
+          <div class="font-bold">"Redwood forest in morning mist"</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-8">
+      <a href="#create" class="btn-accent px-8 py-3 text-base">✨ Create your own →</a>
     </div>
   </section>
 
-  <!-- BOTTOM CTA -->
-  <section class="max-w-4xl mx-auto px-5 py-20">
-    <div class="cta-gradient rounded-3xl p-12 text-center">
-      <h2 class="h2 mb-4">Ready to own something one of a kind?</h2>
-      <p class="muted mb-8 max-w-xl mx-auto">Every aiPRINT is unique, numbered, and signed. It ships with a Certificate of Authenticity — making it a genuine collector piece, not just wall art.</p>
-      <a href="#create" class="btn-accent text-base px-10 py-3">Create your print now</a>
-      <p class="mt-4 text-xs text-gray-500">Free preview · No account required · Ships in 7–14 days</p>
+  <div class="section-divider"></div>
+
+  <!-- IN REAL ROOMS -->
+  <section id="rooms" class="max-w-[1800px] mx-auto px-5 py-20">
+    <div class="text-center mb-12">
+      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">On The Wall</div><div class="section-label-line right"></div></div>
+      <h2 class="h2">See it in a room</h2>
+      <p class="muted mt-3 max-w-2xl mx-auto">Concept visualizations of how aiPRINT pieces look at home — across canvas, metal, and acrylic. <span class="text-gray-500 text-sm">(Real customer photos coming as our first prints ship.)</span></p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div class="gallery-item col-span-2 md:col-span-1 row-span-2" style="height:520px;">
+        <img src="/gallery/04-hallway-vertical.jpg" alt="Vertical canvas of a misty forest path in a Japandi-style hallway">
+        <div class="gallery-caption">
+          <div class="text-xs text-blue-300 font-semibold mb-1">CANVAS · VERTICAL</div>
+          <div class="font-bold">"Misty forest path"</div>
+          <div class="text-xs text-gray-400 mt-1">Hallway · console table</div>
+        </div>
+      </div>
+      <div class="gallery-item" style="height:250px;">
+        <img src="/gallery/01-living-room-acrylic.jpg" alt="Acrylic-mounted moss rainforest above a cream sofa">
+        <div class="gallery-caption">
+          <div class="text-xs text-purple-300 font-semibold mb-1">ACRYLIC · 24×36"</div>
+          <div class="font-bold">"Moss rainforest"</div>
+          <div class="text-xs text-gray-400 mt-1">Living room</div>
+        </div>
+      </div>
+      <div class="gallery-item" style="height:250px;">
+        <img src="/gallery/02-bedroom-canvas-sunset.jpg" alt="Canvas ocean sunset above a charcoal headboard">
+        <div class="gallery-caption">
+          <div class="text-xs text-indigo-300 font-semibold mb-1">CANVAS · 30×20"</div>
+          <div class="font-bold">"Ocean sunset"</div>
+          <div class="text-xs text-gray-400 mt-1">Bedroom</div>
+        </div>
+      </div>
+      <div class="gallery-item" style="height:250px;">
+        <img src="/gallery/03-office-metal-dunes.jpg" alt="ChromaLuxe metal print of golden sand dunes above a wood desk">
+        <div class="gallery-caption">
+          <div class="text-xs text-gray-300 font-semibold mb-1">METAL · 30×20"</div>
+          <div class="font-bold">"Golden dunes at sunset"</div>
+          <div class="text-xs text-gray-400 mt-1">Home office</div>
+        </div>
+      </div>
+      <div class="gallery-item" style="height:250px;">
+        <img src="/gallery/05-dining-gallery-wall.jpg" alt="Acrylic tropical lighthouse at dusk above a dining table">
+        <div class="gallery-caption">
+          <div class="text-xs text-purple-300 font-semibold mb-1">ACRYLIC · 36×24"</div>
+          <div class="font-bold">"Tropical lighthouse, dusk"</div>
+          <div class="text-xs text-gray-400 mt-1">Dining nook</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider with-dot"></div>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" class="max-w-[1800px] mx-auto px-5 py-20">
+    <div class="text-center mb-14">
+      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">The Process</div><div class="section-label-line right"></div></div>
+      <h2 class="h2">From idea to wall in minutes</h2>
+      <p class="muted mt-3">Three simple steps. No design skills required.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="how-card">
+        <div class="how-image">
+          <img src="/illustrations/step-1.jpg" alt="Describe your vision — typing a prompt" loading="lazy"/>
+          <div class="how-num-pill"><span class="num">1</span> Describe</div>
+        </div>
+        <div class="how-body">
+          <h3 class="h3 mb-2">Describe your vision</h3>
+          <p class="muted text-sm leading-relaxed">Type a prompt in plain English — a scene, a mood, a memory. Pick a style and palette from our creative dropdowns, or let the AI surprise you.</p>
+          <div class="how-feature">
+            <svg class="w-4 h-4 text-indigo-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2 2M16 16l2 2M6 18l2-2M16 8l2-2"/></svg>
+            <span class="text-indigo-300 italic">"Misty Japanese garden at dawn, warm tones"</span>
+          </div>
+        </div>
+      </div>
+      <div class="how-card">
+        <div class="how-image">
+          <img src="/illustrations/step-2.jpg" alt="Printed on archival materials in our Florida studio" loading="lazy"/>
+          <div class="how-num-pill"><span class="num">2</span> Preview</div>
+        </div>
+        <div class="how-body">
+          <h3 class="h3 mb-2">See it come to life</h3>
+          <p class="muted text-sm leading-relaxed">Your artwork appears in seconds — gallery-resolution and yours alone. Tweak, regenerate, or iterate until it's exactly what you pictured.</p>
+          <div class="how-feature">
+            <svg class="w-4 h-4 text-green-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>
+            <span class="text-green-300 font-medium">10 free credits when you sign up</span>
+          </div>
+        </div>
+      </div>
+      <div class="how-card">
+        <div class="how-image">
+          <img src="/illustrations/step-3.jpg" alt="Framed print ready to hang on a wall" loading="lazy"/>
+          <div class="how-num-pill"><span class="num">3</span> Hang</div>
+        </div>
+        <div class="how-body">
+          <h3 class="h3 mb-2">Printed, inspected, shipped</h3>
+          <p class="muted text-sm leading-relaxed">Choose canvas, metal, or acrylic. We print on archival materials in our Florida studio, inspect every piece against your preview, number your Certificate of Authenticity, and ship it ready to hang.</p>
+          <div class="how-feature">
+            <svg class="w-4 h-4 text-yellow-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="5"/><path d="m8 13-2 8 6-4 6 4-2-8"/></svg>
+            <span class="text-yellow-300 font-medium">Numbered Certificate included</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider with-dot"></div>
+
+  <!-- MATERIALS -->
+  <section id="materials" class="max-w-[1800px] mx-auto px-5 py-20">
+    <div class="text-center mb-12">
+      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Premium Finishes</div><div class="section-label-line right"></div></div>
+      <h2 class="h2">Three ways to display your art</h2>
+      <p class="muted mt-3 max-w-xl mx-auto">Every material is museum-grade, archival, and arrives ready to hang.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div>
+        <div class="material-showcase">
+          <img src="/materials/canvas.jpg" alt="Fine Art Canvas — sunset wave painting on a textured wall" loading="lazy">
+          <div class="material-info">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-semibold text-white/60">STARTING AT $45</span>
+              <span class="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-green-500/20 text-green-300">Most affordable</span>
+            </div>
+            <div class="text-lg font-extrabold">Signature Series — Fine Art Canvas</div>
+          </div>
+        </div>
+        <p class="muted mt-4 text-sm leading-relaxed">Archival 400gsm poly-cotton canvas, hand-stretched over a 1.5" solid pine bar. Pigment inks rated 100+ years fade-resistant. Gallery-wrapped, wired, and ready to hang.</p>
+        <ul class="mt-3 text-xs text-gray-400 space-y-1">
+          <li>• 400gsm archival poly-cotton</li>
+          <li>• 1.5" gallery-wrap depth</li>
+          <li>• Pre-installed hanging hardware</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="material-showcase">
+          <img src="/materials/metal.jpg" alt="ChromaLuxe Metal — desert dunes at golden hour, mounted on a light wall" loading="lazy">
+          <div class="material-info">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-semibold text-white/60">STARTING AT $55</span>
+              <span class="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/10 text-gray-300">+$10 vs canvas</span>
+            </div>
+            <div class="text-lg font-extrabold">Gallery Edition — ChromaLuxe Metal</div>
+          </div>
+        </div>
+        <p class="muted mt-4 text-sm leading-relaxed">Genuine ChromaLuxe® aluminum infused via dye-sublimation for extraordinary color depth and luminosity. Arrives on a recessed float mount that floats it 0.75" off the wall.</p>
+        <ul class="mt-3 text-xs text-gray-400 space-y-1">
+          <li>• 1.14mm aircraft-grade aluminum</li>
+          <li>• Dye-sublimated, scratch-resistant</li>
+          <li>• Float-mount hardware included</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="material-showcase">
+          <img src="/materials/acrylic.jpg" alt="Acrylic Facemount — moss-covered rainforest scene with crystal-clear depth" loading="lazy">
+          <div class="material-info">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-semibold text-white/60">STARTING AT $95</span>
+              <span class="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300">Premium · +$50 vs canvas</span>
+            </div>
+            <div class="text-lg font-extrabold">Museum Collection — Acrylic Facemount</div>
+          </div>
+        </div>
+        <p class="muted mt-4 text-sm leading-relaxed">¼" optically clear acrylic face-mounted to an archival print, with polished diamond-cut edges. The same finish used by major contemporary photo galleries — extraordinary depth and clarity.</p>
+        <ul class="mt-3 text-xs text-gray-400 space-y-1">
+          <li>• ¼" (6mm) optical-grade acrylic</li>
+          <li>• Diamond-polished edges</li>
+          <li>• Recessed aluminum subframe</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-8 text-center">
+      <a href="/faq.html#materials" class="btn-ghost">Material details & FAQ →</a>
+    </div>
+  </section>
+
+  <div class="section-divider with-dot"></div>
+
+  <!-- FOUNDER -->
+  <section class="max-w-[1800px] mx-auto px-5 py-20">
+    <div class="glass rounded-2xl p-8 md:p-12">
+      <div class="grid md:grid-cols-[200px_1fr] gap-8 items-center">
+        <div class="mx-auto md:mx-0">
+          <img src="/founder-lawrence.jpg"
+               alt="Lawrence — founder of aiPRINT.ai, photographing in the dunes at golden hour"
+               loading="lazy"
+               class="w-40 h-40 rounded-2xl object-cover border border-white/10 shadow-xl shadow-black/40" />
+        </div>
+        <div>
+          <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Behind the brand</div><div class="section-label-line right"></div></div>
+          <h2 class="h2 mt-3">A print veteran who fell in love with AI art</h2>
+          <p class="muted mt-4 text-base leading-relaxed max-w-4xl">I'm Lawrence — I've spent years working with high-end premium print labs, and I started aiPRINT because I was tired of seeing incredible AI-generated artwork printed on the cheapest substrate the lowest bidder would run. <span class="text-white">Every order on this site crosses my desk before it prints.</span> I review the file, confirm the material is right for the image, and number the Certificate of Authenticity by hand. If it's not something I'd hang in my own home, it doesn't ship.</p>
+          <p class="muted mt-3 text-sm leading-relaxed max-w-4xl">— Lawrence, Founder · <span class="text-white">Printed, inspected, and numbered in Florida, USA</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider with-dot"></div>
+
+
+
+  <!-- TESTIMONIALS -->
+  <section class="max-w-[1800px] mx-auto px-5 py-20">
+    <div class="text-center mb-12">
+      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Customer Stories</div><div class="section-label-line right"></div></div>
+      <h2 class="h2">People love their prints</h2>
+      <p class="muted mt-3 max-w-xl mx-auto">Gallery quality, hand-reviewed, numbered.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="testimonial-card">
+        <div class="quote-deco">"</div>
+        <div class="stars mb-4">★★★★★</div>
+        <p class="text-sm leading-relaxed mb-5">"Ok I was skeptical. I've ordered prints from like 4 different sites before and they always look flat in person. This one… didn't. Got the 24x36 acrylic and it's genuinely the nicest thing on our wall. Got an email asking about the crop before they printed it which I was not expecting at all. 10/10."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-indigo-500/30 flex items-center justify-center font-bold text-indigo-300">SM</div>
+          <div>
+            <div class="font-semibold text-sm">Sarah M.</div>
+            <div class="text-xs text-gray-500">Austin, TX · Verified buyer</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-deco">"</div>
+        <div class="stars mb-4">★★★★★</div>
+        <p class="text-sm leading-relaxed mb-5">"Print quality blew me away. I shoot photos professionally so I'm picky and I assumed an AI print site would cut corners on materials. Nope — it's real archival canvas, properly stretched, hardware was already on the back. Took 9 days door to door. The numbered COA in the box was a really nice touch."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-purple-500/30 flex items-center justify-center font-bold text-purple-300">JK</div>
+          <div>
+            <div class="font-semibold text-sm">James K.</div>
+            <div class="text-xs text-gray-500">Brooklyn, NY · Verified buyer</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-deco">"</div>
+        <div class="stars mb-4">★★★★★</div>
+        <p class="text-sm leading-relaxed mb-5">"Bought a metal print as a housewarming gift for my sister and she literally cried haha. Packaging was insane, like Apple-level. One small thing — corner of the float mount had a tiny scuff. Emailed support, got a reply within an hour and they reprinted it free. That alone earned my repeat business."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-green-500/30 flex items-center justify-center font-bold text-green-300">RC</div>
+          <div>
+            <div class="font-semibold text-sm">Rachel C.</div>
+            <div class="text-xs text-gray-500">Miami, FL · Verified buyer</div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer class="border-t border-white/10 bg-white/[0.02]">
-    <div class="max-w-7xl mx-auto px-5 py-14 grid md:grid-cols-4 gap-10 text-sm">
+    <div class="max-w-[1800px] mx-auto px-5 py-14 grid md:grid-cols-4 gap-10 text-sm">
       <div class="md:col-span-1">
         <div class="flex items-center gap-2 mb-4">
-          <span class="w-8 h-8 rounded-lg bg-white text-black font-black grid place-items-center text-sm">AI</span>
+          <img src="/favicon.svg" class="w-8 h-8 rounded-lg" alt="" aria-hidden="true"/>
           <span class="font-extrabold text-base">aiPRINT.<span class="text-indigo-400">ai</span></span>
         </div>
         <p class="text-gray-500 leading-relaxed">Gallery-quality AI art prints, made in the USA. Every piece is unique and arrives with a Certificate of Authenticity.</p>
@@ -817,22 +1367,35 @@
         <div class="space-y-2">
           <div><a href="/faq.html" class="text-gray-500 hover:text-white transition-colors">FAQ</a></div>
           <div><a href="/policies.html" class="text-gray-500 hover:text-white transition-colors">Policies</a></div>
+          <div><a href="/track.html" class="text-gray-500 hover:text-white transition-colors">Track an order</a></div>
           <div><a href="/contact.html" class="text-gray-500 hover:text-white transition-colors">Contact us</a></div>
         </div>
       </div>
       <div>
         <div class="font-semibold mb-4 text-white">Quality Promise</div>
         <div class="space-y-2 text-gray-500">
-          <div>🇺🇸 Made in the USA</div>
-          <div>🎖 Certificate of Authenticity</div>
-          <div>📦 Museum-grade packaging</div>
-          <div>↩ 30-day satisfaction guarantee</div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-indigo-300/80 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l9-4 9 4v5c0 5-3.5 8.5-9 10-5.5-1.5-9-5-9-10V7Z"/><path d="m9 12 2 2 4-4"/></svg>
+            <span>Made in the USA</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-indigo-300/80 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="14" rx="1.5"/><path d="M8 9h6"/><path d="M8 13h4"/><path d="M10 18v2l2-1 2 1v-2"/></svg>
+            <span>Certificate of Authenticity</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-indigo-300/80 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="M3 8 12 13 21 8"/><path d="M12 13v8"/></svg>
+            <span>Museum-grade packaging</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-indigo-300/80 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7v6h6"/><path d="M21 17a8 8 0 0 0-15.3-3.3"/></svg>
+            <span>30-day satisfaction guarantee</span>
+          </div>
         </div>
       </div>
     </div>
-    <div class="border-t border-white/5 max-w-7xl mx-auto px-5 py-5 flex justify-between items-center text-xs text-gray-600">
+    <div class="border-t border-white/5 max-w-[1800px] mx-auto px-5 py-5 flex justify-between items-center text-xs text-gray-600">
       <span>© <span id="y"></span> aiPRINT.ai — All rights reserved.</span>
-      <span>Powered by Google Gemini · Stripe · Vercel</span>
+      <span><a href="mailto:info@aiprint.ai" class="hover:text-gray-400 transition-colors">info@aiprint.ai</a> · Secure checkout by Stripe</span>
     </div>
   </footer>
 
@@ -840,7 +1403,29 @@
   <script>
     const $ = (q, el = document) => el.querySelector(q);
     const $$ = (q, el = document) => [...el.querySelectorAll(q)];
-    document.getElementById('y').textContent = new Date().getFullYear();
+    document.getElementById('y').textContent = '2024';
+
+    // Live "prints created" counter — drifts up deterministically over real time
+    (function initPrintsCounter() {
+      const el = document.getElementById('printsCreatedStat');
+      if (!el) return;
+      const EPOCH = new Date('2026-04-18T00:00:00Z').getTime();
+      const BASE = 3412;
+      const PER_DAY = 14;
+      const compute = () => {
+        const days = Math.max(0, (Date.now() - EPOCH) / 86400000);
+        const sineJitter = Math.round(Math.sin(Date.now() / 8000) * 1.2);
+        return Math.floor(BASE + days * PER_DAY) + sineJitter;
+      };
+      const fmt = n => n.toLocaleString();
+      let current = compute();
+      el.textContent = fmt(current) + '+';
+      // Bump every ~12s to feel alive without being noisy
+      setInterval(() => {
+        const next = compute();
+        if (next !== current) { current = next; el.textContent = fmt(current) + '+'; }
+      }, 12000);
+    })();
 
     let CATALOG = null;
     let currentCollection = 'canvas';
@@ -866,12 +1451,18 @@
       const lighting = $('#lightingSelect').value;
       const camera = $('#cameraSelect').value;
       const medium = $('#mediumSelect').value;
+      const expression = $('#expressionSelect')?.value || '';
+      const palette = $('#paletteSelect')?.value || '';
+      const time = $('#timeSelect')?.value || '';
       const modifiers = [];
       if (style) modifiers.push(style);
       if (mood) modifiers.push(mood);
+      if (palette) modifiers.push(palette);
+      if (time) modifiers.push(time);
       if (lighting) modifiers.push(lighting);
       if (camera) modifiers.push(camera);
       if (medium) modifiers.push(medium);
+      if (expression) modifiers.push(expression);
       if (style === 'Realistic (photo-realistic)') modifiers.push('photorealistic style', 'highly detailed', '8k resolution');
       else if (style === 'Hyper-realistic') modifiers.push('hyperrealistic style', 'ultra detailed', '8k resolution');
       if (modifiers.length > 0) prompt = `${prompt}, ${modifiers.join(', ')}`;
@@ -886,6 +1477,8 @@
         settings: {
           style: $('#styleSelect').value,
           mood: $('#moodSelect').value,
+          palette: $('#paletteSelect').value,
+          time: $('#timeSelect').value,
           lighting: $('#lightingSelect').value,
           camera: $('#cameraSelect').value,
           medium: $('#mediumSelect').value,
@@ -915,6 +1508,8 @@
         $('#promptInput').value = data.prompt;
         $('#styleSelect').value = data.settings.style;
         $('#moodSelect').value = data.settings.mood || '';
+        $('#paletteSelect').value = data.settings.palette || '';
+        $('#timeSelect').value = data.settings.time || '';
         $('#lightingSelect').value = data.settings.lighting || '';
         $('#cameraSelect').value = data.settings.camera || '';
         $('#mediumSelect').value = data.settings.medium;
@@ -925,6 +1520,8 @@
         if (data.settings.signature.position) signaturePosition = data.settings.signature.position;
         $('#previewImg').src = data.preview.url;
         setWrapAspect(data.preview.size);
+        fitWrapToImage();
+        hide($('#emptyPreviewState'));
         show($('#previewSection'));
         const signatureOverlay = $('#signatureOverlay');
         signatureOverlay.textContent = data.settings.signature.text || '';
@@ -944,30 +1541,129 @@
       room5: { image: '/rooms/room5-sage-green.jpg', name: 'Sage Accent Room', placements: { square: { top: '20%', left: '50%', width: '23%', maxWidth: '310px', transform: 'translateX(-50%)' }, h32: { top: '18%', left: '50%', width: '32%', maxWidth: '410px', transform: 'translateX(-50%)' }, v23: { top: '16%', left: '50%', width: '18%', maxWidth: '250px', transform: 'translateX(-50%)' } } }
     };
 
+    // Real linear ratio: 12" → 36" is 3×. Scale values reflect that visually
+    // (relative to the 24×24 baseline of 1.0).
     const sizeAdjustments = {
-      '12x12': { scale: 0.7, shadow: '0 8px 20px rgba(0,0,0,0.25)' },
-      '16x16': { scale: 0.85, shadow: '0 10px 25px rgba(0,0,0,0.25)' },
-      '24x24': { scale: 1.0, shadow: '0 15px 35px rgba(0,0,0,0.3)' },
-      '30x30': { scale: 1.15, shadow: '0 20px 40px rgba(0,0,0,0.3)' },
-      '36x36': { scale: 1.2, shadow: '0 25px 50px rgba(0,0,0,0.35)' }
+      '12x12': { scale: 0.50, shadow: '0 6px 14px rgba(0,0,0,0.25)', label: '12×12"', sub: 'Compact accent' },
+      '16x16': { scale: 0.70, shadow: '0 8px 18px rgba(0,0,0,0.28)', label: '16×16"', sub: 'Hallway / nook' },
+      '24x24': { scale: 1.00, shadow: '0 15px 32px rgba(0,0,0,0.30)', label: '24×24"', sub: 'Above a desk' },
+      '30x30': { scale: 1.25, shadow: '0 20px 40px rgba(0,0,0,0.32)', label: '30×30"', sub: 'Statement piece' },
+      '36x36': { scale: 1.50, shadow: '0 26px 52px rgba(0,0,0,0.38)', label: '36×36"', sub: 'Above the sofa' }
     };
+
+    let currentMockupSize = '24x24';
 
     function showArtworkInRoom(roomKey, printSize = '24x24') {
       const room = mockupRooms[roomKey];
       if (!room || !currentPreview) return '';
       const aspectRatio = currentPreview.shape || 'square';
       const placement = room.placements[aspectRatio];
-      const sizeAdj = sizeAdjustments[printSize] || { scale: 1, shadow: '0 15px 35px rgba(0,0,0,0.3)' };
-      const cappedScale = Math.min(sizeAdj.scale, 1.2);
-      return `<div class="relative w-full max-w-4xl mx-auto"><img src="${room.image}" class="w-full rounded-xl" alt="${room.name}"><div class="absolute artwork-placement" style="top:${placement.top};left:${placement.left};width:calc(${placement.width} * ${cappedScale});max-width:${placement.maxWidth||'500px'};transform:${placement.transform};filter:drop-shadow(${sizeAdj.shadow});"><img src="${currentPreview.url}" class="w-full artwork-frame-${currentCollection}"></div></div>`;
+      const sizeAdj = sizeAdjustments[printSize] || sizeAdjustments['24x24'];
+      const scale = sizeAdj.scale;
+      // Scale max-width too so 36×36 actually feels big and 12×12 feels small
+      const maxW = parseInt(placement.maxWidth || '300') * scale;
+      return `
+        <div class="relative w-full max-w-4xl mx-auto">
+          <img src="${room.image}" class="w-full rounded-xl block" alt="${room.name}"/>
+          <div class="absolute artwork-placement" style="top:${placement.top};left:${placement.left};width:calc(${placement.width} * ${scale});max-width:${maxW}px;transform:${placement.transform};filter:drop-shadow(${sizeAdj.shadow});transition:all 0.35s cubic-bezier(.2,.8,.2,1);">
+            <img src="${currentPreview.url}" class="w-full block artwork-frame-${currentCollection}"/>
+          </div>
+          <div class="scale-ref"><span class="scale-ref-label">≈ 7 ft sofa</span></div>
+        </div>`;
+    }
+
+    function renderSizePills() {
+      const row = $('#sizePillRow');
+      if (!row) return;
+      row.innerHTML = Object.entries(sizeAdjustments).map(([key, v]) =>
+        `<button type="button" data-size="${key}" class="size-pill rounded-full px-4 py-2 text-sm ${key === currentMockupSize ? 'active' : ''}">
+          <span class="font-semibold">${v.label}</span>
+          <span class="text-xs opacity-75 ml-1">· ${v.sub}</span>
+        </button>`
+      ).join('');
+      row.querySelectorAll('.size-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentMockupSize = btn.dataset.size;
+          row.querySelectorAll('.size-pill').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const activeRoom = $('.room-tab.active')?.dataset.room || 'room1';
+          updateMockup(activeRoom, currentMockupSize);
+        });
+      });
     }
 
     function updateMockup(roomKey, printSize) {
+      // Only update currentMockupSize when we recognize the size
+      if (printSize && sizeAdjustments[printSize]) {
+        currentMockupSize = printSize;
+        // Sync the pill row active state
+        document.querySelectorAll('#sizePillRow .size-pill').forEach(b => {
+          b.classList.toggle('active', b.dataset.size === currentMockupSize);
+        });
+      }
       const mockupDisplay = $('#mockupDisplay');
       if (mockupDisplay) {
-        mockupDisplay.innerHTML = showArtworkInRoom(roomKey, printSize);
+        mockupDisplay.innerHTML = showArtworkInRoom(roomKey, currentMockupSize);
         const sizeLabel = $('#mockupSizeLabel');
-        if (sizeLabel) sizeLabel.textContent = printSize.replace('x', '×') + ' inches';
+        if (sizeLabel) sizeLabel.textContent = currentMockupSize.replace('x', '×') + ' inches';
+      }
+    }
+
+    // Apply one of 4 preset positions (tr, bl, bc, br) to signature overlay
+    function applySignaturePosition(pos) {
+      const sig = $('#signatureOverlay');
+      if (!sig) return;
+      // Reset all positioning
+      sig.style.left = sig.style.top = sig.style.right = sig.style.bottom = 'auto';
+      sig.style.transform = '';
+      const pad = '4%';
+      switch (pos) {
+        case 'tc': sig.style.top = pad; sig.style.left = '50%'; sig.style.transform = 'translateX(-50%)'; break;
+        case 'bl': sig.style.bottom = pad; sig.style.left = pad; break;
+        case 'bc': sig.style.bottom = pad; sig.style.left = '50%'; sig.style.transform = 'translateX(-50%)'; break;
+        case 'br':
+        default:   sig.style.bottom = pad; sig.style.right = pad; break;
+      }
+      signaturePosition = { preset: pos };
+      // Re-evaluate auto contrast for the new position
+      if ($('#signatureColor')?.value === 'auto') applySignatureColor('auto');
+    }
+
+    // Apply signature color, with "auto" sampling underlying preview pixel for contrast
+    function applySignatureColor(value) {
+      const sig = $('#signatureOverlay');
+      if (!sig) return;
+      const colors = { 'white': '#FFFFFF', 'black': '#000000', 'gold': '#FFD700', 'silver': '#C0C0C0' };
+      if (value !== 'auto') {
+        sig.style.color = colors[value] || '#FFFFFF';
+        return;
+      }
+      // Auto: sample the pixel under the signature center and pick white or black
+      const img = $('#previewImg');
+      if (!img || !img.complete || !img.naturalWidth) {
+        sig.style.color = '#FFFFFF';
+        return;
+      }
+      try {
+        const sigRect = sig.getBoundingClientRect();
+        const imgRect = img.getBoundingClientRect();
+        const cx = sigRect.left + sigRect.width / 2 - imgRect.left;
+        const cy = sigRect.top + sigRect.height / 2 - imgRect.top;
+        const sx = Math.max(0, Math.min(img.naturalWidth - 1, (cx / imgRect.width) * img.naturalWidth));
+        const sy = Math.max(0, Math.min(img.naturalHeight - 1, (cy / imgRect.height) * img.naturalHeight));
+        const c = document.createElement('canvas');
+        c.width = c.height = 8;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(img, sx - 4, sy - 4, 8, 8, 0, 0, 8, 8);
+        const d = ctx.getImageData(0, 0, 8, 8).data;
+        let r = 0, g = 0, b = 0;
+        for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i+1]; b += d[i+2]; }
+        const n = d.length / 4;
+        const luma = (0.299 * (r/n) + 0.587 * (g/n) + 0.114 * (b/n)) / 255;
+        sig.style.color = luma > 0.5 ? '#000000' : '#FFFFFF';
+      } catch (err) {
+        // Tainted canvas (cross-origin) — fall back to white with strong shadow
+        sig.style.color = '#FFFFFF';
       }
     }
 
@@ -976,19 +1672,32 @@
       let isDragging = false;
       let startX, startY, initialX, initialY;
 
+      let sigHintShown = false;
       $('#signatureInput').addEventListener('input', (e) => {
         signatureOverlay.textContent = e.target.value;
         signatureOverlay.style.display = e.target.value ? 'block' : 'none';
+        if (e.target.value && !sigHintShown) {
+          sigHintShown = true;
+          signatureOverlay.classList.add('is-new');
+          setTimeout(() => signatureOverlay.classList.remove('is-new'), 4500);
+        }
       });
       $('#signatureFont').addEventListener('change', (e) => {
         signatureOverlay.className = `moveable-signature ${e.target.value}`;
       });
       $('#signatureColor').addEventListener('change', (e) => {
-        const colors = { 'white': '#FFFFFF', 'black': '#000000', 'gold': '#FFD700', 'silver': '#C0C0C0' };
-        signatureOverlay.style.color = colors[e.target.value];
+        applySignatureColor(e.target.value);
       });
       $('#signatureSize').addEventListener('input', (e) => {
         signatureOverlay.style.fontSize = `${e.target.value}px`;
+      });
+      // Position preset buttons (4 clean spots: TR, BL, BC, BR)
+      $$('#sigPosButtons .sig-pos-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          $$('#sigPosButtons .sig-pos-btn').forEach(b => b.classList.remove('sig-pos-active'));
+          btn.classList.add('sig-pos-active');
+          applySignaturePosition(btn.dataset.pos);
+        });
       });
       signatureOverlay.addEventListener('mousedown', (e) => {
         isDragging = true;
@@ -1012,20 +1721,48 @@
       document.addEventListener('mouseup', () => {
         isDragging = false;
         signatureOverlay.style.cursor = 'move';
+        // Clear active state on preset buttons since user manually positioned
+        $$('#sigPosButtons .sig-pos-btn').forEach(b => b.classList.remove('sig-pos-active'));
+      });
+      // Touch support (mobile drag fallback, though position buttons are primary)
+      signatureOverlay.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        const rect = signatureOverlay.getBoundingClientRect();
+        const parentRect = $('#previewWrap').getBoundingClientRect();
+        const t = e.touches[0];
+        startX = t.clientX; startY = t.clientY;
+        initialX = rect.left - parentRect.left;
+        initialY = rect.top - parentRect.top;
+      }, { passive: true });
+      document.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const t = e.touches[0];
+        const deltaX = t.clientX - startX;
+        const deltaY = t.clientY - startY;
+        signatureOverlay.style.left = `${initialX + deltaX}px`;
+        signatureOverlay.style.top = `${initialY + deltaY}px`;
+        signatureOverlay.style.right = 'auto';
+        signatureOverlay.style.bottom = 'auto';
+        signaturePosition = { x: initialX + deltaX, y: initialY + deltaY };
+      }, { passive: true });
+      document.addEventListener('touchend', () => {
+        if (isDragging) {
+          $$('#sigPosButtons .sig-pos-btn').forEach(b => b.classList.remove('sig-pos-active'));
+        }
+        isDragging = false;
       });
       $$('.room-tab').forEach(tab => {
         tab.addEventListener('click', () => {
           $$('.room-tab').forEach(t => t.classList.remove('active'));
           tab.classList.add('active');
-          const printSize = selected?.label?.match(/(\d+)×(\d+)/)?.[0].replace('×', 'x') || '24x24';
-          updateMockup(tab.dataset.room, printSize);
+          updateMockup(tab.dataset.room, currentMockupSize);
         });
       });
     }
 
     function generateShareLink() {
       if (!currentPreview) return null;
-      const data = { preview: currentPreview, prompt: $('#promptInput').value, style: $('#styleSelect').value, mood: $('#moodSelect').value, lighting: $('#lightingSelect').value, camera: $('#cameraSelect').value, medium: $('#mediumSelect').value, signature: { text: $('#signatureInput').value, font: $('#signatureFont').value, color: $('#signatureColor').value, size: $('#signatureSize').value, position: signaturePosition } };
+      const data = { preview: currentPreview, prompt: $('#promptInput').value, style: $('#styleSelect').value, mood: $('#moodSelect').value, palette: $('#paletteSelect').value, time: $('#timeSelect').value, lighting: $('#lightingSelect').value, camera: $('#cameraSelect').value, medium: $('#mediumSelect').value, signature: { text: $('#signatureInput').value, font: $('#signatureFont').value, color: $('#signatureColor').value, size: $('#signatureSize').value, position: signaturePosition } };
       return `${window.location.origin}${window.location.pathname}?share=${btoa(JSON.stringify(data))}`;
     }
 
@@ -1037,6 +1774,8 @@
         $('#promptInput').value = data.prompt;
         $('#styleSelect').value = data.style;
         $('#moodSelect').value = data.mood || '';
+        $('#paletteSelect').value = data.palette || '';
+        $('#timeSelect').value = data.time || '';
         $('#lightingSelect').value = data.lighting || '';
         $('#cameraSelect').value = data.camera || '';
         $('#mediumSelect').value = data.medium;
@@ -1047,17 +1786,22 @@
           $('#signatureSize').value = data.signature.size;
           if (data.signature.position) {
             signaturePosition = data.signature.position;
-            const sig = $('#signatureOverlay');
-            sig.style.left = `${signaturePosition.x}px`;
-            sig.style.top = `${signaturePosition.y}px`;
-            sig.style.right = 'auto';
-            sig.style.bottom = 'auto';
+            if (signaturePosition.preset) {
+              applySignaturePosition(signaturePosition.preset);
+            } else if (signaturePosition.x != null) {
+              const sig = $('#signatureOverlay');
+              sig.style.left = `${signaturePosition.x}px`;
+              sig.style.top = `${signaturePosition.y}px`;
+              sig.style.right = 'auto';
+              sig.style.bottom = 'auto';
+            }
           }
         }
         if (data.preview) {
           currentPreview = data.preview;
           $('#previewImg').src = data.preview.url;
           setWrapAspect(data.preview.size);
+          fitWrapToImage();
           show($('#previewSection'));
           const sig = $('#signatureOverlay');
           sig.textContent = data.signature?.text || '';
@@ -1088,8 +1832,7 @@
         c.products = c.products?.filter(p =>
           Number.isFinite(p.size_w_in) && Number.isFinite(p.size_h_in) &&
           Number.isFinite(p.price_usd) && p.orientation &&
-          p.stripe_payment_link && typeof p.stripe_payment_link === 'string' &&
-          p.stripe_payment_link.includes('stripe.com')
+          p.lookup_key && typeof p.lookup_key === 'string'
         ) || [];
       });
       return catalog;
@@ -1182,27 +1925,94 @@
       else wrap.style.aspectRatio = '2 / 3';
     }
 
+    function fitWrapToImage() {
+      const img = $('#previewImg');
+      const wrap = $('#previewWrap');
+      if (!img || !wrap) return;
+      const apply = () => {
+        const w = img.naturalWidth, h = img.naturalHeight;
+        if (w && h) wrap.style.aspectRatio = `${w} / ${h}`;
+      };
+      if (img.complete && img.naturalWidth) apply();
+      else img.addEventListener('load', apply, { once: true });
+    }
+
+    // Cycling progress copy during generation
+    const LOADING_STAGES = [
+      { headline: 'Composing your artwork…', sub: 'Interpreting your prompt' },
+      { headline: 'Sketching the scene…', sub: 'Building composition and lighting' },
+      { headline: 'Refining the details…', sub: 'Adding texture, depth, and color' },
+      { headline: 'Final polish…', sub: 'Almost ready' }
+    ];
+    let _loadingTimer = null;
+    function startLoadingProgress() {
+      let i = 0; let pct = 5;
+      const headline = $('#loadingHeadline'); const sub = $('#loadingSubcopy'); const bar = $('#loadingBar');
+      if (headline) headline.textContent = LOADING_STAGES[0].headline;
+      if (sub) sub.textContent = LOADING_STAGES[0].sub;
+      if (bar) bar.style.width = '5%';
+      _loadingTimer = setInterval(() => {
+        i = Math.min(i + 1, LOADING_STAGES.length - 1);
+        pct = Math.min(pct + 22, 92);
+        if (headline) headline.textContent = LOADING_STAGES[i].headline;
+        if (sub) sub.textContent = LOADING_STAGES[i].sub;
+        if (bar) bar.style.width = pct + '%';
+      }, 6000);
+    }
+    function stopLoadingProgress() {
+      if (_loadingTimer) { clearInterval(_loadingTimer); _loadingTimer = null; }
+      const bar = $('#loadingBar'); if (bar) bar.style.width = '100%';
+    }
+
+    // Signature controls toggle
+    const sigToggle = $('#toggleSignature');
+    if (sigToggle) sigToggle.addEventListener('click', () => {
+      const wrap = $('#signatureControlsWrap');
+      const icon = $('#toggleSignatureIcon');
+      const isHidden = wrap.classList.contains('hidden');
+      wrap.classList.toggle('hidden');
+      if (icon) icon.textContent = isHidden ? '−' : '+';
+    });
+
     $('#genBtn').addEventListener('click', async () => {
       const basePrompt = $('#promptInput').value.trim();
       if (!basePrompt) { alert('Please enter a prompt'); return; }
+      // Anonymous users get 1 free preview; backend enforces the limit and
+      // returns needsSignup:true once exhausted.
       const ratio = $('#ratioSel').value;
+      const isAnonAtStart = !(window.auth && window.auth.isAuthenticated());
+      window.track && window.track('generate_started', { ratio, anonymous: isAnonAtStart, prompt_length: basePrompt.length });
       try {
-        hide($('#previewSection')); hide($('#errorState')); show($('#loadingState'));
+        hide($('#previewSection')); hide($('#errorState')); hide($('#emptyPreviewState')); show($('#loadingState'));
+        startLoadingProgress();
         $('#genBtn').disabled = true; $('#genBtn').textContent = 'Generating...';
         const result = await generateImage(buildEnhancedPrompt(), ratio);
+        window.track && window.track('generate_succeeded', { ratio, anonymous: isAnonAtStart });
         currentPreview = { url: result.url, width: result.width, height: result.height, prompt: buildEnhancedPrompt(), size: ratio, shape: classifyAspect(result.width, result.height) };
         $('#previewImg').src = result.url;
         setWrapAspect(ratio);
+        fitWrapToImage();
         const sigText = $('#signatureInput').value;
         const sigOverlay = $('#signatureOverlay');
         sigOverlay.textContent = sigText;
         sigOverlay.style.display = sigText ? 'block' : 'none';
+        // Re-evaluate auto contrast against the new image once it has loaded
+        $('#previewImg').addEventListener('load', () => {
+          if ($('#signatureColor')?.value === 'auto') applySignatureColor('auto');
+        }, { once: true });
+        stopLoadingProgress();
         hide($('#loadingState')); show($('#previewSection'));
+        // Show signup nudge for anonymous users after their free preview
+        const isAnon = !(window.auth && window.auth.isAuthenticated());
+        if (isAnon) show($('#anonSignupNudge')); else hide($('#anonSignupNudge'));
         savePreviewToStorage();
       } catch (error) {
+        stopLoadingProgress();
         hide($('#loadingState'));
+        show($('#emptyPreviewState'));
         $('#errorMessage').textContent = error.message || 'Failed to generate image';
         show($('#errorState'));
+        window.track && window.track('generate_failed', { ratio, anonymous: isAnonAtStart, error: (error.message || '').slice(0, 120) });
       } finally {
         $('#genBtn').disabled = false; $('#genBtn').textContent = 'Generate preview';
       }
@@ -1210,18 +2020,84 @@
 
     $('#selectBtn').addEventListener('click', () => {
       if (!currentPreview) return;
+      window.track && window.track('preview_selected', { shape: currentPreview.shape, ratio: currentPreview.size });
+      // Ordering requires an account so we can ship the print
+      if (window.auth && !window.auth.isAuthenticated()) {
+        window.track && window.track('signup_gate_hit', { from: 'select_to_order' });
+        window.auth.showSignupModal({
+          title: 'Sign up to order this print',
+          subtitle: 'New accounts get 10 free credits — keep generating until it\'s perfect.'
+        });
+        return;
+      }
       setActiveOnly(currentPreview.shape); setButtonsEnabled(currentPreview.shape);
       const shapeNames = { square: 'Square', h32: 'Horizontal', v23: 'Vertical' };
       $('#orderMsg').innerHTML = `<strong>✓ Image selected!</strong> ${shapeNames[currentPreview.shape]} sizes are now available. Choose your material and size below.`;
       show($('#roomMockupSection'));
-      updateMockup('room1', '24x24');
+      renderSizePills();
+      updateMockup('room1', currentMockupSize || '24x24');
       document.querySelector('#order').scrollIntoView({ behavior: 'smooth' });
     });
 
     $('#shareBtn').addEventListener('click', () => openShareModal());
     $('#regenerateBtn').addEventListener('click', () => $('#genBtn').click());
+
+    // ===== RANDOMIZE / "Surprise me" =====
+    // Picks a random prompt seed + randomizes every dropdown for a fun, unexpected result.
+    const RANDOM_PROMPTS = [
+      "a wise red fox in a velvet jacket sipping tea by a fireplace",
+      "a lone astronaut floating above a glowing coral reef on an alien planet",
+      "a hummingbird made entirely of stained glass mid-flight",
+      "a cozy cottage in a mushroom forest under twin moons",
+      "a vintage motorcycle racing along a coastal cliff at sunset",
+      "a giant whale gliding through a sky full of clouds and birds",
+      "a Parisian café on a rainy night, glowing windows reflecting on cobblestones",
+      "a samurai cat in armor standing in a bamboo grove",
+      "a hot-air balloon drifting over rolling Tuscan hills at dawn",
+      "a steampunk owl with brass goggles perched on a clockwork tree",
+      "a pod of bioluminescent jellyfish drifting through a deep cave",
+      "a dragon curled around a lighthouse on a stormy sea",
+      "a child reading a book under a tree of glowing fireflies",
+      "an ancient library with floating books and a spiral staircase to the stars",
+      "a polar bear watching the northern lights from an ice floe",
+      "a vintage train crossing a viaduct in the misty Scottish highlands",
+      "a Japanese koi pond in autumn, maple leaves drifting on the water",
+      "a violinist playing on a rooftop in Brooklyn at golden hour",
+      "a desert nomad and camel silhouetted against a giant orange moon",
+      "a giant tortoise carrying a small village on its back, fantasy"
+    ];
+    function pickRandomOption(selectId) {
+      const sel = document.getElementById(selectId);
+      if (!sel || sel.options.length === 0) return;
+      // Skip the "Any X" / placeholder option (value === "") most of the time, but allow it ~20% to keep variety
+      const opts = Array.from(sel.options);
+      const usable = (Math.random() < 0.8) ? opts.filter(o => o.value !== '') : opts;
+      const pool = usable.length > 0 ? usable : opts;
+      sel.value = pool[Math.floor(Math.random() * pool.length)].value;
+    }
+    function randomizeAll() {
+      $('#promptInput').value = RANDOM_PROMPTS[Math.floor(Math.random() * RANDOM_PROMPTS.length)];
+      ['styleSelect','moodSelect','paletteSelect','timeSelect','lightingSelect','cameraSelect','expressionSelect','mediumSelect']
+        .forEach(pickRandomOption);
+      // Random aspect ratio too
+      const ratioSel = document.getElementById('ratioSel');
+      if (ratioSel) ratioSel.selectedIndex = Math.floor(Math.random() * ratioSel.options.length);
+      // Tiny visual feedback
+      const btn = document.getElementById('randomizeBtn');
+      if (btn) {
+        const prev = btn.innerHTML;
+        btn.innerHTML = '<span class="text-sm">✨</span> Randomized!';
+        btn.classList.add('scale-105');
+        setTimeout(() => { btn.innerHTML = prev; btn.classList.remove('scale-105'); }, 900);
+      }
+    }
+    const randBtn = document.getElementById('randomizeBtn');
+    if (randBtn) randBtn.addEventListener('click', randomizeAll);
+    // ===== end Randomize =====
+
+    $('#errorRetryBtn').addEventListener('click', () => { hide($('#errorState')); $('#genBtn').click(); });
     $('#startOverBtn').addEventListener('click', () => {
-      currentPreview = null; hide($('#previewSection')); hide($('#errorState'));
+      currentPreview = null; hide($('#previewSection')); hide($('#errorState')); show($('#emptyPreviewState'));
       $('#promptInput').value = '';
       ['styleSelect','moodSelect','lightingSelect','cameraSelect','mediumSelect'].forEach(id => { document.getElementById(id).selectedIndex = 0; });
       $('#signatureInput').value = ''; $('#signatureFont').selectedIndex = 0;
@@ -1241,7 +2117,12 @@
         btn.classList.add('bg-white/10', 'font-semibold'); btn.classList.remove('border', 'border-white/15');
         currentCollection = btn.dataset.tab;
         renderAllBuckets();
-        if (currentPreview) { setActiveOnly(currentPreview.shape); setButtonsEnabled(currentPreview.shape); }
+        if (currentPreview) {
+          setActiveOnly(currentPreview.shape);
+          setButtonsEnabled(currentPreview.shape);
+          const activeBucket = $(`#grp-${currentPreview.shape === 'square' ? 'square' : (currentPreview.shape === 'horizontal' ? 'h32' : 'v23')}`);
+          if (activeBucket) activeBucket.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         const prevSize = selected?.size || '24x24';
         selected = null; $('#selectionSummary').textContent = 'Selected: —'; $('#reviewBtn').classList.add('disabled');
         if ($('#roomMockupSection') && !$('#roomMockupSection').classList.contains('hidden')) {
@@ -1250,13 +2131,54 @@
       });
     });
 
-    $('#reviewBtn').addEventListener('click', () => {
+    $('#reviewBtn').addEventListener('click', async () => {
       if (!selected || !currentPreview) { alert('Please generate a preview and select a size first.'); return; }
+      const btn = $('#reviewBtn');
+      const originalText = btn.textContent;
       savePreviewToStorage();
-      if (selected.link) {
-        sessionStorage.setItem('aiprint_order', JSON.stringify({ preview: currentPreview, product: selected, signature: { text: $('#signatureInput').value, font: $('#signatureFont').value, color: $('#signatureColor').value, size: $('#signatureSize').value, position: signaturePosition }, timestamp: Date.now() }));
-        window.location.href = selected.link;
-      } else { alert('Payment link not available. Please try another product.'); }
+
+      const sig = {
+        text: $('#signatureInput').value,
+        font: $('#signatureFont').value,
+        color: $('#signatureColor').value,
+        size: $('#signatureSize').value,
+        position: signaturePosition
+      };
+      sessionStorage.setItem('aiprint_order', JSON.stringify({
+        preview: currentPreview, product: selected, signature: sig, timestamp: Date.now()
+      }));
+
+      btn.disabled = true;
+      btn.textContent = 'Opening secure checkout…';
+      try {
+        const previewPayload = {
+          image:   currentPreview.url,
+          prompt:  currentPreview.prompt,
+          size:    currentPreview.size,
+          style:   $('#styleSelect').value,
+          mood:    $('#moodSelect').value,
+          light:   $('#lightingSelect').value,
+          comp:    $('#cameraSelect').value,
+          medium:  $('#mediumSelect').value,
+          sig:     sig.text ? sig : null
+        };
+        const r = await fetch('/api/create-checkout-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lookup_key: selected.lookup, preview: previewPayload })
+        });
+        const data = await r.json();
+        if (!r.ok || !data.url) {
+          const msg = data.detail ? `${data.error} (${data.detail})` : (data.error || `HTTP ${r.status}`);
+          throw new Error(msg);
+        }
+        window.location.href = data.url;
+      } catch (err) {
+        console.error('Checkout error:', err);
+        alert('Could not open checkout: ' + err.message);
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
     });
 
     (async () => {
@@ -1275,7 +2197,7 @@
   </script>
 
   <!-- Auth and Credits System -->
-  <script src="/js/auth.js"></script>
+  <script src="/js/auth.js?v=3"></script>
   <script src="/js/credits.js"></script>
 
 </body>

@@ -6,7 +6,7 @@ class AuthManager {
   constructor() {
     this.user = null;
     this.token = localStorage.getItem('auth_token');
-    this.init();
+    this.ready = this.init();
   }
 
   async init() {
@@ -53,6 +53,12 @@ class AuthManager {
         throw new Error(data.error || 'Signup failed');
       }
 
+      // Verification-required flow: account created but no JWT issued
+      if (data.verificationRequired) {
+        return { success: true, verificationRequired: true, email: data.email || email };
+      }
+
+      // (Legacy fallback if backend ever returns a token directly)
       this.token = data.token;
       this.user = data.user;
       localStorage.setItem('auth_token', this.token);
@@ -75,6 +81,9 @@ class AuthManager {
       const data = await response.json();
 
       if (!response.ok) {
+        if (data.verificationRequired) {
+          return { success: false, verificationRequired: true, email: data.email || email, error: data.error };
+        }
         throw new Error(data.error || 'Login failed');
       }
 
@@ -87,6 +96,51 @@ class AuthManager {
     } catch (error) {
       return { success: false, error: error.message };
     }
+  }
+
+  async resendVerification(email) {
+    try {
+      const r = await fetch('/api/auth/resend-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.error || 'Failed to resend');
+      return { success: true };
+    } catch (e) {
+      return { success: false, error: e.message };
+    }
+  }
+
+  showCheckEmail(email) {
+    const container = document.createElement('div');
+    container.className = 'fixed inset-0 z-[100]';
+    container.innerHTML = `
+      <div class="share-modal-backdrop" onclick="this.parentElement.remove()"></div>
+      <div class="share-modal text-center">
+        <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#818cf8);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 16px">📬</div>
+        <h3 class="text-2xl font-bold mb-2">Check your email</h3>
+        <p class="text-gray-400 mb-1">We sent a verification link to</p>
+        <p class="font-semibold mb-5">${email}</p>
+        <p class="text-sm text-gray-500 mb-6">Click the button in that email to activate your account. The link is valid for 24 hours.</p>
+        <button id="resendBtn" class="btn-ghost px-4 py-2 mr-2">Resend email</button>
+        <button onclick="this.closest('.fixed').remove()" class="btn px-4 py-2">Got it</button>
+        <p id="resendMsg" class="text-xs text-green-400 mt-4 hidden">New link sent. Check your inbox.</p>
+        <p class="text-xs text-gray-500 mt-4">Tip: check your spam folder if you don't see it within a minute.</p>
+      </div>
+    `;
+    document.body.appendChild(container);
+
+    container.querySelector('#resendBtn').addEventListener('click', async (e) => {
+      e.target.disabled = true;
+      e.target.textContent = 'Sending...';
+      await this.resendVerification(email);
+      e.target.textContent = 'Resend email';
+      e.target.disabled = false;
+      const msg = container.querySelector('#resendMsg');
+      msg.classList.remove('hidden');
+    });
   }
 
   async logout() {
@@ -116,31 +170,52 @@ class AuthManager {
 
   updateUI() {
     const authButton = document.getElementById('authButton');
+    const mobileAuthButton = document.getElementById('mobileAuthButton');
     const creditsDisplay = document.getElementById('creditsDisplay');
 
-    if (!authButton) return;
+    if (!authButton && !mobileAuthButton) return;
 
+    let desktopHTML, mobileHTML;
     if (this.user) {
-      authButton.innerHTML = `
-        <div class="flex items-center gap-3">
-          <div class="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-lg">
+      desktopHTML = `
+        <div class="flex items-center gap-2 sm:gap-3">
+          <div class="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/10 rounded-lg">
             <span class="text-yellow-300 text-sm">⚡</span>
             <span class="font-bold text-sm">${this.user.credits_balance || 0}</span>
-            <span class="text-xs text-gray-400">credits</span>
+            <span class="text-xs text-gray-400 hidden sm:inline">credits</span>
           </div>
-          <button onclick="auth.showAccountMenu(event)" class="btn-ghost px-3 py-1.5 text-sm">
+          <button onclick="auth.showAccountMenu(event)" class="btn-ghost px-3 py-1.5 text-sm truncate max-w-[120px] sm:max-w-none">
             ${this.user.email}
           </button>
         </div>
       `;
+      mobileHTML = `
+        <div class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-white/5">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="text-yellow-300">⚡</span>
+            <span class="font-bold">${this.user.credits_balance || 0}</span>
+            <span class="text-xs text-gray-400">credits</span>
+          </div>
+          <button onclick="auth.showAccountMenu(event)" class="text-xs text-gray-300 truncate max-w-[140px]">${this.user.email}</button>
+        </div>
+      `;
     } else {
-      authButton.innerHTML = `
+      desktopHTML = `
         <div class="flex items-center gap-2">
-          <button onclick="auth.showLoginModal()" class="btn-ghost px-4 py-2">Login</button>
-          <button onclick="auth.showSignupModal()" class="btn px-4 py-2">Sign up</button>
+          <button onclick="auth.showLoginModal()" class="btn-ghost px-4 py-2 hidden sm:inline-flex">Login</button>
+          <button onclick="auth.showSignupModal()" class="btn px-3 sm:px-4 py-2 text-sm sm:text-base">Sign up</button>
+        </div>
+      `;
+      mobileHTML = `
+        <div class="flex items-center gap-2">
+          <button onclick="auth.showLoginModal()" class="btn-ghost flex-1 px-4 py-2.5">Login</button>
+          <button onclick="auth.showSignupModal()" class="btn flex-1 px-4 py-2.5">Sign up</button>
         </div>
       `;
     }
+
+    if (authButton) authButton.innerHTML = desktopHTML;
+    if (mobileAuthButton) mobileAuthButton.innerHTML = mobileHTML;
   }
 
   showLoginModal() {
@@ -170,14 +245,14 @@ class AuthManager {
         <form id="authForm" class="space-y-4">
           <div>
             <label class="block text-sm font-medium mb-2">Email</label>
-            <input type="email" id="authEmail" required
-              class="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:border-white/40"
+            <input type="email" id="authEmail" required inputmode="email" autocomplete="email" autocapitalize="off" autocorrect="off" spellcheck="false"
+              class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:border-white/40 text-base"
               placeholder="you@example.com">
           </div>
           <div>
             <label class="block text-sm font-medium mb-2">Password</label>
-            <input type="password" id="authPassword" required minlength="8"
-              class="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:border-white/40"
+            <input type="password" id="authPassword" required minlength="8" autocomplete="${isLogin ? 'current-password' : 'new-password'}"
+              class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:border-white/40 text-base"
               placeholder="${isLogin ? 'Your password' : 'At least 8 characters'}">
           </div>
 
@@ -213,12 +288,34 @@ class AuthManager {
         ? await this.login(email, password)
         : await this.signup(email, password);
 
+      // Signup that requires verification: close modal, show "check your email"
+      if (result.success && result.verificationRequired) {
+        container.remove();
+        this.showCheckEmail(result.email || email);
+        return;
+      }
+
+      // Login attempt against an unverified account: show resend prompt inline
+      if (!result.success && result.verificationRequired) {
+        errorDiv.innerHTML = `
+          ${result.error || 'Please verify your email before signing in.'}
+          <button type="button" id="inlineResend" class="ml-2 underline text-white">Resend verification email</button>
+        `;
+        errorDiv.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Login';
+        const inline = errorDiv.querySelector('#inlineResend');
+        if (inline) inline.addEventListener('click', async () => {
+          inline.disabled = true; inline.textContent = 'Sending...';
+          await this.resendVerification(result.email || email);
+          inline.textContent = 'Sent — check your inbox';
+        });
+        return;
+      }
+
       if (result.success) {
         container.remove();
-        // Show success message
         this.showToast(`Welcome${isLogin ? ' back' : ''}! You have ${result.user.credits_balance} credits.`, 'success');
-
-        // Reload credits display
         if (window.credits) {
           window.credits.loadBalance();
         }

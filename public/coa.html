@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Certificate of Authenticity · aiPRINT.ai</title>
+  <meta name="description" content="Certificate of Authenticity for an aiPRINT.ai fine art print — numbered, inspected, and bound to its original generation fingerprint."/>
+  <meta name="robots" content="noindex,follow"/>
+  <link rel="canonical" href="https://aiprint.ai/coa.html"/>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --paper-1:#F9F5E9;
+      --paper-2:#EFE9D6;
+      --paper-3:#E7E1CE;
+      --ink:#1A1A22;
+      --ink-soft:#3A3A45;
+      --ink-mid:#4A4A55;
+      --ink-dim:#6B6B7A;
+      --ind:#4F46E5;
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;background:#0A0F1D;color:#E7EEF8;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+
+    /* Screen-only chrome */
+    .toolbar{position:sticky;top:0;z-index:40;background:rgba(11,16,32,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.10);padding:12px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+    .toolbar .brand{font-weight:800;letter-spacing:-0.01em;color:#fff;font-size:15px;}
+    .toolbar .brand .dot{color:#818cf8;}
+    .toolbar .spacer{flex:1;}
+    .toolbar .pill{font-size:11px;color:rgba(255,255,255,0.6);padding:5px 10px;border:1px solid rgba(255,255,255,0.14);border-radius:9999px;letter-spacing:0.16em;text-transform:uppercase;}
+    .toolbar button{background:#fff;color:#000;border:0;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:0.02em;}
+    .toolbar button.ghost{background:rgba(255,255,255,0.06);color:#E7EEF8;border:1px solid rgba(255,255,255,0.14);}
+    .toolbar button:hover{filter:brightness(0.95);}
+    .stage{padding:48px 20px;display:flex;justify-content:center;}
+
+    /* Certificate sheet — A4 landscape (1.414 : 1) */
+    .coa-sheet{
+      width:min(100%, 1100px);
+      aspect-ratio:1.414/1;
+      background:radial-gradient(ellipse at 50% 0%, var(--paper-1) 0%, var(--paper-2) 70%, var(--paper-3) 100%);
+      color:var(--ink);
+      border-radius:6px;
+      padding:48px 56px;
+      position:relative;
+      overflow:hidden;
+      box-shadow:0 30px 60px rgba(0,0,0,0.45);
+      border:1px solid rgba(0,0,0,0.08);
+    }
+    .coa-sheet .paper-grain{position:absolute;inset:0;background-image:radial-gradient(circle at 20% 30%,rgba(139,69,19,0.04),transparent 40%),radial-gradient(circle at 80% 70%,rgba(79,70,229,0.03),transparent 50%);pointer-events:none;}
+    .coa-sheet .frame{position:absolute;inset:18px;border:1px solid rgba(26,26,34,0.35);border-radius:4px;pointer-events:none;}
+    .coa-sheet .frame:after{content:"";position:absolute;inset:6px;border:1px solid rgba(26,26,34,0.18);border-radius:2px;}
+    .coa-sheet .wm-bg{position:absolute;inset:0;display:grid;place-items:center;font-family:"Playfair Display",serif;font-size:clamp(120px,18vw,240px);font-weight:800;color:rgba(79,70,229,0.045);letter-spacing:-0.02em;pointer-events:none;user-select:none;}
+
+    .coa-sheet .head{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:2;}
+    .coa-sheet .wm{font-weight:800;letter-spacing:-0.01em;font-size:18px;color:var(--ink);}
+    .coa-sheet .wm .dot{color:var(--ind);}
+    .coa-sheet .wm-sub{font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-dim);font-weight:700;margin-top:6px;}
+    .coa-sheet .serial{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:10px;letter-spacing:0.1em;color:var(--ink-mid);text-align:right;text-transform:uppercase;}
+    .coa-sheet .serial b{display:block;color:var(--ink);font-size:14px;letter-spacing:0.06em;margin-top:3px;}
+
+    .coa-title{position:relative;z-index:2;margin:32px 0 4px;}
+    .coa-title .eb{font-size:11px;letter-spacing:0.3em;font-weight:700;color:var(--ind);text-transform:uppercase;}
+    .coa-title h1{font-family:"Playfair Display",serif;font-size:clamp(28px, 3.6vw, 42px);font-weight:700;margin:6px 0 0;letter-spacing:-0.005em;color:var(--ink);line-height:1.05;}
+    .coa-title .art-title{font-family:"Playfair Display",serif;font-style:italic;font-size:clamp(16px, 1.8vw, 22px);margin:14px 0 0;color:#2A2A35;max-width:42ch;}
+
+    .coa-body{position:relative;z-index:2;margin-top:22px;font-size:13px;line-height:1.55;color:var(--ink-soft);max-width:60ch;}
+
+    .coa-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 22px;margin-top:28px;position:relative;z-index:2;}
+    .coa-grid div{font-size:9.5px;text-transform:uppercase;letter-spacing:0.16em;color:var(--ink-dim);font-weight:700;}
+    .coa-grid div b{display:block;color:var(--ink);font-size:14px;letter-spacing:0;text-transform:none;margin-top:5px;font-weight:600;font-family:"Playfair Display",serif;}
+    .coa-grid div b.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:0.04em;}
+
+    .coa-foot{position:absolute;left:56px;right:56px;bottom:42px;display:flex;justify-content:space-between;align-items:flex-end;z-index:2;gap:24px;}
+    .coa-foot .inspected{font-size:10px;text-transform:uppercase;letter-spacing:0.18em;color:var(--ink-dim);font-weight:700;}
+    .coa-foot .inspected b{display:block;margin-top:5px;font-family:"Playfair Display",serif;font-style:italic;font-size:16px;letter-spacing:0.01em;color:var(--ink);font-weight:400;text-transform:none;}
+    .coa-foot .stamp{width:96px;height:96px;border-radius:9999px;border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;}
+    .coa-foot .stamp:before{content:"";position:absolute;inset:6px;border:1px dashed rgba(26,26,34,0.5);border-radius:9999px;}
+    .coa-foot .stamp .s-inner{font-family:"Playfair Display",serif;font-size:10px;font-weight:700;letter-spacing:0.14em;text-align:center;line-height:1.2;color:var(--ink);}
+    .coa-foot .stamp .s-inner b{display:block;font-size:22px;line-height:1;margin:4px 0;letter-spacing:0;color:var(--ind);font-weight:700;}
+
+    @media (max-width: 700px){
+      .stage{padding:24px 14px;}
+      .coa-sheet{padding:26px 22px;aspect-ratio:auto;min-height:0;}
+      .coa-sheet .head{flex-wrap:wrap;gap:12px;}
+      .coa-sheet .serial{text-align:left;flex:1 0 100%;}
+      .coa-title{margin-top:20px;}
+      .coa-title h1{font-size:24px;}
+      .coa-title .art-title{font-size:15px;}
+      .coa-body{font-size:12px;margin-top:16px;}
+      .coa-grid{grid-template-columns:repeat(2,1fr);gap:14px 18px;margin-top:22px;}
+      .coa-grid div b{font-size:13px;}
+      .coa-foot{position:static;left:auto;right:auto;bottom:auto;margin-top:28px;gap:16px;flex-wrap:wrap;}
+      .coa-foot .inspected{flex:1 1 160px;}
+      .coa-foot .stamp{width:80px;height:80px;}
+      .coa-foot .stamp .s-inner b{font-size:18px;}
+      .wm-bg{font-size:clamp(80px,22vw,140px);}
+    }
+
+    @media print{
+      @page{size:A4 landscape;margin:0;}
+      html,body{background:#fff;}
+      .toolbar{display:none !important;}
+      .stage{padding:0;}
+      .coa-sheet{
+        width:100%;
+        height:100vh;
+        aspect-ratio:auto;
+        max-width:none;
+        border-radius:0;
+        box-shadow:none;
+        border:0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <img src="/favicon.svg" alt="" width="24" height="24" style="display:block;border-radius:5px;" aria-hidden="true"/>
+    <div class="brand">aiPRINT<span class="dot">.ai</span></div>
+    <span class="pill">Certificate of Authenticity</span>
+    <div class="spacer"></div>
+    <button class="ghost" onclick="history.length > 1 ? history.back() : location.href='/'">Back</button>
+    <button onclick="window.print()">Download PDF</button>
+  </div>
+
+  <div class="stage">
+    <article class="coa-sheet" id="coa">
+      <div class="paper-grain"></div>
+      <div class="frame"></div>
+      <div class="wm-bg">aiPRINT</div>
+
+      <header class="head">
+        <div class="wm-lockup" style="display:flex;align-items:center;gap:10px;">
+          <img src="/favicon.svg" alt="" width="28" height="28" style="display:block;border-radius:6px;" aria-hidden="true"/>
+          <div>
+            <div class="wm">aiPRINT<span class="dot">.ai</span></div>
+            <div class="wm-sub">Fine Art Print · Florida Studio</div>
+          </div>
+        </div>
+        <div class="serial">
+          Serial
+          <b id="f-serial">A26 · 0000 / 0000</b>
+        </div>
+      </header>
+
+      <div class="coa-title">
+        <div class="eb">Certificate of Authenticity</div>
+        <h1>This piece is one of a limited edition.</h1>
+        <div class="art-title" id="f-title">"Untitled"</div>
+      </div>
+
+      <p class="coa-body">
+        Produced on archival materials in our Florida studio, inspected and numbered by hand. The original generation fingerprint is recorded below, permanently binding this physical print to its unique digital source.
+      </p>
+
+      <div class="coa-grid">
+        <div>Medium<b id="f-medium">Fine Art Canvas</b></div>
+        <div>Dimensions<b id="f-dimensions">24 × 36 in</b></div>
+        <div>Edition<b id="f-edition">— / —</b></div>
+        <div>Issued<b id="f-date">—</b></div>
+        <div style="grid-column:span 2;">Prompt fingerprint<b class="mono" id="f-fingerprint">— · — · — · —</b></div>
+        <div style="grid-column:span 2;">Order reference<b class="mono" id="f-order">—</b></div>
+      </div>
+
+      <footer class="coa-foot">
+        <div class="inspected">
+          Inspected &amp; numbered
+          <b>Florida Studio, USA</b>
+        </div>
+        <div class="stamp" aria-label="Edition stamp">
+          <div class="s-inner">
+            aiPRINT<b id="f-stamp-no">No. 0000</b>
+          </div>
+        </div>
+      </footer>
+    </article>
+  </div>
+
+  <script>
+    // Populate the certificate from query parameters.
+    // Supported params:
+    //   order        order reference (e.g. AI-P-4037)
+    //   stripe       stripe session id (appended to order ref if present)
+    //   title        artwork title (defaults to "Untitled")
+    //   medium       e.g. "Fine Art Canvas"
+    //   dimensions   e.g. "24 × 36 in"
+    //   edition      e.g. 37
+    //   total        edition total (e.g. 250)
+    //   date         ISO or human date; defaults to today
+    //   fingerprint  16-hex prompt fingerprint
+    //   serial       overrides auto-generated serial
+    (function(){
+      const q = new URLSearchParams(location.search);
+      const get = (k, d='') => (q.get(k) || d).trim();
+
+      const order = get('order') || '—';
+      const stripe = get('stripe');
+      const title = get('title') || 'Untitled';
+      const medium = get('medium') || 'Fine Art Canvas';
+      const dimensions = get('dimensions') || '— × —';
+      const edition = parseInt(get('edition'), 10);
+      const total = parseInt(get('total'), 10) || 250;
+      const dateRaw = get('date');
+      let date;
+      if (dateRaw) {
+        const d = new Date(dateRaw);
+        date = isNaN(d) ? dateRaw : d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      } else {
+        date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      }
+
+      // Generate a fingerprint from the order ref if not supplied.
+      function autoFingerprint(seed){
+        if (!seed) return 'c3f9 · 8e2a · 41bb · d705';
+        // Tiny non-cryptographic hash → 16 hex chars in 4-quad form.
+        let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+        for (let i = 0; i < seed.length; i++) {
+          const c = seed.charCodeAt(i);
+          h1 = Math.imul(h1 ^ c, 2654435761);
+          h2 = Math.imul(h2 ^ c, 1597334677);
+        }
+        const hex = (h1 >>> 0).toString(16).padStart(8,'0') + (h2 >>> 0).toString(16).padStart(8,'0');
+        return hex.match(/.{4}/g).join(' · ');
+      }
+      const fingerprint = get('fingerprint') || autoFingerprint(order + '|' + title);
+
+      // Auto-generate a serial like "A26 · 0037 / 0250" using the year + edition.
+      const yearLetter = 'A' + String(new Date().getFullYear()).slice(-2);
+      const editionStr = isNaN(edition) ? '0000' : String(edition).padStart(4,'0');
+      const totalStr = String(total).padStart(4,'0');
+      const serial = get('serial') || `${yearLetter} · ${editionStr} / ${totalStr}`;
+      const editionLabel = isNaN(edition) ? `— / ${total}` : `${edition} / ${total}`;
+      const stampNo = isNaN(edition) ? 'No. 0000' : `No. ${editionStr}`;
+
+      // Compose order reference, suffixing the stripe id if provided.
+      const orderRef = stripe ? `${order} · ${stripe.slice(-8)}` : order;
+
+      document.getElementById('f-serial').textContent = serial;
+      document.getElementById('f-title').textContent = title.startsWith('"') ? title : `"${title}"`;
+      document.getElementById('f-medium').textContent = medium;
+      document.getElementById('f-dimensions').textContent = dimensions;
+      document.getElementById('f-edition').textContent = editionLabel;
+      document.getElementById('f-date').textContent = date;
+      document.getElementById('f-fingerprint').textContent = fingerprint;
+      document.getElementById('f-order').textContent = orderRef;
+      document.getElementById('f-stamp-no').textContent = stampNo;
+
+      document.title = `Certificate · ${title} · aiPRINT.ai`;
+    })();
+  </script>
+</body>
+</html>

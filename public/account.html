@@ -3,13 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Account - aiPRINT.ai</title>
-  <link rel="icon" href="/favicon.ico" />
+  <title>My Account | aiPRINT.ai</title>
+  <meta name="description" content="Manage your aiPRINT account: view credits, purchase more, and see your print order history."/>
+  <meta name="robots" content="noindex,follow"/>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     :root { --bg:#0a0f1d; --ink:#e7eef8; --muted:#9fb3c8; }
     html,body{background:var(--bg);color:var(--ink);min-height:100vh;}
+    html{font-size:clamp(16px, 0.85vw + 12px, 20px);}
     body{font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;}
     .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
     .btn{background:#fff;color:#000;font-weight:700;padding:.7rem 1rem;border-radius:.6rem;cursor:pointer;border:none;}
@@ -17,15 +23,16 @@
     .spinner{border:2px solid #333;border-top:2px solid #fff;border-radius:50%;width:20px;height:20px;animation:spin 1s linear infinite;margin:0 auto;}
     @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
   </style>
-</head>
+<script defer src="/js/analytics.js"></script>
+  </head>
 <body>
 
   <!-- HEADER -->
   <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+    <div class="max-w-[1800px] mx-auto px-5 h-16 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2">
-        <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
-        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+        <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
+        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span></span>
       </a>
       <div id="authButton"></div>
     </div>
@@ -68,13 +75,36 @@
         </button>
       </div>
 
-      <!-- Recent Activity -->
+      <!-- My Gallery -->
       <div>
-        <h2 class="text-2xl font-bold mb-4">Recent Activity</h2>
-        <div id="activityContainer" class="space-y-3">
+        <div class="flex items-end justify-between mb-4">
+          <div>
+            <h2 class="text-2xl font-bold">My Gallery</h2>
+            <p class="text-sm text-gray-400 mt-1">Every image you've generated. Click any piece to order it as a print.</p>
+          </div>
+          <span id="galleryCount" class="text-xs text-gray-500"></span>
+        </div>
+        <div id="galleryContainer">
           <div class="text-center py-8 glass rounded-xl">
             <div class="spinner"></div>
-            <p class="mt-2 text-gray-400">Loading activity...</p>
+            <p class="mt-2 text-gray-400">Loading your gallery...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Print Orders -->
+      <div>
+        <div class="flex items-end justify-between mb-4">
+          <div>
+            <h2 class="text-2xl font-bold">Print Orders</h2>
+            <p class="text-sm text-gray-400 mt-1">Every print you've ordered. Click any order to see full status &amp; tracking.</p>
+          </div>
+          <span id="ordersCount" class="text-xs text-gray-500"></span>
+        </div>
+        <div id="ordersContainer" class="space-y-2">
+          <div class="text-center py-8 glass rounded-xl">
+            <div class="spinner"></div>
+            <p class="mt-2 text-gray-400">Loading orders...</p>
           </div>
         </div>
       </div>
@@ -100,11 +130,12 @@
     </div>
   </main>
 
-  <script src="/js/auth.js"></script>
+  <script src="/js/auth.js?v=3"></script>
   <script src="/js/credits.js"></script>
   <script>
     // Wait for auth to initialize
-    setTimeout(async () => {
+    (async () => {
+      await auth.ready;
       const loadingState = document.getElementById('loadingState');
       const notAuthState = document.getElementById('notAuthenticatedState');
       const accountContent = document.getElementById('accountContent');
@@ -180,51 +211,141 @@
         console.error('Failed to load history:', error);
       }
 
-      // Load recent generations
+      // Load print orders
       try {
-        const generationsResp = await fetch('/api/user/generations', {
+        const ordersResp = await fetch('/api/user/orders', {
+          headers: auth.getAuthHeader()
+        });
+        const ordersContainer = document.getElementById('ordersContainer');
+        const ordersCount = document.getElementById('ordersCount');
+
+        if (ordersResp.ok) {
+          const { orders = [] } = await ordersResp.json();
+          ordersCount.textContent = orders.length ? `${orders.length} order${orders.length===1?'':'s'}` : '';
+
+          if (orders.length === 0) {
+            ordersContainer.innerHTML = `
+              <div class="glass rounded-xl p-10 text-center">
+                <div class="text-5xl mb-3">🖼</div>
+                <p class="text-gray-300 mb-4">No print orders yet.</p>
+                <a href="/" class="btn inline-block">Order your first print</a>
+              </div>`;
+          } else {
+            const fmtMoney = (cents, cur='usd') => ((cents||0)/100).toLocaleString('en-US', { style:'currency', currency:(cur||'usd').toUpperCase() });
+            const fmtDate = iso => new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+            const pillCls = { paid:'bg-blue-500/20 text-blue-300', in_production:'bg-yellow-500/20 text-yellow-300', shipped:'bg-green-500/20 text-green-300', delivered:'bg-emerald-500/20 text-emerald-300', canceled:'bg-red-500/20 text-red-300' };
+            ordersContainer.innerHTML = orders.map(o => {
+              const status = o.status || 'paid';
+              const trackUrl = `/track.html?id=${encodeURIComponent(o.stripe_session_id)}`;
+              return `
+                <a href="${trackUrl}" class="block glass rounded-xl p-4 hover:bg-white/[0.08] transition-colors">
+                  <div class="flex items-center gap-4">
+                    ${o.preview_url ? `<img src="${o.preview_url}" class="w-16 h-16 rounded-lg object-cover border border-white/10" alt="art"/>` : '<div class="w-16 h-16 rounded-lg bg-white/5"></div>'}
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-center gap-2 mb-1 flex-wrap">
+                        <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${pillCls[status]||'bg-white/10 text-gray-300'}">${status.replace('_',' ')}</span>
+                        <span class="font-bold">${o.lookup_key || 'Custom print'}</span>
+                      </div>
+                      <div class="text-xs text-gray-400">${fmtDate(o.created_at)} · ${fmtMoney(o.amount_total, o.currency)} ${o.tracking_number ? `· tracking ${o.carrier||''} ${o.tracking_number}` : ''}</div>
+                    </div>
+                    <div class="text-gray-500 text-xl" aria-hidden="true">→</div>
+                  </div>
+                </a>`;
+            }).join('');
+          }
+        } else {
+          ordersContainer.innerHTML = '<div class="glass rounded-xl p-4 text-center text-gray-400">Could not load your orders.</div>';
+        }
+      } catch (error) {
+        console.error('Failed to load orders:', error);
+        document.getElementById('ordersContainer').innerHTML = '<div class="glass rounded-xl p-4 text-center text-gray-400">Could not load your orders.</div>';
+      }
+
+      // Load gallery
+      try {
+        const generationsResp = await fetch('/api/user/generations?limit=50', {
           headers: auth.getAuthHeader()
         });
 
-        if (generationsResp.ok) {
-          const generationsData = await generationsResp.json();
-          const activityContainer = document.getElementById('activityContainer');
+        const galleryContainer = document.getElementById('galleryContainer');
+        const galleryCount = document.getElementById('galleryCount');
 
-          if (generationsData.generations && generationsData.generations.length > 0) {
-            activityContainer.innerHTML = generationsData.generations.slice(0, 5).map(gen => {
-              const date = new Date(gen.created_at).toLocaleDateString();
-              return `
-                <div class="glass rounded-lg p-4 flex gap-4">
-                  ${gen.image_url ? `<img src="${gen.image_url}" class="w-20 h-20 rounded object-cover" />` : ''}
-                  <div class="flex-1">
-                    <div class="font-medium">${gen.prompt.substring(0, 100)}${gen.prompt.length > 100 ? '...' : ''}</div>
-                    <div class="text-sm text-gray-400 mt-1">${date} · ${gen.size}</div>
-                  </div>
-                </div>
-              `;
-            }).join('');
+        if (generationsResp.ok) {
+          const { generations = [] } = await generationsResp.json();
+          galleryCount.textContent = generations.length ? `${generations.length} piece${generations.length===1?'':'s'}` : '';
+
+          if (generations.length === 0) {
+            galleryContainer.innerHTML = `
+              <div class="glass rounded-xl p-10 text-center">
+                <div class="text-5xl mb-3">🎨</div>
+                <p class="text-gray-300 mb-4">Your gallery is empty.</p>
+                <a href="/" class="btn inline-block">Create your first print</a>
+              </div>`;
           } else {
-            activityContainer.innerHTML = '<div class="glass rounded-xl p-4 text-center text-gray-400">No generations yet. <a href="/" class="text-white hover:underline">Create your first one!</a></div>';
+            galleryContainer.innerHTML = `
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                ${generations.map(gen => galleryTile(gen)).join('')}
+              </div>`;
           }
         } else {
-          // API endpoint doesn't exist yet, show placeholder
-          document.getElementById('activityContainer').innerHTML = '<div class="glass rounded-xl p-4 text-center text-gray-400">Generation history coming soon!</div>';
+          galleryContainer.innerHTML = '<div class="glass rounded-xl p-4 text-center text-gray-400">Could not load your gallery.</div>';
         }
       } catch (error) {
-        console.error('Failed to load generations:', error);
-        document.getElementById('activityContainer').innerHTML = '<div class="glass rounded-xl p-4 text-center text-gray-400">Generation history coming soon!</div>';
+        console.error('Failed to load gallery:', error);
+        document.getElementById('galleryContainer').innerHTML = '<div class="glass rounded-xl p-4 text-center text-gray-400">Could not load your gallery.</div>';
+      }
+
+      function galleryTile(gen) {
+        const date = new Date(gen.created_at).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+        const promptShort = (gen.prompt || '').replace(/"/g, '&quot;');
+        const safePromptAttr = encodeURIComponent(JSON.stringify(gen));
+        return `
+          <div class="glass rounded-xl overflow-hidden group relative">
+            ${gen.image_url
+              ? `<img src="${gen.image_url}" class="w-full aspect-square object-cover" alt="generation"/>`
+              : '<div class="w-full aspect-square bg-white/5 grid place-items-center text-gray-500">no image</div>'}
+            <div class="p-3">
+              <div class="text-xs text-gray-300 line-clamp-2 mb-2" title="${promptShort}">${promptShort.substring(0, 90)}${promptShort.length>90?'…':''}</div>
+              <div class="text-[11px] text-gray-500 mb-3">${date} · ${gen.size || ''}</div>
+              <button onclick='reorderGeneration("${safePromptAttr}")' class="btn w-full text-sm" style="padding:.5rem .75rem">
+                Order as a print →
+              </button>
+            </div>
+          </div>`;
       }
 
       // Check for purchase success
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('credits_purchased') === 'true') {
         auth.showToast('Credits added successfully! 🎉', 'success');
-        // Reload balance
         credits.loadBalance().then(balance => {
           document.getElementById('creditsBalance').textContent = balance;
         });
       }
-    }, 500);
+    })();
+
+    // Reorder: stash this image as the homepage's "current preview" and jump to the order section.
+    window.reorderGeneration = function(encoded) {
+      try {
+        const gen = JSON.parse(decodeURIComponent(encoded));
+        const [w, h] = (gen.size || '1024x1024').split('x').map(n => parseInt(n, 10));
+        const shape = w === h ? 'square' : (w > h ? 'h32' : 'v23');
+        const previewData = {
+          preview: { url: gen.image_url, width: w, height: h, prompt: gen.prompt, size: gen.size, shape },
+          prompt: gen.prompt || '',
+          settings: {
+            style: '', mood: '', lighting: '', camera: '', medium: '',
+            signature: { text: '', font: 'font-elegant', color: 'white', size: 18, position: null }
+          },
+          timestamp: Date.now()
+        };
+        localStorage.setItem('aiprint_last_preview', JSON.stringify(previewData));
+        window.location.href = '/#order';
+      } catch (e) {
+        console.error('Reorder failed:', e);
+        alert('Could not load that piece. Please try again.');
+      }
+    };
   </script>
 </body>
 </html>
