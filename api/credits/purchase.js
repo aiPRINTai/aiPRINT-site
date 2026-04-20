@@ -35,9 +35,28 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid package ID' });
     }
 
-    const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+    // Resolve origin defensively — env vars sometimes get saved with trailing
+    // whitespace or literal "\n" escapes, and Stripe rejects any non-https URL
+    // (or any URL with stray whitespace) in live mode. Mirrors the logic used
+    // by api/create-checkout-session.js.
+    const sanitize = (v) => {
+      if (!v) return '';
+      return String(v)
+        .replace(/\\[nrt]/g, '')
+        .replace(/[\s\u200B-\u200D\uFEFF]+/g, '')
+        .replace(/\/+$/, '');
+    };
+    const candidates = [
+      sanitize(process.env.CLIENT_URL),
+      sanitize(req.headers.origin),
+      req.headers.host ? `https://${sanitize(req.headers.host)}` : '',
+      'https://aiprint.ai',
+    ];
+    const clientUrl = candidates.find((u) => /^https:\/\/[^\s]+$/i.test(u)) || 'https://aiprint.ai';
 
-    // Create Stripe checkout session
+    // Create Stripe checkout session. Intentionally omit product_data.images —
+    // Stripe validates image URLs and a missing/misconfigured CLIENT_URL was
+    // producing `http://localhost:3000/icon.png`, which Stripe rejects.
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -46,8 +65,7 @@ export default async function handler(req, res) {
             currency: 'usd',
             product_data: {
               name: `${selectedPackage.credits} Credits`,
-              description: `AI image generation credits - $${selectedPackage.pricePerCredit.toFixed(2)} per credit`,
-              images: [`${clientUrl}/icon.png`]
+              description: `AI image generation credits - $${selectedPackage.pricePerCredit.toFixed(2)} per credit`
             },
             unit_amount: Math.round(selectedPackage.price * 100) // Convert to cents
           },
