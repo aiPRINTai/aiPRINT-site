@@ -34,6 +34,15 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
+    // Block unverified accounts
+    if (user.email_verified === false) {
+      return res.status(403).json({
+        error: 'Please verify your email before signing in.',
+        verificationRequired: true,
+        email: user.email
+      });
+    }
+
     // Generate JWT token
     const token = generateToken(user);
 

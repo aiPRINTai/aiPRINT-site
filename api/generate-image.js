@@ -1,12 +1,12 @@
-// api/generate-image.js - Google Gemini (Nano Banana) Version with Credits
+// api/generate-image.js - Google Gemini Image Generation with Credits
 import { put } from '@vercel/blob';
 import { canUserGenerate, deductCreditsForGeneration } from './credits/utils.js';
 import { recordGeneration } from './db/index.js';
 import { getUserFromRequest, getClientIp } from './auth/utils.js';
+import { makeWatermarkedPreview, PREVIEW_WATERMARK_VERSION } from './_watermark.js';
 
 const ALLOWED_SIZES = new Set(['1024x1024', '1024x1536', '1536x1024']);
 
-// Map sizes to Gemini aspect ratios
 const SIZE_TO_ASPECT_RATIO = {
   '1024x1024': '1:1',
   '1536x1024': '3:2',
@@ -33,13 +33,9 @@ async function generateImage({ prompt, size, apiKey, signal }) {
         'x-goog-api-key': apiKey
       },
       body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text: prompt
-          }]
-        }],
+        contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
-          responseModalities: ['IMAGE'],
+          responseModalities: ['TEXT', 'IMAGE'],
           imageConfig: {
             aspectRatio: aspectRatio
           }
@@ -51,32 +47,20 @@ async function generateImage({ prompt, size, apiKey, signal }) {
 
   const text = await resp.text();
   let data;
-  try {
-    data = JSON.parse(text);
-  } catch {
-    throw new Error(`Bad upstream JSON: ${text.slice(0, 500)}`);
-  }
+  try { data = JSON.parse(text); } catch { throw new Error(`Bad upstream JSON: ${text.slice(0, 500)}`); }
 
   if (!resp.ok) {
     const errorMsg = data?.error?.message || data?.error?.details?.[0]?.message || `Gemini API error ${resp.status}`;
     throw new Error(errorMsg);
   }
 
-  // Extract base64 image from Gemini response
-  // Response format: { candidates: [{ content: { parts: [{ inlineData: { mimeType, data } }] } }] }
   const parts = data?.candidates?.[0]?.content?.parts;
-  if (!parts || parts.length === 0) {
-    throw new Error('No image returned from Gemini API');
-  }
+  if (!parts?.length) throw new Error('No image returned from Gemini API');
 
-  // Find the image part (Gemini may return text + image)
-  const imagePart = parts.find(part => part.inlineData?.mimeType?.startsWith('image/'));
-  if (!imagePart?.inlineData?.data) {
-    throw new Error('No image data found in Gemini response');
-  }
+  const imagePart = parts.find(p => p.inlineData?.mimeType?.startsWith('image/'));
+  if (!imagePart?.inlineData?.data) throw new Error('No image data found in Gemini response');
 
-  const b64 = imagePart.inlineData.data;
-  return Buffer.from(b64, 'base64');
+  return Buffer.from(imagePart.inlineData.data, 'base64');
 }
 
 export default async function handler(req, res) {
@@ -124,31 +108,61 @@ export default async function handler(req, res) {
       buffer = await generateImage({ prompt, size, apiKey, signal: ctrl.signal });
     } catch (e) {
       // Quick retry once
-      console.log('First attempt failed, retrying:', e.message);
+      if (process.env.DEBUG_LOGS) console.log('First attempt failed, retrying:', e.message);
       buffer = await generateImage({ prompt, size, apiKey, signal: ctrl.signal });
     }
   } catch (err) {
     clearTimeout(timer);
-    console.error('Generate image error:', err);
+    console.error('Generate image error:', err?.message || err);
     return res.status(502).json({
       ok: false,
-      error: err.message || 'Upstream error'
+      error: 'Image generation is temporarily unavailable. Please try again in a moment.'
     });
   }
   clearTimeout(timer);
 
   try {
-    // Upload to Vercel Blob
-    const base = `previews/${Date.now()}-${slugify(prompt)}`;
-    const pngKey = `${base}.png`;
+    // ── 1. Build the watermarked preview FIRST (catches sharp errors before any uploads) ──
+    let preview;
+    try {
+      preview = await makeWatermarkedPreview(buffer);
+    } catch (wmErr) {
+      console.error('Watermark error:', wmErr?.message || wmErr);
+      // If watermarking somehow fails, refuse to upload — never expose a clean
+      // image as the preview by accident.
+      return res.status(500).json({
+        ok: false,
+        error: 'Image post-processing failed. Please try again.'
+      });
+    }
 
-    const { url } = await put(pngKey, buffer, {
+    // ── 2. Upload BOTH images to Vercel Blob ──
+    // - clean: full-resolution PNG, the print master. Lives at a non-guessable
+    //   path (random suffix). Only revealed to admin (CSV export) and to the
+    //   customer in their post-payment confirmation email.
+    // - preview: downsized + watermarked JPEG. This is what the browser shows
+    //   and what's safe to expose publicly.
+    const base = `${Date.now()}-${slugify(prompt)}`;
+    const cleanKey = `originals/${base}.png`;
+    const previewKey = `previews/${base}.jpg`;
+
+    // Upload originals with addRandomSuffix so the URL is non-guessable.
+    const cleanUpload = await put(cleanKey, buffer, {
       access: 'public',
       contentType: 'image/png',
+      cacheControlMaxAge: 31536000,
+      addRandomSuffix: true
+    });
+    const cleanUrl = cleanUpload.url;
+
+    const previewUpload = await put(previewKey, preview.buffer, {
+      access: 'public',
+      contentType: preview.contentType,
       cacheControlMaxAge: 31536000
     });
+    const previewUrl = previewUpload.url;
 
-    // Save metadata
+    // ── 3. Save metadata json (helpful for ad-hoc inspection) ──
     const metadata = {
       model: 'gemini-2.5-flash-image',
       prompt,
@@ -156,42 +170,55 @@ export default async function handler(req, res) {
       width: w,
       height: h,
       created_at: new Date().toISOString(),
-      image_url: url
+      preview_url: previewUrl,
+      clean_url: cleanUrl,
+      preview_dimensions: { width: preview.width, height: preview.height },
+      watermark_version: PREVIEW_WATERMARK_VERSION
     };
 
-    const metaKey = `${base}-meta.json`;
+    const metaKey = `meta/${base}.json`;
     await put(metaKey, JSON.stringify(metadata, null, 2), {
       access: 'public',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      addRandomSuffix: true
     });
 
-    // Deduct credits and record generation
+    // ── 4. Deduct credits + record generation ──
     const tokenData = getUserFromRequest(req);
     const ipAddress = getClientIp(req);
 
     const creditResult = await deductCreditsForGeneration(req, {
       prompt,
-      imageUrl: url,
+      imageUrl: previewUrl, // store preview url in credit log; clean stays in generations table
       size,
       sessionId: req.body.sessionId
     });
 
-    // Record generation in database
+    // Record generation in database — both URLs.
     await recordGeneration(
       tokenData?.userId || null,
       ipAddress,
       prompt,
-      url,
+      previewUrl,
       size,
-      0.035 // Cost per generation
+      0.035, // Cost per generation
+      cleanUrl
     );
 
+    // ── 5. Respond — only the previewUrl is sent to the browser ──
+    // The cleanUrl is intentionally NOT in the JSON response, so it never
+    // leaks to the client. The server pulls it from the DB at order time.
     return res.status(200).json({
       ok: true,
-      image: url,
-      url,
-      width: w,
-      height: h,
+      image: previewUrl,
+      url: previewUrl,
+      width: preview.width,
+      height: preview.height,
+      // Native (clean original) dimensions — useful for the room-mockup math
+      // and for showing customers what their print resolution will be. The URL
+      // itself is withheld; only the size leaks.
+      nativeWidth: w,
+      nativeHeight: h,
       prompt,
       size,
       credits: {

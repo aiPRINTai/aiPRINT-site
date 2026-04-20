@@ -2,15 +2,17 @@ import {
   getUserById,
   updateUserCredits,
   addCreditTransaction,
+  recordAnonymousGeneration,
   getAnonymousGenerationCount,
-  recordAnonymousGeneration
+  atomicDeductCredits
 } from '../db/index.js';
 import { getUserFromRequest, getClientIp } from '../auth/utils.js';
 
 // Configuration
-const ANONYMOUS_DAILY_LIMIT = 3;
 const SIGNUP_BONUS_CREDITS = 10;
 const GENERATION_COST = 1; // 1 credit per generation
+const ANONYMOUS_LIMIT = 1; // free previews allowed per IP per 24h before signup is required
+const ANONYMOUS_WINDOW_HOURS = 24;
 
 /**
  * Check if user (authenticated or anonymous) can generate an image
@@ -49,27 +51,34 @@ export async function canUserGenerate(req) {
     }
   }
 
-  // Anonymous user - check IP-based rate limit
+  // Anonymous user - allow ANONYMOUS_LIMIT previews per IP per window
   try {
-    const count = await getAnonymousGenerationCount(ipAddress, 24);
-
-    if (count >= ANONYMOUS_DAILY_LIMIT) {
+    const usedCount = await getAnonymousGenerationCount(ipAddress, ANONYMOUS_WINDOW_HOURS);
+    const remaining = Math.max(0, ANONYMOUS_LIMIT - usedCount);
+    if (remaining > 0) {
       return {
-        allowed: false,
-        reason: 'Daily limit reached',
+        allowed: true,
         isAnonymous: true,
-        remainingGenerations: 0
+        remainingGenerations: remaining - 1 // after this generation
       };
     }
-
     return {
-      allowed: true,
+      allowed: false,
+      reason: 'Sign up free to keep creating — new accounts get 10 credits.',
       isAnonymous: true,
-      remainingGenerations: ANONYMOUS_DAILY_LIMIT - count
+      remainingGenerations: 0,
+      needsSignup: true
     };
   } catch (error) {
     console.error('Error checking anonymous limit:', error);
-    return { allowed: false, reason: 'Error checking limit' };
+    // Fail closed: require signup if we can't read the table
+    return {
+      allowed: false,
+      reason: 'Sign in to generate. New accounts get 10 free credits.',
+      isAnonymous: true,
+      remainingGenerations: 0,
+      needsSignup: true
+    };
   }
 }
 
@@ -81,19 +90,15 @@ export async function deductCreditsForGeneration(req, generationData) {
   const tokenData = getUserFromRequest(req);
   const ipAddress = getClientIp(req);
 
-  // Authenticated user - deduct credits
+  // Authenticated user - deduct credits atomically (race-safe)
   if (tokenData && tokenData.userId) {
     try {
-      const user = await getUserById(tokenData.userId);
+      const newBalance = await atomicDeductCredits(tokenData.userId, GENERATION_COST);
 
-      if (!user) {
-        throw new Error('User not found');
+      if (newBalance === null) {
+        // Either user doesn't exist or balance went under between check and deduct
+        throw new Error('Insufficient credits at deduction time');
       }
-
-      const newBalance = user.credits_balance - GENERATION_COST;
-
-      // Update user credits
-      await updateUserCredits(tokenData.userId, newBalance);
 
       // Record transaction
       await addCreditTransaction(
@@ -114,19 +119,27 @@ export async function deductCreditsForGeneration(req, generationData) {
     }
   }
 
-  // Anonymous user - record generation for rate limiting
+  // Anonymous user — record the generation against their IP/session
   try {
-    await recordAnonymousGeneration(ipAddress, generationData.sessionId);
-    const count = await getAnonymousGenerationCount(ipAddress, 24);
-
+    await recordAnonymousGeneration(ipAddress, generationData.sessionId || null);
+    const usedCount = await getAnonymousGenerationCount(ipAddress, ANONYMOUS_WINDOW_HOURS);
     return {
       success: true,
       isAnonymous: true,
-      remainingGenerations: ANONYMOUS_DAILY_LIMIT - count
+      remainingGenerations: Math.max(0, ANONYMOUS_LIMIT - usedCount),
+      newBalance: null,
+      creditsUsed: 0
     };
   } catch (error) {
     console.error('Error recording anonymous generation:', error);
-    throw error;
+    // Don't block on telemetry failure
+    return {
+      success: true,
+      isAnonymous: true,
+      remainingGenerations: 0,
+      newBalance: null,
+      creditsUsed: 0
+    };
   }
 }
 
@@ -172,44 +185,36 @@ export async function addCreditsToUser(userId, amount, description, stripePaymen
 export function getCreditPackages() {
   return [
     {
-      id: 'credits_5',
-      credits: 5,
+      id: 'credits_25',
+      credits: 25,
       price: 5.00,
-      pricePerCredit: 1.00,
+      pricePerCredit: 0.20,
       popular: false,
-      lookupKey: 'CREDITS-5'
-    },
-    {
-      id: 'credits_10',
-      credits: 10,
-      price: 10.00,
-      pricePerCredit: 1.00,
-      popular: false,
-      lookupKey: 'CREDITS-10'
-    },
-    {
-      id: 'credits_15',
-      credits: 15,
-      price: 15.00,
-      pricePerCredit: 1.00,
-      popular: true,
-      lookupKey: 'CREDITS-15'
-    },
-    {
-      id: 'credits_20',
-      credits: 20,
-      price: 20.00,
-      pricePerCredit: 1.00,
-      popular: false,
-      lookupKey: 'CREDITS-20'
+      lookupKey: 'CREDITS-25'
     },
     {
       id: 'credits_50',
       credits: 50,
-      price: 50.00,
-      pricePerCredit: 1.00,
-      popular: false,
+      price: 10.00,
+      pricePerCredit: 0.20,
+      popular: true,
       lookupKey: 'CREDITS-50'
+    },
+    {
+      id: 'credits_100',
+      credits: 100,
+      price: 20.00,
+      pricePerCredit: 0.20,
+      popular: false,
+      lookupKey: 'CREDITS-100'
+    },
+    {
+      id: 'credits_250',
+      credits: 250,
+      price: 50.00,
+      pricePerCredit: 0.20,
+      popular: false,
+      lookupKey: 'CREDITS-250'
     }
   ];
 }

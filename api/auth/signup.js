@@ -1,9 +1,12 @@
+import crypto from 'node:crypto';
 import { createUser, getUserByEmail } from '../db/index.js';
-import { hashPassword, generateToken, isValidEmail, isValidPassword, createAuthCookie } from './utils.js';
+import { hashPassword, isValidEmail, isValidPassword } from './utils.js';
+import { sendVerificationEmail } from '../_email.js';
 
 /**
  * POST /api/auth/signup
- * Create a new user account with 10 free credits
+ * Creates an unverified account. Sends a verification email. Does NOT issue a JWT.
+ * User must click the email link before they can log in.
  */
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -11,49 +14,51 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body || {};
 
-    // Validate input
     if (!email || !password) {
       return res.status(400).json({ error: 'Email and password are required' });
     }
-
     if (!isValidEmail(email)) {
       return res.status(400).json({ error: 'Invalid email format' });
     }
-
     if (!isValidPassword(password)) {
       return res.status(400).json({ error: 'Password must be at least 8 characters' });
     }
 
-    // Check if user already exists
-    const existingUser = await getUserByEmail(email.toLowerCase());
+    const cleanEmail = email.toLowerCase().trim();
+
+    const existingUser = await getUserByEmail(cleanEmail);
     if (existingUser) {
       return res.status(409).json({ error: 'Email already registered' });
     }
 
-    // Hash password
     const passwordHash = await hashPassword(password);
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+    const verificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24h
 
-    // Create user with 10 free credits
-    const user = await createUser(email.toLowerCase(), passwordHash);
+    const user = await createUser(cleanEmail, passwordHash, {
+      verificationToken,
+      verificationExpires
+    });
 
-    // Generate JWT token
-    const token = generateToken(user);
+    const origin = process.env.CLIENT_URL
+      || req.headers.origin
+      || `https://${req.headers.host || 'aiprint.ai'}`;
+    const verifyUrl = `${origin}/api/auth/verify?token=${verificationToken}`;
 
-    // Set HTTP-only cookie
-    res.setHeader('Set-Cookie', createAuthCookie(token));
+    try {
+      const result = await sendVerificationEmail(cleanEmail, verifyUrl);
+      if (result?.error) console.error('Verification email send returned error:', result);
+    } catch (err) {
+      console.error('Verification email threw:', err);
+    }
 
-    // Return user data (without password hash)
     return res.status(201).json({
       success: true,
-      user: {
-        id: user.id,
-        email: user.email,
-        credits_balance: user.credits_balance,
-        created_at: user.created_at
-      },
-      token
+      verificationRequired: true,
+      message: 'Account created. Please check your email to verify your account.',
+      email: cleanEmail
     });
   } catch (error) {
     console.error('Signup error:', error);

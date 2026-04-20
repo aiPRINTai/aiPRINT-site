@@ -2,6 +2,9 @@
 import { stripe } from './_stripe.js';
 import { json, rawBody } from './_util.js';
 import { addCreditsToUser } from './credits/utils.js';
+import { createOrder, getOrderByStripeSessionId, getCreditTransactionByStripePaymentId } from './db/index.js';
+import { sendOrderConfirmationEmail, sendFulfillmentAlertEmail, sendCreditPurchaseEmail } from './_email.js';
+import { getUserById } from './db/index.js';
 
 export const config = { api: { bodyParser: false } }; // Vercel/Next tells not to parse
 
@@ -35,8 +38,15 @@ export default async function handler(req, res) {
           return res.status(200).json({ received: true, error: 'Invalid metadata' });
         }
 
+        // Idempotency: if we've already credited this Stripe session, skip
+        const alreadyCredited = await getCreditTransactionByStripePaymentId(s.id);
+        if (alreadyCredited) {
+          console.log(`ℹ️  Credit purchase ${s.id} already processed — skipping duplicate webhook`);
+          return res.status(200).json({ received: true, duplicate: true });
+        }
+
         // Add credits to user account
-        await addCreditsToUser(
+        const result = await addCreditsToUser(
           userId,
           creditsAmount,
           `Purchased ${creditsAmount} credits (${packageId})`,
@@ -44,6 +54,22 @@ export default async function handler(req, res) {
         );
 
         console.log(`✅ Credits added: ${creditsAmount} credits to user ${userId} (payment: ${s.id})`);
+
+        // Send purchase confirmation email
+        try {
+          const user = await getUserById(userId);
+          await sendCreditPurchaseEmail({
+            email: s.customer_details?.email || user?.email,
+            name: s.customer_details?.name || user?.name,
+            creditsAmount,
+            amountTotal: s.amount_total,
+            currency: s.currency,
+            newBalance: result?.newBalance,
+            sessionId: s.id
+          });
+        } catch (emailErr) {
+          console.error('❌ Credit purchase email failed:', emailErr);
+        }
       } catch (error) {
         console.error('❌ Error adding credits:', error);
         // Still return 200 to acknowledge webhook receipt
@@ -51,27 +77,52 @@ export default async function handler(req, res) {
     }
     // Handle print product orders
     else {
-      const order = {
-        order_id: s.id,
-        lookup_key: m.lookup_key,
-        preview_url: m.preview_url,
-        prompt: m.prompt,
-        options: {
-          ratio: m.ratio, style: m.style, mood: m.mood, light: m.light,
-          composition: m.composition, medium: m.medium,
-          signature: m.signature_json ? JSON.parse(m.signature_json) : null
-        },
-        customer: {
-          email: s.customer_details?.email || '',
-          name: s.shipping_details?.name || '',
-          address: s.shipping_details?.address || null
-        },
-        amount_total: s.amount_total,
-        tax_amount: s.total_details?.amount_tax || 0,
-        created: Date.now()
-      };
-      // TODO: Save `order` (DB/Sheets/Notion) or email yourself
-      console.log('✅ Order captured:', order);
+      try {
+        // Idempotency: Stripe can retry; skip if we've already processed this session
+        const existing = await getOrderByStripeSessionId(s.id);
+        if (existing) {
+          console.log(`ℹ️  Order ${s.id} already recorded — skipping duplicate webhook`);
+          return res.status(200).json({ received: true, duplicate: true });
+        }
+
+        const order = {
+          stripe_session_id: s.id,
+          customer_email: s.customer_details?.email || '',
+          customer_name: s.shipping_details?.name || s.customer_details?.name || '',
+          shipping_address: s.shipping_details?.address || null,
+          lookup_key: m.lookup_key,
+          preview_url: m.preview_url,
+          // clean_url = the unwatermarked print master. For pre-watermark-feature
+          // orders, m.clean_url won't be set; fall back to preview_url so admin
+          // export still has *something*.
+          clean_url: m.clean_url || m.preview_url,
+          prompt: m.prompt,
+          options: {
+            ratio: m.ratio, style: m.style, mood: m.mood, light: m.light,
+            composition: m.composition, medium: m.medium,
+            signature: m.signature_json ? JSON.parse(m.signature_json) : null
+          },
+          amount_total: s.amount_total,
+          tax_amount: s.total_details?.amount_tax || 0,
+          currency: s.currency || 'usd'
+        };
+
+        await createOrder(order);
+        console.log(`✅ Order saved: ${s.id} (${order.customer_email})`);
+
+        // Fire emails — failures here shouldn't fail the webhook
+        await Promise.allSettled([
+          sendOrderConfirmationEmail(order),
+          sendFulfillmentAlertEmail(order)
+        ]).then(results => {
+          results.forEach((r, i) => {
+            if (r.status === 'rejected') console.error(`❌ Email ${i} failed:`, r.reason);
+          });
+        });
+      } catch (err) {
+        console.error('❌ Error processing print order:', err);
+        // Still ack to Stripe; we have the event in their dashboard for retry
+      }
     }
   }
 
