@@ -937,13 +937,13 @@
       <p id="orderMsg" class="muted mt-3 max-w-2xl mx-auto">Generate and select a preview above to unlock ordering. Compare Canvas, Metal, and Acrylic side-by-side — same sizes, your call on finish.</p>
     </div>
 
-    <!-- Orientation indicator: shows the orientation locked in by the selected preview -->
+    <!-- Orientation indicator: tracks the aspect-ratio dropdown in Step 1 so
+         shoppers can price-check across orientations before they generate. -->
     <div id="orientationBar" class="flex items-center justify-center gap-3 mb-6 text-sm text-gray-300">
-      <span id="orientationChipIdle">Pick an orientation when you generate a preview above to see your sizes here.</span>
-      <span id="orientationChip" class="hidden inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15">
+      <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15">
         <span class="text-indigo-300" aria-hidden="true">●</span>
-        <span class="text-white font-semibold" id="orientationChipText">—</span>
-        <span class="text-gray-400 text-xs">based on your preview</span>
+        <span class="text-white font-semibold" id="orientationChipText">Square (1:1)</span>
+        <span id="orientationChipNote" class="text-gray-400 text-xs">preview pricing — generate to order</span>
       </span>
     </div>
 
@@ -1973,17 +1973,12 @@
     function renderMaterialColumns(bucket, enabled) {
       const resolved = bucket || 'square';
       ['canvas', 'metal', 'acrylic'].forEach(m => renderMaterial(m, resolved, !!enabled));
-      const chip = $('#orientationChip');
-      const chipIdle = $('#orientationChipIdle');
       const chipText = $('#orientationChipText');
-      if (bucket && chip && chipText) {
-        chipText.textContent = SHAPE_LABEL[bucket] || '';
-        chip.classList.remove('hidden');
-        if (chipIdle) chipIdle.classList.add('hidden');
-      } else if (chip) {
-        chip.classList.add('hidden');
-        if (chipIdle) chipIdle.classList.remove('hidden');
-      }
+      const chipNote = $('#orientationChipNote');
+      if (chipText) chipText.textContent = SHAPE_LABEL[resolved] || '';
+      if (chipNote) chipNote.textContent = enabled
+        ? 'based on your preview'
+        : 'preview pricing — generate to order';
     }
 
     // Back-compat shims so callers elsewhere in the file keep working.
@@ -2207,6 +2202,31 @@
 
     // Material tabs were removed in favor of three material columns side-by-side;
     // selecting a size button now drives `currentCollection` directly.
+
+    // Live-sync the material columns to the aspect-ratio dropdown in Step 1.
+    // Lets customers shop prices across orientations without regenerating —
+    // buttons stay disabled until a matching preview is actually selected.
+    function ratioValueToShape(v) {
+      if (v === '1536x1024') return 'h32';
+      if (v === '1024x1536') return 'v23';
+      return 'square';
+    }
+    function syncColumnsToRatio() {
+      const shape = ratioValueToShape($('#ratioSel')?.value);
+      // Columns are only clickable if a matching preview has been selected —
+      // otherwise this is a "browse prices" preview.
+      const enabled = !!currentPreview && currentPreview.shape === shape;
+      renderMaterialColumns(shape, enabled);
+      // If the user switched orientation away from their current selection,
+      // clear it so Review & Checkout never points at a mismatched size.
+      if (selected && selected.shape !== shape) {
+        selected = null;
+        $('#selectionSummary').textContent = 'Selected: —';
+        $('#reviewBtn').classList.add('disabled');
+        $$('.sizeBtn').forEach(x => x.classList.remove('ringy', 'bg-white/20'));
+      }
+    }
+    $('#ratioSel')?.addEventListener('change', syncColumnsToRatio);
 
     $('#reviewBtn').addEventListener('click', async () => {
       if (!selected || !currentPreview) { alert('Please generate a preview and select a size first.'); return; }
