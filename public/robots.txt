@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /account.html
+Disallow: /admin/
+Disallow: /api/
+Disallow: /success.html
+Disallow: /thank-you.html
+Disallow: /verified.html
+
+Sitemap: https://aiprint.ai/sitemap.xml

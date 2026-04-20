@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About | aiPRINT.ai — AI Art, Made Real</title>
+  <meta name="description" content="aiPRINT.ai turns your ideas into museum-grade prints. AI generation paired with human curation and in-house production at our Florida studio." />
+  <link rel="canonical" href="https://aiprint.ai/about.html" />
+  <meta name="theme-color" content="#0a0f1d" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="aiPRINT.ai" />
+  <meta property="og:title" content="About | aiPRINT.ai — AI Art, Made Real" />
+  <meta property="og:description" content="AI generation paired with human curation and in-house production. Every print is hand-inspected by the founder before and after print." />
+  <meta property="og:url" content="https://aiprint.ai/about.html" />
+  <meta property="og:image" content="https://aiprint.ai/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="About | aiPRINT.ai" />
+  <meta name="twitter:description" content="AI generation paired with human curation. Every print is hand-inspected by the founder before and after print." />
+  <meta name="twitter:image" content="https://aiprint.ai/og-image.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { --bg:#0a0f1d; --ink:#e7eef8; --muted:#9fb3c8; }
+    html,body{background:var(--bg);color:var(--ink);}
+    html{font-size:clamp(16px, 0.85vw + 12px, 20px);}
+    body{font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;}
+    .h1{font-size:clamp(2.4rem, 4.5vw, 4.5rem);font-weight:800;line-height:1.05}
+    .h2{font-size:clamp(1.55rem, 2.8vw, 2.8rem);font-weight:800;line-height:1.1}
+    .muted{color:var(--muted)}
+    .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
+    .btn{background:#fff;color:#000;font-weight:700;padding:.7rem 1rem;border-radius:.6rem;cursor:pointer;border:none;display:inline-block;text-decoration:none;}
+    .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#e7eef8;cursor:pointer;padding:.7rem 1rem;border-radius:.6rem;display:inline-block;text-decoration:none;}
+    .gradient-text{background:linear-gradient(135deg,#a78bfa,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent;}
+    .step-num{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#6366f1,#818cf8);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;flex-shrink:0;}
+  </style>
+  <script defer src="/js/analytics.js"></script>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
+    <div class="max-w-[1800px] mx-auto px-5 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2">
+        <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
+        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span></span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-base">
+        <a href="/" class="hover:text-white">Home</a>
+        <a href="/#how" class="hover:text-white">How it works</a>
+        <a href="/#materials" class="hover:text-white">Materials</a>
+        <a href="/about.html" class="hover:text-white font-semibold">About</a>
+        <a href="/faq.html" class="hover:text-white">FAQ</a>
+        <a href="/policies.html" class="hover:text-white">Policies</a>
+        <a href="/contact.html" class="hover:text-white">Contact</a>
+      </nav>
+      <button id="navOpen" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Nav Sheet -->
+  <div id="navSheet" class="fixed inset-0 z-[100] hidden">
+    <div id="navBackdrop" class="absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-200"></div>
+    <aside id="navDrawer" class="absolute right-0 top-0 h-full w-80 max-w-[88vw] bg-[#0b1020] border-l border-white/10 translate-x-full transition-transform duration-300">
+      <div class="h-14 px-4 border-b border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
+          <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span></span>
+        </div>
+        <button id="navClose" class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 hover:bg-white/10">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <nav class="px-4 py-4">
+        <ul class="space-y-2 text-white/90 text-base">
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/">Home</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/#how">How it works</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/#materials">Materials</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/about.html">About</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/faq.html">FAQ</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/policies.html">Policies</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/contact.html">Contact</a></li>
+        </ul>
+        <div class="mt-6 space-y-2">
+          <a href="/#create" class="block w-full text-center rounded-lg px-4 py-2 font-semibold bg-white text-black">Create a preview</a>
+        </div>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- HERO -->
+  <section class="relative overflow-hidden">
+    <div class="relative">
+      <img src="/banners/about-hero.jpg"
+           alt="Dramatic atmosphere of light breaking through stormy clouds — ideas becoming art"
+           class="w-full h-[42vh] md:h-[52vh] object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-b from-[#0a0f1d]/30 via-[#0a0f1d]/55 to-[#0a0f1d]"></div>
+      <div class="absolute inset-0 flex items-center justify-center px-5">
+        <div class="text-center max-w-4xl">
+          <h1 class="h1 mb-5 drop-shadow-lg">AI art, <span class="gradient-text">made real.</span></h1>
+          <p class="text-gray-200 text-lg max-w-2xl mx-auto drop-shadow">
+            We turn the ideas in your head into museum-grade prints you can hang on your wall — combining the speed of AI with the craft of a real print studio.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <section class="max-w-5xl mx-auto px-5 py-12">
+    <div class="glass rounded-2xl p-8 md:p-12">
+      <div class="grid md:grid-cols-[260px_1fr] gap-8 md:gap-10 items-start">
+        <div class="flex md:block flex-col items-center md:items-start">
+          <img src="/founder-lawrence.jpg"
+               alt="Lawrence — founder of aiPRINT.ai, photographing in the dunes at golden hour"
+               loading="lazy"
+               class="w-full max-w-[260px] aspect-square object-cover rounded-2xl shadow-xl shadow-black/40 border border-white/10" />
+          <div class="mt-3 text-center md:text-left">
+            <div class="text-white font-semibold">Lawrence</div>
+            <div class="text-gray-400 text-sm">Founder · Florida studio</div>
+          </div>
+        </div>
+        <div>
+          <h2 class="h2 mb-5">Our story</h2>
+          <div class="space-y-4 text-gray-300 leading-relaxed">
+            <p>
+              aiPRINT.ai started with a simple frustration: the most powerful image generators in the world produce gallery-worthy art in seconds — but turning that art into something physical, archival, and beautiful was a slow, scattered, technical mess. Color profiles. DPI math. Vendor portals. Six different shipping policies.
+            </p>
+            <p>
+              We thought there should be one place. Type a prompt, choose a size and finish, and a real print arrives at your door — color-corrected by a human, printed on professional materials at our Florida studio, and shipped flat or stretched and ready to hang.
+            </p>
+            <p>
+              <span class="text-white font-semibold">I'm Lawrence — a working fine-art photographer for over a decade.</span> I built aiPRINT.ai because I wanted my own AI ideas to live on a wall, not just on a screen. Every order on this site crosses my desk before it prints — I confirm the file is right for the material chosen, and the print is inspected before and after it comes off the printer, before it goes anywhere near a shipping box.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STUDIO -->
+  <section class="max-w-6xl mx-auto px-5 py-12">
+    <div class="text-center mb-8">
+      <div class="inline-block text-xs font-semibold tracking-widest uppercase text-purple-300 bg-purple-500/10 border border-purple-500/30 rounded-full px-4 py-1.5 mb-4">Inside the studio</div>
+      <h2 class="h2 mb-3">Where your print is actually made</h2>
+      <p class="muted max-w-2xl mx-auto">A real print lab in Florida — Mimaki UV flatbed for acrylic and metal, Epson archival pigment for fine art paper and canvas. Every piece is inspected before and after print before it ships.</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="md:col-span-2">
+        <img src="/studio/lab-prints-hero.jpg"
+             alt="Finished prints laid out on the print floor at the aiPRINT studio in Florida"
+             loading="lazy"
+             class="w-full rounded-2xl border border-white/10 shadow-xl shadow-black/40" />
+      </div>
+      <img src="/studio/lab-wide.jpg"
+           alt="Print studio workspace with finished pieces on the wall"
+           loading="lazy"
+           class="w-full rounded-2xl border border-white/10 shadow-lg shadow-black/30" />
+      <img src="/studio/lab-acrylic.jpg"
+           alt="Acrylic prints and a black frame ready for finishing"
+           loading="lazy"
+           class="w-full rounded-2xl border border-white/10 shadow-lg shadow-black/30" />
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="max-w-5xl mx-auto px-5 py-12">
+    <h2 class="h2 text-center mb-10">What we believe</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="glass rounded-2xl p-6">
+        <div class="text-3xl mb-3">🎨</div>
+        <h3 class="font-bold text-lg mb-2">Anyone can be an artist</h3>
+        <p class="muted text-sm leading-relaxed">You don't need a degree, a tablet, or a decade of practice. You need an idea and the words to describe it. We handle the rest.</p>
+      </div>
+      <div class="glass rounded-2xl p-6">
+        <div class="text-3xl mb-3">🖼️</div>
+        <h3 class="font-bold text-lg mb-2">Physical still matters</h3>
+        <p class="muted text-sm leading-relaxed">A screen is not a wall. There's something about holding a finished print, hanging it, watching the light change on it, that no digital file can match.</p>
+      </div>
+      <div class="glass rounded-2xl p-6">
+        <div class="text-3xl mb-3">✋</div>
+        <h3 class="font-bold text-lg mb-2">Humans in the loop</h3>
+        <p class="muted text-sm leading-relaxed">AI generates. A real person reviews every order before it goes to print — checking color, composition, and detail so what arrives is what you imagined.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="max-w-4xl mx-auto px-5 py-12">
+    <h2 class="h2 text-center mb-10">How a print is made</h2>
+    <div class="space-y-6">
+      <div class="flex gap-5 items-start">
+        <div class="step-num">1</div>
+        <div>
+          <h3 class="font-bold text-lg mb-1">You describe it</h3>
+          <p class="muted">Type a prompt — anything from "misty redwood forest at dawn" to "abstract gold leaf composition." Pick a style, mood, and lighting. We generate a preview in seconds.</p>
+        </div>
+      </div>
+      <div class="flex gap-5 items-start">
+        <div class="step-num">2</div>
+        <div>
+          <h3 class="font-bold text-lg mb-1">You pick the piece</h3>
+          <p class="muted">See your artwork on a real wall in our room previews. Choose the material — fine art canvas, ChromaLuxe metal, or museum acrylic — and the size that fits your space.</p>
+        </div>
+      </div>
+      <div class="flex gap-5 items-start">
+        <div class="step-num">3</div>
+        <div>
+          <h3 class="font-bold text-lg mb-1">A human reviews it</h3>
+          <p class="muted">Before anything touches a printer, a real person color-corrects, sharpens, and proofs the file at print resolution. If it's not gallery-quality, we don't run it.</p>
+        </div>
+      </div>
+      <div class="flex gap-5 items-start">
+        <div class="step-num">4</div>
+        <div>
+          <h3 class="font-bold text-lg mb-1">We print, inspect, and ship</h3>
+          <p class="muted">Your piece is produced on archival materials at our Florida studio, inspected once it's off the printer, optionally embedded with your custom signature, bundled with a Certificate of Authenticity, and shipped ready to hang. 7–14 days door to door.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STUDIO -->
+  <section class="max-w-4xl mx-auto px-5 py-12">
+    <div class="glass rounded-2xl p-8 md:p-12 text-center">
+      <h2 class="h2 mb-3">Made in Florida, USA</h2>
+      <p class="muted max-w-2xl mx-auto mb-6">
+        Every aiPRINT is produced at our studio — no drop-shippers, no overseas relays, no surprises. We control the materials, the color, and the timeline so you don't have to.
+      </p>
+      <div class="flex flex-wrap justify-center gap-3 text-sm">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10"><span class="text-green-400">✓</span> Archival inks &amp; substrates</span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10"><span class="text-green-400">✓</span> Color-managed workflow</span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10"><span class="text-green-400">✓</span> Hand-finished &amp; inspected</span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10"><span class="text-green-400">✓</span> Recyclable packaging</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="max-w-4xl mx-auto px-5 py-16 text-center">
+    <h2 class="h2 mb-4">Ready to make something for your wall?</h2>
+    <p class="muted mb-7 max-w-xl mx-auto">It takes a minute. Sign up free, get 10 credits, and see your idea on canvas before you spend a dollar.</p>
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+      <a href="/#create" class="btn">Create a preview →</a>
+      <a href="/faq.html" class="btn-ghost">Read the FAQ</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/10">
+    <div class="max-w-[1800px] mx-auto px-5 py-10 text-sm text-white/70 flex flex-col md:flex-row justify-between gap-3">
+      <span>© <span id="y"></span> aiPRINT.ai — All rights reserved.</span>
+      <span><a href="mailto:info@aiprint.ai" class="hover:text-white">info@aiprint.ai</a> · Florida, USA</span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = '2024';
+    (() => {
+      const sheet = document.getElementById('navSheet');
+      const drawer = document.getElementById('navDrawer');
+      const backdrop = document.getElementById('navBackdrop');
+      const openBtn = document.getElementById('navOpen');
+      const closeBtn = document.getElementById('navClose');
+      const openSheet = () => { sheet.classList.remove('hidden'); requestAnimationFrame(() => { drawer.classList.remove('translate-x-full'); backdrop.classList.remove('opacity-0'); document.body.classList.add('overflow-hidden'); }); };
+      const closeSheet = () => { drawer.classList.add('translate-x-full'); backdrop.classList.add('opacity-0'); setTimeout(() => { sheet.classList.add('hidden'); document.body.classList.remove('overflow-hidden'); }, 250); };
+      openBtn?.addEventListener('click', openSheet);
+      closeBtn?.addEventListener('click', closeSheet);
+      backdrop?.addEventListener('click', closeSheet);
+      sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSheet));
+      window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !sheet.classList.contains('hidden')) closeSheet(); });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" width="480" height="300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Printed on archival materials">
+  <defs>
+    <linearGradient id="bg2" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#10162A"/>
+      <stop offset="1" stop-color="#0A0F1D"/>
+    </linearGradient>
+    <linearGradient id="art2" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#a78bfa" stop-opacity="0.55"/>
+      <stop offset=".5" stop-color="#818cf8" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#6366f1" stop-opacity="0.55"/>
+    </linearGradient>
+    <linearGradient id="ink2" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#818cf8"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="300" fill="url(#bg2)"/>
+  <path d="M0 240 L480 240 L480 300 L0 300 Z" fill="rgba(255,255,255,0.03)"/>
+  <path d="M0 240 L480 240" stroke="rgba(255,255,255,0.12)"/>
+  <g>
+    <rect x="60" y="120" width="360" height="24" rx="3" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.18)"/>
+    <rect x="60" y="144" width="360" height="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)"/>
+    <rect x="170" y="112" width="100" height="42" rx="4" fill="#0F1530" stroke="rgba(255,255,255,0.22)"/>
+    <rect x="180" y="122" width="80" height="4" rx="2" fill="rgba(255,255,255,0.3)"/>
+    <circle cx="186" cy="137" r="3" fill="#818cf8"/>
+    <circle cx="196" cy="137" r="3" fill="#a78bfa"/>
+    <circle cx="206" cy="137" r="3" fill="#6366f1"/>
+    <path d="M80 135 L170 135" stroke="rgba(129,140,248,0.5)" stroke-dasharray="3 3"/>
+    <rect x="60" y="156" width="360" height="80" fill="url(#art2)" opacity="0.6"/>
+    <rect x="60" y="156" width="360" height="80" fill="none" stroke="rgba(255,255,255,0.14)"/>
+    <rect x="170" y="154" width="100" height="4" fill="url(#ink2)" opacity="0.8"/>
+  </g>
+  <g opacity="0.85">
+    <path d="M120 180 Q 240 160 360 180" stroke="rgba(255,255,255,0.25)" fill="none"/>
+    <path d="M120 210 Q 240 196 360 210" stroke="rgba(255,255,255,0.15)" fill="none"/>
+  </g>
+  <g transform="translate(32,48)">
+    <rect width="60" height="22" rx="11" fill="rgba(129,140,248,0.14)" stroke="rgba(129,140,248,0.35)"/>
+    <text x="30" y="15" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="10" font-weight="700" letter-spacing="1.5" fill="#a5b4fc">PRINT</text>
+  </g>
+</svg>

@@ -5,15 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>FAQ | aiPRINT.ai — Questions & Answers</title>
   <meta name="description" content="Answers about AI image generation, materials, sizing, shipping, returns, usage rights, signatures, and payments for aiPRINT.ai prints." />
-  <link rel="icon" href="/favicon.ico" />
+  <link rel="canonical" href="https://aiprint.ai/faq.html" />
+  <meta name="theme-color" content="#0a0f1d" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="aiPRINT.ai" />
+  <meta property="og:title" content="FAQ | aiPRINT.ai — Questions & Answers" />
+  <meta property="og:description" content="Materials, sizing, shipping, returns, usage rights, signatures, and payments — answered." />
+  <meta property="og:url" content="https://aiprint.ai/faq.html" />
+  <meta property="og:image" content="https://aiprint.ai/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="FAQ | aiPRINT.ai" />
+  <meta name="twitter:description" content="Materials, sizing, shipping, returns, usage rights, signatures, and payments — answered." />
+  <meta name="twitter:image" content="https://aiprint.ai/og-image.png" />
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     :root { --bg:#0a0f1d; --ink:#e7eef8; --muted:#9fb3c8; }
     html,body{background:var(--bg);color:var(--ink);}
+    html{font-size:clamp(16px, 0.85vw + 12px, 20px);}
     body{font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;}
-    .h1{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:800;line-height:1.05}
-    .h2{font-size:clamp(1.4rem,2.4vw,2.1rem);font-weight:800;}
+    .h1{font-size:clamp(2.4rem, 4.5vw, 4.5rem);font-weight:800;line-height:1.05}
+    .h2{font-size:clamp(1.55rem, 2.8vw, 2.8rem);font-weight:800;line-height:1.1}
     .muted{color:var(--muted)}
     .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
     .btn{background:#fff;color:#000;font-weight:700;padding:.7rem 1rem;border-radius:.6rem;cursor:pointer;border:none;}
@@ -23,20 +39,22 @@
     summary { cursor: pointer; user-select: none; }
     details { transition: all 0.3s ease; }
   </style>
-</head>
+<script defer src="/js/analytics.js"></script>
+  </head>
 <body>
 
   <!-- HEADER -->
   <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+    <div class="max-w-[1800px] mx-auto px-5 h-16 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2">
-        <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
-        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+        <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
+        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span></span>
       </a>
       <nav class="hidden md:flex items-center gap-6 text-base">
         <a href="/" class="hover:text-white">Home</a>
         <a href="/#how" class="hover:text-white">How it works</a>
         <a href="/#materials" class="hover:text-white">Materials</a>
+        <a href="/about.html" class="hover:text-white">About</a>
         <a href="/faq.html" class="hover:text-white font-semibold">FAQ</a>
         <a href="/policies.html" class="hover:text-white">Policies</a>
         <a href="/contact.html" class="hover:text-white">Contact</a>
@@ -57,8 +75,8 @@
     <aside id="navDrawer" class="absolute right-0 top-0 h-full w-80 max-w-[88vw] bg-[#0b1020] border-l border-white/10 translate-x-full transition-transform duration-300">
       <div class="h-14 px-4 border-b border-white/10 flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
-          <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+          <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
+          <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span></span>
         </div>
         <button id="navClose" class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 hover:bg-white/10">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -71,6 +89,7 @@
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/">Home</a></li>
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/#how">How it works</a></li>
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/#materials">Materials</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/about.html">About</a></li>
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/faq.html">FAQ</a></li>
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/policies.html">Policies</a></li>
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/contact.html">Contact</a></li>
@@ -82,19 +101,72 @@
     </aside>
   </div>
 
+  <!-- Hero with banner -->
+  <section class="relative overflow-hidden">
+    <div class="relative">
+      <img src="/banners/faq-hero.jpg"
+           alt="A framed gallery print under museum spotlight on a dark wall"
+           class="w-full h-[36vh] md:h-[44vh] object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-b from-[#0a0f1d]/40 via-[#0a0f1d]/60 to-[#0a0f1d]"></div>
+      <div class="absolute inset-0 flex items-end pb-10 md:pb-14 px-5">
+        <div class="max-w-6xl mx-auto w-full">
+          <h1 class="h1 mb-3 drop-shadow-lg">Frequently Asked Questions</h1>
+          <p class="text-gray-200 text-lg max-w-3xl drop-shadow">
+            Everything you need to know about creating your artwork, materials, sizing, shipping, and more.
+            Can't find your answer? <a href="/contact.html" class="text-white underline">Contact us</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <main class="max-w-6xl mx-auto px-5 py-12">
-    <!-- Hero -->
-    <section class="mb-12">
-      <h1 class="h1 mb-4">Frequently Asked Questions</h1>
-      <p class="muted text-lg max-w-3xl">
-        Everything you need to know about creating your artwork, materials, sizing, shipping, and more. 
-        Can't find your answer? <a href="/contact.html" class="text-white underline">Contact us</a>.
-      </p>
+
+    <!-- The honest questions first -->
+    <section id="authenticity" class="mb-10 scroll-mt-24">
+      <h2 class="h2 text-2xl mb-4">The honest questions</h2>
+      <div class="glass rounded-xl p-6 space-y-4">
+        <details class="group border-b border-white/10 pb-4" open>
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span class="font-semibold">Is AI-generated art "real" art?</span>
+            <svg class="w-5 h-5 opacity-60 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-3">It's a fair question. Your prompt, your style choices, your composition decisions, and a human curator's final review all shape the artwork. The AI is a tool — like a camera or a paintbrush. The result is a one-of-a-kind piece that exists because you made the creative choices behind it.</p>
+        </details>
+        <details class="group border-b border-white/10 pb-4">
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span class="font-semibold">Who owns the copyright?</span>
+            <svg class="w-5 h-5 opacity-60 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-3">You receive full personal-use rights to your artwork — display it, gift it, photograph it. Commercial resale rights are not included by default. The Certificate of Authenticity documents your unique edition. Each generation is unique to you and is not resold to anyone else.</p>
+        </details>
+        <details class="group border-b border-white/10 pb-4">
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span class="font-semibold">What if I don't love the print when it arrives?</span>
+            <svg class="w-5 h-5 opacity-60 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-3">You see and approve the watermarked preview before you order, so there are no surprises in composition. If your print arrives damaged or doesn't match the approved preview, we replace it free. Because each piece is custom-made, we can't accept buyer's-remorse returns — but our 30-day satisfaction guarantee covers any quality issue.</p>
+        </details>
+        <details class="group pb-2">
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span class="font-semibold">Is it actually unique, or could someone else generate the same thing?</span>
+            <svg class="w-5 h-5 opacity-60 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-3">Even with the identical prompt, the model produces a different result every time — different composition, lighting, and detail. We log your generation with a unique ID printed on your Certificate of Authenticity. Your piece is genuinely one of one.</p>
+        </details>
+        <details class="group pb-2 border-t border-white/10 pt-4">
+          <summary class="flex items-start justify-between cursor-pointer">
+            <span class="font-semibold">Can I see what the Certificate of Authenticity looks like?</span>
+            <svg class="w-5 h-5 opacity-60 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/></svg>
+          </summary>
+          <p class="muted mt-3">Yes — every print ships with a numbered Certificate of Authenticity on archival paper, documenting the title, medium, dimensions, edition number, issue date, and a unique fingerprint tied to your order. <a href="/coa.html?order=AI-P-SAMPLE&amp;stripe=cs_sample&amp;title=Mossy%20Pines%20No.%207&amp;medium=Fine%20Art%20Canvas&amp;dimensions=24%20%C3%97%2036%20in&amp;edition=42&amp;total=250&amp;date=2026-04-20&amp;fingerprint=a4f2%20%C2%B7%20e9c1%20%C2%B7%207b83%20%C2%B7%20d056" target="_blank" rel="noopener" class="text-indigo-300 underline hover:text-indigo-200 font-medium">View a sample certificate →</a></p>
+        </details>
+      </div>
     </section>
 
     <!-- FAQ Categories in 2-column grid -->
     <section class="grid lg:grid-cols-2 gap-8">
-      
+
       <!-- Ordering & Image Generation -->
       <div class="space-y-6">
         <h2 class="h2 text-2xl">Creating Your Art</h2>
@@ -147,15 +219,14 @@
               </svg>
             </summary>
             <p class="muted mt-3">
-              Yes! Toggle "Show signature on preview" and type your name. Your signature will be tastefully embedded 
-              in the final print, making it uniquely yours.
+              Yes! Click "Add your signature" under the artwork controls and type your name. Pick a font, color, size, and corner — it'll be tastefully embedded in the final print, making it uniquely yours.
             </p>
           </details>
         </div>
       </div>
 
       <!-- Materials & Quality -->
-      <div class="space-y-6">
+      <div id="materials" class="space-y-6 scroll-mt-24">
         <h2 class="h2 text-2xl">Materials & Quality</h2>
         
         <div class="glass rounded-xl p-6 space-y-4">
@@ -215,7 +286,7 @@
       </div>
 
       <!-- Shipping & Returns -->
-      <div class="space-y-6">
+      <div id="shipping" class="space-y-6 scroll-mt-24">
         <h2 class="h2 text-2xl">Shipping & Returns</h2>
         
         <div class="glass rounded-xl p-6 space-y-4">
@@ -227,8 +298,8 @@
               </svg>
             </summary>
             <p class="muted mt-3">
-              Production takes 3-5 business days, with shipping typically 3-7 days depending on location. 
-              Most orders arrive within 7-14 days total. Rush options available.
+              Production takes 3–7 business days depending on material, with shipping typically 3–7 days after that.
+              Most orders arrive within 7–14 days total. We'll keep you updated with tracking every step of the way.
             </p>
           </details>
 
@@ -240,8 +311,8 @@
               </svg>
             </summary>
             <p class="muted mt-3">
-              Currently shipping within the USA only. International shipping coming soon. 
-              Join our mailing list to be notified when we expand.
+              Currently shipping within the USA only. International shipping is coming soon —
+              email us at <a href="mailto:info@aiprint.ai" class="text-white underline">info@aiprint.ai</a> to be added to the waitlist.
             </p>
           </details>
 
@@ -274,7 +345,7 @@
       </div>
 
       <!-- Pricing & Payment -->
-      <div class="space-y-6">
+      <div id="pricing" class="space-y-6 scroll-mt-24">
         <h2 class="h2 text-2xl">Pricing & Payment</h2>
         
         <div class="glass rounded-xl p-6 space-y-4">
@@ -325,8 +396,8 @@
               </svg>
             </summary>
             <p class="muted mt-3">
-              Not yet, but they're coming soon! Perfect for the art lover who wants to create their own custom piece. 
-              Join our mailing list for updates.
+              Not yet, but they're on the way. Perfect for the art lover who wants to create their own custom piece.
+              Email us at <a href="mailto:info@aiprint.ai" class="text-white underline">info@aiprint.ai</a> to be notified when they launch.
             </p>
           </details>
         </div>
@@ -348,13 +419,13 @@
 
   <!-- FOOTER -->
   <footer class="border-t border-white/10 mt-20">
-    <div class="max-w-7xl mx-auto px-5 py-10 text-sm text-white/70">
+    <div class="max-w-[1800px] mx-auto px-5 py-10 text-sm text-white/70">
       © <span id="y"></span> aiPRINT.ai — All rights reserved.
     </div>
   </footer>
 
   <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+    document.getElementById('y').textContent = '2024';
     
     // Mobile menu
     (() => {

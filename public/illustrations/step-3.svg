@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" width="480" height="300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Arrives ready to hang">
+  <defs>
+    <linearGradient id="bg3" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#12182B"/>
+      <stop offset="1" stop-color="#0A0F1D"/>
+    </linearGradient>
+    <linearGradient id="art3" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#6366f1" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#a78bfa" stop-opacity="0.3"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="300" fill="url(#bg3)"/>
+  <rect x="40" y="30" width="400" height="210" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.06)"/>
+  <path d="M40 240 H440" stroke="rgba(255,255,255,0.14)"/>
+  <path d="M40 246 H440" stroke="rgba(255,255,255,0.08)"/>
+  <path d="M0 240 L40 240 L40 246 L0 246 Z M440 240 L480 240 L480 246 L440 246 Z" fill="rgba(255,255,255,0.03)"/>
+  <g transform="translate(150,188)">
+    <rect width="180" height="52" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)"/>
+    <path d="M24 52 V68" stroke="rgba(255,255,255,0.2)"/>
+    <path d="M156 52 V68" stroke="rgba(255,255,255,0.2)"/>
+    <circle cx="140" cy="42" r="6" fill="rgba(255,255,255,0.12)"/>
+    <rect x="26" y="36" width="22" height="16" fill="rgba(255,255,255,0.1)"/>
+  </g>
+  <g transform="translate(160,52)">
+    <rect width="160" height="120" fill="url(#art3)"/>
+    <rect width="160" height="120" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+    <rect x="10" y="10" width="140" height="100" fill="none" stroke="rgba(255,255,255,0.18)"/>
+    <rect y="122" width="160" height="6" fill="url(#art3)" opacity="0.3"/>
+  </g>
+  <path d="M240 52 L240 38" stroke="rgba(255,255,255,0.25)" stroke-dasharray="2 2"/>
+  <circle cx="240" cy="36" r="2" fill="rgba(255,255,255,0.35)"/>
+</svg>

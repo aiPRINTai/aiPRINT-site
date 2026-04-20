@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <title>aiPRINT.ai — Order Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background:#0a0f1d; color:#e7eef8; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    .glass { background: rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.10); }
+    .muted { color:#94a3b8; }
+    .pill { padding:2px 8px; border-radius:999px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; }
+    .pill-paid          { background:#1e293b; color:#93c5fd; }
+    .pill-in_production { background:#422006; color:#fde047; }
+    .pill-shipped       { background:#052e1a; color:#86efac; }
+    .pill-delivered     { background:#064e3b; color:#bbf7d0; }
+    .pill-canceled      { background:#3f1212; color:#fca5a5; }
+    select, input, textarea {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      color:#e7eef8; border-radius:6px; padding:6px 10px; font-size:13px;
+      color-scheme: dark;
+    }
+    select option { background:#11151f; color:#e7eef8; }
+    button.primary { background: linear-gradient(135deg,#6366f1,#818cf8); color:white; padding:6px 14px; border-radius:6px; font-size:13px; font-weight:600; }
+    button.ghost   { background: rgba(255,255,255,.08); color:#e7eef8; padding:6px 12px; border-radius:6px; font-size:12px; }
+    button:hover { filter: brightness(1.1); }
+    .stat { padding:14px 18px; border-radius:10px; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+<!-- Login screen -->
+<div id="loginView" class="min-h-screen grid place-items-center px-4">
+  <div class="glass rounded-2xl p-8 w-full max-w-sm">
+    <h1 class="text-xl font-bold mb-1">Admin Access</h1>
+    <p class="muted text-sm mb-5">Enter the admin password to view orders.</p>
+    <input id="pwInput" type="password" placeholder="Password" class="w-full mb-3" autocomplete="current-password"/>
+    <button onclick="login()" class="primary w-full">Sign in</button>
+    <p id="loginErr" class="text-red-400 text-sm mt-3 hidden"></p>
+  </div>
+</div>
+
+<!-- Main app (hidden until login) -->
+<div id="appView" class="hidden">
+  <header class="border-b border-white/10 bg-[#0b1020]/80 sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-5 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
+        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span> · Admin</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="loadOrders()" class="ghost" title="Refresh (R)">↻ Refresh</button>
+        <button onclick="exportCsv()" class="ghost" title="Export CSV">⬇ CSV</button>
+        <button onclick="showShortcuts()" class="ghost" title="Keyboard shortcuts (?)">⌨</button>
+        <button onclick="logout()" class="ghost">Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-5 py-6">
+    <!-- Stats -->
+    <div id="statsRow" class="grid grid-cols-2 md:grid-cols-6 gap-3 mb-6"></div>
+
+    <!-- Filter -->
+    <div class="flex items-center gap-3 mb-4 flex-wrap">
+      <label class="text-sm muted">Status:</label>
+      <select id="statusFilter" onchange="loadOrders()">
+        <option value="">All</option>
+        <option value="paid">Paid (new)</option>
+        <option value="in_production">In production</option>
+        <option value="shipped">Shipped</option>
+        <option value="delivered">Delivered</option>
+        <option value="canceled">Canceled</option>
+      </select>
+      <input id="searchInput" type="search" placeholder="Search email, name, prompt, tracking…" oninput="applySearch()" class="flex-1 min-w-[200px]" />
+      <span id="countLabel" class="text-sm muted ml-auto"></span>
+    </div>
+
+    <div id="ordersList" class="space-y-4"></div>
+    <div id="emptyState" class="hidden text-center py-20 muted">No orders yet.</div>
+  </main>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-6 right-6 hidden z-50">
+  <div id="toastBox" class="glass rounded-xl px-4 py-3 text-sm shadow-2xl border-l-4"></div>
+</div>
+
+<script>
+  const $ = (q, el=document) => el.querySelector(q);
+  const PW_KEY = 'aiprint_admin_pw';
+
+  function login() {
+    const pw = $('#pwInput').value.trim();
+    if (!pw) return;
+    sessionStorage.setItem(PW_KEY, pw);
+    enterApp();
+  }
+
+  function logout() {
+    sessionStorage.removeItem(PW_KEY);
+    location.reload();
+  }
+
+  async function api(path, opts = {}) {
+    const pw = sessionStorage.getItem(PW_KEY);
+    const r = await fetch(path, {
+      ...opts,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${pw}`,
+        ...(opts.headers || {})
+      }
+    });
+    if (r.status === 401) {
+      sessionStorage.removeItem(PW_KEY);
+      $('#appView').classList.add('hidden');
+      $('#loginView').classList.remove('hidden');
+      $('#loginErr').textContent = 'Wrong password.';
+      $('#loginErr').classList.remove('hidden');
+      throw new Error('unauthorized');
+    }
+    if (!r.ok) throw new Error((await r.json().catch(()=>({}))).error || `HTTP ${r.status}`);
+    return r.json();
+  }
+
+  function fmtMoney(cents, cur='usd') {
+    return ((cents||0)/100).toLocaleString('en-US', { style:'currency', currency:cur.toUpperCase() });
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    return d.toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit' });
+  }
+
+  function fmtAddress(a) {
+    if (!a) return '—';
+    return [a.line1, a.line2, `${a.city||''}${a.city?', ':''}${a.state||''} ${a.postal_code||''}`, a.country].filter(Boolean).join('\n');
+  }
+
+  function copyText(t) {
+    navigator.clipboard?.writeText(t);
+  }
+
+  async function enterApp() {
+    $('#loginView').classList.add('hidden');
+    $('#appView').classList.remove('hidden');
+    try {
+      await loadOrders();
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  let _allOrders = [];
+
+  async function loadOrders() {
+    const status = $('#statusFilter').value;
+    const qs = status ? `?status=${encodeURIComponent(status)}` : '';
+    const data = await api(`/api/admin/orders${qs}`);
+    renderStats(data.stats);
+    _allOrders = data.orders || [];
+    applySearch();
+  }
+
+  function applySearch() {
+    const q = ($('#searchInput')?.value || '').toLowerCase().trim();
+    if (!q) return renderOrders(_allOrders);
+    const filtered = _allOrders.filter(o => {
+      const hay = [
+        o.customer_email, o.customer_name, o.prompt, o.tracking_number,
+        o.lookup_key, o.stripe_session_id, o.admin_notes
+      ].filter(Boolean).join(' ').toLowerCase();
+      return hay.includes(q);
+    });
+    renderOrders(filtered);
+  }
+
+  function showToast(msg, type = 'info') {
+    const t = $('#toast'); const b = $('#toastBox');
+    const colors = { info: '#818cf8', success: '#86efac', error: '#fca5a5' };
+    b.style.borderLeftColor = colors[type] || colors.info;
+    b.textContent = msg;
+    t.classList.remove('hidden');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => t.classList.add('hidden'), 3500);
+  }
+
+  function renderStats(s) {
+    if (!s) { $('#statsRow').innerHTML = ''; return; }
+    const tiles = [
+      ['Total',         s.total,         '#cbd5e1'],
+      ['New (paid)',    s.paid,          '#93c5fd'],
+      ['In production', s.in_production, '#fde047'],
+      ['Shipped',       s.shipped,       '#86efac'],
+      ['Delivered',     s.delivered,     '#bbf7d0'],
+      ['Revenue',       fmtMoney(s.revenue_cents), '#a5b4fc']
+    ];
+    $('#statsRow').innerHTML = tiles.map(([label, val, color]) => `
+      <div class="glass stat">
+        <div class="text-xs muted uppercase tracking-wider mb-1">${label}</div>
+        <div class="text-xl font-bold" style="color:${color}">${val ?? 0}</div>
+      </div>
+    `).join('');
+  }
+
+  function renderOrders(orders) {
+    $('#countLabel').textContent = `${orders.length} order${orders.length===1?'':'s'}`;
+    if (orders.length === 0) {
+      $('#ordersList').innerHTML = '';
+      $('#emptyState').classList.remove('hidden');
+      return;
+    }
+    $('#emptyState').classList.add('hidden');
+    $('#ordersList').innerHTML = orders.map(o => orderCard(o)).join('');
+  }
+
+  function orderCard(o) {
+    const opts = o.options || {};
+    const addr = fmtAddress(o.shipping_address);
+    const sigText = opts.signature?.text ? `<div class="text-xs"><span class="muted">Signature:</span> <span class="text-indigo-300">${opts.signature.text}</span></div>` : '';
+    return `
+      <div class="glass rounded-xl p-4 grid md:grid-cols-[160px_1fr_280px] gap-4">
+
+        <div>
+          ${o.preview_url
+            ? `<a href="${o.preview_url}" target="_blank"><img src="${o.preview_url}" class="w-full rounded-lg border border-white/10" alt="art"/></a>
+               <a href="${o.preview_url}" target="_blank" download class="block text-xs text-indigo-300 mt-2 text-center">⬇ Download PNG</a>
+               <p class="text-[10px] text-gray-500 text-center mt-1 leading-tight">Upscale in Topaz Gigapixel (4×) before printing</p>`
+            : '<div class="aspect-square rounded-lg bg-white/5 grid place-items-center text-xs muted">no image</div>'}
+        </div>
+
+        <div class="space-y-2 text-sm">
+          <div class="flex items-center gap-3 flex-wrap">
+            <span class="pill pill-${o.status}">${(o.status||'paid').replace('_',' ')}</span>
+            <span class="font-bold text-base">${fmtMoney(o.amount_total, o.currency)}</span>
+            <span class="muted">·</span>
+            <span class="muted">${fmtDate(o.created_at)}</span>
+          </div>
+          <div><span class="muted">Customer:</span> <strong>${o.customer_name || '—'}</strong> · <a href="mailto:${o.customer_email}" class="text-indigo-300">${o.customer_email || '—'}</a></div>
+          <div><span class="muted">Product:</span> ${o.lookup_key || '—'}</div>
+          <div><span class="muted">Prompt:</span> <em class="text-gray-300">${(o.prompt||'').slice(0,200)}${(o.prompt||'').length>200?'…':''}</em></div>
+          <div class="text-xs grid grid-cols-2 gap-x-4 gap-y-1 mt-2 text-gray-400">
+            ${opts.style    ? `<div><span class="muted">Style:</span> ${opts.style}</div>` : ''}
+            ${opts.mood     ? `<div><span class="muted">Mood:</span> ${opts.mood}</div>` : ''}
+            ${opts.light    ? `<div><span class="muted">Light:</span> ${opts.light}</div>` : ''}
+            ${opts.composition ? `<div><span class="muted">Comp:</span> ${opts.composition}</div>` : ''}
+            ${opts.medium   ? `<div><span class="muted">Medium:</span> ${opts.medium}</div>` : ''}
+          </div>
+          ${sigText}
+          <div class="mt-3 pt-3 border-t border-white/10">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="text-xs muted mb-1">Ship to</div>
+                <div class="text-sm whitespace-pre-line">${addr}</div>
+              </div>
+              <button class="ghost text-xs" onclick='copyText(${JSON.stringify(`${o.customer_name||""}\n${addr}`)})'>Copy</button>
+            </div>
+          </div>
+          <div class="text-xs muted mt-2">Stripe: <span class="font-mono">${o.stripe_session_id}</span></div>
+        </div>
+
+        <div class="space-y-3">
+          <div>
+            <label class="text-xs muted block mb-1">Status</label>
+            <select id="status-${o.id}" class="w-full">
+              ${['paid','in_production','shipped','delivered','canceled']
+                .map(s => `<option value="${s}" ${o.status===s?'selected':''}>${s.replace('_',' ')}</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <label class="text-xs muted block mb-1">Carrier</label>
+            <select id="carrier-${o.id}" class="w-full">
+              <option value="">—</option>
+              ${['USPS','UPS','FedEx','DHL','Other']
+                .map(c => `<option value="${c}" ${o.carrier===c?'selected':''}>${c}</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <label class="text-xs muted block mb-1">Tracking #</label>
+            <input id="tracking-${o.id}" type="text" value="${o.tracking_number||''}" class="w-full" placeholder="9400..."/>
+          </div>
+          <div>
+            <label class="text-xs muted block mb-1">Notes</label>
+            <textarea id="notes-${o.id}" rows="2" class="w-full" placeholder="Internal notes...">${o.admin_notes||''}</textarea>
+          </div>
+          <button class="primary w-full" onclick="saveOrder('${o.id}')" data-save-id="${o.id}">Save</button>
+          <div class="flex gap-2">
+            <button class="ghost flex-1 text-xs" onclick="resendEmail('${o.id}', 'resend_confirmation')">📧 Resend confirmation</button>
+            ${o.tracking_number ? `<button class="ghost flex-1 text-xs" onclick="resendEmail('${o.id}', 'resend_shipping')">📬 Resend tracking</button>` : ''}
+          </div>
+          <p class="text-[11px] text-gray-500 leading-tight mt-1">Setting status to <span class="text-green-400">shipped</span> with a tracking # emails the customer automatically.</p>
+        </div>
+
+      </div>
+    `;
+  }
+
+  async function saveOrder(id) {
+    const prev = _allOrders.find(o => String(o.id) === String(id));
+    const body = {
+      id,
+      status:          $(`#status-${id}`).value,
+      carrier:         $(`#carrier-${id}`).value || null,
+      tracking_number: $(`#tracking-${id}`).value.trim() || null,
+      admin_notes:     $(`#notes-${id}`).value.trim() || null
+    };
+    const willShipNotify = body.status === 'shipped' && body.tracking_number && prev?.status !== 'shipped';
+    if (willShipNotify) {
+      if (!confirm(`Mark as shipped and email ${prev?.customer_email || 'the customer'} the tracking number?`)) return;
+    }
+    try {
+      await api('/api/admin/orders', { method: 'PATCH', body: JSON.stringify(body) });
+      showToast(willShipNotify ? `Saved — shipping email sent to ${prev?.customer_email}` : 'Saved', 'success');
+      await loadOrders();
+    } catch (e) {
+      showToast('Save failed: ' + e.message, 'error');
+    }
+  }
+
+  async function resendEmail(id, action) {
+    const labels = { resend_confirmation: 'order confirmation', resend_shipping: 'shipping notification' };
+    if (!confirm(`Resend the ${labels[action]} email for this order?`)) return;
+    try {
+      const r = await api('/api/admin/orders', { method: 'POST', body: JSON.stringify({ id, action }) });
+      showToast(`Email resent to ${r.sent_to || 'customer'}`, 'success');
+    } catch (e) {
+      showToast('Resend failed: ' + e.message, 'error');
+    }
+  }
+
+  function exportCsv() {
+    const pw = sessionStorage.getItem(PW_KEY);
+    if (!pw) return;
+    // Use a one-shot fetch to attach Authorization, then trigger a download
+    const status = $('#statusFilter').value;
+    const url = '/api/admin/orders-export' + (status ? `?status=${encodeURIComponent(status)}` : '');
+    fetch(url, { headers: { Authorization: `Bearer ${pw}` } })
+      .then(r => r.ok ? r.blob() : Promise.reject(new Error(`HTTP ${r.status}`)))
+      .then(blob => {
+        const a = document.createElement('a');
+        const objUrl = URL.createObjectURL(blob);
+        a.href = objUrl;
+        a.download = `aiprint-orders-${new Date().toISOString().slice(0,10)}.csv`;
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(objUrl);
+        showToast('CSV downloaded', 'success');
+      })
+      .catch(e => showToast('Export failed: ' + e.message, 'error'));
+  }
+
+  function showShortcuts() {
+    alert([
+      'Keyboard shortcuts',
+      '',
+      'R       Refresh orders',
+      '/       Focus search',
+      'E       Export CSV',
+      'S       Save the focused order (when a field on that card has focus)',
+      'Esc     Clear search',
+      '?       Show this help'
+    ].join('\n'));
+  }
+
+  // Find the order id whose row contains the currently-focused element
+  function focusedOrderId() {
+    const el = document.activeElement;
+    if (!el || el === document.body) return null;
+    // Inputs use ids like status-{id}, tracking-{id}, etc.
+    const m = (el.id || '').match(/^(?:status|carrier|tracking|notes)-(.+)$/);
+    if (m) return m[1];
+    const card = el.closest('[data-save-id]');
+    return card?.dataset.saveId || null;
+  }
+
+  // Global keyboard shortcuts
+  window.addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const target = e.target;
+    const tag = target?.tagName;
+    const isTyping = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+
+    if (e.key === '/' && !isTyping) { e.preventDefault(); $('#searchInput')?.focus(); return; }
+    if (e.key === 'Escape' && tag === 'INPUT' && target.id === 'searchInput') { target.value = ''; applySearch(); return; }
+    if (e.key === '?' && !isTyping) { e.preventDefault(); showShortcuts(); return; }
+    if (e.key.toLowerCase() === 'r' && !isTyping) { e.preventDefault(); loadOrders(); return; }
+    if (e.key.toLowerCase() === 'e' && !isTyping) { e.preventDefault(); exportCsv(); return; }
+    if (e.key.toLowerCase() === 's' && isTyping) {
+      const id = focusedOrderId();
+      if (id) { e.preventDefault(); saveOrder(id); }
+    }
+  });
+
+  // Auto-login if password is in session
+  if (sessionStorage.getItem(PW_KEY)) {
+    enterApp().catch(() => {});
+  }
+</script>
+</body>
+</html>

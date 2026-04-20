@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Mark system prototype · aiPRINT.ai</title>
+  <meta name="robots" content="noindex,nofollow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0f1d;
+      --surf:#0f1528;
+      --surf-2:#121a33;
+      --ink:#E7EEF8;
+      --muted:rgba(231,238,248,0.62);
+      --line:rgba(255,255,255,0.08);
+      --ind:#818cf8;
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+    .wrap{max-width:1200px;margin:0 auto;padding:48px 32px 96px;}
+    h1{font-size:36px;letter-spacing:-0.02em;margin:0 0 8px;font-weight:800;}
+    h1 .sub{color:var(--muted);font-weight:500;font-size:18px;letter-spacing:0;}
+    .lede{color:var(--muted);font-size:15px;margin:0 0 40px;max-width:70ch;line-height:1.55;}
+    section{margin:56px 0 0;}
+    h2{font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ind);font-weight:700;margin:0 0 4px;}
+    h2 + p{color:var(--muted);font-size:14px;margin:0 0 20px;max-width:70ch;line-height:1.55;}
+
+    .card{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:24px;}
+    .grid{display:grid;gap:16px;}
+    .grid-2{grid-template-columns:1fr 1fr;}
+
+    /* Size-scan row */
+    .sizes{display:flex;align-items:flex-end;gap:32px;flex-wrap:wrap;}
+    .size-cell{display:flex;flex-direction:column;align-items:center;gap:10px;}
+    .size-cell img{image-rendering:-webkit-optimize-contrast;}
+    .size-cell .label{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:700;}
+
+    /* Tab simulation */
+    .tabbar{background:#1f2937;border-radius:10px 10px 0 0;padding:6px 6px 0;display:flex;gap:2px;}
+    .tab{background:#111827;border-radius:8px 8px 0 0;padding:8px 14px 10px;display:flex;align-items:center;gap:8px;min-width:220px;}
+    .tab img{width:16px;height:16px;flex-shrink:0;}
+    .tab .title{font-size:12px;color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .tab.active{background:#0a0f1d;}
+    .tab.active .title{color:#fff;}
+
+    /* Header simulation */
+    .site-hdr{background:rgba(11,16,32,0.9);border-bottom:1px solid rgba(255,255,255,0.1);border-radius:12px 12px 0 0;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+    .brand-lockup{display:flex;align-items:center;gap:10px;}
+    .brand-lockup img{width:28px;height:28px;border-radius:6px;}
+    .brand-lockup .word{font-weight:800;letter-spacing:-0.01em;font-size:16px;}
+    .brand-lockup .word .dot{color:var(--ind);}
+    .site-hdr-nav{display:flex;gap:18px;font-size:13px;color:var(--muted);}
+
+    /* iOS home screen */
+    .ios-grid{display:grid;grid-template-columns:repeat(4, 1fr);gap:20px 24px;padding:24px 0;background:linear-gradient(135deg,#374151,#1f2937);border-radius:14px;justify-items:center;}
+    .ios-app{display:flex;flex-direction:column;align-items:center;gap:6px;width:72px;}
+    .ios-app .icon{width:60px;height:60px;border-radius:13px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.4);}
+    .ios-app .icon img{width:100%;height:100%;}
+    .ios-app .lbl{font-size:11px;color:#fff;text-align:center;}
+
+    /* OG mini card */
+    .og-card{aspect-ratio:1200/630;background:linear-gradient(135deg,#0A0F1D,#1E1B4B 55%,#4C1D95);border-radius:12px;padding:28px;position:relative;overflow:hidden;}
+    .og-card .og-brand{display:flex;align-items:center;gap:10px;}
+    .og-card .og-brand img{width:28px;height:28px;border-radius:6px;}
+    .og-card .og-brand .word{font-weight:800;font-size:16px;letter-spacing:-0.01em;}
+    .og-card .og-brand .word .dot{color:#F472B6;}
+    .og-card h3{font-size:28px;font-weight:900;letter-spacing:-0.02em;line-height:1.05;margin:40px 0 0;}
+    .og-card h3 .accent{color:#F472B6;}
+    .og-card .chip{position:absolute;bottom:22px;left:28px;font-size:10px;letter-spacing:0.18em;font-weight:700;color:#F9A8D4;}
+
+    /* CoA paper simulation */
+    .paper{background:radial-gradient(ellipse at 50% 0%, #F9F5E9 0%, #EFE9D6 70%, #E7E1CE 100%);color:#1A1A22;border-radius:8px;padding:28px 32px;position:relative;aspect-ratio:1.414/1;display:flex;flex-direction:column;justify-content:space-between;min-height:240px;}
+    .paper::after{content:"";position:absolute;inset:8px;border:1px solid rgba(26,26,34,0.25);border-radius:4px;pointer-events:none;}
+    .paper .paper-hdr{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;}
+    .paper .lock{display:flex;align-items:center;gap:10px;}
+    .paper .lock img{width:32px;height:32px;border-radius:6px;}
+    .paper .lock .word{font-weight:800;font-size:14px;letter-spacing:-0.005em;}
+    .paper .lock .word .dot{color:#4F46E5;}
+    .paper .serial{font-family:ui-monospace,Menlo,monospace;font-size:9px;letter-spacing:0.1em;color:#4A4A55;text-align:right;text-transform:uppercase;}
+    .paper .serial b{display:block;font-size:11px;color:#1A1A22;margin-top:2px;}
+    .paper h4{font-family:"Playfair Display",serif;font-size:22px;letter-spacing:-0.005em;font-weight:700;margin:14px 0 0;line-height:1.1;}
+    .paper .cert-eb{font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:#4F46E5;font-weight:700;}
+    .paper .sig{font-family:"Playfair Display",serif;font-style:italic;font-size:15px;color:#2A2A35;margin-top:10px;}
+    .paper .stamp-row{display:flex;align-items:flex-end;justify-content:space-between;}
+    .paper .footnote{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:#6B6B7A;font-weight:700;}
+    .paper .footnote b{display:block;font-family:"Playfair Display",serif;font-style:italic;font-weight:400;font-size:14px;letter-spacing:0.01em;color:#1A1A22;text-transform:none;margin-top:3px;}
+    .paper .stamp{width:72px;height:72px;}
+
+    .caption{color:var(--muted);font-size:12px;margin-top:10px;line-height:1.5;}
+    .caption strong{color:var(--ink);font-weight:600;}
+
+    .checker{background:
+      linear-gradient(45deg, #0f1528 25%, transparent 25%),
+      linear-gradient(-45deg, #0f1528 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #0f1528 75%),
+      linear-gradient(-45deg, transparent 75%, #0f1528 75%);
+      background-size:16px 16px;background-position:0 0,0 8px,8px -8px,-8px 0;}
+
+    footer.key{margin-top:80px;padding-top:24px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;line-height:1.6;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Mark system prototype <span class="sub">— G10 primary + S3 secondary</span></h1>
+    <p class="lede">Two marks working as a system. <strong style="color:#fff">G10 (primary)</strong> is the italic <em>ai</em> with a glowing gradient inside a deep-indigo frame — it owns tab, iOS home screen, site header, and OG share. <strong style="color:#fff">S3 (secondary)</strong> is the roman (non-italic) <em>ai</em> with rounded corners — it carries large-format contexts where the mark can breathe: CoA, stationery, merch.</p>
+
+    <!-- Primary: size scan -->
+    <section>
+      <h2>Primary · G10 · size scan</h2>
+      <p>Does it hold up from 16px tab-size to a 192px iOS tile? If the letters blur below 24px, we back off the glow.</p>
+      <div class="card sizes">
+        <div class="size-cell"><img src="g10-primary.svg" width="16" height="16"/><span class="label">16 · tab</span></div>
+        <div class="size-cell"><img src="g10-primary.svg" width="24" height="24"/><span class="label">24</span></div>
+        <div class="size-cell"><img src="g10-primary.svg" width="32" height="32"/><span class="label">32</span></div>
+        <div class="size-cell"><img src="g10-primary.svg" width="48" height="48"/><span class="label">48</span></div>
+        <div class="size-cell"><img src="g10-primary.svg" width="64" height="64"/><span class="label">64</span></div>
+        <div class="size-cell"><img src="g10-primary.svg" width="96" height="96"/><span class="label">96</span></div>
+        <div class="size-cell"><img src="g10-primary.svg" width="128" height="128"/><span class="label">128</span></div>
+        <div class="size-cell"><img src="g10-primary.svg" width="192" height="192"/><span class="label">192 · iOS</span></div>
+      </div>
+    </section>
+
+    <!-- Tab simulation -->
+    <section>
+      <h2>Primary · browser tab context</h2>
+      <p>The make-or-break test. If this doesn't read at 16px, nothing else matters.</p>
+      <div class="tabbar">
+        <div class="tab active"><img src="g10-primary.svg"/><span class="title">aiPRINT.ai — Turn any idea into a gallery-worthy print</span></div>
+        <div class="tab"><img src="https://www.google.com/favicon.ico"/><span class="title">Google</span></div>
+        <div class="tab"><img src="https://github.githubassets.com/favicons/favicon-dark.svg"/><span class="title">GitHub</span></div>
+      </div>
+    </section>
+
+    <!-- Site header -->
+    <section>
+      <h2>Primary · site header lockup</h2>
+      <p>With the wordmark at the site's current 28px header size.</p>
+      <div class="site-hdr">
+        <div class="brand-lockup">
+          <img src="g10-primary.svg"/>
+          <span class="word">aiPRINT<span class="dot">.ai</span></span>
+        </div>
+        <div class="site-hdr-nav"><span>Gallery</span><span>How it works</span><span>Materials</span><span>About</span></div>
+      </div>
+    </section>
+
+    <!-- iOS home screen -->
+    <section>
+      <h2>Primary · iOS home screen · app icon</h2>
+      <p>How the mark feels alongside real iOS app icons.</p>
+      <div class="ios-grid">
+        <div class="ios-app"><div class="icon"><img src="g10-primary.svg"/></div><div class="lbl">aiPRINT</div></div>
+        <div class="ios-app"><div class="icon" style="background:#000;display:grid;place-items:center;color:#fff;font-weight:800;font-size:26px;">A</div><div class="lbl">App Store</div></div>
+        <div class="ios-app"><div class="icon" style="background:linear-gradient(135deg,#f093fb,#f5576c);display:grid;place-items:center;color:#fff;font-weight:800;font-size:24px;">P</div><div class="lbl">Photos</div></div>
+        <div class="ios-app"><div class="icon" style="background:#34d399;display:grid;place-items:center;color:#fff;font-weight:800;font-size:26px;">✓</div><div class="lbl">Notes</div></div>
+      </div>
+    </section>
+
+    <!-- OG share card -->
+    <section>
+      <h2>Primary · OG share card · top-left lockup</h2>
+      <p>How the mark sits on iMessage / Twitter preview gradients.</p>
+      <div class="og-card">
+        <div class="og-brand">
+          <img src="g10-primary.svg"/>
+          <span class="word">aiPRINT<span class="dot">.ai</span></span>
+        </div>
+        <h3>Imagine it. Print it. <span class="accent">Hang it.</span></h3>
+        <div class="chip">AI ART · REAL PRINTS · NUMBERED &amp; SHIPPED</div>
+      </div>
+    </section>
+
+    <!-- Secondary: size scan -->
+    <section>
+      <h2>Secondary · S3 · size scan</h2>
+      <p>Used where the mark has real estate. Non-italic, rounded frame, designed for 48px+ and up.</p>
+      <div class="card sizes">
+        <div class="size-cell"><img src="s3-secondary.svg" width="32" height="32"/><span class="label">32</span></div>
+        <div class="size-cell"><img src="s3-secondary.svg" width="48" height="48"/><span class="label">48</span></div>
+        <div class="size-cell"><img src="s3-secondary.svg" width="64" height="64"/><span class="label">64</span></div>
+        <div class="size-cell"><img src="s3-secondary.svg" width="96" height="96"/><span class="label">96</span></div>
+        <div class="size-cell"><img src="s3-secondary.svg" width="128" height="128"/><span class="label">128</span></div>
+        <div class="size-cell"><img src="s3-secondary.svg" width="192" height="192"/><span class="label">192</span></div>
+      </div>
+    </section>
+
+    <!-- CoA paper -->
+    <section>
+      <h2>Secondary · Certificate of Authenticity</h2>
+      <p>The archival context. Mark sits on cream paper, printed alongside Playfair type. S3 (roman, rounded) reads as a curator's stamp rather than a logo.</p>
+      <div class="grid grid-2">
+        <div class="paper">
+          <div class="paper-hdr">
+            <div class="lock">
+              <img src="s3-secondary.svg"/>
+              <span class="word">aiPRINT<span class="dot">.ai</span></span>
+            </div>
+            <div class="serial">Serial<b>A26 · 0042 / 0250</b></div>
+          </div>
+          <div>
+            <div class="cert-eb">Certificate of Authenticity</div>
+            <h4>This piece is one of a limited edition.</h4>
+            <div class="sig">"Mossy Pines No. 7"</div>
+          </div>
+          <div class="stamp-row">
+            <div class="footnote">Inspected &amp; numbered<b>Florida Studio, USA</b></div>
+            <img class="stamp" src="s3-secondary.svg"/>
+          </div>
+        </div>
+        <div>
+          <div class="caption">The left panel simulates the CoA document layout. The <strong>S3 mark appears twice</strong>: top-left as the wordmark lockup, and bottom-right as the edition stamp. Reading across the sheet, the S3 mark functions as both masthead and seal — doing real work, not decoration.</div>
+          <div class="caption" style="margin-top:16px;"><strong>Why not italic here?</strong> Playfair italic is already doing work on the body copy ("Mossy Pines No. 7" etc.). The mark needs to anchor the sheet visually, not harmonize into it. Roman lowercase ai = anchor.</div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="key">
+      <strong style="color:var(--ink);">System summary</strong> — G10 (italic, deep frame, glowing letters) owns digital surfaces: tab, header, iOS, OG. S3 (roman, rounded frame) owns archival surfaces: CoA, stationery, physical prints. Both stay in the indigo/violet palette so the existing OG, step photos, and wordmark don't need to change. If you want a single unified mark instead of a two-mark system, G10 can do both — but S3 reads better at CoA-size.
+    </footer>
+  </div>
+</body>
+</html>

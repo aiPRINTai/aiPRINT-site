@@ -153,7 +153,7 @@ class CreditsManager {
         messageEl.innerHTML = `
           <div class="glass rounded-xl p-4 border-2 border-yellow-500/50">
             <div class="font-bold text-yellow-400 mb-2">⚠️ Daily limit reached</div>
-            <p class="text-sm mb-3">You've used all 3 free generations today.</p>
+            <p class="text-sm mb-3">You've used your free preview today. Sign up to keep going — 10 free credits, no card required.</p>
             <button onclick="auth.showSignupModal()" class="btn w-full">
               Sign up for 10 free credits
             </button>
@@ -163,7 +163,7 @@ class CreditsManager {
         messageEl.innerHTML = `
           <div class="glass rounded-xl p-3 text-sm">
             <span class="text-gray-400">Free previews remaining today:</span>
-            <span class="font-bold ml-2">${this.anonymousGenerationsRemaining}/3</span>
+            <span class="font-bold ml-2">${this.anonymousGenerationsRemaining}/1</span>
             <button onclick="auth.showSignupModal()" class="btn-ghost ml-3 px-3 py-1 text-xs">
               Get 10 free credits →
             </button>
@@ -185,7 +185,7 @@ class CreditsManager {
           <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
         </div>
 
-        <p class="mb-6 text-gray-300">You need more credits to generate images. Purchase a credit package to continue creating!</p>
+        <p class="mb-6 text-gray-300">You're out of credits — grab a pack to keep creating. Just $5 for 25 more generations ($0.20 each).</p>
 
         <button onclick="this.closest('.fixed').remove(); credits.showPurchaseModal()" class="btn w-full">
           Buy Credits

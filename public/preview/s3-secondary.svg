@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="letters-s" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#E0E7FF"/>
+      <stop offset="0.5" stop-color="#A5B4FC"/>
+      <stop offset="1" stop-color="#6366F1"/>
+    </linearGradient>
+    <linearGradient id="frame-s" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4338CA"/>
+      <stop offset="1" stop-color="#312E81"/>
+    </linearGradient>
+    <radialGradient id="glow-s" cx="0.5" cy="0.55" r="0.5">
+      <stop offset="0" stop-color="#818cf8" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#818cf8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Navy tile with slightly softer corner radius for "rounded" family -->
+  <rect width="128" height="128" rx="28" fill="#0A0F1D"/>
+
+  <!-- Hang wire -->
+  <path d="M58 22 L64 13 L70 22 Z" fill="url(#frame-s)"/>
+
+  <!-- Frame outer (rounded corners = "rounded" family) -->
+  <rect x="22" y="22" width="84" height="88" rx="14" fill="url(#frame-s)"/>
+
+  <!-- Frame inner matte (with subtle rounded corners) -->
+  <rect x="30" y="30" width="68" height="72" rx="8" fill="#0A0F1D"/>
+
+  <!-- Backlit glow -->
+  <rect x="30" y="30" width="68" height="72" rx="8" fill="url(#glow-s)"/>
+
+  <!-- Beveled edge -->
+  <rect x="29.5" y="29.5" width="69" height="73" rx="8.5" fill="none" stroke="rgba(165,180,252,0.18)" stroke-width="1"/>
+
+  <!-- Roman (non-italic) lowercase "ai" — archival signature feel -->
+  <text x="37" y="85" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="52" font-weight="700" fill="url(#letters-s)" letter-spacing="-2">ai</text>
+</svg>

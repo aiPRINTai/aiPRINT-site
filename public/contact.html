@@ -5,15 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Contact | aiPRINT.ai — Get in Touch</title>
   <meta name="description" content="Contact aiPRINT.ai for questions about custom prints, materials, or orders. We produce museum-grade prints in-house with archival materials." />
-  <link rel="icon" href="/favicon.ico" />
+  <link rel="canonical" href="https://aiprint.ai/contact.html" />
+  <meta name="theme-color" content="#0a0f1d" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="aiPRINT.ai" />
+  <meta property="og:title" content="Contact | aiPRINT.ai" />
+  <meta property="og:description" content="Questions about custom prints, materials, or orders? Get in touch." />
+  <meta property="og:url" content="https://aiprint.ai/contact.html" />
+  <meta property="og:image" content="https://aiprint.ai/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Contact | aiPRINT.ai" />
+  <meta name="twitter:description" content="Questions about custom prints, materials, or orders? Get in touch." />
+  <meta name="twitter:image" content="https://aiprint.ai/og-image.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   
   <style>
     :root { --bg:#0a0f1d; --ink:#e7eef8; --muted:#9fb3c8; }
     html,body{background:var(--bg);color:var(--ink);}
+    html{font-size:clamp(16px, 0.85vw + 12px, 20px);}
     body{font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;}
-    .h1{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:800;line-height:1.05}
-    .h2{font-size:clamp(1.4rem,2.4vw,2.1rem);font-weight:800;}
+    .h1{font-size:clamp(2.4rem, 4.5vw, 4.5rem);font-weight:800;line-height:1.05}
+    .h2{font-size:clamp(1.55rem, 2.8vw, 2.8rem);font-weight:800;line-height:1.1}
     .muted{color:var(--muted)}
     .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
     .btn{background:#fff;color:#000;font-weight:700;padding:.7rem 1rem;border-radius:.6rem;cursor:pointer;border:none;}
@@ -21,20 +37,22 @@
     .field{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:white;}
     .field:focus{outline:none;ring:2px;ring-offset:2px;ring-offset-transparent;ring:rgba(99, 102, 241, 0.5);}
   </style>
-</head>
+<script defer src="/js/analytics.js"></script>
+  </head>
 <body>
 
   <!-- HEADER -->
   <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+    <div class="max-w-[1800px] mx-auto px-5 h-16 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2">
-        <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
-        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+        <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
+        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span></span>
       </a>
       <nav class="hidden md:flex items-center gap-6 text-base">
         <a href="/" class="hover:text-white">Home</a>
         <a href="/#how" class="hover:text-white">How it works</a>
         <a href="/#materials" class="hover:text-white">Materials</a>
+        <a href="/about.html" class="hover:text-white">About</a>
         <a href="/faq.html" class="hover:text-white">FAQ</a>
         <a href="/policies.html" class="hover:text-white">Policies</a>
         <a href="/contact.html" class="hover:text-white font-semibold">Contact</a>
@@ -55,8 +73,8 @@
     <aside id="navDrawer" class="absolute right-0 top-0 h-full w-80 max-w-[88vw] bg-[#0b1020] border-l border-white/10 translate-x-full transition-transform duration-300">
       <div class="h-14 px-4 border-b border-white/10 flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <span class="w-7 h-7 rounded-lg bg-white text-black font-black grid place-items-center">AI</span>
-          <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-sky-300">ai</span></span>
+          <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
+          <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span></span>
         </div>
         <button id="navClose" class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 hover:bg-white/10">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -69,6 +87,7 @@
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/">Home</a></li>
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/#how">How it works</a></li>
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/#materials">Materials</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/about.html">About</a></li>
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/faq.html">FAQ</a></li>
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/policies.html">Policies</a></li>
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/contact.html">Contact</a></li>
@@ -80,15 +99,22 @@
     </aside>
   </div>
 
-  <!-- Hero Section -->
-  <section class="relative overflow-hidden py-20 px-5">
-    <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10"></div>
-    <div class="relative max-w-6xl mx-auto text-center">
-      <h1 class="h1 mb-4">Get in Touch</h1>
-      <p class="muted text-lg max-w-2xl mx-auto">
-        Questions about your custom artwork? Need help choosing the right size or material? 
-        We're here to help bring your vision to life.
-      </p>
+  <!-- Hero Section with banner -->
+  <section class="relative overflow-hidden">
+    <div class="relative">
+      <img src="/banners/contact-hero.jpg"
+           alt="A warm wood studio desk with a notecard, fountain pen, eucalyptus and morning coffee"
+           class="w-full h-[36vh] md:h-[44vh] object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-b from-[#0a0f1d]/35 via-[#0a0f1d]/55 to-[#0a0f1d]"></div>
+      <div class="absolute inset-0 flex items-center justify-center px-5">
+        <div class="text-center max-w-3xl">
+          <h1 class="h1 mb-4 drop-shadow-lg">Get in Touch</h1>
+          <p class="text-gray-200 text-lg max-w-2xl mx-auto drop-shadow">
+            Questions about your custom artwork? Need help choosing the right size or material?
+            We're here to help bring your vision to life.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -110,7 +136,7 @@
             </div>
             <div>
               <h3 class="font-semibold mb-1">Email Us</h3>
-              <p class="muted">support@aiprint.ai</p>
+              <a href="mailto:info@aiprint.ai" class="text-white hover:text-indigo-300 transition-colors">info@aiprint.ai</a>
               <p class="text-sm muted mt-1">We typically respond within 24 hours</p>
             </div>
           </div>
@@ -188,19 +214,19 @@
         <form action="https://formspree.io/f/xrbadnbo" method="POST" class="space-y-6">
           <div>
             <label for="name" class="block text-sm font-medium mb-2">Your Name *</label>
-            <input type="text" id="name" name="name" required
+            <input type="text" id="name" name="name" required minlength="2" maxlength="100" autocomplete="name"
                    class="field w-full rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-400">
           </div>
 
           <div>
             <label for="email" class="block text-sm font-medium mb-2">Email Address *</label>
-            <input type="email" id="email" name="email" required
+            <input type="email" id="email" name="email" required maxlength="200" autocomplete="email"
                    class="field w-full rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-400">
           </div>
 
           <div>
             <label for="orderNumber" class="block text-sm font-medium mb-2">Order Number (if applicable)</label>
-            <input type="text" id="orderNumber" name="orderNumber"
+            <input type="text" id="orderNumber" name="orderNumber" maxlength="50"
                    class="field w-full rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-400"
                    placeholder="e.g., #AI-12345">
           </div>
@@ -213,14 +239,14 @@
               <option value="order">Question about an order</option>
               <option value="materials">Material & sizing help</option>
               <option value="bulk">Bulk order inquiry</option>
-              <option value="technical">Technical issue</option>
+              <option value="technical">Website support</option>
               <option value="other">Other</option>
             </select>
           </div>
 
           <div>
             <label for="message" class="block text-sm font-medium mb-2">Message *</label>
-            <textarea id="message" name="message" rows="6" required
+            <textarea id="message" name="message" rows="6" required minlength="10" maxlength="5000"
                      class="field w-full rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-400 resize-none"
                      placeholder="Tell us how we can help..."></textarea>
           </div>
@@ -262,13 +288,13 @@
 
   <!-- FOOTER -->
   <footer class="border-t border-white/10">
-    <div class="max-w-7xl mx-auto px-5 py-10 text-sm text-white/70">
+    <div class="max-w-[1800px] mx-auto px-5 py-10 text-sm text-white/70">
       © <span id="y"></span> aiPRINT.ai — All rights reserved.
     </div>
   </footer>
 
   <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+    document.getElementById('y').textContent = '2024';
     
     // Mobile menu
     (() => {

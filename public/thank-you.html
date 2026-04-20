@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Message Sent | aiPRINT.ai</title>
+  <meta name="description" content="Thank you for contacting aiPRINT. We typically respond within 24 hours."/>
+  <meta name="robots" content="noindex,follow"/>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:title" content="Message Sent · aiPRINT.ai"/>
+  <meta property="og:description" content="We received your message and will respond within 24 hours."/>
+  <meta property="og:type" content="website"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { --bg:#0a0f1d; --ink:#e7eef8; }
+    body { background:var(--bg); color:var(--ink); font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+    .glass { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); backdrop-filter:blur(6px); }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    .fade-up { animation: fadeUp .5s ease forwards; }
+    .checkmark { width:72px; height:72px; border-radius:50%; background:linear-gradient(135deg,#4ade80,#22c55e); display:flex; align-items:center; justify-content:center; font-size:2rem; margin:0 auto; }
+  </style>
+  <script>
+    setTimeout(() => { window.location.href = "/"; }, 8000);
+  </script>
+<script defer src="/js/analytics.js"></script>
+  </head>
+<body class="min-h-screen flex flex-col">
+
+  <header class="sticky top-0 z-10 bg-[#0b1020]/90 backdrop-blur border-b border-white/10">
+    <div class="max-w-[1800px] mx-auto px-5 h-14 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2">
+        <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
+        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span></span>
+      </a>
+      <a href="/" class="text-sm text-gray-400 hover:text-white transition-colors">← Back to home</a>
+    </div>
+  </header>
+
+  <main class="flex-1 flex items-center justify-center px-5 py-20">
+    <div class="text-center max-w-md fade-up">
+      <div class="checkmark mb-6">✓</div>
+      <h1 class="text-3xl font-extrabold mb-3">Message received!</h1>
+      <p class="text-gray-400 text-lg mb-2">Thank you for reaching out. We'll get back to you within 24 hours.</p>
+      <p class="text-gray-500 text-sm mb-8">You'll be redirected to the homepage in a moment.</p>
+
+      <div class="glass rounded-2xl p-6 text-left space-y-3 mb-8">
+        <div class="flex items-center gap-3 text-sm">
+          <span class="text-green-400">✓</span>
+          <span class="text-gray-300">Your message is in our inbox</span>
+        </div>
+        <div class="flex items-center gap-3 text-sm">
+          <span class="text-indigo-400">⏱</span>
+          <span class="text-gray-300">We respond within 24 hours, Mon–Fri</span>
+        </div>
+        <div class="flex items-center gap-3 text-sm">
+          <span class="text-blue-400">📧</span>
+          <span class="text-gray-300">Check your inbox for a confirmation</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white text-black font-semibold hover:bg-gray-100 transition-colors">
+          Return to Home
+        </a>
+        <a href="/#create" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 font-semibold transition-colors">
+          ✨ Create a print
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-white/10">
+    <div class="max-w-[1800px] mx-auto px-5 py-6 text-sm text-gray-600 text-center">
+      Questions? Email <a href="mailto:info@aiprint.ai" class="text-gray-400 hover:text-white transition-colors">info@aiprint.ai</a>
+    </div>
+  </footer>
+
+</body>
+</html>
