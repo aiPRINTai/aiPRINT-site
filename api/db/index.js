@@ -58,10 +58,47 @@ export async function getUserByEmail(email) {
 
 export async function getUserById(userId) {
   const result = await sql`
-    SELECT id, email, credits_balance, created_at, updated_at
+    SELECT id, email, credits_balance, email_verified, created_at, updated_at
     FROM users WHERE id = ${userId}
   `;
   return result.rows[0];
+}
+
+// Password reset token storage. Uses the existing verification_token column
+// scheme but in its own dedicated pair of columns so a reset-in-progress
+// doesn't collide with signup verification.
+export async function setResetToken(userId, token, expires) {
+  const r = await sql`
+    UPDATE users
+    SET reset_token = ${token},
+        reset_expires = ${expires},
+        updated_at = CURRENT_TIMESTAMP
+    WHERE id = ${userId}
+    RETURNING id, email
+  `;
+  return r.rows[0];
+}
+
+export async function getUserByResetToken(token) {
+  const r = await sql`
+    SELECT * FROM users
+    WHERE reset_token = ${token}
+      AND reset_expires > NOW()
+  `;
+  return r.rows[0];
+}
+
+export async function updateUserPassword(userId, passwordHash) {
+  const r = await sql`
+    UPDATE users
+    SET password_hash = ${passwordHash},
+        reset_token = NULL,
+        reset_expires = NULL,
+        updated_at = CURRENT_TIMESTAMP
+    WHERE id = ${userId}
+    RETURNING id, email
+  `;
+  return r.rows[0];
 }
 
 export async function updateUserCredits(userId, newBalance) {

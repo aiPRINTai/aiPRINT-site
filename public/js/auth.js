@@ -98,6 +98,74 @@ class AuthManager {
     }
   }
 
+  async forgotPassword(email) {
+    try {
+      const r = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await r.json();
+      // Endpoint always returns 200 with a generic message — treat any
+      // response shape as success from the UI's perspective.
+      return { success: true, message: data.message };
+    } catch (e) {
+      return { success: false, error: e.message };
+    }
+  }
+
+  showForgotPasswordModal(prefillEmail = '') {
+    const container = document.createElement('div');
+    container.className = 'fixed inset-0 z-[100]';
+    container.innerHTML = `
+      <div class="share-modal-backdrop" onclick="this.parentElement.remove()"></div>
+      <div class="share-modal">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-2xl font-bold">Reset your password</h3>
+          <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+        </div>
+        <p class="text-sm text-gray-400 mb-5">Enter your email and we'll send you a link to set a new password.</p>
+
+        <form id="forgotForm" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium mb-2">Email</label>
+            <input type="email" id="forgotEmail" required inputmode="email" autocomplete="email" autocapitalize="off" autocorrect="off" spellcheck="false"
+              value="${prefillEmail.replace(/"/g, '&quot;')}"
+              class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:border-white/40 text-base"
+              placeholder="you@example.com">
+          </div>
+
+          <div id="forgotMsg" class="hidden p-3 bg-green-500/15 border border-green-500/40 rounded-lg text-sm"></div>
+
+          <button type="submit" class="btn w-full">Send reset link</button>
+        </form>
+
+        <div class="mt-4 text-center text-sm text-gray-400">
+          <a href="#" onclick="event.preventDefault(); auth.showLoginModal(); this.closest('.fixed').remove()" class="text-white hover:underline">← Back to login</a>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(container);
+
+    const form = container.querySelector('#forgotForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = container.querySelector('#forgotEmail').value.trim();
+      const btn = form.querySelector('button[type="submit"]');
+      const msg = container.querySelector('#forgotMsg');
+
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      const result = await this.forgotPassword(email);
+
+      msg.textContent = result.message || 'If that email has an account, we\'ve sent a reset link.';
+      msg.classList.remove('hidden');
+      btn.textContent = 'Sent — check your inbox';
+      // Leave disabled to prevent spam-clicking.
+    });
+  }
+
   async resendVerification(email) {
     try {
       const r = await fetch('/api/auth/resend-verification', {
@@ -262,6 +330,11 @@ class AuthManager {
             ${isLogin ? 'Login' : 'Sign up & get 10 free credits'}
           </button>
         </form>
+
+        ${isLogin ? `
+        <div class="mt-3 text-center text-sm">
+          <a href="#" onclick="event.preventDefault(); const em = document.getElementById('authEmail')?.value || ''; this.closest('.fixed').remove(); auth.showForgotPasswordModal(em)" class="text-gray-400 hover:text-white">Forgot password?</a>
+        </div>` : ''}
 
         <div class="mt-4 text-center text-sm text-gray-400">
           ${isLogin

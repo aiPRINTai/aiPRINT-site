@@ -17,6 +17,11 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_token VARCHAR(128);
 ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_expires TIMESTAMP;
 CREATE INDEX IF NOT EXISTS idx_users_verification_token ON users(verification_token);
 
+-- Password reset (separate from signup verification so the two flows don't collide)
+ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_token VARCHAR(128);
+ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_expires TIMESTAMP;
+CREATE INDEX IF NOT EXISTS idx_users_reset_token ON users(reset_token);
+
 -- Generations table (tracks all image generations)
 -- image_url = the WATERMARKED preview shown publicly
 -- clean_url = the ORIGINAL high-res file (admin-only, used for printing)

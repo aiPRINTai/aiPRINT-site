@@ -58,6 +58,22 @@
         <p class="text-gray-400" id="userEmail"></p>
       </div>
 
+      <!-- Unverified Email Banner (shown only when email_verified = false) -->
+      <div id="unverifiedBanner" class="hidden rounded-xl p-5 border border-amber-500/40 bg-amber-500/10">
+        <div class="flex items-start gap-4">
+          <div class="text-3xl leading-none">📬</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold mb-1">Please verify your email</div>
+            <p class="text-sm text-gray-300 mb-3">We sent a verification link to your inbox. Click it to confirm your account and unlock full access.</p>
+            <div class="flex flex-wrap gap-2 items-center">
+              <button id="resendVerifyBtn" class="btn-ghost px-3 py-1.5 text-sm">Resend verification email</button>
+              <span id="resendVerifyMsg" class="text-xs text-green-400 hidden">Sent — check your inbox.</span>
+              <span id="resendVerifyErr" class="text-xs text-red-400 hidden"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Credits Balance -->
       <div class="glass rounded-xl p-6">
         <div class="flex justify-between items-start mb-4">
@@ -130,7 +146,7 @@
     </div>
   </main>
 
-  <script src="/js/auth.js?v=3"></script>
+  <script src="/js/auth.js?v=4"></script>
   <script src="/js/credits.js"></script>
   <script>
     // Wait for auth to initialize
@@ -153,6 +169,31 @@
       // Display user info
       document.getElementById('userEmail').textContent = auth.user.email;
       document.getElementById('creditsBalance').textContent = auth.user.credits_balance;
+
+      // Unverified email banner
+      if (auth.user.email_verified === false) {
+        const banner = document.getElementById('unverifiedBanner');
+        banner.classList.remove('hidden');
+        const btn = document.getElementById('resendVerifyBtn');
+        const okMsg = document.getElementById('resendVerifyMsg');
+        const errMsg = document.getElementById('resendVerifyErr');
+        btn.addEventListener('click', async () => {
+          btn.disabled = true;
+          const original = btn.textContent;
+          btn.textContent = 'Sending...';
+          okMsg.classList.add('hidden');
+          errMsg.classList.add('hidden');
+          const r = await auth.resendVerification(auth.user.email);
+          btn.textContent = original;
+          btn.disabled = false;
+          if (r.success) {
+            okMsg.classList.remove('hidden');
+          } else {
+            errMsg.textContent = r.error || 'Could not resend. Try again soon.';
+            errMsg.classList.remove('hidden');
+          }
+        });
+      }
 
       // Load credit history
       try {
