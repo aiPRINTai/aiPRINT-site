@@ -67,8 +67,25 @@ export async function getUserById(userId) {
 // Password reset token storage. Uses the existing verification_token column
 // scheme but in its own dedicated pair of columns so a reset-in-progress
 // doesn't collide with signup verification.
+//
+// Self-heals: if the reset_token / reset_expires columns don't exist on the
+// live users table yet (because schema.sql hasn't been re-applied since this
+// feature shipped), add them on first use and retry. Avoids silent swallow
+// of "column does not exist" errors.
+async function ensureResetColumns() {
+  await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_token VARCHAR(128)`;
+  await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_expires TIMESTAMP`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_users_reset_token ON users(reset_token)`;
+}
+
+function isMissingColumnError(err) {
+  const m = String(err?.message || '');
+  return m.includes('reset_token') || m.includes('reset_expires')
+    || /column .* does not exist/i.test(m);
+}
+
 export async function setResetToken(userId, token, expires) {
-  const r = await sql`
+  const run = () => sql`
     UPDATE users
     SET reset_token = ${token},
         reset_expires = ${expires},
@@ -76,20 +93,36 @@ export async function setResetToken(userId, token, expires) {
     WHERE id = ${userId}
     RETURNING id, email
   `;
-  return r.rows[0];
+  try {
+    const r = await run();
+    return r.rows[0];
+  } catch (err) {
+    if (!isMissingColumnError(err)) throw err;
+    await ensureResetColumns();
+    const r = await run();
+    return r.rows[0];
+  }
 }
 
 export async function getUserByResetToken(token) {
-  const r = await sql`
+  const run = () => sql`
     SELECT * FROM users
     WHERE reset_token = ${token}
       AND reset_expires > NOW()
   `;
-  return r.rows[0];
+  try {
+    const r = await run();
+    return r.rows[0];
+  } catch (err) {
+    if (!isMissingColumnError(err)) throw err;
+    await ensureResetColumns();
+    const r = await run();
+    return r.rows[0];
+  }
 }
 
 export async function updateUserPassword(userId, passwordHash) {
-  const r = await sql`
+  const run = () => sql`
     UPDATE users
     SET password_hash = ${passwordHash},
         reset_token = NULL,
@@ -98,7 +131,15 @@ export async function updateUserPassword(userId, passwordHash) {
     WHERE id = ${userId}
     RETURNING id, email
   `;
-  return r.rows[0];
+  try {
+    const r = await run();
+    return r.rows[0];
+  } catch (err) {
+    if (!isMissingColumnError(err)) throw err;
+    await ensureResetColumns();
+    const r = await run();
+    return r.rows[0];
+  }
 }
 
 export async function updateUserCredits(userId, newBalance) {
