@@ -15,11 +15,14 @@ import {
   getUserDetail,
   getUserById,
   getUserByEmail,
-  setVerificationToken
+  setVerificationToken,
+  logAdminAction,
+  listAdminActions
 } from '../db/index.js';
 import { addCreditsToUser } from '../credits/utils.js';
 import { addCreditTransaction, updateUserCredits } from '../db/index.js';
 import { sendVerificationEmail } from '../_email.js';
+import { getClientIp } from '../auth/utils.js';
 
 function unauthorized(res) {
   return res.status(401).json({ error: 'Unauthorized' });
@@ -39,11 +42,22 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
+      // Audit log: /api/admin/users?audit=1[&user_id=<uuid>]
+      if (req.query.audit === '1' || req.query.audit === 'true') {
+        const limit = Math.min(parseInt(req.query.limit) || 100, 500);
+        const offset = parseInt(req.query.offset) || 0;
+        const userId = req.query.user_id || null;
+        const actions = await listAdminActions({ limit, offset, userId });
+        return res.status(200).json({ actions });
+      }
+
       // Detail view: /api/admin/users?id=<uuid>
       if (req.query.id) {
         const detail = await getUserDetail(req.query.id);
         if (!detail) return res.status(404).json({ error: 'User not found' });
-        return res.status(200).json(detail);
+        // Recent admin actions targeting this user
+        const actions = await listAdminActions({ userId: req.query.id, limit: 25 });
+        return res.status(200).json({ ...detail, admin_actions: actions });
       }
 
       // List view
@@ -79,8 +93,15 @@ export default async function handler(req, res) {
           return res.status(400).json({ error: 'amount out of range (-10000..10000)' });
         }
 
+        const actorIp = getClientIp(req);
         if (amount > 0) {
           const r = await addCreditsToUser(id, amount, `Admin grant: ${reason}`, null);
+          await logAdminAction({
+            action: 'grant_credits',
+            target_user_id: id,
+            actor_ip: actorIp,
+            details: { amount, reason, new_balance: r.newBalance, target_email: user.email }
+          });
           return res.status(200).json({ ok: true, newBalance: r.newBalance, creditsAdded: amount });
         }
 
@@ -93,6 +114,12 @@ export default async function handler(req, res) {
         const newBalance = currentBalance - deduct;
         await updateUserCredits(id, newBalance);
         await addCreditTransaction(id, -deduct, 'admin_adjustment', `Admin deduct: ${reason}`, null);
+        await logAdminAction({
+          action: 'deduct_credits',
+          target_user_id: id,
+          actor_ip: actorIp,
+          details: { amount: -deduct, reason, new_balance: newBalance, target_email: user.email }
+        });
         return res.status(200).json({ ok: true, newBalance, creditsAdded: -deduct });
       }
 
@@ -119,6 +146,12 @@ export default async function handler(req, res) {
           console.error('Verification email threw:', err);
           return res.status(502).json({ error: 'Email send failed' });
         }
+        await logAdminAction({
+          action: 'resend_verification',
+          target_user_id: full.id,
+          actor_ip: getClientIp(req),
+          details: { target_email: full.email }
+        });
         return res.status(200).json({ ok: true, sent_to: full.email });
       }
 

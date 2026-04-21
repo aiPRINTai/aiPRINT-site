@@ -102,3 +102,19 @@ CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE INDEX IF NOT EXISTS idx_orders_stripe_session_id ON orders(stripe_session_id);
 CREATE INDEX IF NOT EXISTS idx_orders_created_at ON orders(created_at);
 CREATE INDEX IF NOT EXISTS idx_orders_email ON orders(customer_email);
+
+-- Admin audit log: one row per admin action (credit grant, resend, status
+-- change, etc). Lets us answer "who/when/why did this user get +50 credits?"
+-- after the fact.
+CREATE TABLE IF NOT EXISTS admin_actions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  action VARCHAR(64) NOT NULL,
+  target_user_id UUID,
+  target_order_id UUID,
+  actor_ip VARCHAR(45),
+  details JSONB,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_admin_actions_created_at ON admin_actions(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_admin_actions_user ON admin_actions(target_user_id);
+CREATE INDEX IF NOT EXISTS idx_admin_actions_order ON admin_actions(target_order_id);

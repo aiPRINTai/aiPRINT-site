@@ -2,9 +2,10 @@
 // Auth: requires `Authorization: Bearer <ADMIN_PASSWORD>` header.
 // Set ADMIN_PASSWORD in Vercel env vars (use a long random string).
 
-import { listOrders, updateOrder, getOrderStats, getOrderById, setOrderShipping } from '../db/index.js';
+import { listOrders, updateOrder, getOrderStats, getOrderById, setOrderShipping, logAdminAction } from '../db/index.js';
 import { sendShippingNotificationEmail, sendOrderConfirmationEmail } from '../_email.js';
 import { stripe } from '../_stripe.js';
+import { getClientIp } from '../auth/utils.js';
 
 function unauthorized(res) {
   return res.status(401).json({ error: 'Unauthorized' });
@@ -48,12 +49,26 @@ export default async function handler(req, res) {
       if (action === 'resend_confirmation') {
         const r = await sendOrderConfirmationEmail(order);
         if (r?.error) return res.status(502).json({ error: r.error.message || 'Email failed' });
+        await logAdminAction({
+          action: 'resend_order_confirmation',
+          target_order_id: id,
+          target_user_id: order.user_id || null,
+          actor_ip: getClientIp(req),
+          details: { sent_to: order.customer_email, lookup_key: order.lookup_key }
+        });
         return res.status(200).json({ ok: true, sent_to: order.customer_email });
       }
       if (action === 'resend_shipping') {
         if (!order.tracking_number) return res.status(400).json({ error: 'Order has no tracking number yet' });
         const r = await sendShippingNotificationEmail(order);
         if (r?.error) return res.status(502).json({ error: r.error.message || 'Email failed' });
+        await logAdminAction({
+          action: 'resend_shipping_notification',
+          target_order_id: id,
+          target_user_id: order.user_id || null,
+          actor_ip: getClientIp(req),
+          details: { sent_to: order.customer_email, tracking_number: order.tracking_number }
+        });
         return res.status(200).json({ ok: true, sent_to: order.customer_email });
       }
       if (action === 'refresh_shipping') {
@@ -81,6 +96,13 @@ export default async function handler(req, res) {
             customer_name: shipDetails.name || session?.customer_details?.name || null,
             shipping_address: shipDetails.address
           });
+          await logAdminAction({
+            action: 'refresh_shipping_from_stripe',
+            target_order_id: id,
+            target_user_id: order.user_id || null,
+            actor_ip: getClientIp(req),
+            details: { stripe_session_id: order.stripe_session_id }
+          });
           return res.status(200).json({ ok: true, order: updated });
         } catch (err) {
           console.error('refresh_shipping error:', err?.message || err);
@@ -105,6 +127,22 @@ export default async function handler(req, res) {
 
       const updated = await updateOrder(id, { status, tracking_number, carrier, admin_notes });
       if (!updated) return res.status(404).json({ error: 'Order not found' });
+
+      // Audit log: record what actually changed
+      const changes = {};
+      if (status != null && status !== prevStatus) changes.status = { from: prevStatus, to: status };
+      if (tracking_number != null) changes.tracking_number = tracking_number;
+      if (carrier != null) changes.carrier = carrier;
+      if (admin_notes != null) changes.admin_notes_updated = true;
+      if (Object.keys(changes).length > 0) {
+        await logAdminAction({
+          action: 'update_order',
+          target_order_id: id,
+          target_user_id: updated.user_id || null,
+          actor_ip: getClientIp(req),
+          details: changes
+        });
+      }
 
       // Fire shipping notification when transitioning into "shipped" with a tracking number
       const becameShipped = status === 'shipped' && prevStatus !== 'shipped';

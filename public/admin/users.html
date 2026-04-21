@@ -294,7 +294,7 @@
     $('#detailModal').classList.add('hidden');
   }
 
-  function renderDetail({ user, orders, credit_transactions, generations }) {
+  function renderDetail({ user, orders, credit_transactions, generations, admin_actions = [] }) {
     $('#detailTitle').textContent = user.email;
     $('#detailSub').innerHTML = `
       <span class="pill ${user.email_verified ? 'pill-verified' : 'pill-unverified'}">${user.email_verified ? 'verified' : 'unverified'}</span>
@@ -359,7 +359,35 @@
         </table>
       `}
     `;
-    $('#detailBody').innerHTML = actions + ordersBlock + txnsBlock + gensBlock;
+    const auditBlock = `
+      <h3 class="font-bold mb-2 mt-6">Admin audit trail (${admin_actions.length})</h3>
+      ${admin_actions.length === 0 ? '<p class="muted text-sm">No admin actions recorded for this user.</p>' : `
+        <table class="detail">
+          <thead><tr><th>When</th><th>Action</th><th>Details</th><th>From IP</th></tr></thead>
+          <tbody>
+            ${admin_actions.map(a => {
+              const d = a.details || {};
+              let summary = '';
+              if (a.action === 'grant_credits' || a.action === 'deduct_credits') {
+                summary = `${d.amount >= 0 ? '+' : ''}${d.amount} → balance ${d.new_balance}${d.reason ? ` (${escapeHtml(d.reason)})` : ''}`;
+              } else if (a.action === 'resend_verification') {
+                summary = `to ${escapeHtml(d.target_email || '')}`;
+              } else {
+                summary = escapeHtml(JSON.stringify(d));
+              }
+              return `
+                <tr>
+                  <td class="muted">${fmtDate(a.created_at)}</td>
+                  <td><span class="pill">${escapeHtml(a.action)}</span></td>
+                  <td class="muted">${summary}</td>
+                  <td class="muted font-mono text-[10px]">${escapeHtml(a.actor_ip || '—')}</td>
+                </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      `}
+    `;
+    $('#detailBody').innerHTML = actions + ordersBlock + txnsBlock + gensBlock + auditBlock;
   }
 
   function exportCsv() {

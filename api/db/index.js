@@ -487,6 +487,95 @@ export async function getOrderStats() {
   return r.rows[0];
 }
 
+// ── Admin audit log ────────────────────────────────────────────────────────
+// One row per admin action. Self-heals if the table doesn't exist yet
+// (same pattern as contact_submissions / reset_token).
+async function ensureAdminActionsTable() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS admin_actions (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      action VARCHAR(64) NOT NULL,
+      target_user_id UUID,
+      target_order_id UUID,
+      actor_ip VARCHAR(45),
+      details JSONB,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_admin_actions_created_at ON admin_actions(created_at DESC)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_admin_actions_user ON admin_actions(target_user_id)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_admin_actions_order ON admin_actions(target_order_id)`;
+}
+
+export async function logAdminAction({ action, target_user_id = null, target_order_id = null, actor_ip = null, details = null }) {
+  const payload = details ? JSON.stringify(details) : null;
+  const run = () => sql`
+    INSERT INTO admin_actions (action, target_user_id, target_order_id, actor_ip, details)
+    VALUES (${action}, ${target_user_id}, ${target_order_id}, ${actor_ip}, ${payload}::jsonb)
+    RETURNING id, created_at
+  `;
+  try {
+    const r = await run();
+    return r.rows[0];
+  } catch (err) {
+    // Self-heal: table missing on live DB (schema.sql not re-applied)
+    if (String(err?.message || '').includes('does not exist')) {
+      try {
+        await ensureAdminActionsTable();
+        const r = await run();
+        return r.rows[0];
+      } catch (inner) {
+        console.error('logAdminAction: could not create/insert:', inner.message);
+        return null;
+      }
+    }
+    console.error('logAdminAction failed:', err.message);
+    return null; // never throw — audit logging must not break the primary action
+  }
+}
+
+export async function listAdminActions({ limit = 100, offset = 0, userId = null, orderId = null } = {}) {
+  const run = async () => {
+    if (userId) {
+      return sql`
+        SELECT a.*, u.email AS target_user_email
+        FROM admin_actions a
+        LEFT JOIN users u ON u.id = a.target_user_id
+        WHERE a.target_user_id = ${userId}
+        ORDER BY a.created_at DESC
+        LIMIT ${limit} OFFSET ${offset}
+      `;
+    }
+    if (orderId) {
+      return sql`
+        SELECT a.*, u.email AS target_user_email
+        FROM admin_actions a
+        LEFT JOIN users u ON u.id = a.target_user_id
+        WHERE a.target_order_id = ${orderId}
+        ORDER BY a.created_at DESC
+        LIMIT ${limit} OFFSET ${offset}
+      `;
+    }
+    return sql`
+      SELECT a.*, u.email AS target_user_email
+      FROM admin_actions a
+      LEFT JOIN users u ON u.id = a.target_user_id
+      ORDER BY a.created_at DESC
+      LIMIT ${limit} OFFSET ${offset}
+    `;
+  };
+  try {
+    const r = await run();
+    return r.rows;
+  } catch (err) {
+    if (String(err?.message || '').includes('does not exist')) {
+      await ensureAdminActionsTable();
+      return [];
+    }
+    throw err;
+  }
+}
+
 // Initialize database tables
 export async function initializeDatabase() {
   // This function can be called to ensure tables exist
