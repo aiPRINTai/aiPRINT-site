@@ -27,6 +27,9 @@
     button.ghost   { background: rgba(255,255,255,.08); color:#e7eef8; padding:6px 12px; border-radius:6px; font-size:12px; }
     button:hover { filter: brightness(1.1); }
     .stat { padding:14px 18px; border-radius:10px; }
+    .nav-link { color:#94a3b8; padding:6px 10px; border-radius:6px; font-size:13px; text-decoration:none; }
+    .nav-link.active { color:#e7eef8; background: rgba(255,255,255,.08); }
+    .nav-link:hover { color:#e7eef8; }
   </style>
 </head>
 <body class="min-h-screen">
@@ -46,9 +49,15 @@
 <div id="appView" class="hidden">
   <header class="border-b border-white/10 bg-[#0b1020]/80 sticky top-0 z-10">
     <div class="max-w-7xl mx-auto px-5 h-14 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
-        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span> · Admin</span>
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3">
+          <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
+          <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span> · Admin</span>
+        </div>
+        <nav class="flex items-center gap-1 ml-2">
+          <a href="/admin/orders.html" class="nav-link active">Orders</a>
+          <a href="/admin/users.html"  class="nav-link">Users</a>
+        </nav>
       </div>
       <div class="flex items-center gap-3">
         <button onclick="loadOrders()" class="ghost" title="Refresh (R)">↻ Refresh</button>

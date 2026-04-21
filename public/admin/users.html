@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <title>aiPRINT.ai — User Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background:#0a0f1d; color:#e7eef8; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    .glass { background: rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.10); }
+    .muted { color:#94a3b8; }
+    .pill { padding:2px 8px; border-radius:999px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; }
+    .pill-verified   { background:#064e3b; color:#bbf7d0; }
+    .pill-unverified { background:#422006; color:#fde047; }
+    select, input, textarea {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      color:#e7eef8; border-radius:6px; padding:6px 10px; font-size:13px;
+      color-scheme: dark;
+    }
+    select option { background:#11151f; color:#e7eef8; }
+    button.primary { background: linear-gradient(135deg,#6366f1,#818cf8); color:white; padding:6px 14px; border-radius:6px; font-size:13px; font-weight:600; }
+    button.ghost   { background: rgba(255,255,255,.08); color:#e7eef8; padding:6px 12px; border-radius:6px; font-size:12px; }
+    button:hover { filter: brightness(1.1); }
+    .stat { padding:14px 18px; border-radius:10px; }
+    .nav-link { color:#94a3b8; padding:6px 10px; border-radius:6px; font-size:13px; }
+    .nav-link.active { color:#e7eef8; background: rgba(255,255,255,.08); }
+    .nav-link:hover { color:#e7eef8; }
+    table.detail { width: 100%; font-size: 12px; }
+    table.detail td, table.detail th { padding: 4px 8px; border-bottom: 1px solid rgba(255,255,255,.08); text-align: left; }
+    table.detail th { color:#94a3b8; font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+<!-- Login screen -->
+<div id="loginView" class="min-h-screen grid place-items-center px-4">
+  <div class="glass rounded-2xl p-8 w-full max-w-sm">
+    <h1 class="text-xl font-bold mb-1">Admin Access</h1>
+    <p class="muted text-sm mb-5">Enter the admin password to view users.</p>
+    <input id="pwInput" type="password" placeholder="Password" class="w-full mb-3" autocomplete="current-password"/>
+    <button onclick="login()" class="primary w-full">Sign in</button>
+    <p id="loginErr" class="text-red-400 text-sm mt-3 hidden"></p>
+  </div>
+</div>
+
+<!-- Main app (hidden until login) -->
+<div id="appView" class="hidden">
+  <header class="border-b border-white/10 bg-[#0b1020]/80 sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-5 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3">
+          <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
+          <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span> · Admin</span>
+        </div>
+        <nav class="flex items-center gap-1 ml-2">
+          <a href="/admin/orders.html" class="nav-link">Orders</a>
+          <a href="/admin/users.html"  class="nav-link active">Users</a>
+        </nav>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="loadUsers()" class="ghost" title="Refresh">↻ Refresh</button>
+        <button onclick="exportCsv()" class="ghost" title="Export CSV">⬇ CSV</button>
+        <button onclick="logout()" class="ghost">Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-5 py-6">
+    <!-- Stats -->
+    <div id="statsRow" class="grid grid-cols-2 md:grid-cols-6 gap-3 mb-6"></div>
+
+    <!-- Filter -->
+    <div class="flex items-center gap-3 mb-4 flex-wrap">
+      <input id="searchInput" type="search" placeholder="Search email…" oninput="applySearchDebounced()" class="flex-1 min-w-[240px]" />
+      <label class="text-sm muted flex items-center gap-2">
+        <input type="checkbox" id="verifiedOnly" onchange="loadUsers()"/>
+        Verified only
+      </label>
+      <span id="countLabel" class="text-sm muted ml-auto"></span>
+    </div>
+
+    <div id="usersList" class="space-y-2"></div>
+    <div id="emptyState" class="hidden text-center py-20 muted">No users yet.</div>
+  </main>
+</div>
+
+<!-- Detail modal -->
+<div id="detailModal" class="fixed inset-0 z-40 hidden bg-black/60 backdrop-blur-sm" onclick="if(event.target===this)closeDetail()">
+  <div class="max-w-4xl mx-auto my-8 glass rounded-2xl p-6 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-start justify-between mb-4">
+      <div>
+        <h2 id="detailTitle" class="text-xl font-bold"></h2>
+        <p id="detailSub" class="text-sm muted mt-1"></p>
+      </div>
+      <button onclick="closeDetail()" class="ghost">✕ Close</button>
+    </div>
+    <div id="detailBody"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-6 right-6 hidden z-50">
+  <div id="toastBox" class="glass rounded-xl px-4 py-3 text-sm shadow-2xl border-l-4"></div>
+</div>
+
+<script>
+  const $ = (q, el=document) => el.querySelector(q);
+  const PW_KEY = 'aiprint_admin_pw';
+
+  function login() {
+    const pw = $('#pwInput').value.trim();
+    if (!pw) return;
+    sessionStorage.setItem(PW_KEY, pw);
+    enterApp();
+  }
+
+  function logout() {
+    sessionStorage.removeItem(PW_KEY);
+    location.reload();
+  }
+
+  async function api(path, opts = {}) {
+    const pw = sessionStorage.getItem(PW_KEY);
+    const r = await fetch(path, {
+      ...opts,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${pw}`,
+        ...(opts.headers || {})
+      }
+    });
+    if (r.status === 401) {
+      sessionStorage.removeItem(PW_KEY);
+      $('#appView').classList.add('hidden');
+      $('#loginView').classList.remove('hidden');
+      $('#loginErr').textContent = 'Wrong password.';
+      $('#loginErr').classList.remove('hidden');
+      throw new Error('unauthorized');
+    }
+    if (!r.ok) throw new Error((await r.json().catch(()=>({}))).error || `HTTP ${r.status}`);
+    return r.json();
+  }
+
+  function fmtMoney(cents, cur='usd') {
+    return ((cents||0)/100).toLocaleString('en-US', { style:'currency', currency:(cur||'usd').toUpperCase() });
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    return d.toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit' });
+  }
+
+  function showToast(msg, type = 'info') {
+    const t = $('#toast'); const b = $('#toastBox');
+    const colors = { info: '#818cf8', success: '#86efac', error: '#fca5a5' };
+    b.style.borderLeftColor = colors[type] || colors.info;
+    b.textContent = msg;
+    t.classList.remove('hidden');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => t.classList.add('hidden'), 3500);
+  }
+
+  async function enterApp() {
+    $('#loginView').classList.add('hidden');
+    $('#appView').classList.remove('hidden');
+    try { await loadUsers(); } catch (e) { console.error(e); }
+  }
+
+  let _searchDebounceTimer = null;
+  function applySearchDebounced() {
+    clearTimeout(_searchDebounceTimer);
+    _searchDebounceTimer = setTimeout(loadUsers, 300);
+  }
+
+  async function loadUsers() {
+    const search = $('#searchInput').value.trim();
+    const verifiedOnly = $('#verifiedOnly').checked;
+    const qs = new URLSearchParams();
+    if (search) qs.set('search', search);
+    if (verifiedOnly) qs.set('verifiedOnly', '1');
+    const data = await api(`/api/admin/users${qs.toString() ? `?${qs}` : ''}`);
+    renderStats(data.stats);
+    renderUsers(data.users || []);
+  }
+
+  function renderStats(s) {
+    if (!s) { $('#statsRow').innerHTML = ''; return; }
+    const tiles = [
+      ['Total',       s.total,        '#cbd5e1'],
+      ['Verified',    s.verified,     '#bbf7d0'],
+      ['Unverified',  s.unverified,   '#fde047'],
+      ['New (7d)',    s.new_7d,       '#93c5fd'],
+      ['New (30d)',   s.new_30d,      '#a5b4fc'],
+      ['Credits out', s.total_credits,'#818cf8']
+    ];
+    $('#statsRow').innerHTML = tiles.map(([label, val, color]) => `
+      <div class="glass stat">
+        <div class="text-xs muted uppercase tracking-wider mb-1">${label}</div>
+        <div class="text-xl font-bold" style="color:${color}">${val ?? 0}</div>
+      </div>
+    `).join('');
+  }
+
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+  }
+
+  function renderUsers(users) {
+    $('#countLabel').textContent = `${users.length} user${users.length===1?'':'s'}`;
+    if (users.length === 0) {
+      $('#usersList').innerHTML = '';
+      $('#emptyState').classList.remove('hidden');
+      return;
+    }
+    $('#emptyState').classList.add('hidden');
+    $('#usersList').innerHTML = `
+      <div class="glass rounded-xl overflow-hidden">
+        <div class="grid grid-cols-[1fr_110px_110px_110px_130px_180px] gap-3 px-4 py-2 text-[11px] muted uppercase tracking-wider border-b border-white/10">
+          <div>Email</div>
+          <div class="text-right">Credits</div>
+          <div class="text-right">Orders</div>
+          <div class="text-right">Spend</div>
+          <div>Joined</div>
+          <div class="text-right">Actions</div>
+        </div>
+        ${users.map(u => `
+          <div class="grid grid-cols-[1fr_110px_110px_110px_130px_180px] gap-3 px-4 py-3 items-center border-b border-white/5 hover:bg-white/[.03]">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="pill ${u.email_verified ? 'pill-verified' : 'pill-unverified'}">${u.email_verified ? 'verified' : 'unverified'}</span>
+              <a href="mailto:${escapeHtml(u.email)}" class="text-indigo-300 truncate" title="${escapeHtml(u.email)}">${escapeHtml(u.email)}</a>
+            </div>
+            <div class="text-right font-mono">${u.credits_balance}</div>
+            <div class="text-right">${u.order_count}</div>
+            <div class="text-right">${fmtMoney(u.lifetime_cents)}</div>
+            <div class="text-xs muted">${fmtDate(u.created_at)}</div>
+            <div class="flex justify-end gap-2">
+              <button class="ghost text-xs" onclick="openDetail('${u.id}')">Details</button>
+              <button class="ghost text-xs" onclick="grantCredits('${u.id}','${escapeHtml(u.email)}')">+ Credits</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  async function grantCredits(id, email) {
+    const raw = prompt(`Grant credits to ${email}\n\nEnter a positive integer to add, or a negative integer to deduct:`);
+    if (raw == null) return;
+    const amount = parseInt(raw, 10);
+    if (!Number.isFinite(amount) || amount === 0) { showToast('Enter a nonzero integer', 'error'); return; }
+    const reason = prompt(`Reason (shown in credit history):`, 'Customer support') || 'Admin adjustment';
+    try {
+      const r = await api('/api/admin/users', {
+        method: 'POST',
+        body: JSON.stringify({ id, action: 'grant_credits', amount, reason })
+      });
+      showToast(`${amount > 0 ? 'Granted' : 'Deducted'} ${Math.abs(r.creditsAdded)} credits → new balance ${r.newBalance}`, 'success');
+      await loadUsers();
+    } catch (e) {
+      showToast('Failed: ' + e.message, 'error');
+    }
+  }
+
+  async function resendVerification(id, email) {
+    if (!confirm(`Resend verification email to ${email}?`)) return;
+    try {
+      const r = await api('/api/admin/users', {
+        method: 'POST',
+        body: JSON.stringify({ id, action: 'resend_verification' })
+      });
+      showToast(`Verification email sent to ${r.sent_to}`, 'success');
+    } catch (e) {
+      showToast('Failed: ' + e.message, 'error');
+    }
+  }
+
+  async function openDetail(id) {
+    $('#detailTitle').textContent = 'Loading…';
+    $('#detailSub').textContent = '';
+    $('#detailBody').innerHTML = '';
+    $('#detailModal').classList.remove('hidden');
+    try {
+      const data = await api(`/api/admin/users?id=${encodeURIComponent(id)}`);
+      renderDetail(data);
+    } catch (e) {
+      $('#detailBody').innerHTML = `<p class="text-red-400 text-sm">Failed to load: ${escapeHtml(e.message)}</p>`;
+    }
+  }
+
+  function closeDetail() {
+    $('#detailModal').classList.add('hidden');
+  }
+
+  function renderDetail({ user, orders, credit_transactions, generations }) {
+    $('#detailTitle').textContent = user.email;
+    $('#detailSub').innerHTML = `
+      <span class="pill ${user.email_verified ? 'pill-verified' : 'pill-unverified'}">${user.email_verified ? 'verified' : 'unverified'}</span>
+      &nbsp;·&nbsp; ${user.credits_balance} credits
+      &nbsp;·&nbsp; joined ${fmtDate(user.created_at)}
+      &nbsp;·&nbsp; <span class="font-mono text-[10px]">${user.id}</span>
+    `;
+    const actions = `
+      <div class="flex gap-2 mb-5">
+        <button class="primary" onclick="grantCredits('${user.id}','${escapeHtml(user.email)}')">Grant credits</button>
+        ${!user.email_verified ? `<button class="ghost" onclick="resendVerification('${user.id}','${escapeHtml(user.email)}')">Resend verification</button>` : ''}
+      </div>
+    `;
+    const ordersBlock = `
+      <h3 class="font-bold mb-2 mt-4">Orders (${orders.length})</h3>
+      ${orders.length === 0 ? '<p class="muted text-sm">No orders.</p>' : `
+        <table class="detail">
+          <thead><tr><th>Date</th><th>Status</th><th>Product</th><th>Amount</th><th>Tracking</th></tr></thead>
+          <tbody>
+            ${orders.map(o => `
+              <tr>
+                <td class="muted">${fmtDate(o.created_at)}</td>
+                <td>${escapeHtml(o.status)}</td>
+                <td>${escapeHtml(o.lookup_key || '—')}</td>
+                <td>${fmtMoney(o.amount_total, o.currency)}</td>
+                <td class="muted">${escapeHtml(o.tracking_number || '—')}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      `}
+    `;
+    const txnsBlock = `
+      <h3 class="font-bold mb-2 mt-6">Credit history (${credit_transactions.length})</h3>
+      ${credit_transactions.length === 0 ? '<p class="muted text-sm">No credit activity.</p>' : `
+        <table class="detail">
+          <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Description</th></tr></thead>
+          <tbody>
+            ${credit_transactions.map(t => `
+              <tr>
+                <td class="muted">${fmtDate(t.created_at)}</td>
+                <td>${escapeHtml(t.type)}</td>
+                <td class="${t.amount >= 0 ? 'text-green-300' : 'text-red-300'}">${t.amount >= 0 ? '+' : ''}${t.amount}</td>
+                <td class="muted">${escapeHtml(t.description || '')}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      `}
+    `;
+    const gensBlock = `
+      <h3 class="font-bold mb-2 mt-6">Recent generations (${generations.length})</h3>
+      ${generations.length === 0 ? '<p class="muted text-sm">No generations yet.</p>' : `
+        <table class="detail">
+          <thead><tr><th>Date</th><th>Size</th><th>Prompt</th></tr></thead>
+          <tbody>
+            ${generations.map(g => `
+              <tr>
+                <td class="muted">${fmtDate(g.created_at)}</td>
+                <td>${escapeHtml(g.size || '—')}</td>
+                <td class="muted" title="${escapeHtml(g.prompt || '')}">${escapeHtml((g.prompt || '').slice(0, 120))}${(g.prompt||'').length > 120 ? '…' : ''}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      `}
+    `;
+    $('#detailBody').innerHTML = actions + ordersBlock + txnsBlock + gensBlock;
+  }
+
+  function exportCsv() {
+    const pw = sessionStorage.getItem(PW_KEY);
+    if (!pw) return;
+    const qs = new URLSearchParams();
+    const search = $('#searchInput').value.trim();
+    if (search) qs.set('search', search);
+    if ($('#verifiedOnly').checked) qs.set('verifiedOnly', '1');
+    const url = '/api/admin/users-export' + (qs.toString() ? `?${qs}` : '');
+    fetch(url, { headers: { Authorization: `Bearer ${pw}` } })
+      .then(r => r.ok ? r.blob() : Promise.reject(new Error(`HTTP ${r.status}`)))
+      .then(blob => {
+        const a = document.createElement('a');
+        const objUrl = URL.createObjectURL(blob);
+        a.href = objUrl;
+        a.download = `aiprint-users-${new Date().toISOString().slice(0,10)}.csv`;
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(objUrl);
+        showToast('CSV downloaded', 'success');
+      })
+      .catch(e => showToast('Export failed: ' + e.message, 'error'));
+  }
+
+  // Esc closes modal
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !$('#detailModal').classList.contains('hidden')) {
+      closeDetail();
+    }
+  });
+
+  // Auto-login if password in session
+  if (sessionStorage.getItem(PW_KEY)) {
+    enterApp().catch(() => {});
+  }
+</script>
+</body>
+</html>

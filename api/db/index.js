@@ -288,6 +288,113 @@ export async function setOrderShipping(id, { customer_name, shipping_address }) 
   return r.rows[0] || null;
 }
 
+// ── Admin: users list + detail ─────────────────────────────────────────────
+// List users with derived aggregates (orders count, lifetime spend, generations
+// count). One SQL round-trip using LEFT JOIN + GROUP BY. Optional search
+// filters on email prefix (case-insensitive).
+export async function listUsersWithStats({ limit = 200, offset = 0, search = null, verifiedOnly = false } = {}) {
+  const s = search ? `%${search.toLowerCase()}%` : null;
+
+  // Use a single query with subqueries to avoid a cartesian explosion from
+  // joining both orders and generations simultaneously.
+  if (s && verifiedOnly) {
+    const r = await sql`
+      SELECT
+        u.id, u.email, u.credits_balance, u.email_verified, u.created_at, u.updated_at,
+        COALESCE((SELECT COUNT(*)::int FROM orders o WHERE o.user_id = u.id), 0) AS order_count,
+        COALESCE((SELECT SUM(o.amount_total)::int FROM orders o WHERE o.user_id = u.id), 0) AS lifetime_cents,
+        COALESCE((SELECT COUNT(*)::int FROM generations g WHERE g.user_id = u.id), 0) AS generation_count
+      FROM users u
+      WHERE LOWER(u.email) LIKE ${s} AND u.email_verified = TRUE
+      ORDER BY u.created_at DESC
+      LIMIT ${limit} OFFSET ${offset}
+    `;
+    return r.rows;
+  }
+  if (s) {
+    const r = await sql`
+      SELECT
+        u.id, u.email, u.credits_balance, u.email_verified, u.created_at, u.updated_at,
+        COALESCE((SELECT COUNT(*)::int FROM orders o WHERE o.user_id = u.id), 0) AS order_count,
+        COALESCE((SELECT SUM(o.amount_total)::int FROM orders o WHERE o.user_id = u.id), 0) AS lifetime_cents,
+        COALESCE((SELECT COUNT(*)::int FROM generations g WHERE g.user_id = u.id), 0) AS generation_count
+      FROM users u
+      WHERE LOWER(u.email) LIKE ${s}
+      ORDER BY u.created_at DESC
+      LIMIT ${limit} OFFSET ${offset}
+    `;
+    return r.rows;
+  }
+  if (verifiedOnly) {
+    const r = await sql`
+      SELECT
+        u.id, u.email, u.credits_balance, u.email_verified, u.created_at, u.updated_at,
+        COALESCE((SELECT COUNT(*)::int FROM orders o WHERE o.user_id = u.id), 0) AS order_count,
+        COALESCE((SELECT SUM(o.amount_total)::int FROM orders o WHERE o.user_id = u.id), 0) AS lifetime_cents,
+        COALESCE((SELECT COUNT(*)::int FROM generations g WHERE g.user_id = u.id), 0) AS generation_count
+      FROM users u
+      WHERE u.email_verified = TRUE
+      ORDER BY u.created_at DESC
+      LIMIT ${limit} OFFSET ${offset}
+    `;
+    return r.rows;
+  }
+  const r = await sql`
+    SELECT
+      u.id, u.email, u.credits_balance, u.email_verified, u.created_at, u.updated_at,
+      COALESCE((SELECT COUNT(*)::int FROM orders o WHERE o.user_id = u.id), 0) AS order_count,
+      COALESCE((SELECT SUM(o.amount_total)::int FROM orders o WHERE o.user_id = u.id), 0) AS lifetime_cents,
+      COALESCE((SELECT COUNT(*)::int FROM generations g WHERE g.user_id = u.id), 0) AS generation_count
+    FROM users u
+    ORDER BY u.created_at DESC
+    LIMIT ${limit} OFFSET ${offset}
+  `;
+  return r.rows;
+}
+
+// High-level user stats for the admin dashboard tiles.
+export async function getUserStats() {
+  const r = await sql`
+    SELECT
+      COUNT(*)::int                                                    AS total,
+      COUNT(*) FILTER (WHERE email_verified = TRUE)::int               AS verified,
+      COUNT(*) FILTER (WHERE email_verified = FALSE)::int              AS unverified,
+      COUNT(*) FILTER (WHERE created_at > NOW() - INTERVAL '7 days')::int   AS new_7d,
+      COUNT(*) FILTER (WHERE created_at > NOW() - INTERVAL '30 days')::int  AS new_30d,
+      COALESCE(SUM(credits_balance), 0)::int                           AS total_credits
+    FROM users
+  `;
+  return r.rows[0];
+}
+
+// Full detail for one user: base row + recent orders + recent credit txns +
+// recent generations. Returns null if user doesn't exist.
+export async function getUserDetail(userId) {
+  const base = await sql`
+    SELECT id, email, credits_balance, email_verified, created_at, updated_at
+    FROM users WHERE id = ${userId}
+  `;
+  if (!base.rows[0]) return null;
+  const [orders, txns, gens] = await Promise.all([
+    sql`SELECT id, stripe_session_id, customer_email, lookup_key, amount_total, currency,
+               status, tracking_number, carrier, preview_url, created_at
+         FROM orders WHERE user_id = ${userId}
+         ORDER BY created_at DESC LIMIT 50`,
+    sql`SELECT id, amount, type, description, stripe_payment_id, created_at
+         FROM credit_transactions WHERE user_id = ${userId}
+         ORDER BY created_at DESC LIMIT 50`,
+    sql`SELECT id, prompt, size, created_at
+         FROM generations WHERE user_id = ${userId}
+         ORDER BY created_at DESC LIMIT 25`
+  ]);
+  return {
+    user: base.rows[0],
+    orders: orders.rows,
+    credit_transactions: txns.rows,
+    generations: gens.rows
+  };
+}
+
 export async function getOrderStats() {
   const r = await sql`
     SELECT
