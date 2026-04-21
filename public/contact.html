@@ -211,7 +211,7 @@
       <div class="glass rounded-2xl p-8">
         <h2 class="h2 text-2xl mb-6">Send us a message</h2>
         
-        <form action="https://formspree.io/f/xrbadnbo" method="POST" class="space-y-6">
+        <form id="contactForm" class="space-y-6" novalidate>
           <div>
             <label for="name" class="block text-sm font-medium mb-2">Your Name *</label>
             <input type="text" id="name" name="name" required minlength="2" maxlength="100" autocomplete="name"
@@ -252,22 +252,80 @@
           </div>
 
           <div class="flex items-start gap-3">
-            <input type="checkbox" id="newsletter" name="newsletter" 
+            <input type="checkbox" id="newsletter" name="newsletter"
                    class="mt-1 rounded border-white/20">
             <label for="newsletter" class="text-sm muted">
               Send me occasional updates about new features and promotions
             </label>
           </div>
 
-          <!-- Hidden redirect for thank you page -->
-          <input type="hidden" name="_redirect" value="/thank-you.html" />
-          
-          <button type="submit" class="btn w-full">Send Message</button>
-          
+          <!-- Honeypot: real humans leave this blank. Bots fill every field. -->
+          <div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true">
+            <label>Your website (leave blank):
+              <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+            </label>
+          </div>
+
+          <div id="formError" class="hidden p-3 rounded-lg bg-red-500/15 border border-red-500/40 text-red-200 text-sm"></div>
+          <div id="formSuccess" class="hidden p-3 rounded-lg bg-green-500/15 border border-green-500/40 text-green-200 text-sm"></div>
+
+          <button type="submit" id="submitBtn" class="btn w-full">Send Message</button>
+
           <p class="text-xs text-center muted">
             By submitting, you agree to our <a href="/policies.html" class="underline hover:text-white">Privacy Policy</a>
           </p>
         </form>
+
+        <script>
+          (function () {
+            const form = document.getElementById('contactForm');
+            const btn = document.getElementById('submitBtn');
+            const errBox = document.getElementById('formError');
+            const okBox = document.getElementById('formSuccess');
+
+            form.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              errBox.classList.add('hidden');
+              okBox.classList.add('hidden');
+
+              const payload = {
+                name: form.name.value.trim(),
+                email: form.email.value.trim(),
+                subject: form.subject.value,
+                message: form.message.value.trim(),
+                orderNumber: form.orderNumber.value.trim(),
+                newsletter: form.newsletter.checked,
+                website: form.website.value // honeypot
+              };
+
+              btn.disabled = true;
+              btn.textContent = 'Sending…';
+
+              try {
+                const r = await fetch('/api/contact', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(payload)
+                });
+                const data = await r.json().catch(() => ({}));
+                if (!r.ok || data.ok === false) {
+                  errBox.textContent = data.error || 'Something went wrong. Please try again.';
+                  errBox.classList.remove('hidden');
+                  btn.disabled = false;
+                  btn.textContent = 'Send Message';
+                  return;
+                }
+                // Success — redirect to thank-you page to match prior UX
+                window.location.href = '/thank-you.html';
+              } catch (err) {
+                errBox.textContent = 'Network error. Please email info@aiprint.ai directly.';
+                errBox.classList.remove('hidden');
+                btn.disabled = false;
+                btn.textContent = 'Send Message';
+              }
+            });
+          })();
+        </script>
       </div>
     </section>
   </main>

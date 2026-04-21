@@ -219,6 +219,87 @@ export async function sendCreditPurchaseEmail({ email, name, creditsAmount, amou
   });
 }
 
+export async function sendPasswordResetEmail(email, resetUrl) {
+  if (!email) return { skipped: true, reason: 'no email' };
+
+  const html = `
+    <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;color:#0a0f1d;background:#ffffff;">
+      <div style="text-align:center;margin-bottom:28px;">
+        <div style="display:inline-block;width:42px;height:42px;border-radius:10px;background:#0a0f1d;color:#fff;font-weight:900;line-height:42px;font-size:18px;letter-spacing:-.5px;">AI</div>
+      </div>
+      <h1 style="font-size:24px;margin:0 0 12px;text-align:center;font-weight:800;">Reset your password</h1>
+      <p style="color:#475569;margin:0 0 24px;text-align:center;font-size:15px;line-height:1.5">
+        Someone (hopefully you) asked to reset the password on your aiPRINT.ai account. Click below to choose a new one.
+      </p>
+      <div style="text-align:center;margin:28px 0;">
+        <a href="${resetUrl}" style="display:inline-block;background:linear-gradient(135deg,#6366f1,#818cf8);color:white;text-decoration:none;padding:14px 32px;border-radius:10px;font-weight:700;font-size:15px;">
+          Reset my password →
+        </a>
+      </div>
+      <p style="color:#94a3b8;font-size:12px;text-align:center;margin:24px 0 0;line-height:1.5">
+        Or paste this into your browser:<br>
+        <span style="color:#64748b;word-break:break-all;">${resetUrl}</span>
+      </p>
+      <hr style="border:none;border-top:1px solid #e2e8f0;margin:32px 0;">
+      <p style="color:#94a3b8;font-size:12px;text-align:center;margin:0;line-height:1.5">
+        This link expires in 1 hour and can only be used once. If you didn't request a reset, you can safely ignore this email — your password won't change.<br><br>
+        aiPRINT.ai · Made with care in Florida, USA
+      </p>
+    </div>
+  `.trim();
+
+  return sendEmail({
+    to: email,
+    subject: 'Reset your aiPRINT.ai password',
+    html,
+    replyTo: process.env.FULFILLMENT_TO || 'info@aiprint.ai'
+  });
+}
+
+// Sent to the site operator (FULFILLMENT_TO) when a customer submits the
+// contact form. Uses the customer's email as reply-to so admin can just hit
+// Reply to get back to them.
+export async function sendContactFormEmail({ name, email, subject, message, orderNumber, newsletter }) {
+  const to = process.env.FULFILLMENT_TO || 'info@aiprint.ai';
+
+  const escape = (s = '') => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+
+  const subjectMap = {
+    order: 'Question about an order',
+    materials: 'Material & sizing help',
+    bulk: 'Bulk order inquiry',
+    technical: 'Website support',
+    other: 'Other'
+  };
+  const subjectLabel = subjectMap[subject] || subject || 'Contact form message';
+
+  const html = `
+    <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:600px;margin:0 auto;padding:24px;color:#0a0f1d;">
+      <h2 style="margin:0 0 8px;font-size:20px;">📨 New contact form message</h2>
+      <p style="margin:0 0 20px;color:#64748b;font-size:14px;">${escape(subjectLabel)}</p>
+
+      <table style="width:100%;border-collapse:collapse;font-size:14px;margin:0 0 20px;">
+        <tr><td style="padding:8px 0;color:#64748b;width:110px;">From</td><td style="padding:8px 0;"><strong>${escape(name)}</strong></td></tr>
+        <tr><td style="padding:8px 0;color:#64748b;">Email</td><td style="padding:8px 0;"><a href="mailto:${escape(email)}" style="color:#4f46e5;">${escape(email)}</a></td></tr>
+        ${orderNumber ? `<tr><td style="padding:8px 0;color:#64748b;">Order #</td><td style="padding:8px 0;font-family:monospace;">${escape(orderNumber)}</td></tr>` : ''}
+        ${newsletter ? `<tr><td style="padding:8px 0;color:#64748b;">Newsletter</td><td style="padding:8px 0;color:#16a34a;">✓ opted in</td></tr>` : ''}
+      </table>
+
+      <h3 style="margin:24px 0 8px;font-size:14px;color:#64748b;text-transform:uppercase;letter-spacing:.05em;">Message</h3>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;font-size:14px;line-height:1.6;white-space:pre-wrap;">${escape(message)}</div>
+
+      <p style="margin-top:24px;color:#94a3b8;font-size:12px;">Hit reply to respond directly to ${escape(name)}.</p>
+    </div>
+  `.trim();
+
+  return sendEmail({
+    to,
+    subject: `[aiPRINT.ai] ${subjectLabel} — ${name}`,
+    html,
+    replyTo: email
+  });
+}
+
 export async function sendFulfillmentAlertEmail(order) {
   const to = process.env.FULFILLMENT_TO || 'info@aiprint.ai';
   const { customer_email, customer_name, preview_url, clean_url, lookup_key, prompt, amount_total, currency, stripe_session_id, shipping_address, options } = order;
