@@ -9,12 +9,44 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Env & local config
+# Env & local config — NEVER commit anything that may hold secrets.
+# Whitelist only the example template; block everything else.
 .env
 .env.*
+.env.*.local
 .env.local
+.env.development
+.env.development.local
+.env.production
+.env.production.local
+.env.staging
+.env.staging.local
+.env.test
+.env.test.local
+.envrc
+.direnv/
+# Allow template files committed for onboarding
+!.env.example
+!.env.sample
+!.env.template
+
+# Vercel / deploy state
 .vercel
-.env*.local
+
+# Credential dumps and auth artifacts
+*.pem
+*.key
+*.pfx
+*.p12
+id_rsa
+id_ed25519
+*.keystore
+# Editor-saved secret files
+secrets.*
+credentials.*
+service-account*.json
+gcp-*.json
+aws-credentials*
 
 # Local Claude Code config (per-machine)
 .claude/

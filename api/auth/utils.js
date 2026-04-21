@@ -1,7 +1,36 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+// Known placeholder / weak values we refuse to run with. If the secret is
+// missing or looks like a template, we throw the first time anything tries
+// to sign or verify a token — fail-closed beats silently issuing forgeable
+// tokens signed with a public string.
+const WEAK_JWT_SECRETS = new Set([
+  'your-secret-key-change-in-production',
+  'changeme',
+  'secret',
+  'test',
+  'dev',
+  'development'
+]);
+
+function requireStrongJwtSecret() {
+  const s = process.env.JWT_SECRET;
+  if (!s) {
+    throw new Error(
+      'JWT_SECRET is not set. Refusing to sign or verify tokens. ' +
+      'Set a long random value (e.g. `openssl rand -base64 48`) in Vercel env vars.'
+    );
+  }
+  if (WEAK_JWT_SECRETS.has(s) || s.length < 32) {
+    throw new Error(
+      'JWT_SECRET is weak or is a placeholder value. Refusing to sign or verify tokens. ' +
+      'Use a random value at least 32 characters long.'
+    );
+  }
+  return s;
+}
+
 const JWT_EXPIRES_IN = '30d'; // Token valid for 30 days
 
 /**
@@ -28,7 +57,7 @@ export function generateToken(user) {
       userId: user.id,
       email: user.email
     },
-    JWT_SECRET,
+    requireStrongJwtSecret(),
     { expiresIn: JWT_EXPIRES_IN }
   );
 }
@@ -38,7 +67,7 @@ export function generateToken(user) {
  */
 export function verifyToken(token) {
   try {
-    return jwt.verify(token, JWT_SECRET);
+    return jwt.verify(token, requireStrongJwtSecret());
   } catch (error) {
     return null;
   }

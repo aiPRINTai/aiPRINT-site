@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+# Pre-commit hook: refuse to commit files that look like they contain secrets.
+#
+# Installed by running:   git config core.hooksPath .githooks
+# (see scripts/install-hooks.sh)
+#
+# Guards against three classes of mistakes:
+#   1. Committing an env file by name (.env, .env.local, .env.production, etc.)
+#   2. Committing content that matches a known secret pattern (stripe keys,
+#      github tokens, google api keys, aws keys, generic "password = '...'").
+#   3. Committing a JWT_SECRET that looks like the placeholder fallback.
+#
+# To bypass in a genuine emergency: `git commit --no-verify`. Don't bypass
+# routinely — the history is public and burned keys are permanent.
+
+set -u
+
+RED=$'\033[0;31m'
+YELLOW=$'\033[0;33m'
+NC=$'\033[0m'
+
+staged_files=$(git diff --cached --name-only --diff-filter=ACMR)
+[ -z "$staged_files" ] && exit 0
+
+fail=0
+
+# ── 1. Block env files by name ────────────────────────────────────────────
+while IFS= read -r f; do
+  case "$f" in
+    .env|.env.*)
+      # Allow .env.example / .env.sample — those are placeholder templates.
+      case "$f" in
+        .env.example|.env.sample|.env.template) continue ;;
+      esac
+      echo "${RED}✗ Refusing to commit env file: $f${NC}"
+      echo "  env files hold secrets. Put values in Vercel env vars and keep this file local."
+      echo "  If this really is a template with no secrets, name it .env.example."
+      fail=1
+      ;;
+  esac
+done <<< "$staged_files"
+
+# ── 2. Scan diff content for secret patterns ──────────────────────────────
+# Only scan ADDED lines (leading `+`), not context or removed lines.
+# Patterns target common real-world secret prefixes.
+patterns=(
+  'sk_live_[0-9a-zA-Z]{16,}'            # Stripe live secret key
+  'sk_test_[0-9a-zA-Z]{16,}'            # Stripe test secret key
+  'rk_live_[0-9a-zA-Z]{16,}'            # Stripe restricted live
+  'whsec_[0-9a-zA-Z]{32,}'              # Stripe webhook signing secret
+  'ghp_[0-9a-zA-Z]{36}'                 # GitHub classic PAT
+  'github_pat_[0-9a-zA-Z_]{50,}'        # GitHub fine-grained PAT
+  'gho_[0-9a-zA-Z]{36}'                 # GitHub OAuth token
+  'ghs_[0-9a-zA-Z]{36}'                 # GitHub app server token
+  'AIza[0-9A-Za-z_-]{35}'               # Google API key (Gemini, Maps, etc.)
+  'ya29\.[0-9A-Za-z_-]{40,}'            # Google OAuth access token
+  'AKIA[0-9A-Z]{16}'                    # AWS access key ID
+  'aws_secret_access_key[[:space:]]*=[[:space:]]*[A-Za-z0-9/+=]{40}'
+  're_[A-Za-z0-9]{24,}'                 # Resend API key
+  'xox[baprs]-[0-9a-zA-Z-]{10,}'        # Slack bot / user / app tokens
+  'vercel_blob_rw_[A-Za-z0-9_]+'        # Vercel Blob RW token
+  'postgres://[^[:space:]\"]+:[^@[:space:]]+@'  # Postgres URL with password
+  'postgresql://[^[:space:]\"]+:[^@[:space:]]+@'
+  'BEGIN (RSA |DSA |EC |OPENSSH )?PRIVATE KEY'  # Any private key block
+  'your-secret-key-change-in-production'         # Our own placeholder
+)
+
+# Build a single grep alternation so we scan the diff once.
+combined=$(IFS='|'; echo "${patterns[*]}")
+
+# Files that are EXPECTED to contain these patterns (pattern-definition files,
+# reject-lists, documentation). Excluding them from the content scan prevents
+# false positives on legitimate code that names these strings to reject them.
+# Adding `:!<path>` to the pathspec filters out that path from the diff.
+pathspec_excludes=(
+  ':!.githooks/pre-commit'         # this file — defines the patterns
+  ':!api/auth/utils.js'            # WEAK_JWT_SECRETS reject-list
+  ':!OPERATIONS.md'                # documentation listing key prefixes
+  ':!.env.example'                  # template with placeholder prefixes
+)
+
+# Grab the full staged diff (added lines only) and scan.
+# Note: use [+] character classes, not \+. BSD grep -E treats a backslash-
+# escaped `+` at the start of a pattern as a repetition operator with no
+# operand and errors out with "repetition-operator operand invalid".
+hits=$(git diff --cached --unified=0 -- . "${pathspec_excludes[@]}" \
+  | grep -E "^[+]" | grep -v "^[+][+][+]" | grep -En "$combined" || true)
+
+if [ -n "$hits" ]; then
+  echo "${RED}✗ Possible secret detected in staged changes:${NC}"
+  echo "$hits" | sed 's/^/    /'
+  echo ""
+  echo "${YELLOW}If this is a false positive (e.g. documentation showing a prefix),"
+  echo "  you can bypass with: git commit --no-verify${NC}"
+  fail=1
+fi
+
+# ── 3. Done ───────────────────────────────────────────────────────────────
+if [ "$fail" -ne 0 ]; then
+  echo ""
+  echo "${RED}Pre-commit checks failed.${NC} Fix the above, then re-stage and commit."
+  exit 1
+fi
+
+exit 0
