@@ -104,6 +104,7 @@ export default async function handler(req, res) {
 
   // Honeypot: a bot filled the hidden field. Pretend everything's fine.
   if (honeypot) {
+    console.warn('contact: honeypot triggered — dropping silently', { email, honeypotValue: honeypot.slice(0, 40) });
     return res.status(200).json({ ok: true, message: 'Thanks — we received your message.' });
   }
 
@@ -119,17 +120,27 @@ export default async function handler(req, res) {
   }
 
   // Send via Resend
+  const to = process.env.FULFILLMENT_TO || 'info@aiprint.ai';
+  console.log('contact: sending', { to, from: process.env.EMAIL_FROM || 'aiPRINT <orders@aiprint.ai>', subject, replyTo: email });
   try {
     const result = await sendContactFormEmail({ name, email, subject, message, orderNumber, newsletter });
+    if (result?.skipped) {
+      console.error('contact: Resend skipped:', result);
+      return res.status(502).json({
+        ok: false,
+        error: 'Email is not configured on the server right now. Please email info@aiprint.ai directly.'
+      });
+    }
     if (result?.error) {
-      console.error('Contact form send failed:', result);
+      console.error('contact: Resend error:', result);
       return res.status(502).json({
         ok: false,
         error: 'We couldn\'t send your message right now. Please email info@aiprint.ai directly.'
       });
     }
+    console.log('contact: Resend accepted', { id: result?.id || null });
   } catch (err) {
-    console.error('Contact form threw:', err?.message || err);
+    console.error('contact: threw:', err?.message || err);
     return res.status(502).json({
       ok: false,
       error: 'We couldn\'t send your message right now. Please email info@aiprint.ai directly.'
