@@ -1348,50 +1348,32 @@
 
 
 
-  <!-- TESTIMONIALS -->
+  <!-- FIRST 100 CTA (testimonials coming as real orders ship) -->
   <section class="max-w-[1800px] mx-auto px-5 py-20">
     <div class="text-center mb-12">
-      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Customer Stories</div><div class="section-label-line right"></div></div>
-      <h2 class="h2">People love their prints</h2>
-      <p class="muted mt-3 max-w-xl mx-auto">Gallery quality, hand-reviewed, numbered.</p>
+      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Early Access</div><div class="section-label-line right"></div></div>
+      <h2 class="h2">Be one of our first 100 collectors</h2>
+      <p class="muted mt-3 max-w-2xl mx-auto">We just opened. Every early order ships with a low, hand-numbered Certificate of Authenticity — and every piece still crosses the founder's desk before it prints. Real customer stories will live here as those orders arrive.</p>
     </div>
-    <div class="grid md:grid-cols-3 gap-6">
+    <div class="max-w-3xl mx-auto grid md:grid-cols-3 gap-6 text-center">
       <div class="testimonial-card">
-        <div class="quote-deco">"</div>
-        <div class="stars mb-4">★★★★★</div>
-        <p class="text-sm leading-relaxed mb-5">"Ok I was skeptical. I've ordered prints from like 4 different sites before and they always look flat in person. This one… didn't. Got the 24x36 acrylic and it's genuinely the nicest thing on our wall. Got an email asking about the crop before they printed it which I was not expecting at all. 10/10."</p>
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-indigo-500/30 flex items-center justify-center font-bold text-indigo-300">SM</div>
-          <div>
-            <div class="font-semibold text-sm">Sarah M.</div>
-            <div class="text-xs text-gray-500">Austin, TX · Verified buyer</div>
-          </div>
-        </div>
+        <div class="text-4xl font-extrabold text-indigo-400 mb-2">01</div>
+        <div class="font-semibold text-sm mb-1">Hand-reviewed</div>
+        <p class="text-xs text-gray-500 leading-relaxed">Every file is inspected by a human before it reaches the press.</p>
       </div>
       <div class="testimonial-card">
-        <div class="quote-deco">"</div>
-        <div class="stars mb-4">★★★★★</div>
-        <p class="text-sm leading-relaxed mb-5">"Print quality blew me away. I shoot photos professionally so I'm picky and I assumed an AI print site would cut corners on materials. Nope — it's real archival canvas, properly stretched, hardware was already on the back. Took 9 days door to door. The numbered COA in the box was a really nice touch."</p>
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-purple-500/30 flex items-center justify-center font-bold text-purple-300">JK</div>
-          <div>
-            <div class="font-semibold text-sm">James K.</div>
-            <div class="text-xs text-gray-500">Brooklyn, NY · Verified buyer</div>
-          </div>
-        </div>
+        <div class="text-4xl font-extrabold text-indigo-400 mb-2">02</div>
+        <div class="font-semibold text-sm mb-1">Numbered COA</div>
+        <p class="text-xs text-gray-500 leading-relaxed">Each print ships with a signed, hand-numbered Certificate of Authenticity.</p>
       </div>
       <div class="testimonial-card">
-        <div class="quote-deco">"</div>
-        <div class="stars mb-4">★★★★★</div>
-        <p class="text-sm leading-relaxed mb-5">"Bought a metal print as a housewarming gift for my sister and she literally cried haha. Packaging was insane, like Apple-level. One small thing — corner of the float mount had a tiny scuff. Emailed support, got a reply within an hour and they reprinted it free. That alone earned my repeat business."</p>
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-green-500/30 flex items-center justify-center font-bold text-green-300">RC</div>
-          <div>
-            <div class="font-semibold text-sm">Rachel C.</div>
-            <div class="text-xs text-gray-500">Miami, FL · Verified buyer</div>
-          </div>
-        </div>
+        <div class="text-4xl font-extrabold text-indigo-400 mb-2">03</div>
+        <div class="font-semibold text-sm mb-1">Made in USA</div>
+        <p class="text-xs text-gray-500 leading-relaxed">Printed, inspected, and packed in Florida. Direct from the founder.</p>
       </div>
+    </div>
+    <div class="text-center mt-10">
+      <a href="#create" class="inline-block px-8 py-4 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white font-semibold transition-colors">Start your print</a>
     </div>
   </section>
 
@@ -1671,7 +1653,7 @@
         <div class="relative w-full max-w-4xl mx-auto">
           <img src="${room.image}" class="w-full rounded-xl block" alt="${room.name}"/>
           <div class="absolute artwork-placement" style="top:${room.centerY};left:${room.centerX};width:${cappedWidth}%;aspect-ratio:${aspect};transform:translate(-50%,-50%);filter:drop-shadow(${shadow});transition:all 0.35s cubic-bezier(.2,.8,.2,1);">
-            <img src="${currentPreview.url}" class="block artwork-frame-${currentCollection}" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+            <img src="${currentPreview.url}" alt="Your AI artwork preview" class="block artwork-frame-${currentCollection}" style="width:100%;height:100%;object-fit:cover;display:block;"/>
           </div>
           <div class="scale-ref"><span class="scale-ref-label">≈ 7 ft sofa</span></div>
         </div>`;
