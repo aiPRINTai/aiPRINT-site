@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Something went wrong — aiPRINT.ai</title>
+  <meta name="description" content="A temporary error occurred. Please try again in a moment."/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#0a0f1d" />
+  <style>
+    :root { --bg:#0a0f1d; --ink:#e7eef8; --muted:#9fb3c8; }
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);min-height:100vh;}
+    html{font-size:clamp(16px, 0.85vw + 12px, 20px);}
+    body{font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;display:flex;flex-direction:column;}
+    header{position:sticky;top:0;z-index:50;background:rgba(11,16,32,.85);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.1);}
+    .header-inner{max-width:1800px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;justify-content:space-between;}
+    .logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:inherit;}
+    .logo img{width:28px;height:28px;border-radius:8px;}
+    .logo-text{font-weight:800;letter-spacing:-0.01em;}
+    .logo-accent{color:#818cf8;}
+    main{flex:1;display:grid;place-items:center;padding:3rem 20px;}
+    .card{max-width:560px;width:100%;text-align:center;}
+    .big{font-size:clamp(5rem, 14vw, 10rem);font-weight:900;line-height:1;margin:0 0 .2em;background:linear-gradient(135deg,#f43f5e,#fb7185,#fbbf24);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.04em;}
+    h1{font-size:clamp(1.8rem, 3.5vw, 2.6rem);font-weight:800;margin:0 0 .7em;letter-spacing:-.01em;}
+    p{color:var(--muted);margin:0 0 1.5em;font-size:1.05rem;line-height:1.6;}
+    .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:2em;}
+    .btn{display:inline-block;background:linear-gradient(135deg,#6366f1,#818cf8);color:#fff;text-decoration:none;padding:.85rem 1.5rem;border-radius:.6rem;font-weight:700;cursor:pointer;border:none;font-size:1rem;transition:transform .15s,box-shadow .15s;}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(99,102,241,.35);}
+    .btn-ghost{display:inline-block;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:var(--ink);text-decoration:none;padding:.85rem 1.5rem;border-radius:.6rem;font-weight:600;font-size:1rem;cursor:pointer;}
+    .btn-ghost:hover{background:rgba(255,255,255,.1);}
+    .info{margin-top:2.5rem;padding:1.25rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:.75rem;font-size:.9rem;color:var(--muted);line-height:1.6;}
+    .info a{color:#c7d2fe;text-decoration:none;}
+    .info a:hover{text-decoration:underline;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <img src="/favicon.svg" alt="" aria-hidden="true"/>
+      <span class="logo-text">aiPRINT.<span class="logo-accent">ai</span></span>
+    </a>
+  </div>
+</header>
+
+<main>
+  <div class="card">
+    <div class="big" aria-hidden="true">500</div>
+    <h1>Something went sideways</h1>
+    <p>We hit a temporary hiccup on our end. This is on us, not you. Try again in a moment — and if it keeps happening, drop us a line.</p>
+
+    <div class="actions">
+      <button onclick="location.reload()" class="btn">Try again</button>
+      <a href="/" class="btn-ghost">Back home</a>
+    </div>
+
+    <div class="info">
+      Still stuck? Email <a href="mailto:info@aiprint.ai">info@aiprint.ai</a> and we'll look at the logs. Your order data is always safe — nothing gets lost in a page refresh.
+    </div>
+  </div>
+</main>
+
+</body>
+</html>
