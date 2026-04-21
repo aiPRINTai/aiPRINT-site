@@ -15,12 +15,29 @@ export default async function handler(req, res) {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM;
 
+  // Show the full routing picture so it's clear where each kind of mail lands.
+  const ordersTo = process.env.ORDERS_TO || 'orders@aiprint.ai (default)';
+  const contactTo = process.env.CONTACT_TO
+    || process.env.FULFILLMENT_TO
+    || 'info@aiprint.ai (default)';
+
   const checks = {
     RESEND_API_KEY_set: !!apiKey,
     RESEND_API_KEY_prefix: apiKey ? apiKey.slice(0, 6) + '…' : null,
     EMAIL_FROM_set: !!from,
     EMAIL_FROM_value: from || '(unset, will fall back to "aiPRINT <orders@aiprint.ai>")',
-    FULFILLMENT_TO: process.env.FULFILLMENT_TO || '(unset)'
+    ORDERS_TO: ordersTo,
+    CONTACT_TO: contactTo,
+    FULFILLMENT_TO_legacy: process.env.FULFILLMENT_TO || '(unset)',
+    routing: {
+      new_order_alerts: ordersTo,
+      order_confirmation_replyto: ordersTo,
+      shipping_notification_replyto: ordersTo,
+      credit_purchase_replyto: ordersTo,
+      contact_form_destination: contactTo,
+      email_verification_replyto: contactTo,
+      password_reset_replyto: contactTo
+    }
   };
 
   if (!apiKey) {

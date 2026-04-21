@@ -143,7 +143,9 @@ Full template: `.env.example`. Summary of each variable's purpose:
 | `BLOB_READ_WRITE_TOKEN` | yes | Writes generated images to Vercel Blob. |
 | `RESEND_API_KEY` | yes | Sends contact replies, order confirmations, shipping notices, password-reset and verification emails. |
 | `EMAIL_FROM` | yes | Sender address on all outbound email. Must be a verified domain in Resend. |
-| `FULFILLMENT_TO` | yes | Destination for contact-form messages and operational alerts. |
+| `ORDERS_TO` | no (defaults to `orders@aiprint.ai`) | Fulfillment inbox — receives new-order alerts; reply-to on order confirmation / shipping / credit-purchase emails. |
+| `CONTACT_TO` | no (defaults to `info@aiprint.ai`) | General support inbox — receives contact-form messages; reply-to on email-verification and password-reset emails. |
+| `FULFILLMENT_TO` | no (legacy) | Back-compat alias. If set and `CONTACT_TO` is unset, used as `CONTACT_TO`. Does NOT affect `ORDERS_TO`. |
 | `JWT_SECRET` | yes | Signs user session JWTs. ≥32 chars, not a placeholder — app refuses to sign or verify otherwise. |
 | `ADMIN_PASSWORD` | yes | Bearer token for all `/api/admin/*` routes. Store in password manager. |
 | `POSTGRES_URL` (+ 6 siblings) | yes | Neon/Vercel Postgres connection. Auto-populated by the Vercel Postgres integration. |

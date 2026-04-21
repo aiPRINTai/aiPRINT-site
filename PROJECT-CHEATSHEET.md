@@ -63,7 +63,7 @@ The full version lives in **`ARCHITECTURE.md`** at the project root — open tha
 - **PostHog** = product analytics
 - **GoDaddy** = DNS for aiprint.ai
 
-**Env vars you must keep alive in Vercel:** `POSTGRES_URL`, `BLOB_READ_WRITE_TOKEN`, `GOOGLE_GEMINI_API_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `RESEND_API_KEY`, `EMAIL_FROM`, `FULFILLMENT_TO`, `ADMIN_PASSWORD`, `JWT_SECRET`. (Mirror in `.env.example`.)
+**Env vars you must keep alive in Vercel:** `POSTGRES_URL`, `BLOB_READ_WRITE_TOKEN`, `GOOGLE_GEMINI_API_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `RESEND_API_KEY`, `EMAIL_FROM`, `ORDERS_TO` (orders@), `CONTACT_TO` (info@), `ADMIN_PASSWORD`, `JWT_SECRET`. (Mirror in `.env.example`. Legacy `FULFILLMENT_TO` is still honored as a fallback for `CONTACT_TO`.)
 
 ---
 

@@ -52,7 +52,7 @@ Then **you** open `/admin/orders.html`, see new orders, mark them shipped, paste
 | **Vercel Blob**       | Stores generated PNG images (public URLs) | Vercel → Storage → Blob                  | `BLOB_READ_WRITE_TOKEN` (auto-injected)  |
 | **Google Gemini**     | Text-to-image generation               | aistudio.google.com                      | `GOOGLE_GEMINI_API_KEY`                  |
 | **Stripe**            | Checkout, payments, tax                | dashboard.stripe.com                     | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` |
-| **Resend**            | Transactional email (HTTP API)         | resend.com                               | `RESEND_API_KEY`, `EMAIL_FROM`, `FULFILLMENT_TO` |
+| **Resend**            | Transactional email (HTTP API)         | resend.com                               | `RESEND_API_KEY`, `EMAIL_FROM`, `ORDERS_TO`, `CONTACT_TO` |
 | **GoDaddy**           | Domain DNS (aiprint.ai)                | godaddy.com → domains                    | —                                        |
 | **PostHog**           | Product analytics, funnels             | us.posthog.com                           | (public key in `/js/analytics.js`)       |
 | **Admin password**    | Gates `/admin/orders` page             | Vercel env vars                          | `ADMIN_PASSWORD`                         |
@@ -155,7 +155,8 @@ Then **you** open `/admin/orders.html`, see new orders, mark them shipped, paste
 - `STRIPE_WEBHOOK_SECRET` (live mode `whsec_...`)
 - `RESEND_API_KEY`
 - `EMAIL_FROM` — e.g. `aiPRINT <orders@aiprint.ai>`
-- `FULFILLMENT_TO` — e.g. `info@aiprint.ai`
+- `ORDERS_TO` — fulfillment inbox (default `orders@aiprint.ai`). New-order alerts + reply-to on order/shipping/credit emails.
+- `CONTACT_TO` — general inbox (default `info@aiprint.ai`). Contact form + reply-to on verification / password-reset emails. Legacy `FULFILLMENT_TO` is honored as a fallback.
 - `ADMIN_PASSWORD` — long random string for `/admin/orders` access
 - `JWT_SECRET` — for user auth tokens
 

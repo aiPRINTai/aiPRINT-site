@@ -1,10 +1,41 @@
 // Transactional email via Resend HTTP API.
-// Requires env vars:
+//
+// Env vars:
 //   RESEND_API_KEY  - from resend.com dashboard
-//   EMAIL_FROM      - e.g. "aiPRINT <orders@aiprint.ai>"  (sender domain must be verified in Resend)
-//   FULFILLMENT_TO  - e.g. "info@aiprint.ai"              (where new-order alerts go)
+//   EMAIL_FROM      - e.g. "aiPRINT <orders@aiprint.ai>"
+//                     (sender domain must be verified in Resend)
+//   ORDERS_TO       - e.g. "orders@aiprint.ai"
+//                     Where new-order fulfillment alerts land. Also the
+//                     reply-to on order-related customer emails (order
+//                     confirmation, shipping notification, credit purchase).
+//                     Defaults to orders@aiprint.ai.
+//   CONTACT_TO      - e.g. "info@aiprint.ai"
+//                     Where contact-form messages land. Also the reply-to on
+//                     account-support emails (email verification, password
+//                     reset). Defaults to info@aiprint.ai.
+//   FULFILLMENT_TO  - Legacy alias. If set, used as the default for
+//                     CONTACT_TO (but NOT ORDERS_TO — new orders should
+//                     flow to orders@ by default). Kept for back-compat with
+//                     existing Vercel env configs.
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
+
+// Resolve the "orders" inbox — where new-order alerts go and what we use as
+// reply-to on order-related customer emails.
+function ordersTo() {
+  return process.env.ORDERS_TO || 'orders@aiprint.ai';
+}
+
+// Resolve the "contact / support" inbox — where the contact form sends and
+// what we use as reply-to on account-support emails. Falls back to the
+// legacy FULFILLMENT_TO env var so existing deploys keep working.
+export function contactTo() {
+  return process.env.CONTACT_TO || process.env.FULFILLMENT_TO || 'info@aiprint.ai';
+}
+
+// Re-exported so callers outside this module (admin/email-test, contact.js)
+// can stay in sync.
+export { ordersTo };
 
 async function sendEmail({ to, subject, html, replyTo }) {
   const apiKey = process.env.RESEND_API_KEY;
@@ -75,7 +106,8 @@ export async function sendVerificationEmail(email, verifyUrl) {
     to: email,
     subject: 'Verify your aiPRINT.ai email',
     html,
-    replyTo: process.env.FULFILLMENT_TO || 'info@aiprint.ai'
+    // Account-support question → goes to info@ (via CONTACT_TO).
+    replyTo: contactTo()
   });
 }
 
@@ -120,7 +152,8 @@ export async function sendOrderConfirmationEmail(order) {
     to: customer_email,
     subject: 'Your aiPRINT order is confirmed 🎨',
     html,
-    replyTo: process.env.FULFILLMENT_TO || 'info@aiprint.ai'
+    // Order-related → replies go to orders@.
+    replyTo: ordersTo()
   });
 }
 
@@ -173,7 +206,8 @@ export async function sendShippingNotificationEmail(order) {
     to: customer_email,
     subject: 'Your aiPRINT just shipped 📦',
     html,
-    replyTo: process.env.FULFILLMENT_TO || 'info@aiprint.ai'
+    // Order-related → replies go to orders@.
+    replyTo: ordersTo()
   });
 }
 
@@ -215,7 +249,8 @@ export async function sendCreditPurchaseEmail({ email, name, creditsAmount, amou
     to: email,
     subject: `${creditsAmount} aiPRINT credits added to your account`,
     html,
-    replyTo: process.env.FULFILLMENT_TO || 'info@aiprint.ai'
+    // Purchase-related → replies go to orders@.
+    replyTo: ordersTo()
   });
 }
 
@@ -252,15 +287,16 @@ export async function sendPasswordResetEmail(email, resetUrl) {
     to: email,
     subject: 'Reset your aiPRINT.ai password',
     html,
-    replyTo: process.env.FULFILLMENT_TO || 'info@aiprint.ai'
+    // Account-support question → goes to info@ (via CONTACT_TO).
+    replyTo: contactTo()
   });
 }
 
-// Sent to the site operator (FULFILLMENT_TO) when a customer submits the
-// contact form. Uses the customer's email as reply-to so admin can just hit
-// Reply to get back to them.
+// Sent to the site operator (CONTACT_TO, default info@) when a customer
+// submits the contact form. Uses the customer's email as reply-to so admin
+// can just hit Reply to get back to them.
 export async function sendContactFormEmail({ name, email, subject, message, orderNumber, newsletter }) {
-  const to = process.env.FULFILLMENT_TO || 'info@aiprint.ai';
+  const to = contactTo();
 
   const escape = (s = '') => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 
@@ -301,7 +337,8 @@ export async function sendContactFormEmail({ name, email, subject, message, orde
 }
 
 export async function sendFulfillmentAlertEmail(order) {
-  const to = process.env.FULFILLMENT_TO || 'info@aiprint.ai';
+  // New-order alerts go to orders@ (ORDERS_TO) — the fulfillment inbox.
+  const to = ordersTo();
   const { customer_email, customer_name, preview_url, clean_url, lookup_key, prompt, amount_total, currency, stripe_session_id, shipping_address, options } = order;
   // Lawrence (admin) needs the clean print master, not a watermarked preview.
   const printMaster = clean_url || preview_url;

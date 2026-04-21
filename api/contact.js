@@ -1,14 +1,14 @@
 // POST /api/contact
-// Accepts the website contact form and emails FULFILLMENT_TO via Resend.
-// Replaces the external Formspree dependency with an in-house flow so you
-// own the data and get consistent deliverability via your existing Resend
-// setup.
+// Accepts the website contact form and emails CONTACT_TO (default info@)
+// via Resend. Replaces the external Formspree dependency with an in-house
+// flow so you own the data and get consistent deliverability via your
+// existing Resend setup.
 //
 // Rate-limited to 3 submissions per IP per hour via the anonymous_generations
 // table (reuses existing infra — a dedicated contact_submissions table would
 // be cleaner but is overkill for this volume).
 
-import { sendContactFormEmail } from './_email.js';
+import { sendContactFormEmail, contactTo } from './_email.js';
 import { isValidEmail } from './auth/utils.js';
 import { getClientIp } from './auth/utils.js';
 import { sql } from '@vercel/postgres';
@@ -120,7 +120,7 @@ export default async function handler(req, res) {
   }
 
   // Send via Resend
-  const to = process.env.FULFILLMENT_TO || 'info@aiprint.ai';
+  const to = contactTo();
   console.log('contact: sending', { to, from: process.env.EMAIL_FROM || 'aiPRINT <orders@aiprint.ai>', subject, replyTo: email });
   try {
     const result = await sendContactFormEmail({ name, email, subject, message, orderNumber, newsletter });
