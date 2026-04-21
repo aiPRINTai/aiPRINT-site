@@ -1,5 +1,10 @@
 # aiPRINT.ai — Site Operator Manual
 
+> **Prefer a nicer view than raw Markdown?** Run `npm run docs:open` — it
+> renders this file (and every other doc in the repo) into styled HTML with
+> proper tables, a side-nav, and print-ready formatting. Drag any of the
+> resulting `.html` files into Google Docs or Word for an editable copy.
+>
 > **What this is.** Single-source operator manual for the aiPRINT.ai website.
 > Covers what the site does, how every moving part fits together, how each
 > integration works, where mail lands, and what to do when something breaks.

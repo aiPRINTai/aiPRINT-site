@@ -48,6 +48,9 @@ service-account*.json
 gcp-*.json
 aws-credentials*
 
+# Generated doc previews — rebuild with `npm run docs`
+docs-rendered/
+
 # Local Claude Code config (per-machine)
 .claude/
 
