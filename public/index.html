@@ -612,7 +612,7 @@
     <!-- Anonymous Limit Message (filled dynamically when limit hit) -->
     <div id="anonymousLimitMessage" class="hidden mb-4"></div>
 
-    <div class="glass rounded-2xl p-6 md:p-10 max-w-[1400px] mx-auto">
+    <div class="glass rounded-2xl p-6 md:p-10">
       <!-- Prompt input -->
       <div class="mb-7">
         <div class="flex items-center justify-between mb-2 gap-3">
@@ -877,7 +877,7 @@
         </div>
 
         <div class="mt-6 flex flex-col items-center gap-3">
-          <button id="selectBtn" class="btn-accent text-lg px-10 py-3.5 shadow-lg shadow-indigo-500/30">Select this image — order print →</button>
+          <button id="selectBtn" class="btn-ghost text-base px-8 py-3">See it on a wall</button>
           <div class="flex flex-wrap gap-4 justify-center text-sm">
             <button id="regenerateBtn" class="text-gray-400 hover:text-white transition-colors underline-offset-4 hover:underline">Try another (1 credit)</button>
             <span class="text-gray-700">·</span>
@@ -969,7 +969,7 @@
     <div class="text-center mb-8">
       <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Step 2 · Pick your print</div><div class="section-label-line right"></div></div>
       <h2 class="h2 mt-3">Now make it real</h2>
-      <p id="orderMsg" class="muted mt-3 max-w-2xl mx-auto">Generate and select a preview above to unlock ordering. Compare Canvas, Metal, and Acrylic side-by-side — same sizes, your call on finish.</p>
+      <p id="orderMsg" class="muted mt-3 max-w-2xl mx-auto">Generate a preview above to unlock ordering. Compare Canvas, Metal, and Acrylic side-by-side — same sizes, your call on finish.</p>
     </div>
 
     <!-- Orientation indicator: tracks the aspect-ratio dropdown in Step 1 so
@@ -2275,6 +2275,12 @@
         }, { once: true });
         stopLoadingProgress();
         hide($('#loadingState')); show($('#previewSection'));
+        // Immediately snap Step 2 to the new preview — size grid, orientation
+        // chip, and price all update without requiring a "Select this image"
+        // click. Room preview stays hidden behind an optional toggle below.
+        setActiveOnly(currentPreview.shape); setButtonsEnabled(currentPreview.shape);
+        renderSizePills();
+        $('#orderMsg').textContent = 'Choose your material and size below — or see it on a wall first.';
         // Show signup nudge for anonymous users after their free preview
         const isAnon = !(window.auth && window.auth.isAuthenticated());
         if (isAnon) show($('#anonSignupNudge')); else hide($('#anonSignupNudge'));
@@ -2291,25 +2297,24 @@
       }
     });
 
+    // "See it on a wall" toggles the optional room-mockup section. No auth
+    // gate here — that's moved onto the actual checkout action (#reviewBtn)
+    // so shoppers can price/size freely without a signup wall.
     $('#selectBtn').addEventListener('click', () => {
       if (!currentPreview) return;
-      window.track && window.track('preview_selected', { shape: currentPreview.shape, ratio: currentPreview.size });
-      // Ordering requires an account so we can ship the print
-      if (window.auth && !window.auth.isAuthenticated()) {
-        window.track && window.track('signup_gate_hit', { from: 'select_to_order' });
-        window.auth.showSignupModal({
-          title: 'Sign up to order this print',
-          subtitle: 'New accounts get 10 free credits — keep generating until it\'s perfect.'
-        });
-        return;
+      const section = $('#roomMockupSection');
+      const isHidden = section.classList.contains('hidden');
+      if (isHidden) {
+        window.track && window.track('room_preview_opened', { shape: currentPreview.shape, ratio: currentPreview.size });
+        show(section);
+        renderSizePills();
+        updateMockup('room1', currentMockupSize || '24x24');
+        $('#selectBtn').textContent = 'Hide wall preview';
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        hide(section);
+        $('#selectBtn').textContent = 'See it on a wall';
       }
-      setActiveOnly(currentPreview.shape); setButtonsEnabled(currentPreview.shape);
-      const shapeNames = { square: 'Square', h32: 'Horizontal', v23: 'Vertical' };
-      $('#orderMsg').innerHTML = `<strong>✓ Image selected!</strong> ${shapeNames[currentPreview.shape]} sizes are now available. Choose your material and size below.`;
-      show($('#roomMockupSection'));
-      renderSizePills();
-      updateMockup('room1', currentMockupSize || '24x24');
-      document.querySelector('#order').scrollIntoView({ behavior: 'smooth' });
     });
 
     $('#shareBtn').addEventListener('click', () => openShareModal());
@@ -2385,7 +2390,9 @@
         const icon = $('#toggleRefImagesIcon'); if (icon) icon.textContent = '+';
       }
       setActiveOnly(null); setButtonsEnabled(null);
-      $('#orderMsg').textContent = 'Generate and select a preview above to unlock ordering.';
+      hide($('#roomMockupSection'));
+      $('#selectBtn').textContent = 'See it on a wall';
+      $('#orderMsg').textContent = 'Generate a preview above to unlock ordering.';
       $$('.sizeBtn').forEach(x => x.classList.remove('ringy', 'bg-white/20'));
       selected = null; $('#selectionSummary').textContent = 'Selected: —';
       $('#reviewBtn').classList.add('disabled');
@@ -2422,6 +2429,18 @@
 
     $('#reviewBtn').addEventListener('click', async () => {
       if (!selected || !currentPreview) { alert('Please generate a preview and select a size first.'); return; }
+      // Ordering requires an account so we can ship the print. Gate moved
+      // here (from the old #selectBtn) now that the flow doesn't force users
+      // through a select step before they can price/size.
+      if (window.auth && !window.auth.isAuthenticated()) {
+        window.track && window.track('signup_gate_hit', { from: 'review_checkout' });
+        window.auth.showSignupModal({
+          title: 'Sign up to order this print',
+          subtitle: 'New accounts get 10 free credits — keep generating until it\'s perfect.'
+        });
+        return;
+      }
+      window.track && window.track('preview_selected', { shape: currentPreview.shape, ratio: currentPreview.size });
       const btn = $('#reviewBtn');
       const originalText = btn.textContent;
       savePreviewToStorage();
