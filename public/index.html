@@ -2531,6 +2531,15 @@
         const isAnon = !(window.auth && window.auth.isAuthenticated());
         if (isAnon) show($('#anonSignupNudge')); else hide($('#anonSignupNudge'));
         savePreviewToStorage();
+        // If the wall-preview section is already open from a previous
+        // generation, re-render it against the new image + ratio so it
+        // doesn't keep showing the old artwork.
+        const roomSection = $('#roomMockupSection');
+        if (roomSection && !roomSection.classList.contains('hidden')) {
+          const activeRoom = document.querySelector('.room-tab.active')?.dataset.room || 'room1';
+          renderSizePills();
+          updateMockup(activeRoom, currentMockupSize || '24x24');
+        }
       } catch (error) {
         stopLoadingProgress();
         hide($('#loadingState'));
