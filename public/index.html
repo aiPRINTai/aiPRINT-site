@@ -1627,10 +1627,15 @@
         const signatureOverlay = $('#signatureOverlay');
         signatureOverlay.textContent = data.settings.signature.text || '';
         signatureOverlay.style.display = data.settings.signature.text ? 'block' : 'none';
-        // Restored preview is buyable — match the freshly-generated flow so
-        // the size grid, orientation chip, and prices are all live. Without
-        // this, returning visitors saw their old preview but couldn't order
-        // without regenerating (wasting a credit).
+        // Restored preview is buyable — match the freshly-generated flow.
+        // Must sync the ratio dropdown first: the orientation chip and Step 2
+        // columns drive off #ratioSel, so if we leave it at the default Square
+        // value, a restored Horizontal/Vertical preview would show grayed-out
+        // square sizes and the chip would lie.
+        if (currentPreview?.size) {
+          const ratioSel = $('#ratioSel');
+          if (ratioSel) ratioSel.value = currentPreview.size;
+        }
         if (currentPreview?.shape) {
           setActiveOnly(currentPreview.shape);
           setButtonsEnabled(currentPreview.shape);
@@ -2556,7 +2561,17 @@
         const loadedFromShare = loadFromShareLink();
         CATALOG = await loadCatalog();
         renderAllBuckets();
-        if (!loadedFromStorage && !loadedFromShare) { setActiveOnly(null); setButtonsEnabled(null); }
+        // renderAllBuckets() draws all columns as disabled browse-mode. If we
+        // just restored a preview, re-enable the matching shape so the user
+        // can order without regenerating — same behavior as a fresh gen.
+        if ((loadedFromStorage || loadedFromShare) && currentPreview?.shape) {
+          setActiveOnly(currentPreview.shape);
+          setButtonsEnabled(currentPreview.shape);
+          renderSizePills();
+          $('#orderMsg').textContent = 'Choose your material and size below — or see it on a wall first.';
+        } else if (!loadedFromStorage && !loadedFromShare) {
+          setActiveOnly(null); setButtonsEnabled(null);
+        }
       } catch (e) {
         console.error('Failed to initialize:', e);
         $('#orderMsg').textContent = 'Could not load products. Please refresh the page.';
