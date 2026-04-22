@@ -2357,9 +2357,12 @@
       $('#promptInput').value = RANDOM_PROMPTS[Math.floor(Math.random() * RANDOM_PROMPTS.length)];
       ['styleSelect','moodSelect','paletteSelect','timeSelect','lightingSelect','cameraSelect','expressionSelect','mediumSelect']
         .forEach(pickRandomOption);
-      // Random aspect ratio too
+      // Random aspect ratio too — dispatch change so Step 2 columns re-sync
       const ratioSel = document.getElementById('ratioSel');
-      if (ratioSel) ratioSel.selectedIndex = Math.floor(Math.random() * ratioSel.options.length);
+      if (ratioSel) {
+        ratioSel.selectedIndex = Math.floor(Math.random() * ratioSel.options.length);
+        ratioSel.dispatchEvent(new Event('change', { bubbles: true }));
+      }
       // Tiny visual feedback
       const btn = document.getElementById('randomizeBtn');
       if (btn) {
