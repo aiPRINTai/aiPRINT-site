@@ -377,6 +377,7 @@
       border-top: 4px solid rgba(255,255,255,0.7);
       margin-left: 0.25rem; flex-shrink: 0;
     }
+    .custom-select[data-open="true"] { z-index: 9999; }
     .custom-select-menu {
       position: absolute; top: calc(100% + 4px); left: 0;
       min-width: 11rem;
@@ -385,7 +386,7 @@
       border-radius: 0.5rem;
       box-shadow: 0 12px 32px rgba(0,0,0,0.55);
       padding: 0.3rem;
-      z-index: 50;
+      z-index: 9999;
       max-height: 18rem;
       overflow-y: auto;
       display: none;
@@ -2009,6 +2010,7 @@
           function openMenu() {
             rebuildMenu();
             menu.dataset.open = 'true';
+            wrap.dataset.open = 'true';
             btn.setAttribute('aria-expanded', 'true');
             setTimeout(() => {
               document.addEventListener('click', outsideClick);
@@ -2017,6 +2019,7 @@
           }
           function closeMenu() {
             menu.dataset.open = 'false';
+            wrap.dataset.open = 'false';
             btn.setAttribute('aria-expanded', 'false');
             document.removeEventListener('click', outsideClick);
             document.removeEventListener('keydown', keyHandler);
