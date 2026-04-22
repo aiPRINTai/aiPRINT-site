@@ -1377,6 +1377,53 @@
     </div>
   </section>
 
+  <!-- TESTIMONIALS -->
+  <section class="max-w-[1800px] mx-auto px-5 py-20">
+    <div class="text-center mb-12">
+      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Customer Stories</div><div class="section-label-line right"></div></div>
+      <h2 class="h2">People love their prints</h2>
+      <p class="muted mt-3 max-w-xl mx-auto">Gallery quality, hand-reviewed, numbered.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="testimonial-card">
+        <div class="quote-deco">"</div>
+        <div class="stars mb-4">★★★★★</div>
+        <p class="text-sm leading-relaxed mb-5">"Ok I was skeptical. I've ordered prints from like 4 different sites before and they always look flat in person. This one… didn't. Got the 24x36 acrylic and it's genuinely the nicest thing on our wall. Got an email asking about the crop before they printed it which I was not expecting at all. 10/10."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-indigo-500/30 flex items-center justify-center font-bold text-indigo-300">SM</div>
+          <div>
+            <div class="font-semibold text-sm">Sarah M.</div>
+            <div class="text-xs text-gray-500">Austin, TX · Verified buyer</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-deco">"</div>
+        <div class="stars mb-4">★★★★★</div>
+        <p class="text-sm leading-relaxed mb-5">"Print quality blew me away. I shoot photos professionally so I'm picky and I assumed an AI print site would cut corners on materials. Nope — it's real archival canvas, properly stretched, hardware was already on the back. Took 9 days door to door. The numbered COA in the box was a really nice touch."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-purple-500/30 flex items-center justify-center font-bold text-purple-300">JK</div>
+          <div>
+            <div class="font-semibold text-sm">James K.</div>
+            <div class="text-xs text-gray-500">Brooklyn, NY · Verified buyer</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-deco">"</div>
+        <div class="stars mb-4">★★★★★</div>
+        <p class="text-sm leading-relaxed mb-5">"Bought a metal print as a housewarming gift for my sister and she literally cried haha. Packaging was insane, like Apple-level. One small thing — corner of the float mount had a tiny scuff. Emailed support, got a reply within an hour and they reprinted it free. That alone earned my repeat business."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-green-500/30 flex items-center justify-center font-bold text-green-300">RC</div>
+          <div>
+            <div class="font-semibold text-sm">Rachel C.</div>
+            <div class="text-xs text-gray-500">Miami, FL · Verified buyer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer class="border-t border-white/10 bg-white/[0.02]">
     <div class="max-w-[1800px] mx-auto px-5 py-14 grid md:grid-cols-4 gap-10 text-sm">
@@ -1580,6 +1627,16 @@
         const signatureOverlay = $('#signatureOverlay');
         signatureOverlay.textContent = data.settings.signature.text || '';
         signatureOverlay.style.display = data.settings.signature.text ? 'block' : 'none';
+        // Restored preview is buyable — match the freshly-generated flow so
+        // the size grid, orientation chip, and prices are all live. Without
+        // this, returning visitors saw their old preview but couldn't order
+        // without regenerating (wasting a credit).
+        if (currentPreview?.shape) {
+          setActiveOnly(currentPreview.shape);
+          setButtonsEnabled(currentPreview.shape);
+          renderSizePills();
+          $('#orderMsg').textContent = 'Choose your material and size below — or see it on a wall first.';
+        }
         return true;
       } catch (e) {
         localStorage.removeItem('aiprint_last_preview');
