@@ -916,7 +916,14 @@
       <!-- Empty preview placeholder -->
       <div id="emptyPreviewState" class="mt-8">
         <div class="preview-container relative w-full max-w-5xl mx-auto rounded-xl border border-dashed border-white/15 flex flex-col items-center justify-center p-10 min-h-[360px] md:min-h-[500px] text-center">
-          <div class="w-16 h-16 rounded-full bg-indigo-500/15 border border-indigo-400/30 grid place-items-center text-3xl mb-4">🎨</div>
+          <div class="w-16 h-16 rounded-full bg-indigo-500/15 border border-indigo-400/30 grid place-items-center mb-4 text-indigo-300">
+            <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" class="w-8 h-8">
+              <rect x="4" y="6" width="24" height="20" rx="1.5" stroke="currentColor" stroke-width="1.5" opacity="0.7"/>
+              <path d="M7 22l5-6 4 3 3-4 6 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="22" cy="12" r="1.5" fill="currentColor"/>
+              <path d="M26 3l0.9 1.8L28.7 5.7l-1.8 0.9L26 8.4l-0.9-1.8L23.3 5.7l1.8-0.9z" fill="currentColor"/>
+            </svg>
+          </div>
           <p class="text-xl font-semibold">Your preview will appear here</p>
           <p class="text-sm text-gray-400 mt-2 max-w-sm">Describe your artwork above, pick an aspect ratio, and we'll generate a museum-quality preview in 15–30 seconds.</p>
         </div>

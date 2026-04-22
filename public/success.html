@@ -113,7 +113,15 @@
 
         <!-- Creative Selections -->
         <div class="glass rounded-2xl p-6">
-          <div class="font-bold text-lg mb-4">🎨 Your Creative Settings</div>
+          <div class="font-bold text-lg mb-4 flex items-center gap-2 text-indigo-200">
+            <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" class="w-5 h-5 text-indigo-300">
+              <rect x="4" y="6" width="24" height="20" rx="1.5" stroke="currentColor" stroke-width="1.5" opacity="0.7"/>
+              <path d="M7 22l5-6 4 3 3-4 6 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="22" cy="12" r="1.5" fill="currentColor"/>
+              <path d="M26 3l0.9 1.8L28.7 5.7l-1.8 0.9L26 8.4l-0.9-1.8L23.3 5.7l1.8-0.9z" fill="currentColor"/>
+            </svg>
+            Your Creative Settings
+          </div>
           <div class="text-sm grid grid-cols-2 gap-y-2.5">
             <div class="muted">Prompt</div><div id="prompt" class="italic text-gray-300"></div>
             <div class="muted">Style</div><div id="style"></div>

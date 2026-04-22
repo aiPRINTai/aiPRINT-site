@@ -327,7 +327,14 @@
           if (generations.length === 0) {
             galleryContainer.innerHTML = `
               <div class="glass rounded-xl p-10 text-center">
-                <div class="text-5xl mb-3">🎨</div>
+                <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-indigo-500/15 border border-indigo-400/30 grid place-items-center text-indigo-300">
+                  <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" class="w-10 h-10">
+                    <rect x="4" y="6" width="24" height="20" rx="1.5" stroke="currentColor" stroke-width="1.5" opacity="0.7"/>
+                    <path d="M7 22l5-6 4 3 3-4 6 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="22" cy="12" r="1.5" fill="currentColor"/>
+                    <path d="M26 3l0.9 1.8L28.7 5.7l-1.8 0.9L26 8.4l-0.9-1.8L23.3 5.7l1.8-0.9z" fill="currentColor"/>
+                  </svg>
+                </div>
                 <p class="text-gray-300 mb-4">Your gallery is empty.</p>
                 <a href="/" class="btn inline-block">Create your first print</a>
               </div>`;
