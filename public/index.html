@@ -1468,9 +1468,24 @@
 
     const formatMoney = n => `$${Number(n).toLocaleString()}`;
 
+    // Map the customer's explicit ratio choice (the dropdown value) to a shape
+    // bucket. This is the source of truth for which size catalog to show — the
+    // model's actual returned dimensions can drift a few % off the requested
+    // aspect, which used to silently flip a 1:1 request into "horizontal".
+    const shapeFromRatio = (ratio) => {
+      if (ratio === '1024x1024') return 'square';
+      if (ratio === '1536x1024') return 'h32';
+      if (ratio === '1024x1536') return 'v23';
+      return null;
+    };
+    // Pixel-based fallback for any code path that doesn't have the requested
+    // ratio (older localStorage entries, share links from before this fix).
+    // Tolerance is intentionally wide — Gemini occasionally returns square-ish
+    // images at e.g. 1.15:1, and we'd rather classify those as the user's
+    // selection than misroute them into a different orientation bucket.
     const classifyAspect = (w, h) => {
       const r = w / h;
-      if (Math.abs(r - 1) <= 0.1) return 'square';
+      if (Math.abs(r - 1) <= 0.2) return 'square';
       return r > 1 ? 'h32' : 'v23';
     };
 
@@ -1538,6 +1553,12 @@
           return false;
         }
         currentPreview = data.preview;
+        // Re-derive shape from the stored ratio in case this preview was saved
+        // before shapeFromRatio() existed (and was misclassified by pixel ratio).
+        if (currentPreview && currentPreview.size) {
+          const corrected = shapeFromRatio(currentPreview.size);
+          if (corrected) currentPreview.shape = corrected;
+        }
         $('#promptInput').value = data.prompt;
         $('#styleSelect').value = data.settings.style;
         $('#moodSelect').value = data.settings.mood || '';
@@ -1894,6 +1915,11 @@
         }
         if (data.preview) {
           currentPreview = data.preview;
+          // Re-derive shape from the stored ratio (see loadSavedPreview comment).
+          if (currentPreview && currentPreview.size) {
+            const corrected = shapeFromRatio(currentPreview.size);
+            if (corrected) currentPreview.shape = corrected;
+          }
           $('#previewImg').src = data.preview.url;
           setWrapAspect(data.preview.size);
           fitWrapToImage();
@@ -2232,7 +2258,10 @@
         $('#genBtn').disabled = true; $('#genBtn').textContent = 'Generating...';
         const result = await generateImage(buildEnhancedPrompt(), ratio);
         window.track && window.track('generate_succeeded', { ratio, anonymous: isAnonAtStart });
-        currentPreview = { url: result.url, width: result.width, height: result.height, prompt: buildEnhancedPrompt(), size: ratio, shape: classifyAspect(result.width, result.height) };
+        // shape is driven by the customer's ratio choice, not the model's
+        // returned dimensions — see shapeFromRatio() comment above.
+        const shape = shapeFromRatio(ratio) || classifyAspect(result.width, result.height);
+        currentPreview = { url: result.url, width: result.width, height: result.height, prompt: buildEnhancedPrompt(), size: ratio, shape };
         $('#previewImg').src = result.url;
         setWrapAspect(ratio);
         fitWrapToImage();
