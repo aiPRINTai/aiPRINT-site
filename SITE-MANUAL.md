@@ -35,7 +35,7 @@
 | Field | Value |
 |---|---|
 | Doc version | 1.0 |
-| Last edit | 2026-04-21 |
+| Last edit | 2026-04-22 (full secret rotation sweep — see §10.3) |
 | Source repo | `github.com/aiPRINTai/aiPRINT-site` |
 | Primary maintainer | Lawrence |
 
@@ -685,14 +685,43 @@ Integrations (Stripe, Gemini, Resend, Neon, Blob)
 - **bcrypt password hashing** with per-password salt.
 - **Rate limiting** on contact form (3/hr/IP) and generation.
 
-### 10.3 What's still on the "future" list
+### 10.3 Secret rotation log
 
-- No 2FA on admin. Single password.
-- No IP allowlist on admin. Any IP with the password gets in.
-- No automated secret scanning on GitHub (beyond our pre-commit). Consider
-  GitHub secret scanning + push protection.
+| Date | Rotated | Notes |
+|---|---|---|
+| 2026-04-22 | **Full rotation sweep** — `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `GOOGLE_GEMINI_API_KEY`, `RESEND_API_KEY`, `BLOB_READ_WRITE_TOKEN`, `ADMIN_PASSWORD`, `JWT_SECRET`, `POSTGRES_*` (all 7 vars via Neon "Rotate Secrets") | Triggered by potential secret exposure in past chat/share surfaces. Stale Resend keys also deleted (`re_Tu8v8Hd4...`, `re_9iPFeGqP...`). All smoke-tested post-rotation. |
+
+Next scheduled rotation: **2026-07-01** (quarterly cadence — put on calendar).
+
+### 10.4 What's still on the "future" list
+
+**Admin surface**
+- No 2FA on admin. Single bearer password. Consider TOTP (Authy/1Password).
+- No IP allowlist on `/api/admin/*` — any IP with the password gets in.
+
+**Abuse / cost protection**
 - No per-user rate limit on generation (only per-IP on anonymous). Logged-in
-  abuse currently only capped by credit balance.
+  abuse currently only capped by credit balance — a user with $100 of credits
+  can burn them in minutes and exhaust Gemini quota.
+- No WAF rule / bot challenge on `/api/generate-image` (the most expensive
+  endpoint). Consider Vercel Firewall rule or Turnstile/hCaptcha on anon flow.
+
+**Account security**
+- No password strength requirements on signup.
+- No lockout after N failed login attempts (brute-force possible, though rate
+  limit on `/api/auth/login` does slow it).
+- Password reset flow exists but worth auditing token scope/expiry.
+
+**Supply chain & code**
+- No automated secret scanning on GitHub (beyond our pre-commit). Enable
+  GitHub secret scanning + push protection.
+- `npm audit` hasn't been run in a while — bump vulnerable deps.
+- Every `/api/*` route should be audited for:
+  - Auth checks where needed (no endpoint trusts the client)
+  - Rate limits on cost-heavy or abuse-prone endpoints
+  - IDOR — can user A fetch user B's data by guessing an ID?
+  - XSS on stored user input (prompts, names, signature text)
+- Blob storage: verify content-type validation + scoped write permissions.
 
 ---
 

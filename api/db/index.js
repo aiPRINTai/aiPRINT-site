@@ -481,7 +481,10 @@ export async function getOrderStats() {
       COUNT(*) FILTER (WHERE status = 'in_production')::int  AS in_production,
       COUNT(*) FILTER (WHERE status = 'shipped')::int        AS shipped,
       COUNT(*) FILTER (WHERE status = 'delivered')::int      AS delivered,
-      COALESCE(SUM(amount_total), 0)::int                    AS revenue_cents
+      COUNT(*) FILTER (WHERE status = 'canceled')::int       AS canceled,
+      COALESCE(SUM(amount_total) FILTER (
+        WHERE status IN ('paid','in_production','shipped','delivered')
+      ), 0)::int                                             AS revenue_cents
     FROM orders
   `;
   return r.rows[0];
