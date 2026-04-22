@@ -98,9 +98,43 @@ export default async function handler(req, res) {
     ];
     const origin = candidates.find((u) => /^https:\/\/[^\s]+$/i.test(u)) || 'https://aiprint.ai';
 
+    // Build the line item inline (price_data) instead of referencing the
+    // pre-existing Stripe Price by id. This lets us set `images` per session
+    // so the customer sees their actual generated artwork in the Checkout
+    // thumbnail, not the static product photo. Everything else
+    // (currency / unit_amount / tax_behavior / tax_code) is mirrored from
+    // the original Price+Product so automatic_tax + reporting stay identical.
+    const product = price.product || {};
+    const productImages = [];
+    // Stripe accepts up to 8 image URLs, max 2048 chars each, https only.
+    if (typeof preview.image === 'string' && preview.image.length <= 2048) {
+      productImages.push(preview.image);
+    }
+
+    const line_item = {
+      quantity: 1,
+      price_data: {
+        currency: price.currency,
+        unit_amount: price.unit_amount,
+        // automatic_tax requires a tax_behavior on price_data. Mirror the
+        // original Price; if it's somehow missing, default to 'exclusive'
+        // (US-style — tax added on top, matches what Stripe shows today).
+        tax_behavior: price.tax_behavior || 'exclusive',
+        product_data: {
+          name: product.name || 'aiPRINT — Custom Print',
+          ...(product.description ? { description: product.description } : {}),
+          ...(productImages.length ? { images: productImages } : {}),
+          // Preserve the product's tax_code so Stripe Tax keeps classifying
+          // this as the same kind of good (otherwise rates can shift).
+          ...(product.tax_code ? { tax_code: product.tax_code } : {}),
+          metadata: { lookup_key }
+        }
+      }
+    };
+
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
-      line_items: [{ price: price.id, quantity: 1 }],
+      line_items: [line_item],
       automatic_tax: { enabled: true },
       billing_address_collection: 'required',
       shipping_address_collection: { allowed_countries: ['US'] },
