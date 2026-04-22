@@ -348,6 +348,72 @@
     .font-classic { font-family: 'Cormorant Garamond', 'Times New Roman', serif; font-style: italic; }
     .font-bold { font-family: 'Impact', sans-serif; }
 
+    /* Custom select: lets us render each option in its actual font / color.
+       Chrome + Safari ignore font-family and color on native <option>, so we
+       hide the real <select> and paint our own menu on top. The native select
+       still holds the value, fires change events, and participates in forms. */
+    .custom-select { position: relative; display: inline-block; }
+    .custom-select-native {
+      position: absolute; opacity: 0; pointer-events: none;
+      width: 1px; height: 1px; margin: 0;
+    }
+    .custom-select-btn {
+      display: inline-flex; align-items: center; justify-content: space-between;
+      gap: 0.5rem; min-width: 8.5rem;
+      padding: 0.3rem 0.55rem;
+      font-size: 1rem; color: #fff;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 0.3rem;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+      line-height: 1.2;
+    }
+    .custom-select-btn:hover { background: rgba(255,255,255,0.15); }
+    .custom-select-btn[aria-expanded="true"] { border-color: rgba(129,140,248,0.6); }
+    .custom-select-btn::after {
+      content: ''; width: 0; height: 0;
+      border-left: 4px solid transparent; border-right: 4px solid transparent;
+      border-top: 4px solid rgba(255,255,255,0.7);
+      margin-left: 0.25rem; flex-shrink: 0;
+    }
+    .custom-select-menu {
+      position: absolute; top: calc(100% + 4px); left: 0;
+      min-width: 11rem;
+      background: #111827; /* gray-900 */
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 0.5rem;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.55);
+      padding: 0.3rem;
+      z-index: 50;
+      max-height: 18rem;
+      overflow-y: auto;
+      display: none;
+    }
+    .custom-select-menu[data-open="true"] { display: block; }
+    .custom-select-option {
+      display: flex; align-items: center;
+      width: 100%;
+      padding: 0.5rem 0.65rem;
+      border-radius: 0.3rem;
+      background: transparent; color: #fff;
+      border: none; cursor: pointer;
+      font-size: 1.05rem; line-height: 1.2;
+      white-space: nowrap; text-align: left;
+    }
+    .custom-select-option:hover { background: rgba(99,102,241,0.22); }
+    .custom-select-option[aria-selected="true"] { background: rgba(99,102,241,0.32); }
+    .color-swatch {
+      display: inline-block; width: 1rem; height: 1rem;
+      border-radius: 50%; margin-right: 0.55rem;
+      vertical-align: middle; flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.35);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.25);
+    }
+    .color-swatch-auto {
+      background: linear-gradient(135deg, #fff 0%, #fff 50%, #000 50%, #000 100%);
+    }
+
     /* Share modal styles */
     .share-modal {
       position: fixed;
@@ -538,7 +604,8 @@
         AI + Human Artist · Limited Edition Prints
       </div>
       <h1 class="h1">Turn any idea into a <span class="gradient-text">gallery-worthy</span> print.</h1>
-      <p class="muted mt-5 max-w-lg text-lg leading-relaxed">Type a prompt, generate your artwork in seconds, then have it printed on museum-grade canvas, metal, or acrylic and shipped to your door — ready to hang.</p>
+      <p class="muted mt-5 max-w-lg text-lg leading-relaxed hidden md:block">Type a prompt, generate your artwork in seconds, then have it printed on museum-grade canvas, metal, or acrylic and shipped to your door — ready to hang.</p>
+      <p class="mt-5 max-w-lg text-lg leading-snug font-semibold text-white md:hidden">Prompt → Generate → Print → Ship → Hang <span class="text-indigo-300">!! Canvas, Metal or Acrylic!!</span></p>
       <p class="mt-3 max-w-lg text-base text-gray-300"><span class="font-semibold text-white">From $45.</span> Ships in 7–14 days. Numbered Certificate of Authenticity. Optional artist signature.</p>
       <div class="flex gap-3 mt-8 items-center">
         <a href="#create" class="btn-accent text-base">Create a preview →</a>
@@ -553,22 +620,28 @@
       </div>
     </div>
     <div class="grid grid-cols-2 gap-4">
-      <div class="col-span-2 h-72 rounded-2xl overflow-hidden relative">
-        <img src="/ai-art/hero-canyon.jpg" class="w-full h-full object-cover" alt="AI-generated canyon landscape print at golden hour">
-        <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-          <div class="glass rounded-lg px-3 py-1.5 text-xs font-medium">"Desert canyon at golden hour" — 24×36" Acrylic</div>
-        </div>
-      </div>
-      <div class="h-44 rounded-2xl overflow-hidden relative">
+      <div class="aspect-square rounded-2xl overflow-hidden relative">
         <img src="/ai-art/art-cyberpunk-tokyo.jpg" class="w-full h-full object-cover" alt="Neon-soaked cyberpunk Tokyo street at midnight">
         <div class="absolute bottom-2 left-2 right-2">
           <div class="glass rounded px-2 py-1 text-xs">"Neon Tokyo at midnight" — Canvas</div>
         </div>
       </div>
-      <div class="h-44 rounded-2xl overflow-hidden relative">
+      <div class="aspect-square rounded-2xl overflow-hidden relative">
         <img src="/ai-art/art-aurora.jpg" class="w-full h-full object-cover" alt="Aurora borealis over a fjord">
         <div class="absolute bottom-2 left-2 right-2">
           <div class="glass rounded px-2 py-1 text-xs">"Aurora over the fjord" — Metal</div>
+        </div>
+      </div>
+      <div class="aspect-square rounded-2xl overflow-hidden relative">
+        <img src="/ai-art/art-cosmic-cliff.jpg" class="w-full h-full object-cover" alt="Cosmic cliff nebula at the edge of space">
+        <div class="absolute bottom-2 left-2 right-2">
+          <div class="glass rounded px-2 py-1 text-xs">"Cosmic cliff" — Acrylic</div>
+        </div>
+      </div>
+      <div class="aspect-square rounded-2xl overflow-hidden relative">
+        <img src="/ai-art/art-anime-blossoms.jpg" class="w-full h-full object-cover" alt="Anime-style cherry blossoms in full bloom">
+        <div class="absolute bottom-2 left-2 right-2">
+          <div class="glass rounded px-2 py-1 text-xs">"Anime blossoms" — Canvas</div>
         </div>
       </div>
     </div>
@@ -1625,6 +1698,8 @@
         $('#signatureFont').value = data.settings.signature.font || 'font-elegant';
         $('#signatureColor').value = data.settings.signature.color || 'white';
         $('#signatureSize').value = data.settings.signature.size || 18;
+        $('#signatureFont').dispatchEvent(new Event('change', { bubbles: true }));
+        $('#signatureColor').dispatchEvent(new Event('change', { bubbles: true }));
         if (data.settings.signature.position) signaturePosition = data.settings.signature.position;
         $('#previewImg').src = data.preview.url;
         setWrapAspect(data.preview.size);
@@ -1873,6 +1948,103 @@
       $('#signatureColor').addEventListener('change', (e) => {
         applySignatureColor(e.target.value);
       });
+
+      // Paint the font / color selects as custom dropdowns so each option
+      // actually renders in its font / color — native <option> styling is
+      // ignored in Chrome & Safari.
+      (function enhanceSignatureSelects() {
+        const COLOR_SWATCH = {
+          auto:   '<span class="color-swatch color-swatch-auto"></span>',
+          white:  '<span class="color-swatch" style="background:#ffffff"></span>',
+          black:  '<span class="color-swatch" style="background:#000000"></span>',
+          gold:   '<span class="color-swatch" style="background:#d4af37"></span>',
+          silver: '<span class="color-swatch" style="background:#c0c0c0"></span>',
+        };
+        function enhance(selectEl, renderOption) {
+          if (!selectEl) return;
+          const wrap = document.createElement('div');
+          wrap.className = 'custom-select';
+          selectEl.parentElement.insertBefore(wrap, selectEl);
+          wrap.appendChild(selectEl);
+          selectEl.classList.add('custom-select-native');
+          selectEl.setAttribute('tabindex', '-1');
+
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'custom-select-btn';
+          btn.setAttribute('aria-haspopup', 'listbox');
+          btn.setAttribute('aria-expanded', 'false');
+          const label = document.createElement('span');
+          btn.appendChild(label);
+          wrap.appendChild(btn);
+
+          const menu = document.createElement('div');
+          menu.className = 'custom-select-menu';
+          menu.setAttribute('role', 'listbox');
+          wrap.appendChild(menu);
+
+          function syncLabel() {
+            const opt = selectEl.selectedOptions[0];
+            if (opt) label.innerHTML = renderOption(opt);
+          }
+          function rebuildMenu() {
+            menu.innerHTML = '';
+            [...selectEl.options].forEach(opt => {
+              const item = document.createElement('button');
+              item.type = 'button';
+              item.className = 'custom-select-option';
+              item.setAttribute('role', 'option');
+              item.dataset.value = opt.value;
+              item.setAttribute('aria-selected', opt.selected ? 'true' : 'false');
+              item.innerHTML = renderOption(opt);
+              item.addEventListener('click', (ev) => {
+                ev.stopPropagation();
+                selectEl.value = opt.value;
+                selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+                closeMenu();
+              });
+              menu.appendChild(item);
+            });
+          }
+          function openMenu() {
+            rebuildMenu();
+            menu.dataset.open = 'true';
+            btn.setAttribute('aria-expanded', 'true');
+            setTimeout(() => {
+              document.addEventListener('click', outsideClick);
+              document.addEventListener('keydown', keyHandler);
+            }, 0);
+          }
+          function closeMenu() {
+            menu.dataset.open = 'false';
+            btn.setAttribute('aria-expanded', 'false');
+            document.removeEventListener('click', outsideClick);
+            document.removeEventListener('keydown', keyHandler);
+          }
+          function outsideClick(e) { if (!wrap.contains(e.target)) closeMenu(); }
+          function keyHandler(e) { if (e.key === 'Escape') closeMenu(); }
+
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (menu.dataset.open === 'true') closeMenu(); else openMenu();
+          });
+          selectEl.addEventListener('change', syncLabel);
+          syncLabel();
+        }
+
+        enhance(document.getElementById('signatureFont'), (opt) => {
+          const fam = (opt.style.fontFamily || '').replace(/"/g, "'");
+          const italic = opt.style.fontStyle === 'italic' ? 'font-style:italic;' : '';
+          const span = document.createElement('span');
+          span.setAttribute('style', `font-family:${fam};${italic}`);
+          span.textContent = opt.textContent;
+          return span.outerHTML;
+        });
+        enhance(document.getElementById('signatureColor'), (opt) => {
+          const swatch = COLOR_SWATCH[opt.value] || '';
+          return `${swatch}<span>${opt.textContent}</span>`;
+        });
+      })();
       $('#signatureSize').addEventListener('input', (e) => {
         signatureOverlay.style.fontSize = `${e.target.value}px`;
       });
@@ -1969,6 +2141,8 @@
           $('#signatureFont').value = data.signature.font;
           $('#signatureColor').value = data.signature.color;
           $('#signatureSize').value = data.signature.size;
+          $('#signatureFont').dispatchEvent(new Event('change', { bubbles: true }));
+          $('#signatureColor').dispatchEvent(new Event('change', { bubbles: true }));
           if (data.signature.position) {
             signaturePosition = data.signature.position;
             if (signaturePosition.preset) {
@@ -2452,6 +2626,9 @@
       ['styleSelect','moodSelect','lightingSelect','cameraSelect','mediumSelect'].forEach(id => { document.getElementById(id).selectedIndex = 0; });
       $('#signatureInput').value = ''; $('#signatureFont').selectedIndex = 0;
       $('#signatureColor').selectedIndex = 0; $('#signatureSize').value = 18;
+      // Notify custom dropdowns + existing listeners that the value changed
+      $('#signatureFont').dispatchEvent(new Event('change', { bubbles: true }));
+      $('#signatureColor').dispatchEvent(new Event('change', { bubbles: true }));
       signaturePosition = { x: null, y: null };
       // Clear staged reference images and consent
       refImages.length = 0;
