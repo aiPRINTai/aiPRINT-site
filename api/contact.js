@@ -8,7 +8,7 @@
 // table (reuses existing infra — a dedicated contact_submissions table would
 // be cleaner but is overkill for this volume).
 
-import { sendContactFormEmail, contactTo } from './_email.js';
+import { sendContactFormEmail, sendContactFormCustomerAck, contactTo } from './_email.js';
 import { isValidEmail } from './auth/utils.js';
 import { getClientIp } from './auth/utils.js';
 import { sql } from '@vercel/postgres';
@@ -145,6 +145,21 @@ export default async function handler(req, res) {
       ok: false,
       error: 'We couldn\'t send your message right now. Please email info@aiprint.ai directly.'
     });
+  }
+
+  // Send the customer a confirmation ack — fire-and-forget. If this fails,
+  // the support team still got the original message (above), so we never
+  // bubble the ack failure up to the user. Worst case: customer doesn't get
+  // an ack but their message is in our queue.
+  try {
+    const ackResult = await sendContactFormCustomerAck({ name, email, subject, message, orderNumber });
+    if (ackResult?.error || ackResult?.skipped) {
+      console.warn('contact: customer ack not sent:', ackResult);
+    } else {
+      console.log('contact: customer ack sent', { id: ackResult?.id || null, to: email });
+    }
+  } catch (err) {
+    console.warn('contact: customer ack threw (non-fatal):', err?.message || err);
   }
 
   // Log for rate limiting

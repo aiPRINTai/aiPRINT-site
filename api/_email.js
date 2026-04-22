@@ -336,6 +336,69 @@ export async function sendContactFormEmail({ name, email, subject, message, orde
   });
 }
 
+// Sent to the customer who submitted the contact form, so they have a
+// confirmation that we got their message. Includes a copy of what they
+// wrote (so they can reference it later) and sets a clear reply-time
+// expectation. ReplyTo is info@ so a reply to this ack lands in support.
+export async function sendContactFormCustomerAck({ name, email, subject, message, orderNumber }) {
+  if (!email) return { skipped: true, reason: 'no_customer_email' };
+
+  const escape = (s = '') => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+
+  const subjectMap = {
+    order: 'Question about an order',
+    materials: 'Material & sizing help',
+    bulk: 'Bulk order inquiry',
+    technical: 'Website support',
+    other: 'Other'
+  };
+  const subjectLabel = subjectMap[subject] || subject || 'your message';
+
+  // First name only for the greeting (a bit warmer than full name).
+  const firstName = String(name || '').trim().split(/\s+/)[0] || 'there';
+
+  const html = `
+    <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;color:#0a0f1d;background:#ffffff;">
+      <div style="text-align:center;margin-bottom:28px;">
+        <div style="display:inline-block;width:42px;height:42px;border-radius:10px;background:#0a0f1d;color:#fff;font-weight:900;line-height:42px;font-size:18px;letter-spacing:-.5px;">AI</div>
+      </div>
+
+      <h1 style="font-size:22px;margin:0 0 12px;text-align:center;font-weight:800;">Thanks, ${escape(firstName)} — we got your message ✨</h1>
+
+      <p style="color:#475569;margin:0 0 24px;text-align:center;font-size:15px;line-height:1.55;">
+        A real human will read it and reply within <strong>24 hours</strong> (usually faster on weekdays).
+      </p>
+
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:18px;margin:24px 0;">
+        <p style="margin:0 0 12px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:.05em;font-weight:600;">Your message</p>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin:0 0 12px;">
+          <tr><td style="padding:4px 0;color:#64748b;width:90px;">Subject</td><td style="padding:4px 0;">${escape(subjectLabel)}</td></tr>
+          ${orderNumber ? `<tr><td style="padding:4px 0;color:#64748b;">Order #</td><td style="padding:4px 0;font-family:monospace;">${escape(orderNumber)}</td></tr>` : ''}
+        </table>
+        <div style="font-size:14px;line-height:1.6;color:#0a0f1d;white-space:pre-wrap;border-top:1px solid #e2e8f0;padding-top:12px;">${escape(message)}</div>
+      </div>
+
+      <p style="color:#475569;margin:24px 0 0;font-size:14px;line-height:1.55;">
+        Need to add something? Just reply to this email and it'll reach the same person.
+      </p>
+
+      <hr style="border:none;border-top:1px solid #e2e8f0;margin:32px 0 20px;">
+      <p style="color:#94a3b8;font-size:12px;text-align:center;margin:0;line-height:1.55;">
+        aiPRINT.ai · Made with care in Florida, USA<br>
+        You're getting this because you submitted the contact form at aiprint.ai.
+      </p>
+    </div>
+  `.trim();
+
+  return sendEmail({
+    to: email,
+    subject: 'We got your message — aiPRINT.ai',
+    html,
+    // If they reply to this ack, route it to the support inbox.
+    replyTo: contactTo()
+  });
+}
+
 export async function sendFulfillmentAlertEmail(order) {
   // New-order alerts go to orders@ (ORDERS_TO) — the fulfillment inbox.
   const to = ordersTo();
