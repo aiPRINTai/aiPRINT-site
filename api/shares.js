@@ -65,7 +65,12 @@ export default async function handler(req, res) {
       const host = req.headers.host || 'aiprint.ai';
       return res.status(200).json({
         slug,
-        url: `${proto}://${host}/?s=${slug}`
+        // Path-style URL (/s/<slug>) so iMessage/SMS/Slack unfurl through
+        // /api/s.js, which serves per-share OG meta tags (actual artwork
+        // preview instead of the generic site card). A browser landing on
+        // /s/<slug> is instantly redirected to /?s=<slug> where the full
+        // design hydrates.
+        url: `${proto}://${host}/s/${slug}`
       });
     }
 
