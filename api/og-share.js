@@ -27,7 +27,7 @@ const BRAND_STRIP_PATH = path.resolve(__dirname, '../public/og-brand-strip.png')
 
 const SLUG_RE = /^[a-zA-Z0-9]{6,16}$/;
 const CANVAS_WIDTH = 1200;
-const STRIP_HEIGHT = 110; // must match scripts/build-og-brand-strip.mjs
+const STRIP_HEIGHT = 180; // must match scripts/build-og-brand-strip.mjs
 // Guard rails so a weird preview can't blow up the canvas. Covers everything
 // from ultra-wide panoramas to tall portraits without crawlers barfing.
 const MIN_PREVIEW_H = 400;
