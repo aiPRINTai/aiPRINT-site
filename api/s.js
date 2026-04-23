@@ -7,6 +7,7 @@
 // Wired up via vercel.json: /s/:slug → /api/s?slug=:slug
 
 import { getSharedDesign } from './db/index.js';
+import { computeCanvasSize } from './og-share.js';
 
 const SLUG_RE = /^[a-zA-Z0-9]{6,16}$/;
 
@@ -95,10 +96,17 @@ export default async function handler(req, res) {
     const imageUrl = payload?.preview?.url
       ? `${origin}/api/og-share?slug=${encodeURIComponent(slug)}`
       : `${origin}/og-image.png`;
-    // Branded card is always 1200x630 (standard OG dimensions). If no share
-    // preview exists we fall back to /og-image.png which is also 1200x630.
-    const imgW = payload?.preview?.url ? 1200 : 1200;
-    const imgH = payload?.preview?.url ? 630 : 630;
+    // Canvas size adapts to the preview aspect so square/vertical/horizontal
+    // shares all render without cropping or empty space. Dimensions MUST
+    // match what og-share.js actually emits — we compute both from the same
+    // computeCanvasSize() so they can never drift.
+    let imgW = 1200;
+    let imgH = 630;
+    if (payload?.preview?.url && payload?.preview?.width && payload?.preview?.height) {
+      const size = computeCanvasSize(payload.preview.width, payload.preview.height);
+      imgW = size.width;
+      imgH = size.height;
+    }
 
     const title = prompt
       ? `Someone shared this custom print with you — aiPRINT.ai`
