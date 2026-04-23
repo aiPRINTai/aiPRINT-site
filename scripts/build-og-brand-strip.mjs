@@ -1,9 +1,17 @@
 // scripts/build-og-brand-strip.mjs
 // Pre-renders /public/og-brand-strip.png — a 1200x180 opaque brand band
 // that /api/og-share.js places DIRECTLY BELOW the preview (not as an
-// overlay). Height and type were bumped after testing on iMessage: at
-// mobile unfurl widths a 110px strip with 34pt type rendered too small
-// to read, so we went 180px tall with 48pt wordmark + 40pt CTA.
+// overlay).
+//
+// Design notes:
+//   - The strip deliberately DOES NOT include an "aiPRINT.ai" wordmark.
+//     Every unfurl host (iMessage, Slack, Twitter, email) appends our
+//     domain/site_name below the image automatically, so a wordmark in
+//     the strip was just being triplicated with the host's own domain
+//     line. The favicon tile at left is the only brand anchor.
+//   - Message hierarchy is therefore inverted vs. the original: headline
+//     "Shared with you" on the left, CTA "Tap to view & order" on the
+//     right, with short support copy underneath each.
 //
 // Baked at build time with my local fonts (Inter/Helvetica Neue) so no
 // fonts need to resolve in the Vercel serverless runtime.
@@ -54,13 +62,17 @@ const svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
     <text x="60" y="86" text-anchor="middle" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="900" font-size="44" fill="url(#ink)">ai</text>
   </g>
 
-  <!-- Wordmark + tagline (left) -->
-  <text x="170" y="92" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="800" font-size="54" fill="#ffffff" letter-spacing="-1.5">aiPRINT<tspan fill="#A5B4FC">.ai</tspan></text>
-  <text x="170" y="134" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="500" font-size="26" fill="#94a3b8">Premium AI-generated fine art prints</text>
+  <!-- Left: share headline + subtitle. No "aiPRINT.ai" wordmark here — every
+       unfurl host (iMessage, Slack, Twitter, email) already appends our
+       domain/site_name below the image, so baking a big wordmark into the
+       strip was redundant triplication. The favicon tile at left carries
+       the brand visually. -->
+  <text x="170" y="92" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="800" font-size="54" fill="#ffffff" letter-spacing="-1.5">Shared with you</text>
+  <text x="170" y="134" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="500" font-size="26" fill="#94a3b8">A custom AI-generated fine art print</text>
 
-  <!-- Right: share message -->
-  <text x="${W - 32}" y="92" text-anchor="end" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="700" font-size="44" fill="#ffffff">Shared with you</text>
-  <text x="${W - 32}" y="134" text-anchor="end" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="500" font-size="26" fill="#cbd5e1">Tap to view &amp; order — canvas · metal · acrylic</text>
+  <!-- Right: CTA + materials -->
+  <text x="${W - 32}" y="92" text-anchor="end" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="700" font-size="44" fill="#ffffff">Tap to view &amp; order</text>
+  <text x="${W - 32}" y="134" text-anchor="end" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="500" font-size="26" fill="#cbd5e1">canvas · metal · acrylic</text>
 </svg>`;
 
 await sharp(Buffer.from(svg))
