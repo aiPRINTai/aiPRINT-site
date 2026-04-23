@@ -661,6 +661,80 @@ export async function purgeOldSharedDesigns(olderThanDays = 180) {
   }
 }
 
+// ── Stats for /api/admin/security dashboard ───────────────────────────────
+// Aggregates over admin_actions and shared_designs. Both self-heal if their
+// table doesn't exist yet (returning empty stats rather than throwing) so the
+// security page renders on a brand-new DB where no admin action has been
+// logged yet.
+
+export async function getAdminActionStats() {
+  const empty = {
+    total_24h: 0, total_7d: 0, total_30d: 0,
+    unique_actor_ips_24h: 0,
+    by_action_7d: {},
+    by_action_30d: {}
+  };
+  try {
+    const totals = await sql`
+      SELECT
+        COUNT(*) FILTER (WHERE created_at >= NOW() - INTERVAL '24 hours') AS t_24h,
+        COUNT(*) FILTER (WHERE created_at >= NOW() - INTERVAL '7 days')   AS t_7d,
+        COUNT(*) FILTER (WHERE created_at >= NOW() - INTERVAL '30 days')  AS t_30d,
+        COUNT(DISTINCT actor_ip) FILTER (WHERE created_at >= NOW() - INTERVAL '24 hours') AS ips_24h
+      FROM admin_actions
+    `;
+    const by7 = await sql`
+      SELECT action, COUNT(*)::int AS n
+      FROM admin_actions
+      WHERE created_at >= NOW() - INTERVAL '7 days'
+      GROUP BY action
+      ORDER BY n DESC
+    `;
+    const by30 = await sql`
+      SELECT action, COUNT(*)::int AS n
+      FROM admin_actions
+      WHERE created_at >= NOW() - INTERVAL '30 days'
+      GROUP BY action
+      ORDER BY n DESC
+    `;
+    const row = totals.rows[0] || {};
+    const out = {
+      total_24h: Number(row.t_24h || 0),
+      total_7d: Number(row.t_7d || 0),
+      total_30d: Number(row.t_30d || 0),
+      unique_actor_ips_24h: Number(row.ips_24h || 0),
+      by_action_7d: Object.fromEntries(by7.rows.map(r => [r.action, r.n])),
+      by_action_30d: Object.fromEntries(by30.rows.map(r => [r.action, r.n]))
+    };
+    return out;
+  } catch (err) {
+    if (String(err?.message || '').includes('does not exist')) return empty;
+    throw err;
+  }
+}
+
+export async function getSharedDesignStats() {
+  const empty = { total: 0, oldest_age_days: null, newest_created_at: null };
+  try {
+    const r = await sql`
+      SELECT
+        COUNT(*)::int AS total,
+        EXTRACT(EPOCH FROM (NOW() - MIN(created_at))) / 86400.0 AS oldest_age_days,
+        MAX(created_at) AS newest_created_at
+      FROM shared_designs
+    `;
+    const row = r.rows[0] || {};
+    return {
+      total: Number(row.total || 0),
+      oldest_age_days: row.oldest_age_days != null ? Number(row.oldest_age_days) : null,
+      newest_created_at: row.newest_created_at || null
+    };
+  } catch (err) {
+    if (String(err?.message || '').includes('does not exist')) return empty;
+    throw err;
+  }
+}
+
 // Initialize database tables
 export async function initializeDatabase() {
   // This function can be called to ensure tables exist

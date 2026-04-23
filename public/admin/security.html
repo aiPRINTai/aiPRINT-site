@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <title>aiPRINT.ai — Security Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background:#0a0f1d; color:#e7eef8; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    .glass { background: rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.10); }
+    .muted { color:#94a3b8; }
+    .pill { padding:2px 8px; border-radius:999px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; }
+    .pill-ok     { background:#064e3b; color:#bbf7d0; }
+    .pill-warn   { background:#422006; color:#fde047; }
+    .pill-bad    { background:#450a0a; color:#fca5a5; }
+    .pill-neutral{ background:rgba(255,255,255,.08); color:#cbd5e1; }
+    select, input, textarea {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      color:#e7eef8; border-radius:6px; padding:6px 10px; font-size:13px;
+      color-scheme: dark;
+    }
+    select option { background:#11151f; color:#e7eef8; }
+    button.primary { background: linear-gradient(135deg,#6366f1,#818cf8); color:white; padding:6px 14px; border-radius:6px; font-size:13px; font-weight:600; }
+    button.ghost   { background: rgba(255,255,255,.08); color:#e7eef8; padding:6px 12px; border-radius:6px; font-size:12px; }
+    button:hover { filter: brightness(1.1); }
+    .stat { padding:14px 18px; border-radius:10px; }
+    .nav-link { color:#94a3b8; padding:6px 10px; border-radius:6px; font-size:13px; }
+    .nav-link.active { color:#e7eef8; background: rgba(255,255,255,.08); }
+    .nav-link:hover { color:#e7eef8; }
+    table.detail { width: 100%; font-size: 12px; }
+    table.detail td, table.detail th { padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,.08); text-align: left; vertical-align: top; }
+    table.detail th { color:#94a3b8; font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    details > summary { cursor: pointer; }
+    .posture-row { display:grid; grid-template-columns: 1fr auto; gap: 8px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,.06); font-size:13px; }
+    .posture-row:last-child { border-bottom: none; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+<!-- Login screen -->
+<div id="loginView" class="min-h-screen grid place-items-center px-4">
+  <div class="glass rounded-2xl p-8 w-full max-w-sm">
+    <h1 class="text-xl font-bold mb-1">Admin Access</h1>
+    <p class="muted text-sm mb-5">Enter the admin password to view the security dashboard.</p>
+    <input id="pwInput" type="password" placeholder="Password" class="w-full mb-3" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"/>
+    <button onclick="login()" class="primary w-full">Sign in</button>
+    <p id="loginErr" class="text-red-400 text-sm mt-3 hidden"></p>
+  </div>
+</div>
+
+<!-- Main app (hidden until login) -->
+<div id="appView" class="hidden">
+  <header class="border-b border-white/10 bg-[#0b1020]/80 sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-5 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3">
+          <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
+          <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span> · Admin</span>
+        </div>
+        <nav class="flex items-center gap-1 ml-2">
+          <a href="/admin/orders.html"   class="nav-link">Orders</a>
+          <a href="/admin/users.html"    class="nav-link">Users</a>
+          <a href="/admin/security.html" class="nav-link active">Security</a>
+        </nav>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="loadAll()" class="ghost" title="Refresh">↻ Refresh</button>
+        <button onclick="logout()" class="ghost">Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-5 py-6 space-y-6">
+    <!-- Top stats row -->
+    <section>
+      <div id="statsRow" class="grid grid-cols-2 md:grid-cols-5 gap-3"></div>
+    </section>
+
+    <!-- Two-column: posture + by-action -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="glass rounded-xl p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-bold">Security posture</h2>
+          <span class="text-xs muted">live config snapshot</span>
+        </div>
+        <div id="postureList"></div>
+      </div>
+
+      <div class="glass rounded-xl p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-bold">Admin actions — last 7 days</h2>
+          <span class="text-xs muted">by action type</span>
+        </div>
+        <div id="byActionList" class="space-y-1"></div>
+      </div>
+    </section>
+
+    <!-- Shared-designs retention -->
+    <section class="glass rounded-xl p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-bold">Shared designs (PII-adjacent)</h2>
+        <span class="text-xs muted">purged automatically by daily cron</span>
+      </div>
+      <div id="sharedStats" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+    </section>
+
+    <!-- Audit log -->
+    <section class="glass rounded-xl p-5">
+      <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+        <h2 class="font-bold">Audit log</h2>
+        <div class="flex items-center gap-2">
+          <select id="actionFilter" onchange="loadAuditLog()" class="text-sm">
+            <option value="">All actions</option>
+          </select>
+          <select id="limitSelect" onchange="loadAuditLog()" class="text-sm">
+            <option value="50" selected>50</option>
+            <option value="100">100</option>
+            <option value="250">250</option>
+            <option value="500">500</option>
+          </select>
+          <button class="ghost" onclick="loadAuditLog()">↻</button>
+        </div>
+      </div>
+      <div id="auditLog"></div>
+    </section>
+  </main>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-6 right-6 hidden z-50">
+  <div id="toastBox" class="glass rounded-xl px-4 py-3 text-sm shadow-2xl border-l-4"></div>
+</div>
+
+<script>
+  const $ = (q, el=document) => el.querySelector(q);
+  const PW_KEY = 'aiprint_admin_pw';
+
+  function login() {
+    const pw = $('#pwInput').value.trim();
+    if (!pw) return;
+    sessionStorage.setItem(PW_KEY, pw);
+    enterApp();
+  }
+
+  function logout() {
+    sessionStorage.removeItem(PW_KEY);
+    location.reload();
+  }
+
+  async function api(path, opts = {}) {
+    const pw = sessionStorage.getItem(PW_KEY);
+    const r = await fetch(path, {
+      ...opts,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${pw}`,
+        ...(opts.headers || {})
+      }
+    });
+    if (r.status === 401) {
+      sessionStorage.removeItem(PW_KEY);
+      $('#appView').classList.add('hidden');
+      $('#loginView').classList.remove('hidden');
+      $('#loginErr').textContent = 'Wrong password.';
+      $('#loginErr').classList.remove('hidden');
+      throw new Error('unauthorized');
+    }
+    if (!r.ok) throw new Error((await r.json().catch(()=>({}))).error || `HTTP ${r.status}`);
+    return r.json();
+  }
+
+  function showToast(msg, type = 'info') {
+    const t = $('#toast'); const b = $('#toastBox');
+    const colors = { info: '#818cf8', success: '#86efac', error: '#fca5a5' };
+    b.style.borderLeftColor = colors[type] || colors.info;
+    b.textContent = msg;
+    t.classList.remove('hidden');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => t.classList.add('hidden'), 3500);
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    return d.toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit' });
+  }
+
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+  }
+
+  async function enterApp() {
+    $('#loginView').classList.add('hidden');
+    $('#appView').classList.remove('hidden');
+    try { await loadAll(); } catch (e) { console.error(e); }
+  }
+
+  async function loadAll() {
+    await loadOverview();
+    await loadAuditLog();
+  }
+
+  async function loadOverview() {
+    const data = await api('/api/admin/security');
+    renderStats(data.audit, data.shared_designs);
+    renderPosture(data.posture);
+    renderByAction(data.audit.by_action_7d || {});
+    renderShared(data.shared_designs);
+    populateActionFilter(Object.keys(data.audit.by_action_30d || {}));
+  }
+
+  function renderStats(audit, shared) {
+    const tiles = [
+      ['Actions 24h',    audit.total_24h,             '#93c5fd'],
+      ['Actions 7d',     audit.total_7d,              '#a5b4fc'],
+      ['Actions 30d',    audit.total_30d,             '#c4b5fd'],
+      ['Actor IPs 24h',  audit.unique_actor_ips_24h,  '#fde047'],
+      ['Shared designs', shared?.total ?? 0,          '#86efac'],
+    ];
+    $('#statsRow').innerHTML = tiles.map(([label, val, color]) => `
+      <div class="glass stat">
+        <div class="text-xs muted uppercase tracking-wider mb-1">${label}</div>
+        <div class="text-xl font-bold" style="color:${color}">${val ?? 0}</div>
+      </div>
+    `).join('');
+  }
+
+  // Render one posture row. `good` is a boolean or null (null = informational, no pill).
+  function postureRow(label, value, good) {
+    let pill = '';
+    if (good === true)       pill = '<span class="pill pill-ok">ON</span>';
+    else if (good === false) pill = '<span class="pill pill-bad">OFF</span>';
+    else if (value === true) pill = '<span class="pill pill-ok">ON</span>';
+    else if (value === false)pill = '<span class="pill pill-bad">OFF</span>';
+    else                     pill = `<span class="pill pill-neutral">${escapeHtml(String(value))}</span>`;
+    return `
+      <div class="posture-row">
+        <div>${escapeHtml(label)}</div>
+        <div>${pill}</div>
+      </div>
+    `;
+  }
+
+  function renderPosture(p) {
+    if (!p) { $('#postureList').innerHTML = '<p class="muted text-sm">No data.</p>'; return; }
+    // Lay out as two logical groups: env-var checks, then code-level protections.
+    const envRows = [
+      ['ADMIN_PASSWORD set',       p.admin_password_set,       p.admin_password_set],
+      ['CRON_SECRET set',          p.cron_secret_set,          p.cron_secret_set],
+      ['RESEND_API_KEY set',       p.resend_api_key_set,       p.resend_api_key_set],
+      ['STRIPE_WEBHOOK_SECRET set',p.stripe_webhook_secret_set,p.stripe_webhook_secret_set],
+      ['JWT_SECRET set',           p.jwt_secret_set,           p.jwt_secret_set],
+    ];
+    const codeRows = [
+      ['Admin timing-safe compare',        p.admin_timing_safe_compare, p.admin_timing_safe_compare],
+      ['Admin per-IP rate limit',          p.admin_rate_limit_per_ip,   null],
+      ['Login per-IP rate limit',          p.auth_login_rate_limit_per_ip,   null],
+      ['Login per-email rate limit',       p.auth_login_rate_limit_per_email, null],
+      ['Signup per-IP rate limit',         p.auth_signup_rate_limit_per_ip,   null],
+      ['Signup per-email rate limit',      p.auth_signup_rate_limit_per_email, null],
+      ['Signup email-enumeration hardened',p.signup_email_enumeration_hardened, p.signup_email_enumeration_hardened],
+      ['Security headers (HSTS/CSP/XFO)',  p.security_headers_active,   p.security_headers_active],
+      ['CSP Report-Only',                  p.csp_report_only,           p.csp_report_only],
+      ['CSP reporting endpoint',           p.csp_reporting_endpoint,    null],
+      ['robots.txt disallow token pages',  p.robots_disallow_token_pages, p.robots_disallow_token_pages],
+      ['Shared designs retention (days)',  p.shared_designs_retention_days, null],
+      ['Shared designs purge cron',        p.shared_designs_purge_cron, null],
+    ];
+    $('#postureList').innerHTML =
+      '<div class="text-xs muted uppercase tracking-wider mb-1">Environment</div>' +
+      envRows.map(r => postureRow(r[0], r[1], r[2])).join('') +
+      '<div class="text-xs muted uppercase tracking-wider mt-4 mb-1">Protections</div>' +
+      codeRows.map(r => postureRow(r[0], r[1], r[2])).join('');
+  }
+
+  function renderByAction(obj) {
+    const entries = Object.entries(obj).sort((a,b) => b[1] - a[1]);
+    if (entries.length === 0) {
+      $('#byActionList').innerHTML = '<p class="muted text-sm">No admin actions recorded in the last 7 days.</p>';
+      return;
+    }
+    const max = Math.max(...entries.map(([,n]) => n)) || 1;
+    $('#byActionList').innerHTML = entries.map(([k, n]) => {
+      const pct = Math.max(6, Math.round((n / max) * 100));
+      return `
+        <div>
+          <div class="flex items-center justify-between text-sm mb-1">
+            <span class="mono">${escapeHtml(k)}</span>
+            <span class="muted">${n}</span>
+          </div>
+          <div class="w-full h-1.5 rounded-full bg-white/5 overflow-hidden">
+            <div class="h-full" style="width:${pct}%; background: linear-gradient(90deg,#6366f1,#818cf8)"></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderShared(s) {
+    if (!s) { $('#sharedStats').innerHTML = ''; return; }
+    const ageTxt = s.oldest_age_days != null ? `${s.oldest_age_days.toFixed(1)} d` : '—';
+    const tiles = [
+      ['Total rows',      s.total,                    '#cbd5e1'],
+      ['Oldest age',      ageTxt,                     '#fde047'],
+      ['Most recent',     s.newest_created_at ? fmtDate(s.newest_created_at) : '—', '#93c5fd'],
+      ['Retention',       '180 d (auto-purge)',       '#86efac'],
+    ];
+    $('#sharedStats').innerHTML = tiles.map(([label, val, color]) => `
+      <div class="glass stat">
+        <div class="text-xs muted uppercase tracking-wider mb-1">${label}</div>
+        <div class="text-base font-bold" style="color:${color}">${typeof val === 'number' ? val : escapeHtml(String(val))}</div>
+      </div>
+    `).join('');
+  }
+
+  function populateActionFilter(actions) {
+    const sel = $('#actionFilter');
+    const current = sel.value;
+    // Preserve the "All" option + current selection, then rebuild.
+    sel.innerHTML = '<option value="">All actions</option>' +
+      actions.sort().map(a => `<option value="${escapeHtml(a)}"${a === current ? ' selected' : ''}>${escapeHtml(a)}</option>`).join('');
+  }
+
+  async function loadAuditLog() {
+    const action = $('#actionFilter').value;
+    const limit = parseInt($('#limitSelect').value, 10) || 50;
+    const qs = new URLSearchParams({ actions: '1', limit: String(limit) });
+    if (action) qs.set('action', action);
+    try {
+      const data = await api(`/api/admin/security?${qs}`);
+      renderAuditLog(data.actions || []);
+    } catch (e) {
+      $('#auditLog').innerHTML = `<p class="text-red-400 text-sm">Failed to load audit log: ${escapeHtml(e.message)}</p>`;
+    }
+  }
+
+  function summaryForAction(a) {
+    const d = a.details || {};
+    switch (a.action) {
+      case 'grant_credits':
+      case 'deduct_credits':
+        return `${d.amount >= 0 ? '+' : ''}${d.amount} → balance ${d.new_balance}${d.reason ? ` · ${escapeHtml(d.reason)}` : ''}`;
+      case 'resend_verification':
+        return `to ${escapeHtml(d.target_email || '—')}`;
+      case 'resend_order_confirmation':
+      case 'resend_shipping_notification':
+        return `to ${escapeHtml(d.sent_to || '—')}${d.tracking_number ? ` · ${escapeHtml(d.tracking_number)}` : ''}`;
+      case 'refresh_shipping_from_stripe':
+        return `session ${escapeHtml(d.stripe_session_id || '—')}`;
+      case 'update_order': {
+        const parts = [];
+        if (d.status) parts.push(`status: ${escapeHtml(d.status.from || '—')} → ${escapeHtml(d.status.to || '—')}`);
+        if (d.tracking_number) parts.push(`tracking: ${escapeHtml(d.tracking_number)}`);
+        if (d.carrier) parts.push(`carrier: ${escapeHtml(d.carrier)}`);
+        if (d.admin_notes_updated) parts.push('notes updated');
+        return parts.join(' · ') || '—';
+      }
+      case 'export_orders_csv':
+      case 'export_users_csv':
+        return `${d.count ?? '?'} rows${d.status ? ` · filter: ${escapeHtml(d.status)}` : ''}${d.search ? ` · search: ${escapeHtml(d.search)}` : ''}${d.verifiedOnly ? ' · verified-only' : ''}`;
+      default:
+        return escapeHtml(JSON.stringify(d));
+    }
+  }
+
+  function renderAuditLog(rows) {
+    if (rows.length === 0) {
+      $('#auditLog').innerHTML = '<p class="muted text-sm py-4">No audit events for the current filter.</p>';
+      return;
+    }
+    $('#auditLog').innerHTML = `
+      <div class="overflow-x-auto">
+        <table class="detail">
+          <thead>
+            <tr>
+              <th>When</th>
+              <th>Action</th>
+              <th>Target user</th>
+              <th>Target order</th>
+              <th>Summary</th>
+              <th>Actor IP</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(a => `
+              <tr>
+                <td class="muted">${fmtDate(a.created_at)}</td>
+                <td><span class="pill pill-neutral">${escapeHtml(a.action)}</span></td>
+                <td class="truncate" style="max-width:180px">${a.target_user_email ? `<a class="text-indigo-300" href="/admin/users.html">${escapeHtml(a.target_user_email)}</a>` : '<span class="muted">—</span>'}</td>
+                <td class="mono muted text-[10px]">${a.target_order_id ? escapeHtml(a.target_order_id).slice(0,8) + '…' : '—'}</td>
+                <td class="muted" style="max-width:360px">${summaryForAction(a)}</td>
+                <td class="mono muted text-[10px]">${escapeHtml(a.actor_ip || '—')}</td>
+                <td>
+                  <details>
+                    <summary class="muted text-xs">raw</summary>
+                    <pre class="mono text-[10px] whitespace-pre-wrap break-all mt-2 p-2 rounded bg-black/30 max-w-xl">${escapeHtml(JSON.stringify(a.details || {}, null, 2))}</pre>
+                  </details>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  // Auto-login if password in session
+  if (sessionStorage.getItem(PW_KEY)) {
+    enterApp().catch(() => {});
+  }
+</script>
+</body>
+</html>
