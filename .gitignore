@@ -59,3 +59,8 @@ AiPrint Imagery/
 aiPRINT-Lightroom-Shot-List.xlsx
 competitor-analysis.csv
 positioning-summary.md
+
+# Local planning scratchpads (private — would be served publicly if committed
+# to the repo root since /index.html siblings are treated as static routes).
+your-todo.html
+AiPrint-Icon.png
