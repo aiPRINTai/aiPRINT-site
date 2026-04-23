@@ -11,14 +11,6 @@ import { computeCanvasSize } from './og-share.js';
 
 const SLUG_RE = /^[a-zA-Z0-9]{6,16}$/;
 
-// Unfurl crawlers (iMessage, Slack, Twitter, Facebook, LinkedIn, etc).
-// When one of these hits /s/<slug>, we skip the HTML stub and 302 straight
-// to the branded PNG. That makes iMessage treat the link as an image and
-// render it image-only — no purple metadata block below. Humans on real
-// browsers always get the HTML stub (UA won't match), so the /?s=<slug>
-// hydration flow is untouched.
-const UNFURL_UA_RE = /(facebookexternalhit|facebookcatalog|Twitterbot|LinkedInBot|Slackbot|TelegramBot|Discordbot|WhatsApp|Applebot|LinkPreview|LPLinkMetadata|iMessage|Mastodon|Pinterest|redditbot|Embedly|vkShare)/i;
-
 function esc(str) {
   return String(str || '')
     .replace(/&/g, '&amp;')
@@ -35,17 +27,18 @@ function renderStub({ slug, imageUrl, canonicalUrl, imgW, imgH }) {
   const wh = (imgW && imgH)
     ? `<meta property="og:image:width" content="${imgW}" />\n  <meta property="og:image:height" content="${imgH}" />`
     : '';
-  // This HTML is only ever shown to human browsers — known unfurl crawlers
-  // are redirected straight to the branded PNG in the handler above so their
-  // cards render image-only with no metadata block. og:title and og:description
-  // are both omitted here so that any *unknown* crawler that slips past the
-  // UA filter still produces the minimum-possible metadata block (domain-only).
-  // The branded image itself already carries all the messaging.
+  // og:title and og:description are deliberately omitted. The branded image
+  // itself already says "aiPRINT.ai — Shared with you — Tap to view & order",
+  // so repeating it in iMessage's metadata block below the image is pure
+  // duplication. Without a title/description, iMessage collapses that block
+  // to a single-line domain footer — the minimum a rich-link card will ever
+  // show when the URL returns HTML.
   return `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content="#000000" />
 <title>aiPRINT.ai</title>
 <link rel="canonical" href="${safeCanonical}" />
 <!-- Open Graph: image-only card; title/description intentionally omitted -->
@@ -53,6 +46,7 @@ function renderStub({ slug, imageUrl, canonicalUrl, imgW, imgH }) {
 <meta property="og:site_name" content="aiPRINT.ai" />
 <meta property="og:url" content="${safeCanonical}" />
 <meta property="og:image" content="${safeImg}" />
+<meta property="og:image:type" content="image/jpeg" />
 <meta property="og:image:alt" content="Custom print design shared on aiPRINT.ai" />
 ${wh}
 <!-- Twitter: image-only, no title/description -->
@@ -81,20 +75,6 @@ export default async function handler(req, res) {
     if (!slug || !SLUG_RE.test(slug)) {
       // Bad slug → send them to the home page.
       res.writeHead(302, { Location: '/' });
-      return res.end();
-    }
-
-    // Unfurl crawlers get 302'd straight to the branded PNG. iMessage,
-    // Slack, Twitter, etc. then see Content-Type: image/png and render the
-    // link image-only — no metadata/domain strip underneath. Real browsers
-    // (UA won't match the bot list) fall through to the HTML stub below and
-    // still get the /?s=<slug> hydration redirect.
-    const ua = String(req.headers['user-agent'] || '');
-    if (UNFURL_UA_RE.test(ua)) {
-      res.writeHead(302, {
-        Location: `/api/og-share?slug=${encodeURIComponent(slug)}`,
-        'Cache-Control': 'public, max-age=300, s-maxage=3600'
-      });
       return res.end();
     }
 

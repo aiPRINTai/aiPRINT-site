@@ -32,7 +32,9 @@ const STRIP_HEIGHT = 180; // must match scripts/build-og-brand-strip.mjs
 // from ultra-wide panoramas to tall portraits without crawlers barfing.
 const MIN_PREVIEW_H = 400;
 const MAX_PREVIEW_H = 1800;
-const BG = '#0a0f1d';
+// Pure black so iMessage's dominant-color sampler at the bottom of the image
+// picks #000 for its metadata block, flowing seamlessly into the brand strip.
+const BG = '#000000';
 
 // Read the brand-strip once at cold start. Bundled into the function via
 // vercel.json → functions["api/og-share.js"].includeFiles.
@@ -113,6 +115,11 @@ export default async function handler(req, res) {
     const strip = loadBrandStrip();
     if (strip) composites.push({ input: strip, top: previewH, left: 0 });
 
+    // JPEG instead of PNG: photo-heavy previews compress ~10x smaller as
+    // JPEG (≈250KB vs 2.4MB), which matters a lot for iMessage — when an
+    // og:image is too large, iMessage has been observed to fall back to
+    // rendering the link as a "file attachment" card instead of a rich
+    // unfurl. Quality 85 + mozjpeg keeps the artwork crisp at unfurl sizes.
     const composited = await sharp({
       create: {
         width: W,
@@ -122,10 +129,10 @@ export default async function handler(req, res) {
       }
     })
       .composite(composites)
-      .png({ compressionLevel: 8 })
+      .jpeg({ quality: 85, mozjpeg: true, chromaSubsampling: '4:4:4' })
       .toBuffer();
 
-    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Content-Type', 'image/jpeg');
     res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=604800, stale-while-revalidate=2592000');
     return res.status(200).send(composited);
   } catch (err) {

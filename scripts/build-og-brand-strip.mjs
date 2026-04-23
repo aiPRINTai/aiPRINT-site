@@ -40,17 +40,17 @@ const svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
   </defs>
 
   <!-- Solid dark band -->
-  <rect x="0" y="0" width="${W}" height="${H}" fill="#0A0F1D"/>
+  <rect x="0" y="0" width="${W}" height="${H}" fill="#000000"/>
 
   <!-- Thicker accent line at top — reads even when iMessage scales the card -->
   <rect x="0" y="0" width="${W}" height="5" fill="url(#accent)"/>
 
   <!-- Logo tile (mini favicon) — 120x120 -->
   <g transform="translate(32, 30)">
-    <rect width="120" height="120" rx="22" fill="#0A0F1D" stroke="#242a45" stroke-width="1"/>
+    <rect width="120" height="120" rx="22" fill="#000000" stroke="#242a45" stroke-width="1"/>
     <path d="M38 28 L60 16 L82 28" fill="none" stroke="url(#frame)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
     <rect x="16" y="28" width="88" height="80" rx="11" fill="url(#frame)"/>
-    <rect x="22" y="34" width="76" height="68" rx="6" fill="#0A0F1D"/>
+    <rect x="22" y="34" width="76" height="68" rx="6" fill="#000000"/>
     <text x="60" y="86" text-anchor="middle" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="900" font-size="44" fill="url(#ink)">ai</text>
   </g>
 
