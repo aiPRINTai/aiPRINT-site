@@ -11,11 +11,23 @@ import {
   markEmailVerified
 } from '../db/index.js';
 import { hashPassword, isValidPassword, generateToken } from './utils.js';
+import { enforceRateLimit } from '../_rate-limit.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  // Tokens are 32 bytes of crypto.randomBytes so brute-forcing is infeasible,
+  // but a loose IP cap is cheap defense-in-depth and keeps the endpoint from
+  // being abused as an oracle for timing/log noise. Legit users hit this 0–1
+  // times per reset cycle; 20/hour is well above any honest use.
+  const ipRl = enforceRateLimit(req, res, {
+    bucket: 'auth-reset-ip',
+    limit: 20,
+    windowMs: 60 * 60_000
+  });
+  if (!ipRl.ok) return;
 
   try {
     let body = req.body;

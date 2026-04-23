@@ -1,6 +1,5 @@
-import { getOrdersByUserId, getOrdersByEmail } from '../db/index.js';
-import { getUserFromRequest } from '../auth/utils.js';
-import { getUserById } from '../db/index.js';
+import { getOrdersByUserId, getOrdersByEmail, getUserById } from '../db/index.js';
+import { getUserFromRequest, isTokenFresh } from '../auth/utils.js';
 
 /**
  * GET /api/user/orders
@@ -25,6 +24,12 @@ export default async function handler(req, res) {
       getOrdersByUserId(tokenData.userId, { limit }),
       getUserById(tokenData.userId)
     ]);
+
+    // Orders contain shipping addresses and prompt text — high-value PII.
+    // Reject stale tokens before returning anything.
+    if (!user || !isTokenFresh(tokenData, user)) {
+      return res.status(401).json({ error: 'Session expired — please log in again.' });
+    }
 
     let merged = byId;
     if (user?.email) {

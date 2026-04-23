@@ -1,5 +1,5 @@
-import { getUserGenerations } from '../db/index.js';
-import { getUserFromRequest } from '../auth/utils.js';
+import { getUserGenerations, getUserById } from '../db/index.js';
+import { getUserFromRequest, isTokenFresh } from '../auth/utils.js';
 
 /**
  * GET /api/user/generations
@@ -15,6 +15,14 @@ export default async function handler(req, res) {
 
     if (!tokenData || !tokenData.userId) {
       return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    // Generations contain prompt text (often PII-adjacent — kids, pets,
+    // home descriptions). Enforce session freshness so stale JWTs can't
+    // exfiltrate prompt history after a password reset.
+    const user = await getUserById(tokenData.userId);
+    if (!user || !isTokenFresh(tokenData, user)) {
+      return res.status(401).json({ error: 'Session expired — please log in again.' });
     }
 
     const limit = parseInt(req.query.limit) || 50;

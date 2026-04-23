@@ -6,7 +6,7 @@ import {
   getAnonymousGenerationCount,
   atomicDeductCredits
 } from '../db/index.js';
-import { getUserFromRequest, getClientIp } from '../auth/utils.js';
+import { getUserFromRequest, getClientIp, isTokenFresh } from '../auth/utils.js';
 
 // Configuration
 const SIGNUP_BONUS_CREDITS = 10;
@@ -29,6 +29,14 @@ export async function canUserGenerate(req) {
 
       if (!user) {
         return { allowed: false, reason: 'User not found' };
+      }
+
+      // Gate here — canUserGenerate is the single entry point for
+      // authenticated image generation (generate-image.js calls it before
+      // deducting credits), so enforcing freshness here covers the whole
+      // generation flow without a second check downstream.
+      if (!isTokenFresh(tokenData, user)) {
+        return { allowed: false, reason: 'Session expired — please log in again.' };
       }
 
       if (user.credits_balance < GENERATION_COST) {

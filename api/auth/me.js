@@ -1,5 +1,5 @@
 import { getUserById } from '../db/index.js';
-import { getUserFromRequest } from './utils.js';
+import { getUserFromRequest, isTokenFresh } from './utils.js';
 
 /**
  * GET /api/auth/me
@@ -23,6 +23,12 @@ export default async function handler(req, res) {
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Reject JWTs that predate the user's most recent password change.
+    // Returning 401 here (not 403) prompts the frontend auto-logout flow.
+    if (!isTokenFresh(tokenData, user)) {
+      return res.status(401).json({ error: 'Session expired — please log in again.' });
     }
 
     return res.status(200).json({

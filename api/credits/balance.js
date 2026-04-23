@@ -1,5 +1,5 @@
 import { getUserById } from '../db/index.js';
-import { getUserFromRequest } from '../auth/utils.js';
+import { getUserFromRequest, isTokenFresh } from '../auth/utils.js';
 
 /**
  * GET /api/credits/balance
@@ -21,6 +21,10 @@ export default async function handler(req, res) {
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (!isTokenFresh(tokenData, user)) {
+      return res.status(401).json({ error: 'Session expired — please log in again.' });
     }
 
     return res.status(200).json({

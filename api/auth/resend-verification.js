@@ -6,9 +6,20 @@ import crypto from 'node:crypto';
 import { getUserByEmail, setVerificationToken } from '../db/index.js';
 import { isValidEmail } from './utils.js';
 import { sendVerificationEmail } from '../_email.js';
+import { enforceRateLimit } from '../_rate-limit.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  // Two-layer: IP cap catches broad abuse, per-email cap stops inbox bombing
+  // of a specific target. Legit users click "resend" 0–3 times total; 10/hour
+  // per IP and 3/hour per email are well above any honest use.
+  const ipRl = enforceRateLimit(req, res, {
+    bucket: 'auth-resend-ip',
+    limit: 10,
+    windowMs: 60 * 60_000
+  });
+  if (!ipRl.ok) return;
 
   try {
     let body = req.body;
@@ -18,6 +29,16 @@ export default async function handler(req, res) {
     if (!email || !isValidEmail(email)) {
       return res.status(400).json({ error: 'Invalid email' });
     }
+
+    // Per-email cap applied after validation so malformed input doesn't
+    // burn a targeted victim's bucket.
+    const emailRl = enforceRateLimit(req, res, {
+      bucket: 'auth-resend-email',
+      limit: 3,
+      windowMs: 60 * 60_000,
+      key: email
+    });
+    if (!emailRl.ok) return;
 
     const user = await getUserByEmail(email);
     if (user && user.email_verified === false) {

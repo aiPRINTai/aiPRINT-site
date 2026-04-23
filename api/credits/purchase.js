@@ -1,5 +1,6 @@
 import Stripe from 'stripe';
-import { getUserFromRequest } from '../auth/utils.js';
+import { getUserFromRequest, isTokenFresh } from '../auth/utils.js';
+import { getUserById } from '../db/index.js';
 import { getCreditPackages } from './utils.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -19,6 +20,14 @@ export default async function handler(req, res) {
 
     if (!tokenData || !tokenData.userId) {
       return res.status(401).json({ error: 'Authentication required to purchase credits' });
+    }
+
+    // Spending money — extra important that a stale (post-reset) JWT can't
+    // kick off a Stripe checkout. One extra DB hit is cheap compared to a
+    // hijacked-session credit purchase.
+    const user = await getUserById(tokenData.userId);
+    if (!user || !isTokenFresh(tokenData, user)) {
+      return res.status(401).json({ error: 'Session expired — please log in again.' });
     }
 
     const { packageId } = req.body;

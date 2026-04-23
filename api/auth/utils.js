@@ -120,6 +120,33 @@ function parseCookies(cookieHeader) {
 }
 
 /**
+ * Check whether a JWT is still valid for a user, given their most recent
+ * password change. JWTs carry an `iat` (issued-at, seconds) and we stamp
+ * `password_changed_at` on every password reset. If the token was issued
+ * before the last password change, we reject it — otherwise a password
+ * reset doesn't actually kick an attacker out of a hijacked session.
+ *
+ * Missing `password_changed_at` (user has never changed password) is treated
+ * as always-valid, which is correct behavior for newly-signed-up accounts.
+ *
+ * The one-second grace band (`-1`) absorbs the race where a token is minted
+ * in the same request that stamps password_changed_at (reset-password.js
+ * signs the new JWT right after the UPDATE). Without the grace, the fresh
+ * JWT from the reset endpoint itself could be rejected if both timestamps
+ * land in the same second on slow clocks.
+ *
+ * @param {object} tokenData - decoded JWT payload (must include `iat`)
+ * @param {object} user - user row from DB (should include `password_changed_at`)
+ * @returns {boolean} true if the token is still fresh
+ */
+export function isTokenFresh(tokenData, user) {
+  if (!user?.password_changed_at) return true;
+  if (typeof tokenData?.iat !== 'number') return false;
+  const changedSec = Math.floor(new Date(user.password_changed_at).getTime() / 1000);
+  return tokenData.iat >= (changedSec - 1);
+}
+
+/**
  * Validate email format
  */
 export function isValidEmail(email) {

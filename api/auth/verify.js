@@ -4,6 +4,7 @@
 
 import { getUserByVerificationToken, markEmailVerified } from '../db/index.js';
 import { generateToken, createAuthCookie } from './utils.js';
+import { enforceRateLimit } from '../_rate-limit.js';
 
 function escapeHtml(s = '') {
   return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
@@ -21,6 +22,16 @@ function htmlPage({ title, body }) {
 }
 
 export default async function handler(req, res) {
+  // Loose IP cap — real verification is a one-click action per signup, so
+  // 30/hour is generous. Cheap insurance against anyone scripting the
+  // endpoint to probe token shapes or generate log noise.
+  const ipRl = enforceRateLimit(req, res, {
+    bucket: 'auth-verify-ip',
+    limit: 30,
+    windowMs: 60 * 60_000
+  });
+  if (!ipRl.ok) return;
+
   const token = (req.query.token || '').trim();
   // Pending-share slug carried forward from signup.js. If present, it threads
   // through to /verified.html → "Start creating" → /?s=<slug> so the user

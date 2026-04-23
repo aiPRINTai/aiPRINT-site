@@ -57,11 +57,30 @@ export async function getUserByEmail(email) {
 }
 
 export async function getUserById(userId) {
-  const result = await sql`
-    SELECT id, email, credits_balance, email_verified, created_at, updated_at
-    FROM users WHERE id = ${userId}
-  `;
-  return result.rows[0];
+  // password_changed_at is needed by isTokenFresh() to reject JWTs issued
+  // before the last password reset. Select-ed lazily with a fallback so an
+  // older DB that hasn't gained the column yet still works.
+  const run = (withPca) => withPca
+    ? sql`
+        SELECT id, email, credits_balance, email_verified,
+               password_changed_at, created_at, updated_at
+        FROM users WHERE id = ${userId}
+      `
+    : sql`
+        SELECT id, email, credits_balance, email_verified, created_at, updated_at
+        FROM users WHERE id = ${userId}
+      `;
+  try {
+    const r = await run(true);
+    return r.rows[0];
+  } catch (err) {
+    if (!isMissingColumnError(err)) throw err;
+    // Column missing on this DB — use the legacy SELECT. isTokenFresh
+    // treats missing password_changed_at as "never changed", which is
+    // correct for a DB that has never processed a password reset.
+    const r = await run(false);
+    return r.rows[0];
+  }
 }
 
 // Password reset token storage. Uses the existing verification_token column
@@ -78,9 +97,18 @@ async function ensureResetColumns() {
   await sql`CREATE INDEX IF NOT EXISTS idx_users_reset_token ON users(reset_token)`;
 }
 
+// password_changed_at is stamped whenever a password is reset/changed. JWTs
+// issued before that timestamp are considered stale and must be rejected.
+// Kept in its own ensure() so a fresh DB without the column self-heals on
+// first password reset (similar to reset_token above).
+async function ensurePasswordChangedAtColumn() {
+  await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS password_changed_at TIMESTAMP`;
+}
+
 function isMissingColumnError(err) {
   const m = String(err?.message || '');
   return m.includes('reset_token') || m.includes('reset_expires')
+    || m.includes('password_changed_at')
     || /column .* does not exist/i.test(m);
 }
 
@@ -127,16 +155,19 @@ export async function updateUserPassword(userId, passwordHash) {
     SET password_hash = ${passwordHash},
         reset_token = NULL,
         reset_expires = NULL,
+        password_changed_at = CURRENT_TIMESTAMP,
         updated_at = CURRENT_TIMESTAMP
     WHERE id = ${userId}
-    RETURNING id, email
+    RETURNING id, email, password_changed_at
   `;
   try {
     const r = await run();
     return r.rows[0];
   } catch (err) {
     if (!isMissingColumnError(err)) throw err;
+    // Self-heal BOTH column sets in one shot so we don't do two retries.
     await ensureResetColumns();
+    await ensurePasswordChangedAtColumn();
     const r = await run();
     return r.rows[0];
   }
