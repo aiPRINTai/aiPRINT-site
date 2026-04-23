@@ -11,6 +11,14 @@ import { computeCanvasSize } from './og-share.js';
 
 const SLUG_RE = /^[a-zA-Z0-9]{6,16}$/;
 
+// Unfurl crawlers (iMessage, Slack, Twitter, Facebook, LinkedIn, etc).
+// When one of these hits /s/<slug>, we skip the HTML stub and 302 straight
+// to the branded PNG. That makes iMessage treat the link as an image and
+// render it image-only — no purple metadata block below. Humans on real
+// browsers always get the HTML stub (UA won't match), so the /?s=<slug>
+// hydration flow is untouched.
+const UNFURL_UA_RE = /(facebookexternalhit|facebookcatalog|Twitterbot|LinkedInBot|Slackbot|TelegramBot|Discordbot|WhatsApp|Applebot|LinkPreview|LPLinkMetadata|iMessage|Mastodon|Pinterest|redditbot|Embedly|vkShare)/i;
+
 function esc(str) {
   return String(str || '')
     .replace(/&/g, '&amp;')
@@ -27,11 +35,12 @@ function renderStub({ slug, imageUrl, canonicalUrl, imgW, imgH }) {
   const wh = (imgW && imgH)
     ? `<meta property="og:image:width" content="${imgW}" />\n  <meta property="og:image:height" content="${imgH}" />`
     : '';
-  // Deliberately minimal og:title + NO og:description. The branded image
-  // itself already says "aiPRINT.ai — Shared with you — Tap to view & order",
-  // so repeating a title/description in iMessage's purple text block below
-  // the image is pure duplication. Setting title = site_name lets iMessage
-  // collapse the card to image + domain footer.
+  // This HTML is only ever shown to human browsers — known unfurl crawlers
+  // are redirected straight to the branded PNG in the handler above so their
+  // cards render image-only with no metadata block. og:title and og:description
+  // are both omitted here so that any *unknown* crawler that slips past the
+  // UA filter still produces the minimum-possible metadata block (domain-only).
+  // The branded image itself already carries all the messaging.
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -39,17 +48,15 @@ function renderStub({ slug, imageUrl, canonicalUrl, imgW, imgH }) {
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>aiPRINT.ai</title>
 <link rel="canonical" href="${safeCanonical}" />
-<!-- Open Graph: image-forward card; title/description intentionally omitted -->
+<!-- Open Graph: image-only card; title/description intentionally omitted -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="aiPRINT.ai" />
-<meta property="og:title" content="aiPRINT.ai" />
 <meta property="og:url" content="${safeCanonical}" />
 <meta property="og:image" content="${safeImg}" />
 <meta property="og:image:alt" content="Custom print design shared on aiPRINT.ai" />
 ${wh}
-<!-- Twitter: also image-forward, no description -->
+<!-- Twitter: image-only, no title/description -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="aiPRINT.ai" />
 <meta name="twitter:image" content="${safeImg}" />
 <meta http-equiv="refresh" content="0; url=/?s=${safeSlug}" />
 <style>body{margin:0;background:#0a0a0f;color:#eee;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;text-align:center}a{color:#a78bfa}</style>
@@ -74,6 +81,20 @@ export default async function handler(req, res) {
     if (!slug || !SLUG_RE.test(slug)) {
       // Bad slug → send them to the home page.
       res.writeHead(302, { Location: '/' });
+      return res.end();
+    }
+
+    // Unfurl crawlers get 302'd straight to the branded PNG. iMessage,
+    // Slack, Twitter, etc. then see Content-Type: image/png and render the
+    // link image-only — no metadata/domain strip underneath. Real browsers
+    // (UA won't match the bot list) fall through to the HTML stub below and
+    // still get the /?s=<slug> hydration redirect.
+    const ua = String(req.headers['user-agent'] || '');
+    if (UNFURL_UA_RE.test(ua)) {
+      res.writeHead(302, {
+        Location: `/api/og-share?slug=${encodeURIComponent(slug)}`,
+        'Cache-Control': 'public, max-age=300, s-maxage=3600'
+      });
       return res.end();
     }
 
