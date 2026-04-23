@@ -88,9 +88,17 @@ export default async function handler(req, res) {
     // Derive meta fields. Fall back to generic values if the share is missing
     // or malformed (e.g. old slug purged, or a crawler probing a random path).
     const prompt = payload?.prompt || '';
-    const imageUrl = payload?.preview?.url || `${origin}/og-image.png`;
-    const imgW = payload?.preview?.width || null;
-    const imgH = payload?.preview?.height || null;
+    // og:image points at the dynamic branded composite (preview + aiPRINT.ai
+    // wordmark strip), not the raw preview — so the iMessage/Slack unfurl
+    // looks like a gallery card, not a loose image. og-share.js falls back
+    // to /og-image.png if the slug is missing.
+    const imageUrl = payload?.preview?.url
+      ? `${origin}/api/og-share?slug=${encodeURIComponent(slug)}`
+      : `${origin}/og-image.png`;
+    // Branded card is always 1200x630 (standard OG dimensions). If no share
+    // preview exists we fall back to /og-image.png which is also 1200x630.
+    const imgW = payload?.preview?.url ? 1200 : 1200;
+    const imgH = payload?.preview?.url ? 630 : 630;
 
     const title = prompt
       ? `Someone shared this custom print with you — aiPRINT.ai`

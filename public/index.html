@@ -564,7 +564,7 @@
        legacy ?share=<blob>). Framing the landing experience for recipients so
        it's obvious they're looking at someone else's design, not a blank
        generator. Hidden by default; toggled on in applySharePayload(). -->
-  <div id="sharedBanner" class="hidden sticky top-0 z-[60] bg-gradient-to-r from-indigo-600/90 via-fuchsia-600/90 to-pink-600/90 border-b border-white/10 backdrop-blur">
+  <div id="sharedBanner" class="hidden relative z-40 bg-gradient-to-r from-indigo-600/90 via-fuchsia-600/90 to-pink-600/90 border-b border-white/10">
     <div class="max-w-[1800px] mx-auto px-5 py-2.5 flex items-center justify-between gap-3 text-sm">
       <div class="flex items-center gap-2 min-w-0">
         <span class="text-xl leading-none">🎨</span>
@@ -2256,6 +2256,13 @@
         // this isn't a blank generator — they've landed on a specific design.
         const banner = document.getElementById('sharedBanner');
         if (banner) banner.classList.remove('hidden');
+        // Auto-scroll the preview into view on the next frame. Otherwise the
+        // recipient lands on the hero and has to scroll down to find the
+        // thing that was actually shared with them.
+        requestAnimationFrame(() => {
+          const target = document.getElementById('previewSection');
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
         return true;
       } catch (e) { return false; }
     }
