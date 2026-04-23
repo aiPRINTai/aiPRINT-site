@@ -2,7 +2,8 @@
   "version": 2,
   "functions": {
     "api/webhook.js": { "maxDuration": 10 },
-    "api/generate-image.js": { "maxDuration": 60 }
+    "api/generate-image.js": { "maxDuration": 60 },
+    "api/og-share.js": { "includeFiles": "public/og-brand-strip.png" }
   },
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
