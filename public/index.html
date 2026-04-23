@@ -2120,17 +2120,75 @@
       });
     }
 
-    function generateShareLink() {
+    function buildSharePayload() {
       if (!currentPreview) return null;
-      const data = { preview: currentPreview, prompt: $('#promptInput').value, style: $('#styleSelect').value, mood: $('#moodSelect').value, palette: $('#paletteSelect').value, time: $('#timeSelect').value, lighting: $('#lightingSelect').value, camera: $('#cameraSelect').value, medium: $('#mediumSelect').value, signature: { text: $('#signatureInput').value, font: $('#signatureFont').value, color: $('#signatureColor').value, size: $('#signatureSize').value, position: signaturePosition } };
+      return { preview: currentPreview, prompt: $('#promptInput').value, style: $('#styleSelect').value, mood: $('#moodSelect').value, palette: $('#paletteSelect').value, time: $('#timeSelect').value, lighting: $('#lightingSelect').value, camera: $('#cameraSelect').value, medium: $('#mediumSelect').value, signature: { text: $('#signatureInput').value, font: $('#signatureFont').value, color: $('#signatureColor').value, size: $('#signatureSize').value, position: signaturePosition } };
+    }
+
+    // Legacy long-link generator. Only used as a fallback if the short-link
+    // API call fails (e.g. DB outage) so the share feature never hard-breaks.
+    function generateLongShareLink() {
+      const data = buildSharePayload();
+      if (!data) return null;
       return `${window.location.origin}${window.location.pathname}?share=${btoa(JSON.stringify(data))}`;
     }
 
+    // Short-link path: POST the payload to /api/shares and get back
+    // `https://aiprint.ai/?s=<8-char-slug>`. If that round-trip fails for any
+    // reason, fall back to the legacy self-contained `?share=<base64>` URL.
+    async function generateShortShareLink() {
+      const data = buildSharePayload();
+      if (!data) return null;
+      try {
+        const res = await fetch('/api/shares', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ payload: data })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const body = await res.json();
+        if (body && body.url) return body.url;
+        throw new Error('No url in response');
+      } catch (err) {
+        console.warn('Short-link API failed, falling back to long link:', err.message);
+        return generateLongShareLink();
+      }
+    }
+
     function loadFromShareLink() {
-      const shareData = new URLSearchParams(window.location.search).get('share');
+      const params = new URLSearchParams(window.location.search);
+      const shareData = params.get('share');
+      const shortSlug = params.get('s');
+
+      // New short-link path: fetch the payload from the server, then hydrate.
+      if (shortSlug) {
+        hydrateFromSlug(shortSlug);
+        // Return true eagerly so the caller skips the "fresh visitor"
+        // onboarding; the hydrate call above shows the preview once it lands.
+        return true;
+      }
+
       if (!shareData) return false;
       try {
         const data = JSON.parse(atob(shareData));
+        return applySharePayload(data);
+      } catch (e) { return false; }
+    }
+
+    async function hydrateFromSlug(slug) {
+      try {
+        const res = await fetch(`/api/shares?s=${encodeURIComponent(slug)}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const body = await res.json();
+        if (!body || !body.payload) throw new Error('Empty payload');
+        applySharePayload(body.payload);
+      } catch (err) {
+        console.warn('Could not resolve share slug:', err.message);
+      }
+    }
+
+    function applySharePayload(data) {
+      try {
         $('#promptInput').value = data.prompt;
         $('#styleSelect').value = data.style;
         $('#moodSelect').value = data.mood || '';
@@ -2178,16 +2236,44 @@
       } catch (e) { return false; }
     }
 
-    window.openShareModal = function() {
-      const link = generateShareLink();
-      if (!link) { alert('Please generate a preview first'); return; }
-      $('#shareLink').value = link;
+    window.openShareModal = async function() {
+      if (!currentPreview) { alert('Please generate a preview first'); return; }
+      const input = $('#shareLink');
+      input.value = 'Creating short link…';
+      input.disabled = true;
       show($('#shareModal'));
+      try {
+        const link = await generateShortShareLink();
+        if (!link) { hide($('#shareModal')); alert('Could not build share link.'); return; }
+        input.value = link;
+      } catch (_) {
+        input.value = generateLongShareLink() || '';
+      } finally {
+        input.disabled = false;
+      }
     };
     window.closeShareModal = function() { hide($('#shareModal')); };
-    window.copyShareLink = function() { $('#shareLink').select(); document.execCommand('copy'); alert('Link copied!'); };
+    window.copyShareLink = async function() {
+      const input = $('#shareLink');
+      const link = input.value;
+      if (!link || link.startsWith('Creating')) return;
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(link);
+        } else {
+          input.select();
+          document.execCommand('copy');
+        }
+        alert('Link copied!');
+      } catch (_) {
+        input.select();
+        document.execCommand('copy');
+        alert('Link copied!');
+      }
+    };
     window.emailShareLink = function() {
       const link = $('#shareLink').value;
+      if (!link || link.startsWith('Creating')) return;
       window.location.href = `mailto:?subject=${encodeURIComponent('My aiPRINT.ai Design')}&body=${encodeURIComponent(`Check out my custom artwork:\n\n${link}`)}`;
     };
 

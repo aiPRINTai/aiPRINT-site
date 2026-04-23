@@ -118,3 +118,16 @@ CREATE TABLE IF NOT EXISTS admin_actions (
 CREATE INDEX IF NOT EXISTS idx_admin_actions_created_at ON admin_actions(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_admin_actions_user ON admin_actions(target_user_id);
 CREATE INDEX IF NOT EXISTS idx_admin_actions_order ON admin_actions(target_order_id);
+
+-- Shared designs: short-link sharing for /index.html presets. A POST to
+-- /api/shares inserts one row with a generated 8-char slug; GET resolves.
+-- The payload is the full design state (prompt, dropdowns, signature,
+-- preview URL). Used so we can share `?s=abc12345` instead of a 1.5 KB
+-- base64 blob in the query string.
+CREATE TABLE IF NOT EXISTS shared_designs (
+  slug TEXT PRIMARY KEY,
+  payload JSONB NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  views INT DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_shared_designs_created_at ON shared_designs(created_at DESC);

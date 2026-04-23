@@ -579,6 +579,63 @@ export async function listAdminActions({ limit = 100, offset = 0, userId = null,
   }
 }
 
+// ── Shared designs (short-link sharing for /index.html presets) ───────────
+// One row per generated short slug. Self-heals if the table doesn't exist yet
+// (same pattern as admin_actions).
+async function ensureSharedDesignsTable() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS shared_designs (
+      slug TEXT PRIMARY KEY,
+      payload JSONB NOT NULL,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      views INT DEFAULT 0
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_shared_designs_created_at ON shared_designs(created_at DESC)`;
+}
+
+export async function saveSharedDesign(slug, payload) {
+  const json = JSON.stringify(payload);
+  const run = () => sql`
+    INSERT INTO shared_designs (slug, payload)
+    VALUES (${slug}, ${json}::jsonb)
+    RETURNING slug, created_at
+  `;
+  try {
+    const r = await run();
+    return r.rows[0];
+  } catch (err) {
+    if (String(err?.message || '').includes('does not exist')) {
+      await ensureSharedDesignsTable();
+      const r = await run();
+      return r.rows[0];
+    }
+    throw err;
+  }
+}
+
+export async function getSharedDesign(slug) {
+  const run = () => sql`
+    SELECT payload, created_at, views
+    FROM shared_designs
+    WHERE slug = ${slug}
+    LIMIT 1
+  `;
+  try {
+    const r = await run();
+    if (!r.rows[0]) return null;
+    // Best-effort view counter; ignore failures (never block the read).
+    sql`UPDATE shared_designs SET views = views + 1 WHERE slug = ${slug}`.catch(() => {});
+    return r.rows[0];
+  } catch (err) {
+    if (String(err?.message || '').includes('does not exist')) {
+      await ensureSharedDesignsTable();
+      return null;
+    }
+    throw err;
+  }
+}
+
 // Initialize database tables
 export async function initializeDatabase() {
   // This function can be called to ensure tables exist
