@@ -62,17 +62,26 @@ const svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
     <text x="60" y="86" text-anchor="middle" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="900" font-size="44" fill="url(#ink)">ai</text>
   </g>
 
-  <!-- Left: share headline + subtitle. No "aiPRINT.ai" wordmark here — every
-       unfurl host (iMessage, Slack, Twitter, email) already appends our
-       domain/site_name below the image, so baking a big wordmark into the
-       strip was redundant triplication. The favicon tile at left carries
-       the brand visually. -->
-  <text x="170" y="92" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="800" font-size="54" fill="#ffffff" letter-spacing="-1.5">Shared with you</text>
-  <text x="170" y="134" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="500" font-size="26" fill="#94a3b8">A custom AI-generated fine art print</text>
+  <!-- Three-zone layout at 1200x180:
+         LEFT    — logo tile + "Shared with you" headline + subtitle
+         CENTER  — aiPRINT.ai wordmark (single brand anchor, keeps the
+                   strip tied to the site so the image stands alone even
+                   when reposted outside a chat context)
+         RIGHT   — "Tap to view & order" CTA + materials
+       Side fonts were shrunk vs. the previous layout (54→42 and 44→36)
+       to carve out horizontal space for the center wordmark without
+       growing the strip height. -->
 
-  <!-- Right: CTA + materials -->
-  <text x="${W - 32}" y="92" text-anchor="end" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="700" font-size="44" fill="#ffffff">Tap to view &amp; order</text>
-  <text x="${W - 32}" y="134" text-anchor="end" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="500" font-size="26" fill="#cbd5e1">canvas · metal · acrylic</text>
+  <!-- Left -->
+  <text x="170" y="92" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="800" font-size="42" fill="#ffffff" letter-spacing="-1.2">Shared with you</text>
+  <text x="170" y="130" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="500" font-size="22" fill="#94a3b8">A custom AI-generated fine art print</text>
+
+  <!-- Center wordmark, optically centered between left and right zones -->
+  <text x="684" y="118" text-anchor="middle" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="800" font-size="44" fill="#ffffff" letter-spacing="-1.4">aiPRINT<tspan fill="#A5B4FC">.ai</tspan></text>
+
+  <!-- Right -->
+  <text x="${W - 32}" y="92" text-anchor="end" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="700" font-size="36" fill="#ffffff">Tap to view &amp; order</text>
+  <text x="${W - 32}" y="130" text-anchor="end" font-family="'Helvetica Neue','Inter',Arial,sans-serif" font-weight="500" font-size="22" fill="#cbd5e1">canvas · metal · acrylic</text>
 </svg>`;
 
 await sharp(Buffer.from(svg))

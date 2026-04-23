@@ -39,15 +39,14 @@ function renderStub({ slug, imageUrl, canonicalUrl, imgW, imgH }) {
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="theme-color" content="#000000" />
-<!-- <title> matches the hostname exactly (lowercase) so iMessage's
-     LPLinkPresentation collapses its bold-title-line and domain-line into
-     a single line. Without this, iMessage falls back to <title> when
-     og:title is missing and you get the same text shown twice. -->
-<title>aiprint.ai</title>
+<!-- NO <title>, NO og:title, NO og:site_name. These are all possible
+     sources iMessage/LPLinkPresentation will use for the bold "title" line
+     above the domain. With every source absent, iMessage is forced to use
+     only the hostname, collapsing the metadata block to a single "aiprint.ai"
+     line instead of showing it as both title AND domain. -->
 <link rel="canonical" href="${safeCanonical}" />
-<!-- Open Graph: image-only card; title/description intentionally omitted -->
+<!-- Open Graph: image-only card; title/description/site_name intentionally omitted -->
 <meta property="og:type" content="website" />
-<meta property="og:site_name" content="aiPRINT.ai" />
 <meta property="og:url" content="${safeCanonical}" />
 <meta property="og:image" content="${safeImg}" />
 <meta property="og:image:type" content="image/jpeg" />
