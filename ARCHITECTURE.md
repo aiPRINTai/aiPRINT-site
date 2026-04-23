@@ -157,10 +157,12 @@ Then **you** open `/admin/orders.html`, see new orders, mark them shipped, paste
 - `EMAIL_FROM` — e.g. `aiPRINT <orders@aiprint.ai>`
 - `ORDERS_TO` — fulfillment inbox (default `orders@aiprint.ai`). New-order alerts + reply-to on order/shipping/credit emails.
 - `CONTACT_TO` — general inbox (default `info@aiprint.ai`). Contact form + reply-to on verification / password-reset emails. Legacy `FULFILLMENT_TO` is honored as a fallback.
-- `ADMIN_PASSWORD` — long random string for `/admin/orders` access
+- `ADMIN_PASSWORD` — long random string for `/admin/*` access (orders, users, security)
+- `CRON_SECRET` — bearer token Vercel Cron sends on scheduled invocations (shared-designs retention purge, etc.)
 - `JWT_SECRET` — for user auth tokens
+- `CLIENT_URL` — public origin for Stripe success URLs, password-reset links, email footer
 
-If any is missing, the related feature degrades gracefully (e.g. missing `RESEND_API_KEY` → emails skip, console warning, order still saves).
+If any is missing, the related feature degrades gracefully (e.g. missing `RESEND_API_KEY` → emails skip, console warning, order still saves). The security-critical ones — `JWT_SECRET`, `ADMIN_PASSWORD`, `CRON_SECRET`, `STRIPE_WEBHOOK_SECRET` — fail closed instead.
 
 ---
 
@@ -175,6 +177,9 @@ If any is missing, the related feature degrades gracefully (e.g. missing `RESEND
 | Inspect raw DB                        | Vercel → Storage → Postgres → "Open in Neon" → SQL editor                                         |
 | Roll Stripe webhook secret            | Stripe Dashboard → Developers → Webhooks → click endpoint → "Roll secret" → paste into Vercel env |
 | Roll admin password                   | Update `ADMIN_PASSWORD` in Vercel env → redeploy → all open admin sessions get signed out         |
+| Roll cron secret                      | Update `CRON_SECRET` in Vercel env → redeploy → trigger a cron "Run now" to confirm 200           |
+| Review admin activity + security      | Open `/admin/security.html` — posture chips, audit log (filterable + paginated), retention stats  |
+| Force-logout a user                   | `UPDATE users SET password_changed_at = NOW() WHERE id = <id>;` in Neon SQL → existing JWT stales |
 | Add a new print product/size          | Create product in Stripe with a unique `lookup_key` → add it to `/public/products.json`           |
 
 ---

@@ -14,7 +14,7 @@ Stripe products use dynamic `unit_amount` pricing — no Stripe dashboard SKUs r
 
 ---
 
-## 🎯 Quick Deployment (20 minutes total)
+## 🎯 Quick Deployment (25 minutes total)
 
 ### STEP 0: Deploy Code (2 min)
 1. Go to: https://github.com/aiPRINTai/aiPRINT-site/pull/new/claude/add-credits-system-01AgMjLq8Gd9F4Pi9ivFNuA2
@@ -75,6 +75,32 @@ Credit pack pricing is now sent dynamically to Stripe via `unit_amount` in `/api
 
 If you ever want to switch back to fixed Stripe SKUs, the lookup keys are:
 `CREDITS-25`, `CREDITS-50`, `CREDITS-100`, `CREDITS-250`.
+
+---
+
+### STEP 5: Admin + Cron Secrets (3 min)
+
+Two more self-generated bearer tokens that gate everything admin-adjacent. Generate each with `openssl rand -base64 32`.
+
+**`ADMIN_PASSWORD`** — required for every `/api/admin/*` route (orders, users, security panel). There is no "forgot password" flow; store in a password manager before you paste.
+
+**`CRON_SECRET`** — required for every `/api/cron/*` route. Vercel Cron sends this as a bearer token on scheduled invocations (shared-designs retention purge, etc.). Without it, cron routes reject every request.
+
+1. Generate both values locally (`openssl rand -base64 32`).
+2. Save each in your password manager **before** pasting into Vercel.
+3. Vercel → Settings → Environment Variables → add `ADMIN_PASSWORD` and `CRON_SECRET`, both on Production + Preview + Development.
+4. Redeploy.
+
+---
+
+### STEP 6: Verify security posture (1 min)
+
+Visit `https://aiprint.ai/admin/security.html` (bearer-auth with `ADMIN_PASSWORD`). Every chip in the Environment and Protections groups should be green. A red chip means either an env var is missing or the deploy didn't ship the relevant middleware — investigate before going live.
+
+Also confirm:
+- `curl -I https://aiprint.ai/` returns `strict-transport-security`, `x-frame-options`, `x-content-type-options`, `referrer-policy`, `permissions-policy`, and `content-security-policy-report-only` headers.
+- `curl -X POST https://aiprint.ai/api/csp-report -H 'content-type: application/csp-report' -d '{}'` returns 204.
+- `curl https://aiprint.ai/robots.txt` disallows `/admin/`, `/api/`, and `/auth/`.
 
 ---
 
@@ -142,6 +168,6 @@ See `CREDITS_SETUP.md` for complete details on:
 
 ---
 
-**Ready to deploy? Just follow the 4 steps above!**
+**Ready to deploy? Just follow the 6 steps above!**
 
-Time estimate: **20 minutes total**
+Time estimate: **25 minutes total**

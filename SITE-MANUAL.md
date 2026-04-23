@@ -425,14 +425,21 @@ Response includes:
 |---|---|---|
 | **Credit system** | `api/credits/*`, `users.credit_balance` col | Atomic deduction (race-safe). Purchase webhook is idempotent. |
 | **Admin audit log** | `admin_actions` table, `logAdminAction()` in `api/db/index.js` | Every sensitive admin action logs actor IP + details. |
+| **Admin security panel** | `/admin/security.html` + `api/admin/security.js` | Surfaces env-var posture, code-level protections, admin-action counts, audit log (filterable + paginated), shared-designs retention stats. |
 | **Watermarked previews** | `api/_watermark.js` | Customers see watermarked; paid customers + admin see clean. |
 | **COA (Certificate of Authenticity)** | `api/coa.js`, `/coa.html` | Numbered certificate per print. |
 | **Public order tracking** | `/track.html` + `api/track.js` | Lookup by Stripe session ID — no login needed. |
 | **Pre-commit secret scanner** | `.githooks/pre-commit` | Blocks env files + Stripe/GH/Gemini/AWS secret prefixes on staged diffs. |
 | **JWT fail-closed** | `api/auth/utils.js` | Refuses to sign/verify if JWT_SECRET missing, placeholder, or <32 chars. |
+| **Session invalidation on password reset** | `users.password_changed_at` + `isTokenFresh()` in `api/auth/utils.js` | Every sensitive user-data endpoint re-checks JWT `iat` against the column; reset kicks stolen tokens out with no admin action. |
+| **Security headers** | `vercel.json` rewrites | HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy site-wide. |
+| **CSP Report-Only** | `vercel.json` + `api/csp-report.js` | Live in monitoring mode; reports land at `POST /api/csp-report` → Vercel logs. |
+| **Admin authz** | `requireAdmin()` in `api/admin/_authz.js` | Timing-safe bearer compare + per-token rate cap on top of bearer auth. |
+| **Signup account-enumeration hardening** | `api/auth/signup.js` | Identical HTTP response for existing-verified / existing-unverified / new; signal is email-only. |
 | **SEO** | OG tags + Twitter cards on every page, `robots.txt`, `sitemap.xml`, JSON-LD org schema | |
 | **PostHog funnels** | `public/js/analytics.js` | Page loads + key events (generate, checkout, purchase). |
-| **Rate limiting** | Contact form (3/hr/IP), generate (anonymous_generations table) | Lightweight; leans on self-heal tables. |
+| **Rate limiting** | Per-IP + per-email on every auth endpoint (login, signup, reset-request, reset-password, verify, resend-verification), contact form (3/hr/IP), generate (anonymous_generations table) | `api/_rate-limit.js`; dual layer catches broad abuse + per-target bombing. |
+| **Scheduled cleanup (cron)** | `api/cron/*` gated by `CRON_SECRET` | Daily purge of `shared_designs` past retention window. |
 
 ---
 
@@ -511,6 +518,7 @@ reference file — **NOT** auto-run on deploy.
 ┌─ AUTH ──────────────────────────────────────────────────────────────┐
 │ JWT_SECRET                     openssl rand -base64 48 (≥32 chars)  │
 │ ADMIN_PASSWORD                 openssl rand -base64 32              │
+│ CRON_SECRET                    openssl rand -base64 32              │
 └─────────────────────────────────────────────────────────────────────┘
 ┌─ DATABASE ──────────────────────────────────────────────────────────┐
 │ POSTGRES_URL                   auto-set by Neon integration         │
@@ -534,6 +542,7 @@ reference file — **NOT** auto-run on deploy.
 | `RESEND_API_KEY` | Emails silently skip (log warning) | Orders save, no customer mail |
 | `JWT_SECRET` | Login throws | Auth totally broken (fail-closed) |
 | `ADMIN_PASSWORD` | Admin APIs return 401 | Can't access dashboard |
+| `CRON_SECRET` | Cron routes return 401 | Shared-designs retention purge stops running (stale rows accumulate); no user-visible impact |
 | `POSTGRES_URL` | Every DB query 500s | Orders, accounts, credits all down |
 | `ORDERS_TO` | Defaults to orders@aiprint.ai | None — works out of the box |
 | `CONTACT_TO` | Defaults to info@aiprint.ai (via FULFILLMENT_TO if set) | None — works out of the box |
@@ -684,15 +693,22 @@ Integrations (Stripe, Gemini, Resend, Neon, Blob)
 - **Atomic credit deduction** (`UPDATE ... WHERE balance >= 1`). Race-safe.
 - **HTTP-only auth cookies** with `Secure; SameSite=Strict`.
 - **bcrypt password hashing** with per-password salt.
-- **Rate limiting** on contact form (3/hr/IP) and generation.
+- **Rate limiting** — per-IP + per-email caps on every auth endpoint (login, signup, reset-request, reset-password, verify, resend-verification), contact form (3/hr/IP), generation (anonymous_generations table), admin bearer (per-token cap).
+- **Security headers site-wide** — HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy via `vercel.json` rewrites; CSP live in Report-Only mode with reports landing at `POST /api/csp-report`.
+- **Account-enumeration hardening** on signup — identical HTTP response for all outcomes; signal is email-only.
+- **Admin authz** unified behind `requireAdmin()` — timing-safe bearer compare + per-token rate cap. Bulk PII exports (`export_users_csv`, `export_orders_csv`) are audit-logged.
+- **Session invalidation on password reset** — `users.password_changed_at` column + JWT `iat` check via `isTokenFresh()`. Every sensitive user-data endpoint (`/api/auth/me`, `/api/credits/*`, `/api/user/generations`, `/api/user/orders`) re-checks freshness; a reset kicks stolen JWTs out without admin action.
+- **Admin security panel** — `/admin/security.html` surfaces posture chips, admin-action counts (24h/7d/30d), audit log (filterable + paginated), shared-designs retention stats.
+- **Scheduled retention** — daily cron (`api/cron/*`, gated by `CRON_SECRET`) trims `shared_designs` past retention window.
 
 ### 10.3 Secret rotation log
 
 | Date | Rotated | Notes |
 |---|---|---|
 | 2026-04-22 | **Full rotation sweep** — `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `GOOGLE_GEMINI_API_KEY`, `RESEND_API_KEY`, `BLOB_READ_WRITE_TOKEN`, `ADMIN_PASSWORD`, `JWT_SECRET`, `POSTGRES_*` (all 7 vars via Neon "Rotate Secrets") | Triggered by potential secret exposure in past chat/share surfaces. Stale Resend keys also deleted (`re_Tu8v8Hd4...`, `re_9iPFeGqP...`). All smoke-tested post-rotation. |
+| 2026-04-23 | **Security hardening sweep** — no secret rotation, but added: `CRON_SECRET` env var, CSP Report-Only, HSTS + X-Frame-Options + Permissions-Policy via `vercel.json`, dual-layer rate limits on reset-password / verify / resend-verification, admin authz unified behind `requireAdmin`, `password_changed_at` session invalidation, `/admin/security.html` panel. Commits `368dc88` → `7a33de1` → `7d7f727`. | Closed: signup enumeration oracle, admin authz inconsistency, stale-JWT-after-password-reset gap, shared-designs retention drift. |
 
-Next scheduled rotation: **2026-07-01** (quarterly cadence — put on calendar).
+Next scheduled rotation: **2026-07-01** (quarterly cadence — put on calendar). Rotate `ADMIN_PASSWORD`, `JWT_SECRET`, `CRON_SECRET`, `STRIPE_WEBHOOK_SECRET`.
 
 ### 10.4 What's still on the "future" list
 
@@ -708,10 +724,12 @@ Next scheduled rotation: **2026-07-01** (quarterly cadence — put on calendar).
   endpoint). Consider Vercel Firewall rule or Turnstile/hCaptcha on anon flow.
 
 **Account security**
-- No password strength requirements on signup.
-- No lockout after N failed login attempts (brute-force possible, though rate
-  limit on `/api/auth/login` does slow it).
-- Password reset flow exists but worth auditing token scope/expiry.
+- No password strength requirements on signup beyond "≥8 chars."
+- No hard lockout after N failed login attempts (brute-force is slowed, not blocked,
+  by the per-IP + per-email rate limits on `/api/auth/login`).
+- Password reset flow audited 2026-04-23: 32-byte random token, 1h expiry, single-use,
+  per-IP rate-limited (20/hr), invalidates existing sessions via `password_changed_at`.
+  Low residual risk.
 
 **Supply chain & code**
 - No automated secret scanning on GitHub (beyond our pre-commit). Enable

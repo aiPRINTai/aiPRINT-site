@@ -38,6 +38,7 @@ Rotate in this order so the site never serves with a mix of old and new keys:
 | `BLOB_READ_WRITE_TOKEN` | Vercel Blob | Vercel → Storage → Blob → Settings → "Regenerate" | Existing URLs keep working; only new writes need the new token. |
 | `JWT_SECRET` | (self-generated) | `openssl rand -base64 48` locally | **Rotating invalidates every active session.** All users will have to log in again. |
 | `ADMIN_PASSWORD` | (self-generated) | `openssl rand -base64 32` locally | Only you know this. No "forgot password" flow — store in password manager. |
+| `CRON_SECRET` | (self-generated) | `openssl rand -base64 32` locally | Bearer token Vercel Cron sends on scheduled invocations (shared-designs purge, etc.). Rotate on admin-compromise or quarterly. |
 | `POSTGRES_*` | Neon / Vercel Postgres | Neon console → Roles → reset password, or Vercel → Storage → reset | Vercel auto-refreshes its own vars; manual reset needs Vercel redeploy. |
 
 ### 1.4 Smoke test after rotation
@@ -90,7 +91,10 @@ URL: `https://aiprint.ai/admin/` — Bearer token is `ADMIN_PASSWORD`.
   resend confirmation or shipping email, refresh shipping address from Stripe.
 - **Users** (`/admin/users.html`): list, grant credits, deduct credits, resend
   verification email, view per-user audit log.
-- **Audit log** (`/admin/users.html` with audit toggle, or `GET /api/admin/users?audit=1`):
+- **Security** (`/admin/security.html`): posture dashboard — env-var presence checks,
+  code-level protection flags, admin-action counts (24h / 7d / 30d), by-action
+  breakdown, shared-designs retention stats, paginated audit log with action filter.
+- **Audit log** (`/admin/security.html` or `GET /api/admin/security?actions=1`):
   every sensitive admin action is recorded with actor IP, target, timestamp, and details.
 
 ### 3.2 What gets logged
@@ -98,14 +102,36 @@ Any of these admin actions writes a row to `admin_actions`:
 - `grant_credits`, `deduct_credits`, `resend_verification` (from `/api/admin/users`)
 - `resend_order_confirmation`, `resend_shipping_notification`,
   `refresh_shipping_from_stripe`, `update_order` (from `/api/admin/orders`)
+- `export_users_csv`, `export_orders_csv` (bulk PII exports — logged as a dedicated
+  action type so they're easy to filter on)
 
-Read-only GETs are not logged. If you need to audit reads, add logging to the
-handlers in `api/admin/users.js` / `api/admin/orders.js`.
+Read-only GETs of individual records are not logged. If you need to audit reads,
+add logging to the handlers in `api/admin/users.js` / `api/admin/orders.js`.
 
 ### 3.3 Reviewing the audit log
-- In the UI: open a user's detail view — the audit block shows that user's actions.
-- Via API: `GET /api/admin/users?audit=1&limit=100` → last 100 actions across all users.
-- Via SQL (Neon console): `SELECT * FROM admin_actions ORDER BY created_at DESC LIMIT 100;`
+- **Primary:** visit `/admin/security.html` — the paginated audit log at the bottom
+  supports filtering by action type and has a "raw JSON" inspector on each row.
+- **Per-user:** open a user's detail view on `/admin/users.html` — the audit block
+  shows that user's actions.
+- **Programmatic:** `GET /api/admin/security?actions=1&limit=100&action=<name>` →
+  filtered recent actions across all users.
+- **Via SQL (Neon console):** `SELECT * FROM admin_actions ORDER BY created_at DESC LIMIT 100;`
+
+### 3.4 Reading the security posture panel
+The top of `/admin/security.html` shows two groups of checks. They're pass/fail chips
+against the currently-deployed code + env; review them after each rotation or deploy:
+
+- **Environment** — `JWT_SECRET` ≥32 chars (not placeholder), `ADMIN_PASSWORD` set,
+  `CRON_SECRET` set, `STRIPE_WEBHOOK_SECRET` set, `CLIENT_URL` set, `EMAIL_FROM` set.
+- **Protections** — pre-commit hook present, security headers applied via Vercel
+  rewrites (not routes), CSP Report-Only live, robots.txt disallows admin/api/auth,
+  account-enumeration hardened on `/api/auth/signup`, rate-limited auth endpoints
+  (login, signup, reset-request, reset-password, verify, resend-verification),
+  session invalidation on password reset via `password_changed_at` + JWT `iat` check.
+
+A red chip means the check failed — investigate immediately. (The code-level flags
+are evaluated at request time, so a red chip after a deploy usually means that
+deploy shipped without the relevant middleware.)
 
 ---
 
@@ -148,6 +174,7 @@ Full template: `.env.example`. Summary of each variable's purpose:
 | `FULFILLMENT_TO` | no (legacy) | Back-compat alias. If set and `CONTACT_TO` is unset, used as `CONTACT_TO`. Does NOT affect `ORDERS_TO`. |
 | `JWT_SECRET` | yes | Signs user session JWTs. ≥32 chars, not a placeholder — app refuses to sign or verify otherwise. |
 | `ADMIN_PASSWORD` | yes | Bearer token for all `/api/admin/*` routes. Store in password manager. |
+| `CRON_SECRET` | yes | Bearer token Vercel Cron sends on scheduled invocations. Protects `/api/cron/*` routes (shared-designs retention purge, etc.) from being hit by random internet traffic. |
 | `POSTGRES_URL` (+ 6 siblings) | yes | Neon/Vercel Postgres connection. Auto-populated by the Vercel Postgres integration. |
 | `CLIENT_URL` | yes | Public origin used in Stripe success/cancel URLs, password-reset links, and the email footer. |
 | `PORT` | no (dev) | Local-dev port for `vercel dev`. Ignored in production. |
@@ -182,22 +209,50 @@ Full template: `.env.example`. Summary of each variable's purpose:
 - A 500 is a bug in `/api/webhook` — check function logs.
 
 ### 6.4 Admin account suspected compromised
-1. Rotate `ADMIN_PASSWORD` (§1.3).
-2. Redeploy to invalidate the old token everywhere.
+1. Rotate `ADMIN_PASSWORD` (§1.3) **and** `CRON_SECRET` (same recipe) — a leaked admin
+   token usually means the rest of the admin-adjacent env surface should be cycled too.
+2. Redeploy to invalidate the old tokens everywhere.
 3. Review the audit log (§3.3) for the last 30 days. Anything you don't recognize is a lead.
 4. If user data was mutated, the `details` column on each `admin_actions` row shows the
    before/after values — use that to reconstruct what was changed and by whom (IP).
+
+### 6.5 Stolen user JWT (password reset escalation)
+Password resets stamp `password_changed_at` on the user row. The session-freshness check
+(`isTokenFresh` in `api/auth/utils.js`) compares the JWT's `iat` claim against that
+column — any token issued before the reset is rejected by the sensitive endpoints
+(`/api/auth/me`, `/api/credits/*`, `/api/user/generations`, `/api/user/orders`). So if
+a user suspects their session was compromised, having them do a password reset is
+sufficient to kick the attacker out — no admin action needed.
+
+If you need to force-logout a specific user without a password reset, `UPDATE users
+SET password_changed_at = NOW() WHERE id = <id>;` in the Neon SQL editor has the same
+effect (all existing tokens for that user become stale).
+
+### 6.6 CSP-report flood
+CSP Report-Only is live and reports land at `POST /api/csp-report` → Vercel function
+logs. The endpoint is rate-limited and returns 204 regardless. A sudden spike usually
+means one of: (a) a new third-party script was added that isn't on the allow-list,
+(b) a browser extension is injecting scripts into pages (usually harmless noise),
+(c) an actual injection attempt. Check `violated-directive` and `blocked-uri` on a
+few reports in the logs to decide. If it's a legitimate new script source, add it
+to the CSP block in `vercel.json`; if it's browser-extension noise, ignore; if it
+looks like an injection attempt, investigate the source page in the report.
 
 ---
 
 ## 7. Quarterly checklist
 
 First Monday of each quarter:
-- [ ] Rotate `ADMIN_PASSWORD` and `JWT_SECRET`.
+- [ ] Rotate `ADMIN_PASSWORD`, `JWT_SECRET`, and `CRON_SECRET`.
 - [ ] Rotate `STRIPE_WEBHOOK_SECRET`.
+- [ ] Visit `/admin/security.html` — confirm every posture chip is green, skim the
+      last 90 days of `admin_actions` (anything you don't recognize?), and confirm
+      shared-designs retention is trimming (oldest age in days should be bounded by
+      the retention window configured in the purge cron).
 - [ ] Test a Neon PITR restore (§4.1).
-- [ ] Skim 90 days of `admin_actions` — anything unexpected?
 - [ ] Check Resend, Gemini, and Stripe for usage spikes.
+- [ ] Scan Vercel function logs for CSP-report patterns (§6.6) — decide whether to
+      promote CSP from Report-Only to Enforce if the noise floor is clean.
 - [ ] Bump dependencies: `npm outdated` — patch/minor updates without ceremony.
 - [ ] Confirm the pre-commit hook still works: `bash .githooks/pre-commit` in a repo with
       staged changes containing a fake `sk_live_` value should fail closed.
