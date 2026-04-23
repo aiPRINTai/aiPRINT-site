@@ -20,42 +20,36 @@ function esc(str) {
     .replace(/'/g, '&#39;');
 }
 
-function truncate(s, n) {
-  if (!s) return '';
-  s = String(s).replace(/\s+/g, ' ').trim();
-  return s.length > n ? s.slice(0, n - 1) + '…' : s;
-}
-
-function renderStub({ slug, imageUrl, title, description, canonicalUrl, imgW, imgH }) {
-  const safeTitle = esc(title);
-  const safeDesc = esc(description);
+function renderStub({ slug, imageUrl, canonicalUrl, imgW, imgH }) {
   const safeImg = esc(imageUrl);
   const safeCanonical = esc(canonicalUrl);
   const safeSlug = esc(slug);
   const wh = (imgW && imgH)
     ? `<meta property="og:image:width" content="${imgW}" />\n  <meta property="og:image:height" content="${imgH}" />`
     : '';
+  // Deliberately minimal og:title + NO og:description. The branded image
+  // itself already says "aiPRINT.ai — Shared with you — Tap to view & order",
+  // so repeating a title/description in iMessage's purple text block below
+  // the image is pure duplication. Setting title = site_name lets iMessage
+  // collapse the card to image + domain footer.
   return `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>${safeTitle}</title>
+<title>aiPRINT.ai</title>
 <link rel="canonical" href="${safeCanonical}" />
-<meta name="description" content="${safeDesc}" />
-<!-- Open Graph -->
+<!-- Open Graph: image-forward card; title/description intentionally omitted -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="aiPRINT.ai" />
-<meta property="og:title" content="${safeTitle}" />
-<meta property="og:description" content="${safeDesc}" />
+<meta property="og:title" content="aiPRINT.ai" />
 <meta property="og:url" content="${safeCanonical}" />
 <meta property="og:image" content="${safeImg}" />
 <meta property="og:image:alt" content="Custom print design shared on aiPRINT.ai" />
 ${wh}
-<!-- Twitter -->
+<!-- Twitter: also image-forward, no description -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="${safeTitle}" />
-<meta name="twitter:description" content="${safeDesc}" />
+<meta name="twitter:title" content="aiPRINT.ai" />
 <meta name="twitter:image" content="${safeImg}" />
 <meta http-equiv="refresh" content="0; url=/?s=${safeSlug}" />
 <style>body{margin:0;background:#0a0a0f;color:#eee;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;text-align:center}a{color:#a78bfa}</style>
@@ -86,9 +80,6 @@ export default async function handler(req, res) {
     const row = await getSharedDesign(slug).catch(() => null);
     const payload = row?.payload || null;
 
-    // Derive meta fields. Fall back to generic values if the share is missing
-    // or malformed (e.g. old slug purged, or a crawler probing a random path).
-    const prompt = payload?.prompt || '';
     // og:image points at the dynamic branded composite (preview + aiPRINT.ai
     // wordmark strip), not the raw preview — so the iMessage/Slack unfurl
     // looks like a gallery card, not a loose image. og-share.js falls back
@@ -108,20 +99,11 @@ export default async function handler(req, res) {
       imgH = size.height;
     }
 
-    const title = prompt
-      ? `Someone shared this custom print with you — aiPRINT.ai`
-      : 'A custom print design on aiPRINT.ai';
-    const description = prompt
-      ? `"${truncate(prompt, 160)}" — tap to view and order this design on archival canvas, metal, or acrylic.`
-      : 'Tap to view this AI-generated print design and order it on archival canvas, metal, or acrylic.';
-
     const canonicalUrl = `${origin}/s/${slug}`;
 
     const html = renderStub({
       slug,
       imageUrl,
-      title,
-      description,
       canonicalUrl,
       imgW,
       imgH
