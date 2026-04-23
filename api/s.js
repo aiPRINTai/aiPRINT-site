@@ -8,6 +8,7 @@
 
 import { getSharedDesign } from './db/index.js';
 import { computeCanvasSize } from './og-share.js';
+import { enforceRateLimit } from './_rate-limit.js';
 
 const SLUG_RE = /^[a-zA-Z0-9]{6,16}$/;
 
@@ -70,6 +71,14 @@ ${wh}
 
 export default async function handler(req, res) {
   try {
+    // Cache absorbs legit repeat hits (Vercel edge caches by URL). Attackers
+    // generate NEW random slugs each request to bypass cache and force DB
+    // lookups. 300/min/IP is 2x what an iMessage preview fetch from a single
+    // phone could produce even with every friend in a group chat re-opening
+    // the link, but 10x below any real scraping loop.
+    const rl = enforceRateLimit(req, res, { bucket: 's-stub', limit: 300, windowMs: 60_000 });
+    if (!rl.ok) return;
+
     const slug = (req.query && (req.query.slug || req.query.s)) || '';
     const proto = (req.headers['x-forwarded-proto'] || 'https').split(',')[0].trim();
     const host = req.headers.host || 'aiprint.ai';

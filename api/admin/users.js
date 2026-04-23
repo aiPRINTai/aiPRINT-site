@@ -23,22 +23,11 @@ import { addCreditsToUser } from '../credits/utils.js';
 import { addCreditTransaction, updateUserCredits } from '../db/index.js';
 import { sendVerificationEmail } from '../_email.js';
 import { getClientIp } from '../auth/utils.js';
-
-function unauthorized(res) {
-  return res.status(401).json({ error: 'Unauthorized' });
-}
-
-function checkAuth(req) {
-  const expected = process.env.ADMIN_PASSWORD;
-  if (!expected) return false;
-  const header = req.headers['authorization'] || '';
-  const token = header.startsWith('Bearer ') ? header.slice(7) : '';
-  return token && token === expected;
-}
+import { requireAdmin } from './_auth.js';
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
-  if (!checkAuth(req)) return unauthorized(res);
+  if (!requireAdmin(req, res)) return;
 
   try {
     if (req.method === 'GET') {
@@ -161,6 +150,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (err) {
     console.error('Admin users error:', err);
-    return res.status(500).json({ error: err.message || 'Server error' });
+    // Keep err.message server-side; return generic to caller so we don't
+    // leak DB column names / stack hints to anyone who squeaks through.
+    return res.status(500).json({ error: 'Server error' });
   }
 }

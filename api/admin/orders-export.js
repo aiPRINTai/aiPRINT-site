@@ -1,13 +1,7 @@
 // Admin CSV export of all orders. Auth: Bearer ADMIN_PASSWORD.
-import { listOrders } from '../db/index.js';
-
-function checkAuth(req) {
-  const expected = process.env.ADMIN_PASSWORD;
-  if (!expected) return false;
-  const header = req.headers['authorization'] || '';
-  const token = header.startsWith('Bearer ') ? header.slice(7) : '';
-  return token && token === expected;
-}
+import { listOrders, logAdminAction } from '../db/index.js';
+import { requireAdmin } from './_auth.js';
+import { getClientIp } from '../auth/utils.js';
 
 function csvField(v) {
   if (v == null) return '';
@@ -18,12 +12,23 @@ function csvField(v) {
 }
 
 export default async function handler(req, res) {
-  if (!checkAuth(req)) return res.status(401).json({ error: 'Unauthorized' });
+  if (!requireAdmin(req, res)) return;
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
     const status = req.query.status || null;
     const orders = await listOrders({ limit: 5000, status });
+
+    // Audit trail: bulk exports of customer data (PII, prompt text, shipping
+    // addresses) are exactly the kind of operation you want logged. Best-
+    // effort — a logging failure must not block the export.
+    try {
+      await logAdminAction({
+        action: 'export_orders_csv',
+        actor_ip: getClientIp(req),
+        details: { status: status || 'all', count: orders.length }
+      });
+    } catch (_) { /* never fail the export on audit write */ }
 
     const headers = [
       'id', 'created_at', 'status', 'stripe_session_id',
@@ -60,6 +65,6 @@ export default async function handler(req, res) {
     return res.status(200).send(lines.join('\n'));
   } catch (err) {
     console.error('CSV export error:', err);
-    return res.status(500).json({ error: err.message || 'Server error' });
+    return res.status(500).json({ error: 'Server error' });
   }
 }

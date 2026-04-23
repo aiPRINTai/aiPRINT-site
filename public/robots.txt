@@ -1,10 +1,32 @@
+# https://aiprint.ai/robots.txt
+# Defense-in-depth: these pages also carry <meta name="robots" content="noindex">
+# tags. robots.txt is the advisory layer for well-behaved crawlers; the meta
+# tag is the backup for crawlers that ignore robots.txt.
+
 User-agent: *
 Allow: /
+
+# Auth / account UI — never index. account.html and verified.html can expose
+# user-specific state; reset-password.html carries a reset token in the URL
+# query string that must never land in a search index or referrer log.
 Disallow: /account.html
-Disallow: /admin/
-Disallow: /api/
+Disallow: /verified.html
+Disallow: /reset-password.html
+
+# Order-specific pages with tokens in the URL. Indexing them leaks order IDs.
 Disallow: /success.html
 Disallow: /thank-you.html
-Disallow: /verified.html
+Disallow: /coa.html
+Disallow: /track.html
+
+# Short-share stubs — per-user ephemeral content, not SEO-relevant. Each URL
+# serves a redirect + dynamic OG; bulk-indexing them adds noise without value.
+Disallow: /s/
+
+# API surface — never indexable.
+Disallow: /api/
+
+# Admin dashboard.
+Disallow: /admin/
 
 Sitemap: https://aiprint.ai/sitemap.xml

@@ -254,6 +254,49 @@ export async function sendCreditPurchaseEmail({ email, name, creditsAmount, amou
   });
 }
 
+// Sent when someone submits the signup form using an email that already has
+// a verified account. Signup.js used to respond with 409 "Email already
+// registered" which is an enumeration oracle — an attacker could probe 10k
+// emails and learn which ones have accounts. Now the API returns the same
+// 201 success response regardless, and the real signal moves to the user's
+// inbox via this email (for verified accounts) or the verification email
+// (for unverified accounts). That way the attacker gets no signal at all.
+export async function sendAccountExistsEmail(email, signinUrl) {
+  if (!email) return { skipped: true, reason: 'no email' };
+
+  const html = `
+    <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;color:#0a0f1d;background:#ffffff;">
+      <div style="text-align:center;margin-bottom:28px;">
+        <div style="display:inline-block;width:42px;height:42px;border-radius:10px;background:#0a0f1d;color:#fff;font-weight:900;line-height:42px;font-size:18px;letter-spacing:-.5px;">AI</div>
+      </div>
+      <h1 style="font-size:24px;margin:0 0 12px;text-align:center;font-weight:800;">You already have an account</h1>
+      <p style="color:#475569;margin:0 0 24px;text-align:center;font-size:15px;line-height:1.5">
+        Someone (hopefully you) just tried to sign up for aiPRINT.ai using <strong>${email}</strong>, but an account with this email already exists. Sign in instead.
+      </p>
+      <div style="text-align:center;margin:28px 0;">
+        <a href="${signinUrl}" style="display:inline-block;background:linear-gradient(135deg,#6366f1,#818cf8);color:white;text-decoration:none;padding:14px 32px;border-radius:10px;font-weight:700;font-size:15px;">
+          Sign in to aiPRINT.ai →
+        </a>
+      </div>
+      <p style="color:#94a3b8;font-size:13px;text-align:center;margin:16px 0 0;line-height:1.5">
+        Forgot your password? Use <a href="${signinUrl}" style="color:#6366f1;">the sign-in page</a> and click "Forgot password".
+      </p>
+      <hr style="border:none;border-top:1px solid #e2e8f0;margin:32px 0;">
+      <p style="color:#94a3b8;font-size:12px;text-align:center;margin:0;line-height:1.5">
+        If that wasn't you, no action is needed — your account is safe and nothing has changed. Someone may have mistyped their email.<br><br>
+        aiPRINT.ai · Made with care in Florida, USA
+      </p>
+    </div>
+  `.trim();
+
+  return sendEmail({
+    to: email,
+    subject: 'You already have an aiPRINT.ai account',
+    html,
+    replyTo: contactTo()
+  });
+}
+
 export async function sendPasswordResetEmail(email, resetUrl) {
   if (!email) return { skipped: true, reason: 'no email' };
 

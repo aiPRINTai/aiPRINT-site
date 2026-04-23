@@ -1,13 +1,7 @@
 // Admin CSV export of all users. Auth: Bearer ADMIN_PASSWORD.
-import { listUsersWithStats } from '../db/index.js';
-
-function checkAuth(req) {
-  const expected = process.env.ADMIN_PASSWORD;
-  if (!expected) return false;
-  const header = req.headers['authorization'] || '';
-  const token = header.startsWith('Bearer ') ? header.slice(7) : '';
-  return token && token === expected;
-}
+import { listUsersWithStats, logAdminAction } from '../db/index.js';
+import { requireAdmin } from './_auth.js';
+import { getClientIp } from '../auth/utils.js';
 
 function csvField(v) {
   if (v == null) return '';
@@ -17,13 +11,23 @@ function csvField(v) {
 }
 
 export default async function handler(req, res) {
-  if (!checkAuth(req)) return res.status(401).json({ error: 'Unauthorized' });
+  if (!requireAdmin(req, res)) return;
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
     const search = (req.query.search || '').trim() || null;
     const verifiedOnly = req.query.verifiedOnly === '1' || req.query.verifiedOnly === 'true';
     const users = await listUsersWithStats({ limit: 5000, search, verifiedOnly });
+
+    // Audit trail: user exports contain emails + verification status, so log
+    // every export so you can trace a leak back to an actor if needed.
+    try {
+      await logAdminAction({
+        action: 'export_users_csv',
+        actor_ip: getClientIp(req),
+        details: { search, verifiedOnly, count: users.length }
+      });
+    } catch (_) { /* never fail the export on audit write */ }
 
     const headers = [
       'id', 'email', 'email_verified', 'credits_balance',
@@ -46,6 +50,6 @@ export default async function handler(req, res) {
     return res.status(200).send(lines.join('\n'));
   } catch (err) {
     console.error('CSV export error:', err);
-    return res.status(500).json({ error: err.message || 'Server error' });
+    return res.status(500).json({ error: 'Server error' });
   }
 }

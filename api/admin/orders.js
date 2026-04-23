@@ -6,23 +6,12 @@ import { listOrders, updateOrder, getOrderStats, getOrderById, setOrderShipping,
 import { sendShippingNotificationEmail, sendOrderConfirmationEmail } from '../_email.js';
 import { stripe } from '../_stripe.js';
 import { getClientIp } from '../auth/utils.js';
-
-function unauthorized(res) {
-  return res.status(401).json({ error: 'Unauthorized' });
-}
-
-function checkAuth(req) {
-  const expected = process.env.ADMIN_PASSWORD;
-  if (!expected) return false;
-  const header = req.headers['authorization'] || '';
-  const token = header.startsWith('Bearer ') ? header.slice(7) : '';
-  return token && token === expected;
-}
+import { requireAdmin } from './_auth.js';
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
 
-  if (!checkAuth(req)) return unauthorized(res);
+  if (!requireAdmin(req, res)) return;
 
   try {
     if (req.method === 'GET') {
@@ -158,6 +147,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (err) {
     console.error('Admin orders error:', err);
-    return res.status(500).json({ error: err.message || 'Server error' });
+    // Keep the detailed err.message server-side; return generic to caller
+    // so we dont leak DB column names / stripe IDs / stack hints to anyone
+    // who squeaks through (or who legitimately mistypes a query param).
+    return res.status(500).json({ error: 'Server error' });
   }
 }
