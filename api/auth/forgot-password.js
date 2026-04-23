@@ -12,11 +12,21 @@ import crypto from 'node:crypto';
 import { getUserByEmail, setResetToken } from '../db/index.js';
 import { isValidEmail } from './utils.js';
 import { sendPasswordResetEmail } from '../_email.js';
+import { enforceRateLimit } from '../_rate-limit.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  // IP-level cap on reset requests. Legit users hit this 0–2 times/month;
+  // a bomber trying to flood someone's inbox makes hundreds of requests.
+  const ipRl = enforceRateLimit(req, res, {
+    bucket: 'auth-forgot-ip',
+    limit: 10,
+    windowMs: 60 * 60_000 // 10/hour
+  });
+  if (!ipRl.ok) return;
 
   try {
     let body = req.body;
@@ -34,6 +44,26 @@ export default async function handler(req, res) {
     if (!email || !isValidEmail(email)) {
       return genericOk();
     }
+
+    // Per-email cap: at most 3 reset emails / hour to any one address.
+    // Runs AFTER the format check so an attacker can't probe for existence
+    // via timing or rate-limit deltas between valid/invalid email shapes.
+    //
+    // Important: we silently return genericOk() on limit breach instead of
+    // a 429 — otherwise the rate-limit response itself leaks that the email
+    // is either valid-format-but-spammy, which is a minor enumeration hint.
+    // enforceRateLimit normally sends 429 with its own body, so we bypass
+    // it by checking first with a custom bucket inspection... except the
+    // helper doesn't expose that. Compromise: accept the small enumeration
+    // signal in exchange for clear UX (user sees why it failed). Most
+    // real apps do this.
+    const emailRl = enforceRateLimit(req, res, {
+      bucket: 'auth-forgot-email',
+      limit: 3,
+      windowMs: 60 * 60_000,
+      key: email
+    });
+    if (!emailRl.ok) return;
 
     const user = await getUserByEmail(email);
     if (!user) {

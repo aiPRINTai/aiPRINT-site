@@ -1,5 +1,6 @@
 import { getUserByEmail } from '../db/index.js';
 import { comparePassword, generateToken, isValidEmail, createAuthCookie } from './utils.js';
+import { enforceRateLimit } from '../_rate-limit.js';
 
 /**
  * POST /api/auth/login
@@ -9,6 +10,19 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  // Two-layer brute-force defense:
+  //   Layer 1 (IP): 20 login attempts / 5 min per source IP. Cuts off
+  //     a single attacker trying many emails from one box.
+  //   Layer 2 (email): 5 attempts / 15 min per email. Cuts off a
+  //     botnet (many IPs) pounding one known-good account.
+  // Both must pass. Either one exceeded returns 429.
+  const ipRl = enforceRateLimit(req, res, {
+    bucket: 'auth-login-ip',
+    limit: 20,
+    windowMs: 5 * 60_000
+  });
+  if (!ipRl.ok) return;
 
   try {
     const { email, password } = req.body;
@@ -22,8 +36,20 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid email format' });
     }
 
+    const cleanEmail = email.toLowerCase().trim();
+
+    // Layer 2: per-email. The `key` override replaces IP in the bucket key
+    // so the counter follows the targeted email instead of the caller.
+    const emailRl = enforceRateLimit(req, res, {
+      bucket: 'auth-login-email',
+      limit: 5,
+      windowMs: 15 * 60_000,
+      key: cleanEmail
+    });
+    if (!emailRl.ok) return;
+
     // Get user from database
-    const user = await getUserByEmail(email.toLowerCase());
+    const user = await getUserByEmail(cleanEmail);
     if (!user) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
