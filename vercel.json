@@ -9,11 +9,8 @@
   "crons": [
     { "path": "/api/cron/purge-shared-designs", "schedule": "0 4 * * *" }
   ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/s/([^/]+)", "dest": "/api/s?slug=$1" },
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "status": 404, "dest": "/404.html" }
+  "rewrites": [
+    { "source": "/s/:slug", "destination": "/api/s?slug=:slug" }
   ],
   "headers": [
     {
