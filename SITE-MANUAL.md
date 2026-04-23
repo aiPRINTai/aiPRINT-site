@@ -11,7 +11,8 @@
 >
 > **How to use.** Skim §1 once to get the mental model. Jump to §2 for
 > diagrams. Use §3–§8 as reference when you're actively working on the site.
-> §9 is the "something is on fire" section.
+> §9 is the "something is on fire" section. §11 is the rolling session log —
+> skim it to see what's changed recently before you start editing anything.
 >
 > **Keep in sync with Google Drive.** This file is the source of truth. When
 > you upload to Drive, paste the URL back into §0.2 of this file so everyone
@@ -34,8 +35,8 @@
 
 | Field | Value |
 |---|---|
-| Doc version | 1.0 |
-| Last edit | 2026-04-22 (full secret rotation sweep — see §10.3) |
+| Doc version | 1.1 |
+| Last edit | 2026-04-22 (visual-polish / UX session + full secret rotation sweep — see §12 and §10.3) |
 | Source repo | `github.com/aiPRINTai/aiPRINT-site` |
 | Primary maintainer | Lawrence |
 
@@ -725,7 +726,55 @@ Next scheduled rotation: **2026-07-01** (quarterly cadence — put on calendar).
 
 ---
 
-## 11. Appendix — where to look for what
+## 11. Session changelog (what shipped, when)
+
+Running log of material changes the customer or operator can feel. Security /
+secret rotations live in §10.3; this section is for everything else.
+
+### 2026-04-22 — Visual-polish + UX pass
+
+Seven front-end commits landed in a single session (deploy state: READY on
+Vercel). Summary in commit order (newest first):
+
+| Commit | Area | What changed |
+|---|---|---|
+| `45a6d25` | Wall preview | Room mockup now refreshes against the newly generated image when the user regenerates with the mockup section already open (was stuck on the previous artwork). |
+| `85fc255` | Signature dropdowns | Open dropdown menu now lifts above the preview image (`z-index: 9999` on `.custom-select[data-open="true"]` wrapper + menu; `data-open` is toggled in `openMenu()`/`closeMenu()`). Fixes "dropdown hides behind preview" report. |
+| `00ec020` | Gallery | Removed remaining hero↔gallery image duplicates (cyberpunk-tokyo, cosmic-cliff). 16 unique images across hero + gallery verified. |
+| `d8a3135` | Gallery | Swapped duplicate `art-anime-blossoms` anchor tile to `hero-whimsy.jpg`. |
+| `6349ca1` | Hero | Mobile-only tightened copy: "Prompt → Generate → Print → Ship → Hang !! Canvas, Metal or Acrylic!!" (desktop paragraph preserved via `hidden md:block` / `md:hidden`). Desert canyon hero swapped to a symmetric 4-tile `aspect-square` grid. |
+| `3e5b538` | Admin | Revenue stat in `/admin/orders.html` now excludes `canceled` orders. |
+| `2762aa4` | Visuals | Replaced the palette emoji on the Color Palette dropdown with a custom framed-art SVG. |
+
+Not commits, but in-session fixes worth remembering:
+- **Custom-dropdown actual-font rendering.** Chrome/Safari ignore
+  `font-family` and `color` on native `<option>` elements. The signature-font
+  picker uses a custom overlay dropdown; the label span is built via
+  `document.createElement` + `setAttribute` + `outerHTML` because
+  `opt.style.fontFamily` returns values containing embedded double-quotes
+  (e.g. `"Playfair Display", Georgia, serif`) that break template-literal
+  attribute strings. See `site-learnings.md` for the write-up.
+
+### Earlier 2026-04-22 — Same-day work before the polish pass
+
+Checkout + catalog + contact flow improvements (commits `38803d9`, `e759549`,
+`a95ff5e`, `5e8fa66`, `ca4e8d2`, `9bbc372`):
+- Restored preview on page reload is now immediately buyable.
+- Randomize button fires a `change` event on ratio so Step 2 re-syncs.
+- Preview → size-grid flow streamlined; room view now optional (not blocking).
+- Contact form now fires a customer-side auto-reply confirmation.
+- Catalog trusts the user's ratio choice for shape (not the model's output).
+
+### Known UX items deferred for later (do not ship half-done)
+
+- **Site-wide dark / light mode** (moon/sun toggle, seedance2-style). CSS
+  token layer + `data-theme` attribute + persistent toggle in the header,
+  rolled across all 14 HTML pages. Tracked in the session todo list.
+- See `PROJECT-CHEATSHEET.md` §3 for the rest of the UX/content punch list.
+
+---
+
+## 12. Appendix — where to look for what
 
 | Need | Open |
 |---|---|

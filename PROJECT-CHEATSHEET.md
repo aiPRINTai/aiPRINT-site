@@ -2,7 +2,7 @@
 
 > Companion to `ARCHITECTURE.md` (which is the technical source of truth).
 > This doc = **what you owe the site** (copy + images) and **what's still worth polishing**.
-> Last edit: 2026-04-19.
+> Last edit: 2026-04-22.
 
 ---
 
@@ -100,9 +100,21 @@ I did a top-to-bottom proof + UX pass. Items below are bucketed by impact, not e
 19. **Pricing comparison table** (vs. Etsy custom-art / vs. Society6) — only worth it if you want to compete on price.
 20. **Accessibility pass** — color contrast on some muted text fails WCAG AA; some buttons missing `aria-label`.
 21. **`/admin/orders` keyboard shortcut** to mark shipped (currently 3 clicks per order).
+22. **Site-wide dark / light mode** (seedance2.ai-style moon/sun toggle). CSS custom-property theme tokens + `html[data-theme="..."]` override block + pre-paint inline script to prevent flash. Rolled across all 14 HTML pages. Deferred by operator decision — see SITE-MANUAL.md §11 "deferred" list.
 
 ### ✅ Recently shipped (so you know what NOT to retest)
 
+**2026-04-22 — visual-polish / UX pass**
+- Custom-select component for font + prompt dropdowns (rendered label respects the actual font; native `<option>` styling is Firefox-only, so we overlay).
+- Open dropdown lifts above the preview image (z-index stacking context escape).
+- Wall-preview mockup refreshes against the new artwork when the user regenerates without closing the room section.
+- Mobile-tightened hero copy ("Prompt → Generate → Print → Ship → Hang").
+- Symmetric 4-tile `aspect-square` hero grid (retired the desert-canyon anchor layout).
+- Hero ↔ gallery image duplicates removed — 16 unique images verified.
+- Admin Revenue stat now excludes `canceled` orders.
+- Palette emoji replaced with custom framed-art SVG on the Color Palette dropdown.
+
+**Earlier shipped**
 - Shipping notification email (auto-fires when admin flips to `shipped` with tracking)
 - Credit purchase receipt email
 - Webhook idempotency for credit purchases (was a real double-credit bug)

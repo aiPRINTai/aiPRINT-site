@@ -1,6 +1,6 @@
 # aiPRINT.ai — Architecture & Operations Cheat Sheet
 
-> **Living doc.** Update whenever something changes. Last edit: 2026-04-19.
+> **Living doc.** Update whenever something changes. Last edit: 2026-04-22.
 
 ---
 
@@ -190,6 +190,12 @@ If any is missing, the related feature degrades gracefully (e.g. missing `RESEND
 - [x] SEO: OG/Twitter cards on all pages, `robots.txt`, `sitemap.xml`, JSON-LD Org schema
 - [x] Admin: search box, toast notifications, ship-confirm dialog
 - [x] Section dividers on home page
+- [x] Custom-select component for signature-font + prompt dropdowns (Chrome/Safari ignore `font-family` on native `<option>`). 2026-04-22.
+- [x] Open dropdown lifts above preview image (z-index stacking fix). 2026-04-22.
+- [x] Wall-preview refreshes against regenerated image without requiring tab-click. 2026-04-22.
+- [x] Hero grid unified to symmetric 4-tile `aspect-square` layout; mobile-tightened hero copy. 2026-04-22.
+- [x] All hero↔gallery image duplicates removed. 2026-04-22.
+- [x] Admin Revenue stat excludes `canceled` orders. 2026-04-22.
 
 **Still open:**
 - [ ] Founder photo + studio location (placeholders on home)
@@ -213,3 +219,65 @@ If any is missing, the related feature degrades gracefully (e.g. missing `RESEND
 **Image broken on success page or admin** → Blob URL expired? They shouldn't (we set `cacheControlMaxAge: 1y`). More likely: the `preview_url` wasn't passed through Stripe metadata. Check the metadata on the Stripe session.
 
 **Admin says "Wrong password"** → `ADMIN_PASSWORD` env var either isn't set in Vercel, or you typed it wrong. Re-check Vercel → Settings → Environment Variables → Production.
+
+---
+
+## 11. Frontend patterns worth knowing (added 2026-04-22)
+
+### 11.1 Custom-select dropdown component
+
+Chrome and Safari ignore `font-family` and `color` styling on native
+`<option>` elements (Firefox respects them). The signature-font picker and
+the prompt-builder dropdowns on `/index.html` use a custom overlay:
+
+- The native `<select>` stays in the DOM for accessibility + form semantics
+  but is visually hidden; a `.custom-select` wrapper renders the label and
+  `.custom-select-menu` renders the options.
+- `openMenu()`/`closeMenu()` toggle `wrap.dataset.open = 'true'/'false'`.
+- CSS lifts the **entire wrapper's** stacking context when open so the menu
+  escapes sibling stacking contexts from the preview image:
+  ```css
+  .custom-select[data-open="true"] { z-index: 9999; }
+  .custom-select-menu { z-index: 9999; ... }
+  ```
+- The label-building `enhance()` helper must NOT interpolate `opt.style.fontFamily`
+  directly into a template string — CSS font-family values contain embedded
+  double-quotes (e.g. `"Playfair Display", Georgia, serif`). Build the label
+  via `document.createElement('span') + setAttribute + outerHTML` instead.
+
+### 11.2 Wall-preview refresh on regenerate
+
+`showArtworkInRoom()` reads `currentPreview.url`, so refreshing the mockup
+just means calling `updateMockup()` against the now-current state. After a
+successful regenerate in `index.html`, if the room mockup section is already
+visible we refresh it:
+
+```js
+const roomSection = $('#roomMockupSection');
+if (roomSection && !roomSection.classList.contains('hidden')) {
+  const activeRoom = document.querySelector('.room-tab.active')?.dataset.room || 'room1';
+  renderSizePills();
+  updateMockup(activeRoom, currentMockupSize || '24x24');
+}
+```
+
+Without this, the wall keeps showing the previous artwork next to the new
+preview until the user clicks a room tab.
+
+### 11.3 Hero image grid
+
+The hero on `/index.html` uses a 2×2 `aspect-square` CSS grid of four unique
+tiles (desktop + mobile both). The 500px "canyon" anchor + small-tile layout
+is retired. Keep hero tiles + gallery tiles distinct — we dedupe on filename
+to avoid the same image appearing above and below the fold.
+
+### 11.4 Mobile-first hero copy
+
+Hero paragraph uses Tailwind responsive-prefix swaps:
+
+- Desktop (`hidden md:block`): long narrative paragraph.
+- Mobile (`md:hidden`): telegraphic — `Prompt → Generate → Print → Ship → Hang`.
+
+This is the pattern to follow when any content block feels "too wordy on
+phone": keep a rich desktop version and a punchy mobile version in the same
+section, both always rendered in markup, let Tailwind hide the other one.

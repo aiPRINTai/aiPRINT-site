@@ -2,7 +2,7 @@
 
 Things only **you** can do. Code is in good shape; this is the human/content/decisions layer.
 
-Last updated: 2026-04-19 (post-watermark-cleanup + full site proof)
+Last updated: 2026-04-22 (visual-polish / UX session — hero grid, mobile copy, dropdown z-index, wall-preview refresh, gallery dedupes)
 
 ---
 
@@ -111,6 +111,16 @@ The code-side work is done. For reference, here's what's already live:
 - ✅ Resend confirmation / shipping email buttons per-order
 - ✅ CSV export of all orders — now includes `print_master_url` column (clean, full-resolution)
 - ✅ Keyboard shortcuts: R, /, E, S, ?, Esc
+- ✅ Revenue stat excludes `canceled` orders (2026-04-22)
+
+**Visual / UX polish (2026-04-22)**
+- ✅ Custom-select dropdowns render the actual font of each choice (Chrome/Safari fix)
+- ✅ Open dropdown lifts above preview image (no more "menu hidden behind art")
+- ✅ Wall-preview room mockup refreshes when user regenerates without closing the section
+- ✅ Mobile hero copy shortened to "Prompt → Generate → Print → Ship → Hang" (desktop paragraph preserved)
+- ✅ Hero grid: retired desert-canyon anchor layout, now 4 symmetric `aspect-square` tiles
+- ✅ Gallery deduplicated — no image appears in both hero and gallery any more (16 unique)
+- ✅ Palette emoji replaced with custom framed-art SVG on Color Palette dropdown
 
 **Backend / robustness**
 - ✅ Standardized shipping timing across all pages (3–7 production + 3–7 shipping = 7–14 total)

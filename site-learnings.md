@@ -46,3 +46,59 @@
 1. **Add a Founder block** on the homepage (with Lawrence's photo + 1 sentence about the print-lab background). This is the single most differentiated thing we have. Ship it before any other UX polish.
 2. **Add macro material photos** to the Materials section — canvas weave, acrylic edge depth, metal finish. Dramatically boosts premium perception.
 3. **Number the COA** ("Edition 1 of N, signed and authenticated by Lawrence [Lastname]") — turns a generic certificate into a collectible artifact. Costs nothing to implement.
+
+---
+
+## Internal engineering learnings (not competitor-facing)
+
+Collecting gotchas so the next person (or next session) doesn't re-discover them.
+
+### HTML attribute strings break on embedded double-quotes
+`opt.style.fontFamily` returns CSS values that contain embedded double-quotes
+(e.g. `"Playfair Display", Georgia, serif`). Interpolating that into a
+template-literal HTML attribute (`` `<span style="font-family:${fam}">` ``)
+produces malformed markup that Chrome silently "repairs" into the wrong DOM.
+
+**Fix:** build the span via `document.createElement('span')` +
+`span.setAttribute('style', ...)` + `span.outerHTML`. Let the DOM serializer
+do the escaping. For good measure, also replace `"` with `'` in the family
+string before setting the style.
+
+### Chrome/Safari ignore styling on native `<option>`
+`font-family`, `color`, `background` on `<option>` are respected **only** by
+Firefox. Chrome and Safari render every `<option>` in the user's system
+dropdown font. To show the actual font of each choice you need a custom
+overlay dropdown (native `<select>` hidden + `.custom-select-menu` divs).
+
+### Escaping a sibling stacking context with z-index
+If an element is inside a `position: relative` (or `transform`, `filter`,
+`opacity < 1`, etc.) parent, its `z-index` is bounded by the parent's
+stacking-context index. Setting `z-index: 50` on an open dropdown menu will
+still render **below** a sibling image if that image's parent has a higher
+stacking context.
+
+**Fix:** lift the wrapper itself when opening. Toggle
+`wrap.dataset.open = 'true'/'false'` in `openMenu`/`closeMenu` and add
+`.custom-select[data-open="true"] { z-index: 9999; }` in CSS so the whole
+dropdown region floats above neighbors for the duration of the interaction.
+
+### The "preview didn't update the wall" bug
+Any UI that derives from a cached state variable (e.g. `currentPreview.url`)
+has to re-render when that variable changes, even if the derived UI is
+already open elsewhere on the page. Wall-mockup re-render was missing from
+the regenerate handler — we only updated it on room-tab click. Fix: after
+`savePreviewToStorage()`, check if the mockup section is visible and if so
+call `updateMockup()` with the current active tab.
+
+### Bash heredoc fights with special chars in commit messages
+`git commit -m "$(cat <<'EOF' ... → ... !! ... EOF)"` choked on the arrow
+and `!!`. Use `printf '%s\n' "line1" "line2"` instead — no heredoc parser
+to offend.
+
+### Tailwind responsive pair for mobile-specific copy
+To ship different copy on mobile vs desktop without a JS branch, keep both
+blocks in the markup and hide one at each breakpoint:
+- Desktop block: `hidden md:block`
+- Mobile block:  `md:hidden`
+
+Cheap, zero JS, cache-friendly. Used for the hero tagline swap on 2026-04-22.
