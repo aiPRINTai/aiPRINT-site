@@ -39,12 +39,20 @@ class AuthManager {
     }
   }
 
-  async signup(email, password) {
+  async signup(email, password, opts = {}) {
     try {
+      // `pendingShareSlug` is forwarded to the backend so that when the user
+      // clicks the verification email link, they land on /?s=<slug> and the
+      // design they were about to order auto-hydrates — even if the tab they
+      // originally generated it in is long gone or they verify on a different
+      // device. Signup-gate callers (see index.html reviewBtn) mint this slug
+      // via mintPendingShareSlug() before showing the modal.
+      const body = { email, password };
+      if (opts.pendingShareSlug) body.pending_share_slug = opts.pendingShareSlug;
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify(body)
       });
 
       const data = await response.json();
@@ -291,12 +299,16 @@ class AuthManager {
     document.body.appendChild(modal);
   }
 
-  showSignupModal() {
-    const modal = this.createAuthModal('signup');
+  showSignupModal(opts = {}) {
+    // `opts.pendingShareSlug` is threaded through the signup request so the
+    // verification email URL survives around to /?s=<slug>, rehydrating the
+    // user's work after they come back. See public/index.html reviewBtn for
+    // where this is minted.
+    const modal = this.createAuthModal('signup', opts);
     document.body.appendChild(modal);
   }
 
-  createAuthModal(mode) {
+  createAuthModal(mode, opts = {}) {
     const isLogin = mode === 'login';
     const container = document.createElement('div');
     container.className = 'fixed inset-0 z-[100]';
@@ -359,7 +371,7 @@ class AuthManager {
 
       const result = isLogin
         ? await this.login(email, password)
-        : await this.signup(email, password);
+        : await this.signup(email, password, { pendingShareSlug: opts.pendingShareSlug });
 
       // Signup that requires verification: close modal, show "check your email"
       if (result.success && result.verificationRequired) {

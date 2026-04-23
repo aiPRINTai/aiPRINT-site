@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { email, password } = req.body || {};
+    const { email, password, pending_share_slug: pendingShareSlug } = req.body || {};
 
     if (!email || !password) {
       return res.status(400).json({ error: 'Email and password are required' });
@@ -45,7 +45,19 @@ export default async function handler(req, res) {
     const origin = process.env.CLIENT_URL
       || req.headers.origin
       || `https://${req.headers.host || 'aiprint.ai'}`;
-    const verifyUrl = `${origin}/api/auth/verify?token=${verificationToken}`;
+    // Pass `pending_share_slug` through the verification URL so it survives
+    // the full round-trip: signup → email → /api/auth/verify → /verified.html
+    // → "Start creating" → /?s=<slug>. If the user originated from the
+    // checkout-signup gate with a live preview, this is what lets them land
+    // back on their exact design — even on a fresh device that never had
+    // the localStorage copy.
+    const safeSlug =
+      typeof pendingShareSlug === 'string' && /^[a-zA-Z0-9]{6,16}$/.test(pendingShareSlug)
+        ? pendingShareSlug
+        : null;
+    const verifyUrl = safeSlug
+      ? `${origin}/api/auth/verify?token=${verificationToken}&s=${encodeURIComponent(safeSlug)}`
+      : `${origin}/api/auth/verify?token=${verificationToken}`;
 
     try {
       const result = await sendVerificationEmail(cleanEmail, verifyUrl);

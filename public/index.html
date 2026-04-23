@@ -1696,7 +1696,12 @@
       if (!savedData) return false;
       try {
         const data = JSON.parse(savedData);
-        if (Date.now() - data.timestamp > 24 * 60 * 60 * 1000) {
+        // 30-day TTL (was 24h). Common user path: generate a design, get gated
+        // for signup, get a verification email, don't click the link until
+        // days later. A 24h window was too short — users were losing their
+        // work on return. 30 days gives slack without keeping stale previews
+        // around forever.
+        if (Date.now() - data.timestamp > 30 * 24 * 60 * 60 * 1000) {
           localStorage.removeItem('aiprint_last_preview');
           return false;
         }
@@ -2151,6 +2156,30 @@
       const data = buildSharePayload();
       if (!data) return null;
       return `${window.location.origin}${window.location.pathname}?share=${btoa(JSON.stringify(data))}`;
+    }
+
+    // "Pending share" slug: used when we hit the signup gate with a live
+    // preview. We stash the design as a shared_designs row and thread the
+    // slug through the verification email so the user can recover their
+    // design on a different device by landing on /?s=<slug>. Returns just
+    // the slug string (or null), not a full URL — callers append it to
+    // whatever redirect/link they're building.
+    async function mintPendingShareSlug() {
+      const data = buildSharePayload();
+      if (!data) return null;
+      try {
+        const res = await fetch('/api/shares', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ payload: data })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const body = await res.json();
+        return body?.slug || null;
+      } catch (err) {
+        console.warn('mintPendingShareSlug failed:', err.message);
+        return null;
+      }
     }
 
     // Short-link path: POST the payload to /api/shares and get back
@@ -2812,9 +2841,18 @@
       // through a select step before they can price/size.
       if (window.auth && !window.auth.isAuthenticated()) {
         window.track && window.track('signup_gate_hit', { from: 'review_checkout' });
+        // Belt-and-suspenders: save the current preview locally AND mint a
+        // shared_designs slug so the user's work survives the signup → email
+        // verification round-trip even if they complete it on a different
+        // device. The slug gets threaded through the verification email URL
+        // (see AuthManager.signup), so a fresh tab landing on /?s=<slug>
+        // rehydrates automatically via loadFromShareLink().
+        savePreviewToStorage();
+        const pendingShareSlug = await mintPendingShareSlug().catch(() => null);
         window.auth.showSignupModal({
           title: 'Sign up to order this print',
-          subtitle: 'New accounts get 10 free credits — keep generating until it\'s perfect.'
+          subtitle: 'New accounts get 10 free credits — keep generating until it\'s perfect.',
+          pendingShareSlug
         });
         return;
       }

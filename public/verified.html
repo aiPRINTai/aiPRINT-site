@@ -45,21 +45,29 @@
       </div>
     </div>
 
-    <a href="/" class="btn-primary">Start creating →</a>
+    <a id="startCreatingBtn" href="/" class="btn-primary">Start creating →</a>
     <div class="mt-4">
       <a href="/account.html" class="text-sm text-indigo-300 hover:text-indigo-200">Go to my account</a>
     </div>
   </div>
 
   <script>
-    // Pull token from URL (set by /api/auth/verify) and stash it for the auth client.
+    // Pull token + optional pending-share slug from URL (set by /api/auth/verify).
+    // If a slug is present, this user came from the checkout-signup gate with a
+    // live preview; route them to /?s=<slug> so the design rehydrates instead
+    // of dropping them onto an empty generator.
     const params = new URLSearchParams(location.search);
     const token = params.get('token');
+    const shareSlug = (params.get('s') || '').match(/^[a-zA-Z0-9]{6,16}$/)?.[0] || null;
     if (token) {
       try {
         localStorage.setItem('auth_token', token);
         history.replaceState({}, '', '/verified.html');
       } catch (e) {}
+    }
+    if (shareSlug) {
+      const btn = document.getElementById('startCreatingBtn');
+      if (btn) btn.setAttribute('href', `/?s=${encodeURIComponent(shareSlug)}`);
     }
 
     // Fetch the user's current credit balance so the landing page tells them

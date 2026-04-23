@@ -22,6 +22,11 @@ function htmlPage({ title, body }) {
 
 export default async function handler(req, res) {
   const token = (req.query.token || '').trim();
+  // Pending-share slug carried forward from signup.js. If present, it threads
+  // through to /verified.html → "Start creating" → /?s=<slug> so the user
+  // lands back on the exact design they had when they hit the signup gate.
+  const rawSlug = (req.query.s || '').trim();
+  const shareSlug = /^[a-zA-Z0-9]{6,16}$/.test(rawSlug) ? rawSlug : null;
 
   if (!token) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
@@ -44,7 +49,10 @@ export default async function handler(req, res) {
     const verified = await markEmailVerified(user.id);
     const jwt = generateToken(verified);
     res.setHeader('Set-Cookie', createAuthCookie(jwt));
-    return res.redirect(302, `/verified.html?token=${encodeURIComponent(jwt)}`);
+    const dest = shareSlug
+      ? `/verified.html?token=${encodeURIComponent(jwt)}&s=${encodeURIComponent(shareSlug)}`
+      : `/verified.html?token=${encodeURIComponent(jwt)}`;
+    return res.redirect(302, dest);
   } catch (err) {
     console.error('Verify error:', err);
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
