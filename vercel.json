@@ -3,12 +3,51 @@
   "functions": {
     "api/webhook.js": { "maxDuration": 10 },
     "api/generate-image.js": { "maxDuration": 60 },
-    "api/og-share.js": { "includeFiles": "public/og-brand-strip.png" }
+    "api/og-share.js": { "includeFiles": "public/og-brand-strip.png" },
+    "api/cron/purge-shared-designs.js": { "maxDuration": 30 }
   },
+  "crons": [
+    { "path": "/api/cron/purge-shared-designs", "schedule": "0 4 * * *" }
+  ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/s/([^/]+)", "dest": "/api/s?slug=$1" },
     { "handle": "filesystem" },
     { "src": "/(.*)", "status": 404, "dest": "/404.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), interest-cohort=(), browsing-topics=()"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin-allow-popups"
+        },
+        {
+          "key": "Content-Security-Policy-Report-Only",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://us.i.posthog.com https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https://us.i.posthog.com https://api.stripe.com https://*.public.blob.vercel-storage.com https://blob.vercel-storage.com; frame-src https://js.stripe.com https://checkout.stripe.com https://hooks.stripe.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://checkout.stripe.com; upgrade-insecure-requests"
+        }
+      ]
+    }
   ]
 }

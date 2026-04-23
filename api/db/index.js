@@ -636,6 +636,31 @@ export async function getSharedDesign(slug) {
   }
 }
 
+/**
+ * Purge shared_designs rows older than `olderThanDays`. Called by the daily
+ * cron at /api/cron/purge-shared-designs.js. Keeps the share table from
+ * growing unbounded with stale preset blobs (PII-adjacent: they contain the
+ * customer's prompt, which can reveal identity, kids, pets, etc.).
+ *
+ * Returns the number of rows deleted.
+ */
+export async function purgeOldSharedDesigns(olderThanDays = 180) {
+  const days = Math.max(7, Math.min(3650, Number(olderThanDays) || 180));
+  try {
+    const r = await sql`
+      DELETE FROM shared_designs
+      WHERE created_at < NOW() - (${days}::int * INTERVAL '1 day')
+      RETURNING slug
+    `;
+    return r.rowCount || 0;
+  } catch (err) {
+    if (String(err?.message || '').includes('does not exist')) {
+      return 0; // nothing to purge if the table isn't there yet
+    }
+    throw err;
+  }
+}
+
 // Initialize database tables
 export async function initializeDatabase() {
   // This function can be called to ensure tables exist

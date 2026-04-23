@@ -4,6 +4,7 @@ import { canUserGenerate, deductCreditsForGeneration } from './credits/utils.js'
 import { recordGeneration } from './db/index.js';
 import { getUserFromRequest, getClientIp } from './auth/utils.js';
 import { makeWatermarkedPreview, PREVIEW_WATERMARK_VERSION } from './_watermark.js';
+import { enforceRateLimit } from './_rate-limit.js';
 
 const ALLOWED_SIZES = new Set(['1024x1024', '1024x1536', '1536x1024']);
 
@@ -100,6 +101,13 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  // Hard cap before we touch Gemini. Credits gate real cost, but a burst
+  // from a single IP can still hammer the DB credit-check path and blow
+  // through anonymous-guest quotas across many fake sessions. 20/min is
+  // well above legit human pace (each generation takes 10–30s).
+  const rl = enforceRateLimit(req, res, { bucket: 'generate-image', limit: 20, windowMs: 60_000 });
+  if (!rl.ok) return;
 
   const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
   if (!apiKey) {

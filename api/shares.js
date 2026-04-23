@@ -9,6 +9,7 @@
 
 import crypto from 'crypto';
 import { saveSharedDesign, getSharedDesign } from './db/index.js';
+import { enforceRateLimit } from './_rate-limit.js';
 
 const MAX_PAYLOAD_BYTES = 20000; // ~20 KB — covers a full design with prompt; rejects abuse
 const SLUG_LEN = 8;
@@ -30,6 +31,12 @@ function makeSlug(len = SLUG_LEN) {
 export default async function handler(req, res) {
   try {
     if (req.method === 'POST') {
+      // 30 mints/min/IP is ~one every 2s — far above real UX need (the
+      // share button is user-initiated), but below any abuse that would
+      // fill shared_designs with garbage.
+      const rl = enforceRateLimit(req, res, { bucket: 'shares-post', limit: 30, windowMs: 60_000 });
+      if (!rl.ok) return;
+
       const body = req.body || {};
       // Accept either `{ payload: {...} }` or the payload object directly.
       const payload = body && typeof body === 'object' && 'payload' in body ? body.payload : body;
@@ -75,6 +82,13 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'GET') {
+      // Slug-enumeration defense: at 62^8 slugs a brute-force scan is not
+      // realistic, but an attacker probing for harvested-via-logs slugs
+      // gets capped here. 120 lookups/min/IP covers legit hotlinking
+      // (multiple tabs, link previews) without letting a script enumerate.
+      const rl = enforceRateLimit(req, res, { bucket: 'shares-get', limit: 120, windowMs: 60_000 });
+      if (!rl.ok) return;
+
       const slug = (req.query && (req.query.slug || req.query.s)) || '';
       if (!slug || !SLUG_RE.test(slug)) {
         return res.status(400).json({ error: 'Invalid slug' });
