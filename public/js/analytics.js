@@ -32,4 +32,30 @@
     identifyIfAuthed();
     if (++tries > 10) clearInterval(t);
   }, 500);
+
+  // ---------------------------------------------------------------------------
+  // Meta Pixel (Facebook/Instagram) — base code + PageView
+  // Pixel ID: 2679208262451729 (aiPRINT.ai dataset, AiPrint portfolio)
+  // ---------------------------------------------------------------------------
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  window.fbq('init', '2679208262451729');
+  window.fbq('track', 'PageView');
+
+  // Helper: fire a Meta event with a stable event_id for CAPI deduplication.
+  // Pair this with a server-side CAPI call using the same event_id.
+  window.metaTrack = function (event, params, eventId) {
+    try {
+      if (!window.fbq) return;
+      const id = eventId || (crypto && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random());
+      window.fbq('track', event, params || {}, { eventID: id });
+      return id;
+    } catch (e) {}
+  };
 })();
