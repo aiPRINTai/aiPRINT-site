@@ -91,6 +91,11 @@ URL: `https://aiprint.ai/admin/` — Bearer token is `ADMIN_PASSWORD`.
   resend confirmation or shipping email, refresh shipping address from Stripe.
 - **Users** (`/admin/users.html`): list, grant credits, deduct credits, resend
   verification email, view per-user audit log.
+- **Marketing** (`/admin/marketing.html`): UTM-attributed orders + revenue
+  rolled up by source / medium / campaign, daily revenue trend chart, and
+  an interactive "type your ad spend → see CAC + CAC÷AOV ratio" calculator.
+  Reads `orders.utm_*` columns populated by the webhook from the Stripe
+  session metadata (which the homepage forwards from `public/js/utm.js`).
 - **Security** (`/admin/security.html`): posture dashboard — env-var presence checks,
   code-level protection flags, admin-action counts (24h / 7d / 30d), by-action
   breakdown, shared-designs retention stats, paginated audit log with action filter.
@@ -157,7 +162,119 @@ Do NOT paste `POSTGRES_URL` into third-party tools.
 
 ---
 
-## 5. Environment variable reference
+## 5. Shipping policy
+
+Single source of truth is `api/_shipping.js`. The module computes a tier
+from the SKU prefix (CAN/MET/ACR) + dimensions in the lookup_key and returns
+a Stripe `shipping_options[]` array with one fixed-rate option per checkout.
+
+| Tier | Customer pays | Applies to (approx) |
+|---|---|---|
+| Light | $10 | small canvas/metal/acrylic up to ~12×12 |
+| Standard | $15 | medium pieces up to ~18×18 |
+| Heavy | $25 | large pieces (24×24, 24×36 canvas/metal) |
+| Oversize | $35 | biggest acrylics + biggest metal |
+
+Customer-facing copy lives in 3 places — keep them in sync if you change rates:
+- `public/index.html` trust row above checkout (one-line summary)
+- `public/policies.html` Shipping section (full tier breakdown)
+- `public/faq.html` "How much does shipping cost?" entry
+
+### 5.1 Changing rates
+Edit the `TIERS` object in `api/_shipping.js` (amounts in cents). No DB or
+Stripe-dashboard config — `shipping_rate_data` is inline per session, so the
+new rate takes effect on the next deploy. Update the three customer-facing
+copy locations in the same commit so the marketing claim stays honest.
+
+### 5.2 Re-enabling free shipping
+`api/_shipping.js` documents the original threshold logic in its header
+comment. Add a `free` entry to `TIERS` (amount: 0) and an early-return check
+in `buildShippingOptions` that returns the free tier when the product price
+is at or above your threshold.
+
+---
+
+## 6. Image pipeline
+
+Source images live in `public/ai-art/`, `public/gallery/`, `public/rooms/`,
+and `public/banners/`. Both JPG and WebP are checked in — WebP is what the
+HTML actually references; JPG stays as the source-of-truth for re-encoding.
+
+### 6.1 Adding new product photography
+1. Drop the new JPG/PNG into the appropriate directory.
+2. Run `node scripts/convert-to-webp.js` — generates `<name>.webp` at q80,
+   max 1600px on the long edge. Skips files that don't need downscaling.
+3. Run `node scripts/swap-img-refs.js` — updates every HTML `src=` reference
+   from `.jpg`/`.png` to `.webp` for files in those four directories. Verifies
+   each `.webp` exists on disk before swapping, so a typo can't produce a
+   broken reference. Idempotent — running twice is a no-op.
+4. Commit both scripts' output (the `.webp` files + the HTML diff).
+
+### 6.2 Quality / size targets
+The WebP encoder defaults are tuned for "fine-art-print site" — 80 quality,
+max 1600px long edge. That's intentionally generous (most `<img>` slots on
+the largest displays are 800–1000px wide); it leaves headroom if Lawrence
+ever needs to display larger crops or zoom interactions. Across the current
+35-image set this delivered ~95% size reduction (52 MB → 2.7 MB). If you
+add many more images and the bundle starts feeling heavy again, the first
+knob is to drop `MAX_DIM` in `scripts/convert-to-webp.js` to 1200.
+
+### 6.3 Don't delete the JPGs
+The originals stay on disk and in git. They're the re-encode source if we
+ever change quality/size targets, and they're a fallback for any odd cache
+or CDN scenario where a `.webp` request fails. Storage cost is trivial.
+
+---
+
+## 7. Marketing dashboard
+
+URL: `/admin/marketing.html` — same `ADMIN_PASSWORD` bearer auth as the rest
+of `/admin/*`. Window selector in the header (7 / 30 / 90 / 365 days).
+
+### 7.1 What it shows
+- **5 stat tiles:** orders, product revenue (subtotal), gross sales,
+  shipping collected, blended AOV — all for the chosen window.
+- **Daily revenue trend:** SVG bar chart, one bar per day, hover for tooltip.
+- **CAC calculator:** type your total ad spend for the window → blended CAC
+  (spend ÷ orders) and CAC÷AOV ratio with a green / yellow / red signal
+  (green if CAC < 30% of AOV, yellow under 50%, red above).
+- **By-source table:** orders, revenue, AOV, shipping per (source, medium,
+  campaign) combo. Untagged traffic appears as `(direct)`.
+
+### 7.2 How attribution flows
+1. Customer clicks an ad with `?utm_source=meta&utm_medium=cpc&utm_campaign=...`.
+2. `public/js/utm.js` (loaded on every public page) reads those params and
+   persists them in `localStorage` for 30 days. A new tagged URL always wins
+   (most-recent-touch attribution).
+3. When the customer clicks "Buy" on the homepage, the checkout request body
+   includes the stored UTMs.
+4. `/api/create-checkout-session.js` sanitizes and forwards them as Stripe
+   session metadata.
+5. The `/api/webhook.js` handler reads them off `session.metadata.utm_*` and
+   writes them onto the `orders` row alongside `shipping_amount` /
+   `subtotal_amount`.
+6. `/admin/marketing.html` reads from there.
+
+### 7.3 Tagging your ad URLs
+- **Meta / Facebook:** in Ads Manager, under "URL parameters" use:
+  `utm_source=meta&utm_medium=cpc&utm_campaign={{campaign.name}}&utm_content={{adset.name}}`
+- **Pinterest:** under "Tracking parameters" same shape with `utm_source=pinterest`.
+- **Direct / organic / email:** same template; pick a stable `utm_source` value
+  per channel so the dashboard can group cleanly.
+
+### 7.4 Re-attribution after the fact
+Already-placed orders that were missing UTMs can be back-filled by SQL update
+in the Neon console:
+```sql
+UPDATE orders SET utm_source='meta', utm_medium='cpc', utm_campaign='pet-memorial'
+WHERE id IN ('...uuid...', '...uuid...');
+```
+Use sparingly — the dashboard is more useful when the stored values reflect
+what the customer actually clicked.
+
+---
+
+## 8. Environment variable reference
 
 Full template: `.env.example`. Summary of each variable's purpose:
 
@@ -182,7 +299,7 @@ Full template: `.env.example`. Summary of each variable's purpose:
 
 ---
 
-## 6. Incident response
+## 9. Incident response
 
 ### 6.1 Leaked secret in a commit
 1. Rotate the secret (§1). Revoke the old value.
@@ -240,7 +357,7 @@ looks like an injection attempt, investigate the source page in the report.
 
 ---
 
-## 7. Quarterly checklist
+## 10. Quarterly checklist
 
 First Monday of each quarter:
 - [ ] Rotate `ADMIN_PASSWORD`, `JWT_SECRET`, and `CRON_SECRET`.
@@ -251,7 +368,7 @@ First Monday of each quarter:
       the retention window configured in the purge cron).
 - [ ] Test a Neon PITR restore (§4.1).
 - [ ] Check Resend, Gemini, and Stripe for usage spikes.
-- [ ] Scan Vercel function logs for CSP-report patterns (§6.6) — decide whether to
+- [ ] Scan Vercel function logs for CSP-report patterns (§9.6) — decide whether to
       promote CSP from Report-Only to Enforce if the noise floor is clean.
 - [ ] Bump dependencies: `npm outdated` — patch/minor updates without ceremony.
 - [ ] Confirm the pre-commit hook still works: `bash .githooks/pre-commit` in a repo with

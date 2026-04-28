@@ -39,28 +39,33 @@ These are the placeholders sitting in the live site right now. Once you send the
 The full version lives in **`ARCHITECTURE.md`** at the project root — open that any time you forget which env var does what or where a file lives. The 60-second version:
 
 **Customer side** (browser → `index.html`)
+- Lands on the page → `public/js/utm.js` reads any `utm_*` query params and stows them in `localStorage` for 30 days
 - Picks options + types prompt → `POST /api/generate-image`
 - Gemini generates → image stored in Vercel Blob → URL returned to browser
-- Customer clicks "Order this print" → `POST /api/create-checkout-session`
-- Bounced to Stripe Checkout (Stripe collects address + tax)
+- Customer clicks "Order this print" → `POST /api/create-checkout-session` (with stowed UTMs)
+- Bounced to Stripe Checkout — Stripe collects address + tax + the appropriate flat-rate shipping ($10/$15/$25/$35 by size, computed in `api/_shipping.js`)
 
 **Stripe → you**
 - On `checkout.session.completed`, Stripe POSTs `/api/webhook`
-- Webhook: verify signature → check idempotency (no double-insert) → insert into `orders` → fire two Resend emails (customer confirmation, your fulfillment alert)
+- Webhook: verify signature → check idempotency (no double-insert) → insert into `orders` (with `shipping_amount`, `subtotal_amount`, `utm_*`) → fire two Resend emails (customer confirmation, your fulfillment alert)
 - Customer redirected to `/success.html?session_id=…`
 
 **Fulfillment (you)**
 - Open `/admin/orders.html` (password-gated by `ADMIN_PASSWORD`)
 - New order shows `paid` → mark `in_production` → print → mark `shipped` + paste tracking → **shipping email auto-sends to customer**
 
+**Marketing visibility (you)**
+- `/admin/marketing.html` — orders + revenue grouped by UTM source/medium/campaign, daily revenue chart, CAC calculator
+- `/admin/security.html` — env-var posture, audit log, retention stats
+
 **Stack at a glance**
 - **Vercel** = hosting + serverless API
 - **Vercel Postgres (Neon)** = users, orders, generations, credits
 - **Vercel Blob** = generated PNGs (public URLs, 1y cache)
 - **Google Gemini** = text → image
-- **Stripe** = checkout + payments + tax
+- **Stripe** = checkout + payments + tax + flat-rate shipping
 - **Resend** = all transactional email (5 templates: verification, order confirm, fulfillment alert, shipping notification, credit purchase receipt)
-- **PostHog** = product analytics
+- **PostHog** = product analytics + funnel
 - **GoDaddy** = DNS for aiprint.ai
 
 **Env vars you must keep alive in Vercel:** `POSTGRES_URL`, `BLOB_READ_WRITE_TOKEN`, `GOOGLE_GEMINI_API_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `RESEND_API_KEY`, `EMAIL_FROM`, `ORDERS_TO` (orders@), `CONTACT_TO` (info@), `ADMIN_PASSWORD`, `CRON_SECRET`, `JWT_SECRET`. (Mirror in `.env.example`. Legacy `FULFILLMENT_TO` is still honored as a fallback for `CONTACT_TO`.)

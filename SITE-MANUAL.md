@@ -426,6 +426,11 @@ Response includes:
 | **Credit system** | `api/credits/*`, `users.credit_balance` col | Atomic deduction (race-safe). Purchase webhook is idempotent. |
 | **Admin audit log** | `admin_actions` table, `logAdminAction()` in `api/db/index.js` | Every sensitive admin action logs actor IP + details. |
 | **Admin security panel** | `/admin/security.html` + `api/admin/security.js` | Surfaces env-var posture, code-level protections, admin-action counts, audit log (filterable + paginated), shared-designs retention stats. |
+| **Admin marketing panel** | `/admin/marketing.html` + `api/admin/marketing.js` | Orders + revenue grouped by UTM source/medium/campaign, daily revenue trend chart, interactive CAC calculator (CAC ÷ AOV with green/yellow/red signal). |
+| **UTM attribution** | `public/js/utm.js` → checkout request → Stripe metadata → webhook → `orders.utm_*` columns | First-paid-touch attribution, 30-day TTL in localStorage. End-to-end so the marketing dashboard can attribute orders back to the ad source. |
+| **Tiered flat-rate shipping** | `api/_shipping.js` → Stripe `shipping_options` per session | $10 / $15 / $25 / $35 by SKU prefix + dimensions. No `shipping_rates` Stripe-dashboard config — `shipping_rate_data` is inline per session. |
+| **Order economics breakdown** | `orders.shipping_amount` + `subtotal_amount` (self-heal via `ensureOrderEconomicsColumns`) | Webhook splits Stripe's `amount_total` into shipping / subtotal / tax so true product margin is queryable. |
+| **WebP image pipeline** | `scripts/convert-to-webp.js` + `scripts/swap-img-refs.js`, originals stay in git | All hero/gallery/room/banner JPGs converted to WebP at q80 / max 1600px. ~95% size reduction across 35 files. Re-run scripts after adding new product photography. |
 | **Watermarked previews** | `api/_watermark.js` | Customers see watermarked; paid customers + admin see clean. |
 | **COA (Certificate of Authenticity)** | `api/coa.js`, `/coa.html` | Numbered certificate per print. |
 | **Public order tracking** | `/track.html` + `api/track.js` | Lookup by Stripe session ID — no login needed. |
@@ -748,6 +753,25 @@ Next scheduled rotation: **2026-07-01** (quarterly cadence — put on calendar).
 
 Running log of material changes the customer or operator can feel. Security /
 secret rotations live in §10.3; this section is for everything else.
+
+### 2026-04-28 — Pre-launch sweep
+
+The "before we turn on paid ads" punch list landed in five tight commits
+(`d12c754` → `35b1123` → `eb83030` → `ab437b5` → `3a1684a`). Highlights:
+
+| Commit(s) | Area | What changed |
+|---|---|---|
+| `aca94d7` → `d12c754` → `ab437b5` | Generator | "Surprise me" pool grew from 20 hardcoded prompts to 258 across 9 user-facing themes (any / pets / nature / cities / cosmic / surreal / cozy / modern / vintage). Theme picker is a tiny `<select>` next to the dice button; choice persists in `localStorage`. No-repeat memory keeps a fresh pick within the active pool. Every theme has 25+ prompts. |
+| `35b1123` → `eb83030` | Checkout | Tiered flat-rate shipping wired through Stripe `shipping_options`. $10 / $15 / $25 / $35 by SKU prefix + dimensions. Customer sees the rate on the Stripe page before they pay (no more "calculated at checkout" surprise). Source-of-truth is `api/_shipping.js`; copy mirrored in `index.html`, `policies.html`, `faq.html`. |
+| `3a1684a` | Image pipeline | All 35 hero/gallery/room/banner JPGs converted to WebP at q80 / max 1600px. 52.5 MB → 2.7 MB total (95% smaller); hero set went from ~8 MB to ~350 KB above the fold. Reusable scripts at `scripts/convert-to-webp.js` + `scripts/swap-img-refs.js`. Originals stay in git as the re-encode source. |
+| `3a1684a` | Webhook | Persists `shipping_amount` + `subtotal_amount` alongside `amount_total` and `tax_amount`. Self-heals the schema via `ensureOrderEconomicsColumns`. Stripe API field migration handled (`shipping_cost.amount_total` preferred, `total_details.amount_shipping` fallback). |
+| `3a1684a` | Marketing infra | New `/admin/marketing.html` panel — orders + revenue grouped by UTM source/medium/campaign, SVG bar chart of daily revenue, interactive CAC calculator with green/yellow/red signal. End-to-end UTM attribution: `public/js/utm.js` → checkout request → Stripe session metadata → webhook → `orders.utm_*` columns → dashboard. Marketing nav link added to all `/admin/*` pages. |
+| `3a1684a` | Privacy | `policies.html` gained a "Tracking & Cookies" subsection covering PostHog (analytics), Meta Pixel + Pinterest Tag (ads measurement), Stripe (payments), Vercel (logs) — what each one sees and how to opt out. CCPA right-to-request paragraph added under "Your Rights". |
+
+Net effect: the soft-launch code/infra bar is cleared. The remaining gates
+are content-side and operational (Meta Pixel + Pinterest Tag IDs, $1
+live-mode Stripe test, watermark E2E check) — none of them blocking the
+underlying machinery.
 
 ### 2026-04-22 — Visual-polish + UX pass
 

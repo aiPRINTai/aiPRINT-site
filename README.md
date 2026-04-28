@@ -44,6 +44,18 @@ If/when we add serverless routes:
   retention window.
 - Day-2 runbook lives in `OPERATIONS.md`; personal punch list in `your-todo.html`.
 
+## Marketing & shipping
+- Tiered flat-rate shipping ($10 / $15 / $25 / $35 by size + material) wired
+  through Stripe `shipping_options`; policy lives in `api/_shipping.js`.
+- Webhook persists `shipping_amount` + `subtotal_amount` alongside the gross
+  total so true product margin is queryable per order.
+- UTMs captured on landing (`public/js/utm.js`) propagate end-to-end through
+  the checkout flow into `orders.utm_*` columns; admin dashboard at
+  `/admin/marketing.html` visualizes orders + revenue + CAC by source.
+- Hero/gallery/room/banner images are served as WebP (95% smaller than the
+  source JPGs); regenerate via `scripts/convert-to-webp.js` after adding new
+  product photography.
+
 ## Contact
 info@aiPRINT.ai  
 Instagram: @aiPRINT.ai

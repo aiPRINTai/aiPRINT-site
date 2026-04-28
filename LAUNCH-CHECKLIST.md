@@ -2,7 +2,7 @@
 
 Things only **you** can do. Code is in good shape; this is the human/content/decisions layer.
 
-Last updated: 2026-04-22 (visual-polish / UX session — hero grid, mobile copy, dropdown z-index, wall-preview refresh, gallery dedupes)
+Last updated: 2026-04-28 (pre-launch P0/P1 sweep — WebP image pipeline, tiered shipping, marketing dashboard, privacy disclosure, theme-tagged Surprise Me)
 
 ---
 
@@ -132,22 +132,35 @@ The code-side work is done. For reference, here's what's already live:
 - ✅ Two-URL image architecture (clean print master never touches the browser)
 - ✅ Watermark renders cleanly across all aspect ratios (v2 — ASCII only, no font-fallback boxes)
 
+**Pre-launch sweep (2026-04-28)**
+- ✅ **Image weight crushed** — 35 hero/gallery/room/banner JPGs converted to WebP at q80 / max 1600px. 52.5 MB → 2.7 MB total (95% smaller). Hero set went from ~8 MB to ~350 KB above the fold. Mobile cellular load is now sub-second instead of 5–15s. Reusable scripts in `scripts/` for the next photo drop.
+- ✅ **Tiered flat-rate shipping** — Stripe `shipping_options` wired through `api/_shipping.js`. Customer pays $10 / $15 / $25 / $35 based on size + material. No more "calculated at checkout" surprise; the rate appears on the Stripe page before they pay. Policy + FAQ + homepage trust row all reflect the new structure.
+- ✅ **Order economics persisted** — `shipping_amount` + `subtotal_amount` columns added to `orders` (self-healing via `ensureOrderEconomicsColumns`). Webhook breaks out the amounts from Stripe so the marketing dashboard can compute true product margin, not gross-with-shipping confusion.
+- ✅ **UTM attribution end-to-end** — `public/js/utm.js` captures `utm_source/medium/campaign/content/term` on landing, persists 30 days in localStorage, forwards through the checkout request → Stripe session metadata → webhook → orders row → `/admin/marketing.html`.
+- ✅ **Marketing dashboard** at `/admin/marketing.html` — 5 stat tiles (orders, product revenue, gross sales, shipping collected, blended AOV), SVG bar chart of daily revenue across the chosen window, by-source table with orders/AOV/shipping per UTM combo, and an interactive "type your ad spend → see CAC + CAC/AOV ratio" calculator with green/yellow/red signal.
+- ✅ **Privacy disclosure** — `policies.html` gained a Tracking & Cookies subsection listing PostHog (analytics), Meta Pixel + Pinterest Tag (ads measurement), Stripe (payments), Vercel (hosting logs) — what each one sees and how to opt out. CCPA right-to-request paragraph for California residents.
+- ✅ **Surprise me, theme-tagged** — Generator's randomizer expanded from 20 prompts to **258 across 9 user-facing buckets** (Any / Pets & portraits / Nature & landscapes / Cities & travel / Cosmic & sci-fi / Surreal & mythical / Anime & cozy / Modern & graphic / Vintage & retro). Every bucket has 25+ prompts. No-repeat memory caps at 12 picks per pool. Last-picked theme persists in localStorage.
+
 ---
 
 ## Rough launch-readiness score
 
 | Area | Status | Notes |
 |---|---|---|
-| Code & infrastructure | ✅ 100% | All deployed, watermarking live (v2), DB migrated |
+| Code & infrastructure | ✅ 100% | All deployed, watermarking live (v2), DB migrated, security panel + marketing panel wired |
 | Payment + fulfillment flow | 🟡 90% | Code is right; needs real $1 live-mode confirm (#19) |
-| Legal pages (Terms / Privacy / Shipping) | ✅ 100% | Plain-English policies live with hero banner |
+| Site speed (mobile) | ✅ 100% | Hero set 8 MB → 350 KB after WebP conversion; cellular load is instant |
+| Shipping policy | ✅ 100% | Tiered flat-rate ($10/$15/$25/$35) wired through Stripe; no checkout surprise |
+| Legal pages (Terms / Privacy / Shipping) | ✅ 100% | Plain-English policies live with hero banner; tracking/cookies disclosed; CCPA covered |
+| Marketing infrastructure | 🟡 80% | Dashboard + UTM attribution + CAC calculator live. **Pending: Meta Pixel + Pinterest Tag wiring (need IDs from your Meta Events Manager + Pinterest Ads dashboard).** |
 | Visible placeholders | 🟡 75% | Customer-room photos (#3b) + Unsplash how-it-works (#6) still placeholder |
 | Trust/credibility content | 🟠 60% | Founder + studio strong, but **fake testimonials are still the real problem (#4)** |
 | Marketing assets | ✅ 100% | OG image + meta tags live across all pages |
 | Visual / UX polish | ✅ 98% | Wide-display layout fixed, font scales, watermark cleaned, all "hand-signed" copy reconciled |
 | Copy consistency | ✅ 97% | Full proof pass 2026-04-19; all founder-hand-signs / signature-is-required claims reconciled |
+| Security | ✅ 100% | Sweep landed 2026-04-23: HSTS+CSP-RO+frame protection, dual-layer auth rate limits, signup enumeration fix, audit log, password-reset session invalidation, retention purge cron, `/admin/security.html` panel |
 
 **Bottom line:**
-- **Soft launch (paying customers):** ~95% ready. Code, copy, and UX are there. Only gate is the live-mode Stripe confirmation (#19) and the watermark smoke test (#20) — both 30-min tasks.
-- **Investor-facing:** ~80% ready. Same as above plus the testimonial credibility problem (#4) is the one item that meaningfully drags this down. A diligent investor doing 5 minutes of source-view will spot the placeholder testimonials.
-- **Public launch / press push:** 75% — wait until #4, #3b, and #6 are real, otherwise the imagery story doesn't fully match the "real prints from a real studio" positioning.
+- **Soft, quiet launch (paying customers + first ad spend):** ~98% ready. The technical and operational stack is done. The remaining gate is the Meta Pixel + Pinterest Tag wiring (need pixel IDs from you), the $1 live-mode Stripe confirmation (#19), and the watermark smoke test (#20). All three are <30 min combined.
+- **Investor-facing:** ~85% ready. Same as above plus a few content items already noted as ongoing (#3b, #4, #6) — those compound credibility but don't block the conversation when CAC data starts flowing from the marketing dashboard.
+- **Public launch / press push:** 75% — wait until the ongoing content items (#3b, #4, #6) are real so the imagery story fully matches the "real prints from a real studio" positioning.
