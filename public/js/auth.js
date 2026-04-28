@@ -404,6 +404,11 @@ class AuthManager {
         if (window.credits) {
           window.credits.loadBalance();
         }
+        // Cross-device cart sync: re-run the boot merge so the user's
+        // server-side cart loads immediately after sign-in, no page refresh.
+        if (window.aiprintCartSync && typeof window.aiprintCartSync.refresh === 'function') {
+          try { window.aiprintCartSync.refresh(); } catch (_) {}
+        }
       } else {
         errorDiv.textContent = result.error;
         errorDiv.classList.remove('hidden');

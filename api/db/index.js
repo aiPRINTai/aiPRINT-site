@@ -384,6 +384,59 @@ export async function getOrdersByStripeSessionId(stripeSessionId) {
   return result.rows;
 }
 
+// ── Cross-device cart sync ─────────────────────────────────────────────────
+// One row per user holding their cart + saved-for-later as JSONB blobs that
+// mirror the localStorage shape. Last-write-wins; client merges with local
+// state on read and PUTs the merged result.
+async function ensureUserCartsTable() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS user_carts (
+      user_id    UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+      cart       JSONB DEFAULT '[]'::jsonb,
+      saved      JSONB DEFAULT '[]'::jsonb,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `;
+}
+
+export async function getUserCart(userId) {
+  const run = () => sql`
+    SELECT cart, saved, updated_at FROM user_carts WHERE user_id = ${userId}
+  `;
+  try {
+    const r = await run();
+    return r.rows[0] || { cart: [], saved: [], updated_at: null };
+  } catch (err) {
+    if (!String(err?.message || '').includes('does not exist')) throw err;
+    await ensureUserCartsTable();
+    const r = await run();
+    return r.rows[0] || { cart: [], saved: [], updated_at: null };
+  }
+}
+
+export async function setUserCart(userId, { cart, saved }) {
+  const cartJson  = JSON.stringify(Array.isArray(cart)  ? cart  : []);
+  const savedJson = JSON.stringify(Array.isArray(saved) ? saved : []);
+  const run = () => sql`
+    INSERT INTO user_carts (user_id, cart, saved, updated_at)
+    VALUES (${userId}, ${cartJson}::jsonb, ${savedJson}::jsonb, CURRENT_TIMESTAMP)
+    ON CONFLICT (user_id) DO UPDATE
+      SET cart       = EXCLUDED.cart,
+          saved      = EXCLUDED.saved,
+          updated_at = CURRENT_TIMESTAMP
+    RETURNING cart, saved, updated_at
+  `;
+  try {
+    const r = await run();
+    return r.rows[0];
+  } catch (err) {
+    if (!String(err?.message || '').includes('does not exist')) throw err;
+    await ensureUserCartsTable();
+    const r = await run();
+    return r.rows[0];
+  }
+}
+
 export async function getOrderById(id) {
   const result = await sql`SELECT * FROM orders WHERE id = ${id}`;
   return result.rows[0] || null;
