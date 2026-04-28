@@ -10,28 +10,49 @@
 
 (function () {
   if (typeof window === 'undefined' || !document) return;
-  // Skip on admin + transactional pages.
+  // Skip on admin + transactional pages where the cart pill would be
+  // confusing (post-purchase, mid-auth-flow, password-reset, etc.).
   const path = (window.location && window.location.pathname) || '';
-  if (path.startsWith('/admin/') || path === '/success.html' || path === '/verified.html') return;
+  const SKIP = new Set([
+    '/success.html', '/verified.html', '/reset-password.html'
+  ]);
+  if (path.startsWith('/admin/') || SKIP.has(path)) return;
   if (!window.aiprintCart) return; // cart.js failed to load — bail silently
 
   const STYLES = `
+    /* Inline cart pill — used when the host page provides #cartMount inside
+       its navbar. Visually matches the other navbar chips (credits, etc.)
+       so it reads as a first-class navbar element, not a floating overlay. */
     .aip-cart-pill {
-      position: fixed; top: 14px; right: 14px; z-index: 60;
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 14px; border-radius: 999px;
-      background: rgba(11,16,32,.85); color: #e7eef8;
-      border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px);
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 12px; border-radius: 8px;
+      background: rgba(255,255,255,.06); color: #e7eef8;
+      border: 1px solid rgba(255,255,255,.14);
       font: 600 13px/1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      cursor: pointer; transition: transform .15s, background .15s, opacity .2s;
-      box-shadow: 0 6px 24px rgba(0,0,0,.25);
+      cursor: pointer; transition: background .15s, border-color .15s, opacity .2s;
     }
-    .aip-cart-pill:hover { transform: translateY(-1px); background: rgba(11,16,32,.95); }
-    .aip-cart-pill.aip-empty { opacity: .55; }
+    .aip-cart-pill:hover { background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.22); }
+    .aip-cart-pill.aip-empty { opacity: .8; }
     .aip-cart-pill.aip-empty:hover { opacity: 1; }
-    .aip-cart-pill .aip-cart-icon { width: 16px; height: 16px; flex-shrink: 0; }
+    .aip-cart-pill .aip-cart-icon { width: 16px; height: 16px; flex-shrink: 0; color: #a5b4fc; }
+    .aip-cart-pill .aip-cart-label { display: inline; }
     .aip-cart-pill .aip-cart-count { background: linear-gradient(135deg,#6366f1,#818cf8); color: #fff; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
     .aip-cart-pill.aip-empty .aip-cart-count { display: none; }
+    /* Floating fallback — used only when the host page has NO #cartMount
+       (e.g. a page that doesn't have a proper navbar). Same shape as
+       inline but absolutely positioned in the corner. */
+    .aip-cart-pill.aip-cart-floating {
+      position: fixed; top: 14px; right: 14px; z-index: 60;
+      padding: 8px 14px; border-radius: 999px;
+      background: rgba(11,16,32,.85); backdrop-filter: blur(6px);
+      box-shadow: 0 6px 24px rgba(0,0,0,.25);
+    }
+    .aip-cart-pill.aip-cart-floating:hover { transform: translateY(-1px); background: rgba(11,16,32,.95); border-color: rgba(255,255,255,.18); }
+    /* Hide the "Cart" label on very small screens so the pill stays compact
+       when it sits in a tight mobile navbar. */
+    @media (max-width: 480px) {
+      .aip-cart-pill .aip-cart-label { display: none; }
+    }
 
     .aip-drawer-backdrop {
       position: fixed; inset: 0; z-index: 80; background: rgba(0,0,0,.55);
@@ -139,7 +160,10 @@
     document.head.appendChild(style);
   }
 
-  // Build the floating pill + drawer DOM.
+  // Build the cart button + drawer DOM. The button mounts inline at
+  // #cartMount when the host page provides it (preferred — keeps the cart
+  // as a first-class navbar element). When the slot is missing the button
+  // falls back to a fixed-position floating pill in the top-right corner.
   function build() {
     injectStyles();
 
@@ -147,8 +171,15 @@
     pill.className = 'aip-cart-pill aip-empty';
     pill.id = 'aipCartPill';
     pill.setAttribute('aria-label', 'Open cart');
-    pill.innerHTML = `${ICON_BAG}<span>Cart</span><span class="aip-cart-count" id="aipCartCount">0</span>`;
-    document.body.appendChild(pill);
+    pill.innerHTML = `${ICON_BAG}<span class="aip-cart-label">Cart</span><span class="aip-cart-count" id="aipCartCount">0</span>`;
+
+    const mount = document.getElementById('cartMount');
+    if (mount) {
+      mount.appendChild(pill);
+    } else {
+      pill.classList.add('aip-cart-floating');
+      document.body.appendChild(pill);
+    }
 
     const backdrop = document.createElement('div');
     backdrop.className = 'aip-drawer-backdrop';
