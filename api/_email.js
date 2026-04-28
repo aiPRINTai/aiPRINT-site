@@ -145,7 +145,8 @@ export async function sendOrderConfirmationEmail(order) {
 
       <p style="margin:24px 0 0;font-size:14px"><a href="https://aiprint.ai/track.html?id=${encodeURIComponent(stripe_session_id)}" style="display:inline-block;background:#0a0f1d;color:#fff;text-decoration:none;font-weight:600;padding:10px 18px;border-radius:8px">Track this order →</a></p>
 
-      <p style="margin-top:28px;color:#64748b;font-size:13px">Questions? Just reply to this email — we respond within 24 hours.</p>
+      <p style="margin-top:24px;font-size:13px;color:#475569">Once your print arrives, our <a href="https://aiprint.ai/care.html" style="color:#4f46e5;font-weight:600">Print Care guide</a> walks through how to clean, hang, and live with it.</p>
+      <p style="margin-top:20px;color:#64748b;font-size:13px">Questions? Just reply to this email — we respond within 24 hours.</p>
       <p style="margin-top:8px;color:#94a3b8;font-size:12px">aiPRINT.ai · Made with care in Florida, USA</p>
     </div>
   `.trim();
