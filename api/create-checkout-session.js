@@ -11,6 +11,7 @@
 // master. The clean URL never crosses the wire to the browser.
 import Stripe from 'stripe';
 import { getCleanUrlForPreview } from './db/index.js';
+import { buildShippingOptions } from './_shipping.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -132,12 +133,19 @@ export default async function handler(req, res) {
       }
     };
 
+    // Tiered flat-rate shipping. Cheap-feeling on small SKUs (recoups some
+    // back-end shipping cost), free on anything ≥$99 retail (which is most of
+    // the catalog). Tier logic + threshold live in api/_shipping.js so the
+    // policy is one place to change.
+    const shipping_options = buildShippingOptions(lookup_key, price.unit_amount);
+
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items: [line_item],
       automatic_tax: { enabled: true },
       billing_address_collection: 'required',
       shipping_address_collection: { allowed_countries: ['US'] },
+      shipping_options,
       metadata,
       success_url: `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${origin}/#order`
