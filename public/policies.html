@@ -36,7 +36,7 @@
     .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#e7eef8;cursor:pointer;padding:.7rem 1rem;border-radius:.6rem;}
     .gradient-text{background:linear-gradient(135deg,#a78bfa,#818cf8,#60a5fa);-webkit-background-clip:text;background-clip:text;color:transparent;}
   </style>
-<script defer src="/js/analytics.js"></script>
+<script defer src="/js/analytics.js"></script><script defer src="/js/utm.js"></script>
   </head>
 <body>
 
@@ -101,7 +101,7 @@
   <!-- Hero banner (image) -->
   <section class="relative mb-12 overflow-hidden">
     <div class="relative">
-      <img src="/banners/policies-hero.jpg"
+      <img src="/banners/policies-hero.webp"
            alt="A wax seal pressed into cream parchment — symbol of trust and craftsmanship"
            class="w-full h-[38vh] md:h-[46vh] object-cover" />
       <div class="absolute inset-0 bg-gradient-to-b from-[#0a0f1d]/40 via-[#0a0f1d]/65 to-[#0a0f1d]"></div>
@@ -290,16 +290,30 @@
           </div>
 
           <div>
+            <h3 class="text-xl font-semibold mb-3">Tracking &amp; Cookies</h3>
+            <p class="muted mb-3">We use a small set of third-party services to operate the site, fulfill orders, and measure whether our advertising actually works. None of them receive your name, address, or payment information; they only see anonymous browsing events tied to a randomly-assigned ID.</p>
+            <ul class="space-y-2 muted">
+              <li class="flex gap-3"><span class="text-blue-400">•</span><span><strong class="text-white">PostHog</strong> — product analytics. Tracks page views and user actions (e.g. "generated a preview," "started checkout") so we can see which steps of the site work and which don't. Session recording is disabled.</span></li>
+              <li class="flex gap-3"><span class="text-blue-400">•</span><span><strong class="text-white">Meta (Facebook) Pixel</strong> — measures whether our Facebook/Instagram ads are reaching the right people. Fires a "Purchase" event when an order completes so Meta can stop showing ads to people who already bought.</span></li>
+              <li class="flex gap-3"><span class="text-blue-400">•</span><span><strong class="text-white">Pinterest Tag</strong> — same role as the Meta Pixel, for Pinterest ads.</span></li>
+              <li class="flex gap-3"><span class="text-blue-400">•</span><span><strong class="text-white">Stripe</strong> — payment processing. Receives your billing details directly during checkout — they never touch our servers.</span></li>
+              <li class="flex gap-3"><span class="text-blue-400">•</span><span><strong class="text-white">Vercel</strong> — hosting. Standard server logs (IP, user-agent, request path) for security and rate limiting; rotated on a short schedule.</span></li>
+            </ul>
+            <p class="muted mt-3 text-sm">You can opt out of analytics and ad tracking by enabling your browser's "Do Not Track" header, using an ad-blocker, or installing the official opt-out extensions from <a href="https://www.facebook.com/help/568137493302217" target="_blank" rel="noopener" class="underline hover:text-white">Meta</a> and <a href="https://help.pinterest.com/en/article/personalization-and-data" target="_blank" rel="noopener" class="underline hover:text-white">Pinterest</a>. We honor those signals where the upstream services do.</p>
+          </div>
+
+          <div>
             <h3 class="text-xl font-semibold mb-3">Your Rights</h3>
             <p class="muted">
-              You can request to see, update, or delete your personal information at any time. 
+              You can request to see, update, or delete your personal information at any time.
               We never sell your data to third parties. Your generated artwork remains exclusively yours.
+              California residents have additional rights under the CCPA — email <a href="mailto:info@aiprint.ai" class="underline hover:text-white">info@aiprint.ai</a> with the subject line "CCPA request" and we'll respond within 45 days.
             </p>
           </div>
 
           <div class="p-4 bg-white/5 rounded-lg border border-white/10">
             <p class="text-sm">
-              <strong>Security:</strong> We use industry-standard encryption and security measures. 
+              <strong>Security:</strong> We use industry-standard encryption and security measures.
               Payment processing is handled by Stripe, and we never store your credit card information.
             </p>
           </div>

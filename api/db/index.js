@@ -105,10 +105,31 @@ async function ensurePasswordChangedAtColumn() {
   await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS password_changed_at TIMESTAMP`;
 }
 
+// Order economics columns. shipping_amount + subtotal_amount let us compute
+// real product margin (revenue - shipping - tax) without touching Stripe.
+// utm_* are populated from the checkout-session metadata so the marketing
+// dashboard can attribute orders back to the ad source. All optional —
+// pre-existing rows without them just read NULL.
+async function ensureOrderEconomicsColumns() {
+  await sql`
+    ALTER TABLE orders
+      ADD COLUMN IF NOT EXISTS shipping_amount INT,
+      ADD COLUMN IF NOT EXISTS subtotal_amount INT,
+      ADD COLUMN IF NOT EXISTS utm_source TEXT,
+      ADD COLUMN IF NOT EXISTS utm_medium TEXT,
+      ADD COLUMN IF NOT EXISTS utm_campaign TEXT,
+      ADD COLUMN IF NOT EXISTS utm_content TEXT,
+      ADD COLUMN IF NOT EXISTS utm_term TEXT
+  `;
+}
+
 function isMissingColumnError(err) {
   const m = String(err?.message || '');
   return m.includes('reset_token') || m.includes('reset_expires')
     || m.includes('password_changed_at')
+    || m.includes('shipping_amount') || m.includes('subtotal_amount')
+    || m.includes('utm_source') || m.includes('utm_medium') || m.includes('utm_campaign')
+    || m.includes('utm_content') || m.includes('utm_term')
     || /column .* does not exist/i.test(m);
 }
 
@@ -334,23 +355,41 @@ export async function createOrder(order) {
   const {
     stripe_session_id, user_id = null, customer_email, customer_name,
     shipping_address, lookup_key, preview_url, clean_url = null, prompt, options,
-    amount_total, tax_amount, currency = 'usd'
+    amount_total, tax_amount, currency = 'usd',
+    // Economic breakdown (cents). shipping_amount + subtotal_amount let us
+    // compute real product margin per order. Both nullable for old rows.
+    shipping_amount = null, subtotal_amount = null,
+    // Marketing attribution. Captured from session.metadata in the webhook.
+    utm_source = null, utm_medium = null, utm_campaign = null,
+    utm_content = null, utm_term = null
   } = order;
-  const result = await sql`
+  const run = () => sql`
     INSERT INTO orders (
       stripe_session_id, user_id, customer_email, customer_name,
       shipping_address, lookup_key, preview_url, clean_url, prompt, options,
-      amount_total, tax_amount, currency
+      amount_total, tax_amount, currency,
+      shipping_amount, subtotal_amount,
+      utm_source, utm_medium, utm_campaign, utm_content, utm_term
     ) VALUES (
       ${stripe_session_id}, ${user_id}, ${customer_email}, ${customer_name},
       ${JSON.stringify(shipping_address || null)}, ${lookup_key}, ${preview_url}, ${clean_url},
       ${prompt}, ${JSON.stringify(options || null)},
-      ${amount_total}, ${tax_amount}, ${currency}
+      ${amount_total}, ${tax_amount}, ${currency},
+      ${shipping_amount}, ${subtotal_amount},
+      ${utm_source}, ${utm_medium}, ${utm_campaign}, ${utm_content}, ${utm_term}
     )
     ON CONFLICT (stripe_session_id) DO NOTHING
     RETURNING *
   `;
-  return result.rows[0] || null;
+  try {
+    const result = await run();
+    return result.rows[0] || null;
+  } catch (err) {
+    if (!isMissingColumnError(err)) throw err;
+    await ensureOrderEconomicsColumns();
+    const result = await run();
+    return result.rows[0] || null;
+  }
 }
 
 export async function listOrders({ limit = 100, offset = 0, status = null } = {}) {
@@ -519,6 +558,81 @@ export async function getOrderStats() {
     FROM orders
   `;
   return r.rows[0];
+}
+
+// Aggregate orders + revenue + AOV bucketed by UTM source for the marketing
+// dashboard. NULLs are coalesced to '(direct)' so visitors who came in
+// without a tagged link are still represented. Revenue uses subtotal_amount
+// when available (cleanest "product revenue" number), falling back to
+// amount_total for legacy rows.
+export async function getMarketingStats({ days = 30 } = {}) {
+  const run = () => sql`
+    WITH recent AS (
+      SELECT
+        COALESCE(NULLIF(utm_source,   ''), '(direct)')  AS source,
+        COALESCE(NULLIF(utm_medium,   ''), '(none)')    AS medium,
+        COALESCE(NULLIF(utm_campaign, ''), '(none)')    AS campaign,
+        COALESCE(subtotal_amount, amount_total - COALESCE(tax_amount,0) - COALESCE(shipping_amount,0)) AS rev_cents,
+        amount_total,
+        shipping_amount,
+        tax_amount,
+        status,
+        created_at
+      FROM orders
+      WHERE created_at >= NOW() - (${days}::int || ' days')::interval
+        AND status IN ('paid','in_production','shipped','delivered')
+    )
+    SELECT
+      source,
+      medium,
+      campaign,
+      COUNT(*)::int                              AS orders,
+      COALESCE(SUM(rev_cents),0)::int            AS revenue_cents,
+      COALESCE(SUM(amount_total),0)::int         AS gross_cents,
+      COALESCE(SUM(shipping_amount),0)::int      AS shipping_cents,
+      COALESCE(SUM(tax_amount),0)::int           AS tax_cents,
+      COALESCE(AVG(rev_cents),0)::int            AS aov_cents
+    FROM recent
+    GROUP BY source, medium, campaign
+    ORDER BY revenue_cents DESC, orders DESC
+  `;
+  try {
+    const r = await run();
+    return r.rows;
+  } catch (err) {
+    if (!isMissingColumnError(err)) throw err;
+    await ensureOrderEconomicsColumns();
+    const r = await run();
+    return r.rows;
+  }
+}
+
+// Daily totals for the trendline chart on the marketing dashboard.
+// Bucketed by created_at::date (UTC) — close enough at this scale; if we
+// ever need timezone-aware buckets we can pass the operator's tz in.
+export async function getMarketingTrend({ days = 30 } = {}) {
+  const run = () => sql`
+    SELECT
+      created_at::date                                         AS day,
+      COUNT(*)::int                                            AS orders,
+      COALESCE(SUM(
+        COALESCE(subtotal_amount, amount_total - COALESCE(tax_amount,0) - COALESCE(shipping_amount,0))
+      ),0)::int                                                AS revenue_cents
+    FROM orders
+    WHERE created_at >= NOW() - (${days}::int || ' days')::interval
+      AND status IN ('paid','in_production','shipped','delivered')
+    GROUP BY day
+    ORDER BY day ASC
+  `;
+  try {
+    const r = await run();
+    return r.rows;
+  } catch (err) {
+    if (!isMissingColumnError(err)) throw err;
+    await ensureOrderEconomicsColumns();
+    const r = await run();
+    return r.rows;
+  }
 }
 
 // ── Admin audit log ────────────────────────────────────────────────────────

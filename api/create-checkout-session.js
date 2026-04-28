@@ -27,11 +27,28 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid JSON body' });
   }
 
-  const { lookup_key, preview } = body || {};
+  const { lookup_key, preview, utm } = body || {};
   if (!lookup_key || typeof lookup_key !== 'string') return res.status(400).json({ error: 'Missing lookup_key' });
   if (!preview?.image || typeof preview.image !== 'string') return res.status(400).json({ error: 'Missing preview.image' });
   // Only accept https URLs for preview to avoid javascript:/data: schemes leaking into Stripe metadata
   if (!/^https:\/\//i.test(preview.image)) return res.status(400).json({ error: 'Invalid preview.image URL' });
+
+  // UTM marketing attribution forwarded from public/js/utm.js — sanitize each
+  // value (string only, max 200 chars, no whitespace/control chars) so a
+  // malformed param can never poison the Stripe metadata payload.
+  function sanitizeUtm(v) {
+    if (typeof v !== 'string') return '';
+    // Strip ASCII control chars + cap length; keep normal punctuation
+    // (hyphens / underscores are common in real campaign names).
+    return v.replace(/[\x00-\x1f\x7f]/g, '').trim().slice(0, 200);
+  }
+  const utmSafe = {
+    utm_source:   sanitizeUtm(utm?.utm_source),
+    utm_medium:   sanitizeUtm(utm?.utm_medium),
+    utm_campaign: sanitizeUtm(utm?.utm_campaign),
+    utm_content:  sanitizeUtm(utm?.utm_content),
+    utm_term:     sanitizeUtm(utm?.utm_term)
+  };
 
   const stripeSecret = process.env.STRIPE_SECRET_KEY;
   if (!stripeSecret) return res.status(500).json({ error: 'Server misconfigured (no STRIPE_SECRET_KEY)' });
@@ -78,7 +95,14 @@ export default async function handler(req, res) {
       medium:      cap(preview.medium),
       signature_json: preview.sig ? cap(JSON.stringify(preview.sig)) : '',
       product_name:        cap(price.product?.name),
-      product_description: cap(price.product?.description)
+      product_description: cap(price.product?.description),
+      // Marketing attribution — webhook reads these and writes them onto
+      // the orders row so /admin/marketing.html can group by UTM source.
+      utm_source:   cap(utmSafe.utm_source),
+      utm_medium:   cap(utmSafe.utm_medium),
+      utm_campaign: cap(utmSafe.utm_campaign),
+      utm_content:  cap(utmSafe.utm_content),
+      utm_term:     cap(utmSafe.utm_term)
     };
 
     // Resolve origin defensively — we've been burned by env vars that got saved

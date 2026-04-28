@@ -92,6 +92,18 @@ export default async function handler(req, res) {
           || s.shipping_details
           || null;
 
+        // Economic breakdown from Stripe. amount_total is the gross paid;
+        // we split out shipping and tax so the marketing dashboard can
+        // compute true product margin (subtotal_amount). The Stripe
+        // shipping field moved between API versions — check both shapes.
+        const tax_amount = s.total_details?.amount_tax || 0;
+        const shipping_amount = s.shipping_cost?.amount_total
+          ?? s.total_details?.amount_shipping
+          ?? 0;
+        const subtotal_amount = Number.isFinite(s.amount_subtotal)
+          ? s.amount_subtotal
+          : Math.max(0, (s.amount_total || 0) - tax_amount - shipping_amount);
+
         const order = {
           stripe_session_id: s.id,
           customer_email: s.customer_details?.email || '',
@@ -110,8 +122,18 @@ export default async function handler(req, res) {
             signature: m.signature_json ? JSON.parse(m.signature_json) : null
           },
           amount_total: s.amount_total,
-          tax_amount: s.total_details?.amount_tax || 0,
-          currency: s.currency || 'usd'
+          tax_amount,
+          shipping_amount,
+          subtotal_amount,
+          currency: s.currency || 'usd',
+          // Marketing attribution — captured client-side on landing,
+          // forwarded via the checkout request, and stored on the Stripe
+          // session metadata. Read back here for /admin/marketing.html.
+          utm_source:   m.utm_source   || null,
+          utm_medium:   m.utm_medium   || null,
+          utm_campaign: m.utm_campaign || null,
+          utm_content:  m.utm_content  || null,
+          utm_term:     m.utm_term     || null
         };
 
         await createOrder(order);

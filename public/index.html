@@ -555,7 +555,7 @@
     @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
     .fade-up { animation: fadeUp .6s ease forwards; }
   </style>
-<script defer src="/js/analytics.js"></script>
+<script defer src="/js/analytics.js"></script><script defer src="/js/utm.js"></script>
   </head>
 <body>
 
@@ -642,25 +642,25 @@
     </div>
     <div class="grid grid-cols-2 gap-4">
       <div class="aspect-square rounded-2xl overflow-hidden relative">
-        <img src="/ai-art/art-cyberpunk-tokyo.jpg" class="w-full h-full object-cover" alt="Neon-soaked cyberpunk Tokyo street at midnight">
+        <img src="/ai-art/art-cyberpunk-tokyo.webp" class="w-full h-full object-cover" alt="Neon-soaked cyberpunk Tokyo street at midnight">
         <div class="absolute bottom-2 left-2 right-2">
           <div class="glass rounded px-2 py-1 text-xs">"Neon Tokyo at midnight" — Canvas</div>
         </div>
       </div>
       <div class="aspect-square rounded-2xl overflow-hidden relative">
-        <img src="/ai-art/art-aurora.jpg" class="w-full h-full object-cover" alt="Aurora borealis over a fjord">
+        <img src="/ai-art/art-aurora.webp" class="w-full h-full object-cover" alt="Aurora borealis over a fjord">
         <div class="absolute bottom-2 left-2 right-2">
           <div class="glass rounded px-2 py-1 text-xs">"Aurora over the fjord" — Metal</div>
         </div>
       </div>
       <div class="aspect-square rounded-2xl overflow-hidden relative">
-        <img src="/ai-art/art-cosmic-cliff.jpg" class="w-full h-full object-cover" alt="Cosmic cliff nebula at the edge of space">
+        <img src="/ai-art/art-cosmic-cliff.webp" class="w-full h-full object-cover" alt="Cosmic cliff nebula at the edge of space">
         <div class="absolute bottom-2 left-2 right-2">
           <div class="glass rounded px-2 py-1 text-xs">"Cosmic cliff" — Acrylic</div>
         </div>
       </div>
       <div class="aspect-square rounded-2xl overflow-hidden relative">
-        <img src="/ai-art/art-anime-blossoms.jpg" class="w-full h-full object-cover" alt="Anime-style cherry blossoms in full bloom">
+        <img src="/ai-art/art-anime-blossoms.webp" class="w-full h-full object-cover" alt="Anime-style cherry blossoms in full bloom">
         <div class="absolute bottom-2 left-2 right-2">
           <div class="glass rounded px-2 py-1 text-xs">"Anime blossoms" — Canvas</div>
         </div>
@@ -1158,7 +1158,7 @@
     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
       <!-- Row 1 - large feature tile + 2 squares -->
       <div class="gallery-item col-span-2 md:col-span-1 row-span-2" style="height:500px;">
-        <img src="/ai-art/hero-whimsy.jpg" alt="Whimsical storybook illustration, hot-air balloons over rolling hills">
+        <img src="/ai-art/hero-whimsy.webp" alt="Whimsical storybook illustration, hot-air balloons over rolling hills">
         <div class="gallery-caption">
           <div class="text-xs text-purple-300 font-semibold mb-1">ACRYLIC · 24×36"</div>
           <div class="font-bold">"Hot-air balloons over rolling hills"</div>
@@ -1166,14 +1166,14 @@
         </div>
       </div>
       <div class="gallery-item" style="height:240px;">
-        <img src="/ai-art/hero-pop.jpg" alt="Bold pop-art graphic with saturated color blocks">
+        <img src="/ai-art/hero-pop.webp" alt="Bold pop-art graphic with saturated color blocks">
         <div class="gallery-caption">
           <div class="text-xs text-cyan-300 font-semibold mb-1">METAL · 30×20"</div>
           <div class="font-bold">"Pop-art color blocks"</div>
         </div>
       </div>
       <div class="gallery-item" style="height:240px;">
-        <img src="/ai-art/art-pet-portrait.jpg" alt="Classical oil portrait of a golden retriever">
+        <img src="/ai-art/art-pet-portrait.webp" alt="Classical oil portrait of a golden retriever">
         <div class="gallery-caption">
           <div class="text-xs text-amber-300 font-semibold mb-1">CANVAS · 30×20"</div>
           <div class="font-bold">"Regal golden retriever, oil portrait"</div>
@@ -1182,21 +1182,21 @@
 
       <!-- Row 2 - cosmic + still life + abstract -->
       <div class="gallery-item" style="height:280px;">
-        <img src="/ai-art/art-ocean-abstract.jpg" alt="Abstract ocean waves in deep blues and silver">
+        <img src="/ai-art/art-ocean-abstract.webp" alt="Abstract ocean waves in deep blues and silver">
         <div class="gallery-caption">
           <div class="text-xs text-indigo-300 font-semibold mb-1">ACRYLIC · 36×24"</div>
           <div class="font-bold">"Ocean abstraction in motion"</div>
         </div>
       </div>
       <div class="gallery-item" style="height:280px;">
-        <img src="/ai-art/art-still-life.jpg" alt="Dutch-master still life with copper kettle and grapes">
+        <img src="/ai-art/art-still-life.webp" alt="Dutch-master still life with copper kettle and grapes">
         <div class="gallery-caption">
           <div class="text-xs text-amber-300 font-semibold mb-1">CANVAS · 24×16"</div>
           <div class="font-bold">"Dutch-master still life, copper kettle"</div>
         </div>
       </div>
       <div class="gallery-item" style="height:280px;">
-        <img src="/ai-art/art-abstract-bold.jpg" alt="Bold abstract palette-knife color field">
+        <img src="/ai-art/art-abstract-bold.webp" alt="Bold abstract palette-knife color field">
         <div class="gallery-caption">
           <div class="text-xs text-pink-300 font-semibold mb-1">ACRYLIC · 30×30"</div>
           <div class="font-bold">"Color field study, palette knife"</div>
@@ -1205,7 +1205,7 @@
 
       <!-- Row 3 — vertical BW street + 2 tiles (botanical, watercolor) -->
       <div class="gallery-item col-span-2 md:col-span-1 row-span-2" style="height:500px;">
-        <img src="/ai-art/art-bw-street.jpg" alt="Black-and-white Parisian street photograph with a lone silhouette">
+        <img src="/ai-art/art-bw-street.webp" alt="Black-and-white Parisian street photograph with a lone silhouette">
         <div class="gallery-caption">
           <div class="text-xs text-gray-300 font-semibold mb-1">METAL · 24×36"</div>
           <div class="font-bold">"Lone walker, Parisian alley"</div>
@@ -1213,14 +1213,14 @@
         </div>
       </div>
       <div class="gallery-item" style="height:240px;">
-        <img src="/ai-art/art-botanical.jpg" alt="Vintage botanical illustration of a magnolia branch">
+        <img src="/ai-art/art-botanical.webp" alt="Vintage botanical illustration of a magnolia branch">
         <div class="gallery-caption">
           <div class="text-xs text-emerald-300 font-semibold mb-1">CANVAS · 16×24"</div>
           <div class="font-bold">"Magnolia branch, vintage botanical"</div>
         </div>
       </div>
       <div class="gallery-item" style="height:240px;">
-        <img src="/ai-art/art-watercolor-coast.jpg" alt="Loose watercolor of a Mediterranean coastal village">
+        <img src="/ai-art/art-watercolor-coast.webp" alt="Loose watercolor of a Mediterranean coastal village">
         <div class="gallery-caption">
           <div class="text-xs text-sky-300 font-semibold mb-1">CANVAS · 30×20"</div>
           <div class="font-bold">"Mediterranean village, watercolor"</div>
@@ -1229,21 +1229,21 @@
 
       <!-- Row 4 — macro butterfly square (with 2 hero squares re-purposed for richness) -->
       <div class="gallery-item" style="height:280px;">
-        <img src="/ai-art/art-macro-wing.jpg" alt="Macro photograph of an iridescent butterfly wing">
+        <img src="/ai-art/art-macro-wing.webp" alt="Macro photograph of an iridescent butterfly wing">
         <div class="gallery-caption">
           <div class="text-xs text-blue-300 font-semibold mb-1">METAL · 24×24"</div>
           <div class="font-bold">"Morpho wing, iridescent macro"</div>
         </div>
       </div>
       <div class="gallery-item" style="height:280px;">
-        <img src="/ai-art/hero-canyon.jpg" alt="Desert canyon at golden hour">
+        <img src="/ai-art/hero-canyon.webp" alt="Desert canyon at golden hour">
         <div class="gallery-caption">
           <div class="text-xs text-orange-300 font-semibold mb-1">METAL · 30×30"</div>
           <div class="font-bold">"Desert canyon at golden hour"</div>
         </div>
       </div>
       <div class="gallery-item" style="height:280px;">
-        <img src="/ai-art/art-forest-mist.jpg" alt="Misty forest at dawn">
+        <img src="/ai-art/art-forest-mist.webp" alt="Misty forest at dawn">
         <div class="gallery-caption">
           <div class="text-xs text-emerald-300 font-semibold mb-1">CANVAS · 30×20"</div>
           <div class="font-bold">"Redwood forest in morning mist"</div>
@@ -1268,7 +1268,7 @@
 
     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
       <div class="gallery-item col-span-2 md:col-span-1 row-span-2" style="height:520px;">
-        <img src="/gallery/04-hallway-vertical.jpg" alt="Vertical canvas of a misty forest path in a Japandi-style hallway">
+        <img src="/gallery/04-hallway-vertical.webp" alt="Vertical canvas of a misty forest path in a Japandi-style hallway">
         <div class="gallery-caption">
           <div class="text-xs text-blue-300 font-semibold mb-1">CANVAS · VERTICAL</div>
           <div class="font-bold">"Misty forest path"</div>
@@ -1276,7 +1276,7 @@
         </div>
       </div>
       <div class="gallery-item" style="height:250px;">
-        <img src="/gallery/01-living-room-acrylic.jpg" alt="Acrylic-mounted moss rainforest above a cream sofa">
+        <img src="/gallery/01-living-room-acrylic.webp" alt="Acrylic-mounted moss rainforest above a cream sofa">
         <div class="gallery-caption">
           <div class="text-xs text-purple-300 font-semibold mb-1">ACRYLIC · 24×36"</div>
           <div class="font-bold">"Moss rainforest"</div>
@@ -1284,7 +1284,7 @@
         </div>
       </div>
       <div class="gallery-item" style="height:250px;">
-        <img src="/gallery/02-bedroom-canvas-sunset.jpg" alt="Canvas ocean sunset above a charcoal headboard">
+        <img src="/gallery/02-bedroom-canvas-sunset.webp" alt="Canvas ocean sunset above a charcoal headboard">
         <div class="gallery-caption">
           <div class="text-xs text-indigo-300 font-semibold mb-1">CANVAS · 30×20"</div>
           <div class="font-bold">"Ocean sunset"</div>
@@ -1292,7 +1292,7 @@
         </div>
       </div>
       <div class="gallery-item" style="height:250px;">
-        <img src="/gallery/03-office-metal-dunes.jpg" alt="ChromaLuxe metal print of golden sand dunes above a wood desk">
+        <img src="/gallery/03-office-metal-dunes.webp" alt="ChromaLuxe metal print of golden sand dunes above a wood desk">
         <div class="gallery-caption">
           <div class="text-xs text-gray-300 font-semibold mb-1">METAL · 30×20"</div>
           <div class="font-bold">"Golden dunes at sunset"</div>
@@ -1300,7 +1300,7 @@
         </div>
       </div>
       <div class="gallery-item" style="height:250px;">
-        <img src="/gallery/05-dining-gallery-wall.jpg" alt="Acrylic tropical lighthouse at dusk above a dining table">
+        <img src="/gallery/05-dining-gallery-wall.webp" alt="Acrylic tropical lighthouse at dusk above a dining table">
         <div class="gallery-caption">
           <div class="text-xs text-purple-300 font-semibold mb-1">ACRYLIC · 36×24"</div>
           <div class="font-bold">"Tropical lighthouse, dusk"</div>
@@ -1776,11 +1776,11 @@
     // corresponds to 1 real inch of print width. Calibrated so a 24"-wide print
     // looks correct for the sofa's ≈7ft (84") scale reference.
     const mockupRooms = {
-      room1: { image: '/rooms/room1-neutral-console.jpg', name: 'Modern Living Room', centerX: '50%', centerY: '28%', pctPerInch: 0.95 },
-      room2: { image: '/rooms/room2-gray-console.jpg',    name: 'Minimalist Space',   centerX: '50%', centerY: '32%', pctPerInch: 1.05 },
-      room3: { image: '/rooms/room3-sofa-wall.jpg',       name: 'Cozy Living Area',   centerX: '50%', centerY: '29%', pctPerInch: 1.10 },
-      room4: { image: '/rooms/room4-light-sofa.jpg',      name: 'Bright Living Space',centerX: '50%', centerY: '24%', pctPerInch: 1.00 },
-      room5: { image: '/rooms/room5-sage-green.jpg',      name: 'Sage Accent Room',   centerX: '50%', centerY: '33%', pctPerInch: 0.98 }
+      room1: { image: '/rooms/room1-neutral-console.webp', name: 'Modern Living Room', centerX: '50%', centerY: '28%', pctPerInch: 0.95 },
+      room2: { image: '/rooms/room2-gray-console.webp',    name: 'Minimalist Space',   centerX: '50%', centerY: '32%', pctPerInch: 1.05 },
+      room3: { image: '/rooms/room3-sofa-wall.webp',       name: 'Cozy Living Area',   centerX: '50%', centerY: '29%', pctPerInch: 1.10 },
+      room4: { image: '/rooms/room4-light-sofa.webp',      name: 'Bright Living Space',centerX: '50%', centerY: '24%', pctPerInch: 1.00 },
+      room5: { image: '/rooms/room5-sage-green.webp',      name: 'Sage Accent Room',   centerX: '50%', centerY: '33%', pctPerInch: 0.98 }
     };
 
     // Real print sizes per orientation, matching the product catalog 1:1.
@@ -3215,10 +3215,13 @@
           medium:  $('#mediumSelect').value,
           sig:     sig.text ? sig : null
         };
+        // Forward any UTM params captured on landing so the order row can be
+        // attributed back to the ad source on /admin/marketing.html.
+        const utm = (typeof window.aiprintUtm === 'function') ? window.aiprintUtm() : {};
         const r = await fetch('/api/create-checkout-session', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ lookup_key: selected.lookup, preview: previewPayload })
+          body: JSON.stringify({ lookup_key: selected.lookup, preview: previewPayload, utm })
         });
         const data = await r.json();
         if (!r.ok || !data.url) {

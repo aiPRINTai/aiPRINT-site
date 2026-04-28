@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <title>aiPRINT.ai — Marketing Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background:#0a0f1d; color:#e7eef8; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    .glass { background: rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.10); }
+    .muted { color:#94a3b8; }
+    .pill { padding:2px 8px; border-radius:999px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; }
+    .pill-ok      { background:#064e3b; color:#bbf7d0; }
+    .pill-neutral { background:rgba(255,255,255,.08); color:#cbd5e1; }
+    select, input { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); color:#e7eef8; border-radius:6px; padding:6px 10px; font-size:13px; color-scheme: dark; }
+    select option { background:#11151f; color:#e7eef8; }
+    button.primary { background: linear-gradient(135deg,#6366f1,#818cf8); color:white; padding:6px 14px; border-radius:6px; font-size:13px; font-weight:600; }
+    button.ghost { background: rgba(255,255,255,.08); color:#e7eef8; padding:6px 12px; border-radius:6px; font-size:12px; }
+    button:hover { filter: brightness(1.1); }
+    .stat { padding:14px 18px; border-radius:10px; }
+    .nav-link { color:#94a3b8; padding:6px 10px; border-radius:6px; font-size:13px; }
+    .nav-link.active { color:#e7eef8; background: rgba(255,255,255,.08); }
+    .nav-link:hover { color:#e7eef8; }
+    table.detail { width: 100%; font-size: 12px; }
+    table.detail td, table.detail th { padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,.08); text-align: left; vertical-align: top; }
+    table.detail th { color:#94a3b8; font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .num  { font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+<!-- Login -->
+<div id="loginView" class="min-h-screen grid place-items-center px-4">
+  <div class="glass rounded-2xl p-8 w-full max-w-sm">
+    <h1 class="text-xl font-bold mb-1">Admin Access</h1>
+    <p class="muted text-sm mb-5">Enter the admin password to view the marketing dashboard.</p>
+    <input id="pwInput" type="password" placeholder="Password" class="w-full mb-3" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"/>
+    <button onclick="login()" class="primary w-full">Sign in</button>
+    <p id="loginErr" class="text-red-400 text-sm mt-3 hidden"></p>
+  </div>
+</div>
+
+<!-- App -->
+<div id="appView" class="hidden">
+  <header class="border-b border-white/10 bg-[#0b1020]/80 sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-5 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3">
+          <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
+          <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span> · Admin</span>
+        </div>
+        <nav class="flex items-center gap-1 ml-2">
+          <a href="/admin/orders.html"    class="nav-link">Orders</a>
+          <a href="/admin/users.html"     class="nav-link">Users</a>
+          <a href="/admin/marketing.html" class="nav-link active">Marketing</a>
+          <a href="/admin/security.html"  class="nav-link">Security</a>
+        </nav>
+      </div>
+      <div class="flex items-center gap-3">
+        <select id="windowSelect" class="text-sm" onchange="loadAll()">
+          <option value="7">Last 7 days</option>
+          <option value="30" selected>Last 30 days</option>
+          <option value="90">Last 90 days</option>
+          <option value="365">Last 365 days</option>
+        </select>
+        <button onclick="loadAll()" class="ghost" title="Refresh">↻ Refresh</button>
+        <button onclick="logout()" class="ghost">Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-5 py-6 space-y-6">
+    <!-- Top stats -->
+    <section>
+      <div id="statsRow" class="grid grid-cols-2 md:grid-cols-5 gap-3"></div>
+    </section>
+
+    <!-- Trend + spend-helper grid -->
+    <section class="grid lg:grid-cols-3 gap-5">
+      <div class="glass rounded-xl p-5 lg:col-span-2">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-bold">Daily revenue trend</h2>
+          <span class="text-xs muted">product revenue (subtotal), <span id="trendWindow">30</span>-day window</span>
+        </div>
+        <div id="trendChart" class="h-48"></div>
+      </div>
+
+      <div class="glass rounded-xl p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-bold">CAC calculator</h2>
+          <span class="text-xs muted">enter your ad spend</span>
+        </div>
+        <p class="text-xs muted mb-3">Type your total ad spend for the window (Meta + Pinterest + anywhere else). We divide by paid orders to give you a quick blended CAC.</p>
+        <label class="text-xs muted">Total ad spend (USD)</label>
+        <input id="adSpendInput" type="number" min="0" step="0.01" placeholder="e.g. 500" class="w-full mb-3" oninput="recalcCac()"/>
+        <div class="grid grid-cols-2 gap-2 text-sm">
+          <div class="glass stat">
+            <div class="text-xs muted uppercase tracking-wider mb-1">Orders</div>
+            <div class="text-lg font-bold num" id="cacOrders">—</div>
+          </div>
+          <div class="glass stat">
+            <div class="text-xs muted uppercase tracking-wider mb-1">Blended CAC</div>
+            <div class="text-lg font-bold num" id="cacValue" style="color:#fde047">—</div>
+          </div>
+          <div class="glass stat">
+            <div class="text-xs muted uppercase tracking-wider mb-1">AOV (subtotal)</div>
+            <div class="text-lg font-bold num" id="cacAov" style="color:#86efac">—</div>
+          </div>
+          <div class="glass stat">
+            <div class="text-xs muted uppercase tracking-wider mb-1">CAC ÷ AOV</div>
+            <div class="text-lg font-bold num" id="cacRatio">—</div>
+          </div>
+        </div>
+        <p class="text-xs muted mt-3">Healthy zone for soft launch: CAC ÷ AOV under 0.5 means you're keeping at least half of revenue after acquiring the customer.</p>
+      </div>
+    </section>
+
+    <!-- By-source table -->
+    <section class="glass rounded-xl p-5">
+      <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+        <h2 class="font-bold">Orders by UTM source</h2>
+        <span class="text-xs muted">grouped by source · medium · campaign — orders without UTMs show as <span class="mono">(direct)</span></span>
+      </div>
+      <div id="bySource"></div>
+    </section>
+
+    <p class="text-xs muted text-center pt-2 pb-6">
+      Tag your ad URLs with <span class="mono">?utm_source=meta&amp;utm_medium=cpc&amp;utm_campaign=pet-memorial-q2</span> (or similar) — the homepage captures these on landing and writes them onto the order at checkout.
+    </p>
+  </main>
+</div>
+
+<script>
+  const $ = (q, el=document) => el.querySelector(q);
+  const PW_KEY = 'aiprint_admin_pw';
+  let LAST = null;  // last successful response, used by recalcCac()
+
+  function login() {
+    const pw = $('#pwInput').value.trim();
+    if (!pw) return;
+    sessionStorage.setItem(PW_KEY, pw);
+    enterApp();
+  }
+  function logout() { sessionStorage.removeItem(PW_KEY); location.reload(); }
+
+  async function api(path) {
+    const pw = sessionStorage.getItem(PW_KEY);
+    const r = await fetch(path, { headers: { 'Authorization': `Bearer ${pw}` } });
+    if (r.status === 401) {
+      sessionStorage.removeItem(PW_KEY);
+      $('#appView').classList.add('hidden');
+      $('#loginView').classList.remove('hidden');
+      $('#loginErr').textContent = 'Wrong password.';
+      $('#loginErr').classList.remove('hidden');
+      throw new Error('unauthorized');
+    }
+    if (!r.ok) throw new Error((await r.json().catch(()=>({}))).error || `HTTP ${r.status}`);
+    return r.json();
+  }
+
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+  }
+  function fmtMoney(cents) {
+    return (Number(cents || 0) / 100).toLocaleString('en-US', { style:'currency', currency: 'USD' });
+  }
+  function fmtDay(iso) {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric' });
+  }
+
+  async function enterApp() {
+    $('#loginView').classList.add('hidden');
+    $('#appView').classList.remove('hidden');
+    try { await loadAll(); } catch (e) { console.error(e); }
+  }
+
+  async function loadAll() {
+    const days = parseInt($('#windowSelect').value, 10) || 30;
+    $('#trendWindow').textContent = String(days);
+    const data = await api(`/api/admin/marketing?days=${days}`);
+    LAST = data;
+    renderStats(data.totals);
+    renderTrend(data.trend, days);
+    renderBySource(data.by_source);
+    recalcCac();
+  }
+
+  function renderStats(t) {
+    if (!t) { $('#statsRow').innerHTML = ''; return; }
+    const tiles = [
+      ['Orders',          String(t.orders || 0),                           '#93c5fd'],
+      ['Product revenue', fmtMoney(t.revenue_cents),                       '#86efac'],
+      ['Gross sales',     fmtMoney(t.gross_cents),                         '#a5b4fc'],
+      ['Shipping',        fmtMoney(t.shipping_cents),                      '#fde047'],
+      ['Blended AOV',     fmtMoney(t.blended_aov_cents),                   '#fca5a5'],
+    ];
+    $('#statsRow').innerHTML = tiles.map(([label, val, color]) => `
+      <div class="glass stat">
+        <div class="text-xs muted uppercase tracking-wider mb-1">${label}</div>
+        <div class="text-xl font-bold num" style="color:${color}">${escapeHtml(val)}</div>
+      </div>
+    `).join('');
+  }
+
+  // Simple inline-SVG bar chart. One bar per day in the window. Days with
+  // no orders show as a thin baseline so the gap is visually obvious.
+  function renderTrend(rows, days) {
+    const container = $('#trendChart');
+    if (!rows || rows.length === 0) {
+      container.innerHTML = '<p class="muted text-sm py-12 text-center">No orders in this window yet. Once paid traffic starts converting, daily revenue lands here.</p>';
+      return;
+    }
+    // Backfill missing days with zeros so the chart shows the full window.
+    const byDay = new Map(rows.map(r => [String(r.day).slice(0,10), r]));
+    const today = new Date();
+    today.setUTCHours(0,0,0,0);
+    const all = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const d = new Date(today.getTime() - i * 86400000);
+      const k = d.toISOString().slice(0,10);
+      const row = byDay.get(k) || { day: k, orders: 0, revenue_cents: 0 };
+      all.push(row);
+    }
+    const maxRev = Math.max(...all.map(r => r.revenue_cents), 1);
+    const W = 720, H = 180, P = 24, BW = (W - P*2) / all.length;
+    const bars = all.map((r, i) => {
+      const x = P + i * BW;
+      const h = Math.max(1, Math.round(((r.revenue_cents) / maxRev) * (H - P*2)));
+      const y = H - P - h;
+      const barW = Math.max(2, BW - 2);
+      return `<rect x="${x}" y="${y}" width="${barW}" height="${h}" fill="url(#g)" rx="1"><title>${escapeHtml(fmtDay(r.day))}: ${r.orders} order${r.orders===1?'':'s'}, ${fmtMoney(r.revenue_cents)}</title></rect>`;
+    }).join('');
+    // Light x-axis labels (every Nth day)
+    const tickEvery = days <= 14 ? 2 : days <= 60 ? 7 : 30;
+    const labels = all.map((r, i) => {
+      if (i % tickEvery !== 0 && i !== all.length - 1) return '';
+      const x = P + i * BW + BW/2;
+      return `<text x="${x}" y="${H-6}" font-size="10" fill="#94a3b8" text-anchor="middle">${escapeHtml(fmtDay(r.day))}</text>`;
+    }).join('');
+    container.innerHTML = `
+      <svg viewBox="0 0 ${W} ${H}" class="w-full h-full" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"  stop-color="#818cf8"/>
+            <stop offset="100%" stop-color="#6366f1"/>
+          </linearGradient>
+        </defs>
+        ${bars}
+        ${labels}
+      </svg>
+    `;
+  }
+
+  function renderBySource(rows) {
+    if (!rows || rows.length === 0) {
+      $('#bySource').innerHTML = '<p class="muted text-sm py-4">No orders in this window. Tag your ads with UTMs and the breakdown lands here once orders start flowing.</p>';
+      return;
+    }
+    $('#bySource').innerHTML = `
+      <div class="overflow-x-auto">
+        <table class="detail">
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th>Medium</th>
+              <th>Campaign</th>
+              <th class="text-right">Orders</th>
+              <th class="text-right">Revenue</th>
+              <th class="text-right">AOV</th>
+              <th class="text-right">Shipping</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(r => `
+              <tr>
+                <td>${r.source === '(direct)' ? '<span class="muted mono">(direct)</span>' : `<span class="pill pill-ok">${escapeHtml(r.source)}</span>`}</td>
+                <td class="muted mono">${escapeHtml(r.medium)}</td>
+                <td class="muted mono">${escapeHtml(r.campaign)}</td>
+                <td class="text-right num">${r.orders}</td>
+                <td class="text-right num">${fmtMoney(r.revenue_cents)}</td>
+                <td class="text-right num muted">${fmtMoney(r.aov_cents)}</td>
+                <td class="text-right num muted">${fmtMoney(r.shipping_cents)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  function recalcCac() {
+    if (!LAST) return;
+    const t = LAST.totals || {};
+    const orders = t.orders || 0;
+    const aovCents = t.blended_aov_cents || 0;
+    const spendDollars = parseFloat($('#adSpendInput').value);
+    $('#cacOrders').textContent = String(orders);
+    $('#cacAov').textContent = fmtMoney(aovCents);
+    if (!Number.isFinite(spendDollars) || spendDollars <= 0 || orders === 0) {
+      $('#cacValue').textContent = '—';
+      $('#cacRatio').textContent = '—';
+      $('#cacRatio').style.color = '';
+      return;
+    }
+    const cacDollars = spendDollars / orders;
+    $('#cacValue').textContent = '$' + cacDollars.toFixed(2);
+    const aovDollars = aovCents / 100;
+    if (aovDollars > 0) {
+      const ratio = cacDollars / aovDollars;
+      $('#cacRatio').textContent = (ratio * 100).toFixed(0) + '%';
+      $('#cacRatio').style.color = ratio < 0.3 ? '#86efac' : ratio < 0.5 ? '#fde047' : '#fca5a5';
+    }
+  }
+
+  // Auto-login if password in session
+  if (sessionStorage.getItem(PW_KEY)) {
+    enterApp().catch(() => {});
+  }
+</script>
+</body>
+</html>
