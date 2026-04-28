@@ -709,12 +709,26 @@
     <div class="glass rounded-2xl p-6 md:p-10">
       <!-- Prompt input -->
       <div class="mb-7">
-        <div class="flex items-center justify-between mb-2 gap-3">
+        <div class="flex items-center justify-between mb-2 gap-3 flex-wrap">
           <label class="text-base font-semibold text-gray-200">Describe your artwork</label>
-          <button type="button" id="randomizeBtn" aria-label="Randomize all settings"
-                  class="text-sm font-semibold px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500/30 to-purple-500/30 border border-indigo-400/40 text-indigo-100 hover:from-indigo-500/50 hover:to-purple-500/50 transition-all inline-flex items-center gap-1.5">
-            <span class="text-base">🎲</span> Surprise me
-          </button>
+          <div class="flex items-center gap-2 flex-wrap">
+            <select id="surpriseTheme" aria-label="Surprise me theme"
+                    class="text-sm font-medium px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-indigo-100 cursor-pointer hover:bg-white/15 focus:outline-none focus:border-indigo-400/40 transition-colors">
+              <option value="any">✨ Any theme</option>
+              <option value="pets">🐾 Pets &amp; portraits</option>
+              <option value="nature">🏞️ Nature &amp; landscapes</option>
+              <option value="cities">🏙️ Cities &amp; travel</option>
+              <option value="cosmic">🌌 Cosmic &amp; sci-fi</option>
+              <option value="surreal">🪄 Surreal &amp; mythical</option>
+              <option value="cozy">🎨 Anime &amp; cozy</option>
+              <option value="modern">◼️ Modern &amp; graphic</option>
+              <option value="vintage">📻 Vintage &amp; retro</option>
+            </select>
+            <button type="button" id="randomizeBtn" aria-label="Randomize all settings"
+                    class="text-sm font-semibold px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500/30 to-purple-500/30 border border-indigo-400/40 text-indigo-100 hover:from-indigo-500/50 hover:to-purple-500/50 transition-all inline-flex items-center gap-1.5">
+              <span class="text-base">🎲</span> Surprise me
+            </button>
+          </div>
         </div>
         <textarea id="promptInput" aria-label="Describe your artwork" class="w-full rounded-xl bg-white/10 border border-white/15 px-4 py-4 min-h-[140px] md:min-h-[130px] text-base text-white resize-none focus:outline-none focus:border-white/30"
                   placeholder="e.g., a wise fox in a velvet jacket sipping tea by a fireplace — storybook, painterly"></textarea>
@@ -2722,271 +2736,277 @@
     $('#regenerateBtn').addEventListener('click', () => $('#genBtn').click());
 
     // ===== RANDOMIZE / "Surprise me" =====
-    // Picks a random prompt seed + randomizes every dropdown for a fun, unexpected result.
-    // Prompts grouped by feel for maintainability; the runtime sees one flat array.
-    // ~200 prompts spanning pets, landscapes, cityscapes, cosmic, anime, pop/modern,
-    // surreal, vintage, botanical, wildlife, B&W, watercolor, cyberpunk, mythology,
-    // underwater, macro, and children's-book cozy. To add more, drop them in any
-    // section — order doesn't matter to the picker.
-    const RANDOM_PROMPTS = [
-      // ── Pets / portraits (marketing-aligned: pet memorial + portrait gifters) ──
-      "a regal golden retriever in royal Renaissance attire with a velvet cape",
-      "a black cat with glowing emerald eyes silhouetted against a full harvest moon",
-      "a corgi astronaut floating in zero gravity with Earth in the background",
-      "a noble bulldog general in 18th-century military regalia, oil painting",
-      "a senior labrador dozing in a sunbeam through stained-glass windows",
-      "a fluffy ragdoll cat wearing pearls, classical oil-painting style",
-      "a husky leading a dogsled team across the aurora-lit Arctic",
-      "a beagle detective with a magnifying glass and tweed coat",
-      "two border collies herding sheep in the Scottish highlands at dusk",
-      "a tabby cat curled on a stack of ancient leather books",
-      "a French bulldog in a beret painting on an easel in Montmartre",
-      "a pug emperor on a tiny throne, oil-painting grandeur",
-      "a calico kitten chasing fireflies in a midsummer meadow",
-      "a samoyed running through fresh snow, paws kicking up flurries",
-      "a Maine coon perched in a window framed by frost flowers",
-      "a tabby kitten staring up at a butterfly that just landed on its nose",
-      "a senior dachshund snoozing in a patch of sun on hardwood floors",
-
-      // ── Landscapes & nature ──
-      "alpine meadow exploding with wildflowers under a turquoise sky",
-      "a single solitary oak on a hillside silhouetted at sunset",
-      "a misty Japanese mountainside with cherry blossoms drifting down",
-      "the moment a wave crests with sunlight piercing through it",
-      "redwoods reaching into morning fog, beams of light cutting through",
-      "a frozen waterfall in deep winter, ice crystals catching low sun",
-      "a desert sand dune ridge under the milky way",
-      "an English countryside in early autumn, hedgerows turning gold",
-      "a still glassy lake reflecting snow-capped peaks at sunrise",
-      "bioluminescent waves crashing against a tropical beach at midnight",
-      "the badlands at golden hour, layered sandstone in red and gold",
-      "a thunderstorm rolling across the Great Plains, lightning over wheat fields",
-      "ice caves in Iceland with deep blue light filtering through",
-      "an ancient olive grove in Greece with afternoon sun through the leaves",
-      "a moss-covered forest floor with shafts of light and ferns",
-      "the volcanic coastline of Hawaii at sunrise, black sand and white surf",
-      "a salt flat reflecting the pink sky like a mirror",
-      "ancient sequoias in Yosemite with mist between trunks",
-      "a coral reef alive with color and tropical fish in clear water",
-      "the cliffs of Moher with seabirds and crashing Atlantic waves",
-      "bamboo forest in soft green light, a path winding through",
-      "arctic tundra with a single caribou silhouetted against the sun",
-      "a vineyard in Tuscany at the very moment golden light hits the rows",
-      "the Sahara at dawn, long shadows across endless dunes",
-      "a cave system with crystal-clear underground river",
-      "a path of golden ginkgo leaves through a Tokyo park in November",
-      "the silver birch forest of Finland in deep winter, snow on every branch",
-      "a hot-air balloon drifting over rolling Tuscan hills at dawn",
-
-      // ── Cityscape & architecture ──
-      "New York skyline in a snowstorm, lit windows like stars",
-      "the streets of Tokyo at night, neon reflecting in rain puddles",
-      "a Venetian canal at dawn, gondolas tied to weathered posts",
-      "Parisian rooftops at twilight with the Eiffel Tower in soft focus",
-      "the labyrinthine medina of Marrakech with hanging lanterns",
-      "Lisbon's pastel houses cascading down a hillside in afternoon light",
-      "the Charles Bridge in Prague at sunrise, spires rising through mist",
-      "Hong Kong's neon canyon at street level on a humid evening",
-      "the Brooklyn Bridge in heavy fog, lights diffused into halos",
-      "a quiet Edinburgh close at midnight with gas-lamp glow",
-      "the Amalfi Coast cliffside villages catching afternoon sun",
-      "ancient Petra at first light, rose-colored stone glowing",
-      "Istanbul's Hagia Sophia silhouetted at sunset over the Bosphorus",
-      "a hidden courtyard in Seville with orange trees and tiled fountains",
-      "Chicago's architecture seen from the river at golden hour",
-      "a Greek island whitewashed village cascading to a sapphire sea",
-      "the lanterns of Hoi An reflected in the river at dusk",
-
-      // ── Cosmic / sci-fi ──
-      "a lone astronaut watching a binary sunset from a windswept ridge",
-      "a city built into the side of a moon-sized hollow asteroid",
-      "the silhouette of a sailing ship crossing a giant ringed planet",
-      "a nebula nursery birthing new stars, swirls of pink and blue",
-      "a derelict space station drifting past a gas giant",
-      "the surface of an ice moon with cryo-geysers erupting against starlight",
-      "a botanical greenhouse on Mars under a violet sky",
-      "two astronauts dancing in zero gravity inside a transparent dome",
-      "a fleet of paper airplanes drifting through a star field",
-      "a lighthouse on an asteroid warning passing ships through the void",
-      "a forest of crystalline trees on an alien moon",
-      "the view from inside a wave looking up at a binary sunset",
-
-      // ── Anime / Studio Ghibli vibes ──
-      "a young girl with a paper umbrella standing in a rain-soaked Tokyo alley",
-      "a giant gentle forest spirit walking through a cherry-blossom shower",
-      "a cat bus winding through the Japanese countryside at twilight",
-      "two friends running across a wheat field with kites in a wide blue sky",
-      "a small witch flying her broom over a coastal village at dusk",
-      "a quiet noodle stand glowing on a rainy Kyoto street",
-      "a girl reading in a tree house surrounded by drifting paper birds",
-      "a robot tending a garden of glowing flowers at midnight",
-      "a silent train carrying spirits over a moonlit ocean",
-      "a child holding hands with a tall, kind shadow in a snowy forest",
-
-      // ── Pop / graphic / modern ──
-      "bold geometric color blocks in saturated cyan, magenta, and yellow",
-      "abstract liquid shapes in molten gold against deep navy",
-      "a single red door on a vast white wall, geometric perfection",
-      "minimalist mountain ranges in three flat planes of blue",
-      "an oversized pop-art lemon on a hot pink background",
-      "mid-century modern living room rendered as flat illustration",
-      "a graphic poster of one perfect wave in three shades of blue",
-      "Bauhaus geometric composition in primary colors",
-      "abstract topographic map in muted earth tones",
-      "a single ripe pomegranate split open against deep crimson, fine art still life",
-
-      // ── Surreal / fantasy ──
-      "a clock tower melting into a sea of clouds, Dali-inspired",
-      "a giant whale gliding through the sky pulling a ship beneath it",
-      "a forest of doors standing in an empty meadow, each slightly open",
-      "a woman with butterflies pouring from her sleeves into the wind",
-      "a chess game played on cliff tops between two giants",
-      "a library where the books are flying free between shelves",
-      "a staircase that spirals up into a single enormous moon",
-      "a person walking a leashed cloud across a grassy hillside",
-      "a tea party held inside a giant glass marble",
-      "a small house balanced on the back of a sleeping dragon",
-      "a forest where every leaf is a tiny lantern",
-      "the moment time turns to liquid and pools on a table",
-      "a piano whose keys grow as wildflowers",
-      "a city built inside a snow globe held by an unseen hand",
-      "the inside of a cathedral made entirely of stained-glass butterflies",
-      "a giant tortoise carrying a small village on its back",
-      "a steampunk owl with brass goggles perched on a clockwork tree",
-      "an ancient library with floating books and a spiral staircase to the stars",
-      "a wise red fox in a velvet jacket sipping tea by a fireplace",
-      "a hummingbird made entirely of stained glass mid-flight",
-
-      // ── Vintage / retro ──
-      "a 1950s diner at midnight in heavy rain, neon reflecting on chrome",
-      "a vintage motorcycle parked outside a desert motel at dusk",
-      "a 1970s living room frozen in time, sun streaming through orange curtains",
-      "a couple slow-dancing in a 1940s ballroom under a chandelier",
-      "a retro space helmet on a dusty workshop bench, Polaroid style",
-      "a vintage typewriter on a writer's desk by a rain-streaked window",
-      "a roadside Americana scene at golden hour, route 66 vibes",
-      "a 1960s drive-in theater with classic cars and a starry sky",
-      "an old-world barbershop interior with morning light through the front window",
-      "a vintage hot rod racing along a Pacific Coast cliff at sunset",
-      "a vintage train crossing a viaduct in the misty Scottish highlands",
-
-      // ── Botanical / floral ──
-      "a single peony in full bloom against deep velvet black",
-      "wisteria cascading over a Japanese garden path in late spring",
-      "a wild meadow of poppies under a wide blue sky",
-      "ferns unfurling in a rainforest after a fresh shower",
-      "a single iris dewy with morning rain in macro detail",
-      "a still life of tulips spilling from a copper pot, Dutch master style",
-      "a botanical illustration of mushrooms on a forest floor",
-      "magnolia branch in full bloom against a misty pale background",
-      "an English cottage garden in full chaotic bloom",
-      "a single lotus floating on still water at dawn",
-      "a Japanese koi pond in autumn, maple leaves drifting on the water",
-
-      // ── Wildlife ──
-      "a snow leopard padding silently through Himalayan snow",
-      "a humpback whale breaching with sun shafts piercing the water below",
-      "an eagle mid-stoop, wings folded, against a clear sky",
-      "a fox curled in a den of autumn leaves",
-      "elephants crossing a savannah at sunset",
-      "a stag silhouetted on a misty ridge at dawn",
-      "a kingfisher striking the water in a freeze-frame splash",
-      "a pride of lions resting under an acacia tree",
-      "a great horned owl peering from a hollow oak",
-      "a polar bear watching the northern lights from an ice floe",
-      "a hummingbird hovering at a passion flower",
-      "a school of mackerel turning together in a shaft of sunlight",
-      "a bald eagle catching a salmon mid-air over a misty river",
-
-      // ── Black & white / fine-art photography ──
-      "a stark Ansel Adams-style mountain range under towering clouds",
-      "a single tree on a hill in deep contrast, fine-art photography",
-      "a foggy harbor with one boat just visible, atmospheric monochrome",
-      "a New York street scene in heavy rain, mid-century photographic style",
-      "a portrait silhouette in a doorway, dramatic chiaroscuro",
-      "a winter forest with snow on bare branches, high contrast",
-      "a violinist on a rooftop in Brooklyn at golden hour",
-      "a sand dune in pure black and white with sweeping lines",
-
-      // ── Watercolor / illustration ──
-      "a watercolor map of an imaginary coastline with hand-drawn compass",
-      "a children's-book illustration of a fox riding a bicycle through autumn",
-      "a loose ink-and-wash sketch of a Parisian café",
-      "a botanical watercolor of wildflowers and butterflies",
-      "a pen-and-ink illustration of a mountain village in winter",
-      "a soft watercolor portrait of a hummingbird mid-flight",
-      "an illustrated cross-section of a cozy underground burrow home",
-      "a vintage children's book illustration of a sailboat and a whale",
-
-      // ── Cyberpunk / futurism ──
-      "a rain-soaked Hong Kong-style alley with floating holograms in Cantonese and Japanese",
-      "a lone figure with a glowing umbrella in a neon-drenched megacity",
-      "a cyber-monk meditating on a rooftop above a city of light",
-      "a transit station inside a vertical megacity at night",
-      "a hacker's apartment with monitors casting blue light through fog",
-      "a futuristic temple at the edge of a vast neon ocean",
-      "a synthwave sunset over a chrome desert highway",
-      "two figures sharing ramen at a glowing street stall under skyscrapers",
-
-      // ── Mythology / folklore ──
-      "the Norse world tree Yggdrasil with stars caught in its branches",
-      "a Japanese kitsune fox with nine tails in a moonlit bamboo grove",
-      "a phoenix rising from ash at the moment of rebirth",
-      "a Celtic stag spirit in a misty forest at dawn",
-      "a mermaid sitting on a rock at the edge of a thunderstorm",
-      "a sphinx watching over a starlit desert oasis",
-      "a small selkie on a Scottish beach with seal companions",
-      "a dragon curled around a lighthouse on a stormy sea",
-      "a samurai cat in armor standing in a bamboo grove",
-      "the moment a hero pulls a glowing sword from a stone in a forest clearing",
-      "a giant Pacific Northwest thunderbird among storm clouds",
-      "a Slavic rusalka spirit at the edge of a moonlit lake",
-
-      // ── Underwater / aquatic ──
-      "a sea turtle gliding past sunbeams piercing tropical water",
-      "a kelp forest in California with sunlight filtering down",
-      "an octopus changing colors against a coral garden",
-      "a sunken cathedral now home to coral and schooling fish",
-      "a manta ray gliding silently through a blue void",
-      "a deep-sea anglerfish with its lure lighting the abyss",
-      "a freediver descending into a glowing blue cenote",
-      "a school of moon jellies pulsing through dark water",
-      "a pod of bioluminescent jellyfish drifting through a deep cave",
-
-      // ── Macro / detail ──
-      "a single dewdrop on a spider's web at sunrise",
-      "the iridescent wing of a butterfly in extreme macro",
-      "a hummingbird's eye reflecting a flower",
-      "frost crystals forming on a leaf in early morning",
-      "a single grain of pollen on the tip of a stamen",
-      "the texture of layered geode crystals in cross-section",
-
-      // ── Children's-book whimsy / cozy ──
-      "a tiny hedgehog reading a book by candlelight in a hollow tree",
-      "a teddy bear and a child watching a meteor shower from a treehouse",
-      "mice having a tea party in a thimble-sized house",
-      "a cozy reading nook by a window in a heavy snowstorm",
-      "a small dragon curled around a mug of cocoa in a cottage kitchen",
-      "a family of bunnies preparing soup in a cottage in autumn",
-      "a small fox lighting lanterns in a forest at twilight",
-      "a child walking a moose through a magical winter forest",
-      "a child reading a book under a tree of glowing fireflies",
-      "a cozy cottage in a mushroom forest under twin moons",
-      "a desert nomad and camel silhouetted against a giant orange moon"
-    ];
-    // Avoid showing the same prompt twice within the last N picks. Keeps "Surprise me"
-    // feeling fresh even after a dozen consecutive clicks.
-    const RECENT_PROMPT_MEMORY = Math.min(12, Math.floor(RANDOM_PROMPTS.length / 2));
-    const _recentPromptIdxs = [];
+    // Picks a random prompt seed + randomizes every dropdown for a fun, unexpected
+    // result. Prompts are bucketed by user-facing theme, which the #surpriseTheme
+    // selector lets the customer constrain. Picking "Any" pulls from the full pool.
+    //
+    // To add prompts: drop them in any theme. To add a new theme: add a new key
+    // here AND a new <option> in #surpriseTheme above. Internal sub-section
+    // comments are decorative — the picker only sees the theme key.
+    const PROMPT_THEMES = {
+      pets: [
+        "a regal golden retriever in royal Renaissance attire with a velvet cape",
+        "a black cat with glowing emerald eyes silhouetted against a full harvest moon",
+        "a corgi astronaut floating in zero gravity with Earth in the background",
+        "a noble bulldog general in 18th-century military regalia, oil painting",
+        "a senior labrador dozing in a sunbeam through stained-glass windows",
+        "a fluffy ragdoll cat wearing pearls, classical oil-painting style",
+        "a husky leading a dogsled team across the aurora-lit Arctic",
+        "a beagle detective with a magnifying glass and tweed coat",
+        "two border collies herding sheep in the Scottish highlands at dusk",
+        "a tabby cat curled on a stack of ancient leather books",
+        "a French bulldog in a beret painting on an easel in Montmartre",
+        "a pug emperor on a tiny throne, oil-painting grandeur",
+        "a calico kitten chasing fireflies in a midsummer meadow",
+        "a samoyed running through fresh snow, paws kicking up flurries",
+        "a Maine coon perched in a window framed by frost flowers",
+        "a tabby kitten staring up at a butterfly that just landed on its nose",
+        "a senior dachshund snoozing in a patch of sun on hardwood floors"
+      ],
+      nature: [
+        // Landscapes
+        "alpine meadow exploding with wildflowers under a turquoise sky",
+        "a single solitary oak on a hillside silhouetted at sunset",
+        "a misty Japanese mountainside with cherry blossoms drifting down",
+        "the moment a wave crests with sunlight piercing through it",
+        "redwoods reaching into morning fog, beams of light cutting through",
+        "a frozen waterfall in deep winter, ice crystals catching low sun",
+        "a desert sand dune ridge under the milky way",
+        "an English countryside in early autumn, hedgerows turning gold",
+        "a still glassy lake reflecting snow-capped peaks at sunrise",
+        "bioluminescent waves crashing against a tropical beach at midnight",
+        "the badlands at golden hour, layered sandstone in red and gold",
+        "a thunderstorm rolling across the Great Plains, lightning over wheat fields",
+        "ice caves in Iceland with deep blue light filtering through",
+        "an ancient olive grove in Greece with afternoon sun through the leaves",
+        "a moss-covered forest floor with shafts of light and ferns",
+        "the volcanic coastline of Hawaii at sunrise, black sand and white surf",
+        "a salt flat reflecting the pink sky like a mirror",
+        "ancient sequoias in Yosemite with mist between trunks",
+        "a coral reef alive with color and tropical fish in clear water",
+        "the cliffs of Moher with seabirds and crashing Atlantic waves",
+        "bamboo forest in soft green light, a path winding through",
+        "arctic tundra with a single caribou silhouetted against the sun",
+        "a vineyard in Tuscany at the very moment golden light hits the rows",
+        "the Sahara at dawn, long shadows across endless dunes",
+        "a cave system with crystal-clear underground river",
+        "a path of golden ginkgo leaves through a Tokyo park in November",
+        "the silver birch forest of Finland in deep winter, snow on every branch",
+        "a hot-air balloon drifting over rolling Tuscan hills at dawn",
+        // Wildlife
+        "a snow leopard padding silently through Himalayan snow",
+        "a humpback whale breaching with sun shafts piercing the water below",
+        "an eagle mid-stoop, wings folded, against a clear sky",
+        "a fox curled in a den of autumn leaves",
+        "elephants crossing a savannah at sunset",
+        "a stag silhouetted on a misty ridge at dawn",
+        "a kingfisher striking the water in a freeze-frame splash",
+        "a pride of lions resting under an acacia tree",
+        "a great horned owl peering from a hollow oak",
+        "a polar bear watching the northern lights from an ice floe",
+        "a hummingbird hovering at a passion flower",
+        "a school of mackerel turning together in a shaft of sunlight",
+        "a bald eagle catching a salmon mid-air over a misty river",
+        // Botanical & floral
+        "a single peony in full bloom against deep velvet black",
+        "wisteria cascading over a Japanese garden path in late spring",
+        "a wild meadow of poppies under a wide blue sky",
+        "ferns unfurling in a rainforest after a fresh shower",
+        "a single iris dewy with morning rain in macro detail",
+        "a still life of tulips spilling from a copper pot, Dutch master style",
+        "a botanical illustration of mushrooms on a forest floor",
+        "magnolia branch in full bloom against a misty pale background",
+        "an English cottage garden in full chaotic bloom",
+        "a single lotus floating on still water at dawn",
+        "a Japanese koi pond in autumn, maple leaves drifting on the water",
+        // Macro & detail
+        "a single dewdrop on a spider's web at sunrise",
+        "the iridescent wing of a butterfly in extreme macro",
+        "a hummingbird's eye reflecting a flower",
+        "frost crystals forming on a leaf in early morning",
+        "a single grain of pollen on the tip of a stamen",
+        "the texture of layered geode crystals in cross-section",
+        // Underwater & aquatic
+        "a sea turtle gliding past sunbeams piercing tropical water",
+        "a kelp forest in California with sunlight filtering down",
+        "an octopus changing colors against a coral garden",
+        "a sunken cathedral now home to coral and schooling fish",
+        "a manta ray gliding silently through a blue void",
+        "a deep-sea anglerfish with its lure lighting the abyss",
+        "a freediver descending into a glowing blue cenote",
+        "a school of moon jellies pulsing through dark water",
+        "a pod of bioluminescent jellyfish drifting through a deep cave"
+      ],
+      cities: [
+        "New York skyline in a snowstorm, lit windows like stars",
+        "the streets of Tokyo at night, neon reflecting in rain puddles",
+        "a Venetian canal at dawn, gondolas tied to weathered posts",
+        "Parisian rooftops at twilight with the Eiffel Tower in soft focus",
+        "the labyrinthine medina of Marrakech with hanging lanterns",
+        "Lisbon's pastel houses cascading down a hillside in afternoon light",
+        "the Charles Bridge in Prague at sunrise, spires rising through mist",
+        "Hong Kong's neon canyon at street level on a humid evening",
+        "the Brooklyn Bridge in heavy fog, lights diffused into halos",
+        "a quiet Edinburgh close at midnight with gas-lamp glow",
+        "the Amalfi Coast cliffside villages catching afternoon sun",
+        "ancient Petra at first light, rose-colored stone glowing",
+        "Istanbul's Hagia Sophia silhouetted at sunset over the Bosphorus",
+        "a hidden courtyard in Seville with orange trees and tiled fountains",
+        "Chicago's architecture seen from the river at golden hour",
+        "a Greek island whitewashed village cascading to a sapphire sea",
+        "the lanterns of Hoi An reflected in the river at dusk"
+      ],
+      cosmic: [
+        // Cosmic / sci-fi
+        "a lone astronaut watching a binary sunset from a windswept ridge",
+        "a city built into the side of a moon-sized hollow asteroid",
+        "the silhouette of a sailing ship crossing a giant ringed planet",
+        "a nebula nursery birthing new stars, swirls of pink and blue",
+        "a derelict space station drifting past a gas giant",
+        "the surface of an ice moon with cryo-geysers erupting against starlight",
+        "a botanical greenhouse on Mars under a violet sky",
+        "two astronauts dancing in zero gravity inside a transparent dome",
+        "a fleet of paper airplanes drifting through a star field",
+        "a lighthouse on an asteroid warning passing ships through the void",
+        "a forest of crystalline trees on an alien moon",
+        "the view from inside a wave looking up at a binary sunset",
+        // Cyberpunk / futurism
+        "a rain-soaked Hong Kong-style alley with floating holograms in Cantonese and Japanese",
+        "a lone figure with a glowing umbrella in a neon-drenched megacity",
+        "a cyber-monk meditating on a rooftop above a city of light",
+        "a transit station inside a vertical megacity at night",
+        "a hacker's apartment with monitors casting blue light through fog",
+        "a futuristic temple at the edge of a vast neon ocean",
+        "a synthwave sunset over a chrome desert highway",
+        "two figures sharing ramen at a glowing street stall under skyscrapers"
+      ],
+      surreal: [
+        // Surreal / fantasy
+        "a clock tower melting into a sea of clouds, Dali-inspired",
+        "a giant whale gliding through the sky pulling a ship beneath it",
+        "a forest of doors standing in an empty meadow, each slightly open",
+        "a woman with butterflies pouring from her sleeves into the wind",
+        "a chess game played on cliff tops between two giants",
+        "a library where the books are flying free between shelves",
+        "a staircase that spirals up into a single enormous moon",
+        "a person walking a leashed cloud across a grassy hillside",
+        "a tea party held inside a giant glass marble",
+        "a small house balanced on the back of a sleeping dragon",
+        "a forest where every leaf is a tiny lantern",
+        "the moment time turns to liquid and pools on a table",
+        "a piano whose keys grow as wildflowers",
+        "a city built inside a snow globe held by an unseen hand",
+        "the inside of a cathedral made entirely of stained-glass butterflies",
+        "a giant tortoise carrying a small village on its back",
+        "a steampunk owl with brass goggles perched on a clockwork tree",
+        "an ancient library with floating books and a spiral staircase to the stars",
+        "a wise red fox in a velvet jacket sipping tea by a fireplace",
+        "a hummingbird made entirely of stained glass mid-flight",
+        // Mythology / folklore
+        "the Norse world tree Yggdrasil with stars caught in its branches",
+        "a Japanese kitsune fox with nine tails in a moonlit bamboo grove",
+        "a phoenix rising from ash at the moment of rebirth",
+        "a Celtic stag spirit in a misty forest at dawn",
+        "a mermaid sitting on a rock at the edge of a thunderstorm",
+        "a sphinx watching over a starlit desert oasis",
+        "a small selkie on a Scottish beach with seal companions",
+        "a dragon curled around a lighthouse on a stormy sea",
+        "a samurai cat in armor standing in a bamboo grove",
+        "the moment a hero pulls a glowing sword from a stone in a forest clearing",
+        "a giant Pacific Northwest thunderbird among storm clouds",
+        "a Slavic rusalka spirit at the edge of a moonlit lake"
+      ],
+      cozy: [
+        // Anime / Studio Ghibli vibes
+        "a young girl with a paper umbrella standing in a rain-soaked Tokyo alley",
+        "a giant gentle forest spirit walking through a cherry-blossom shower",
+        "a cat bus winding through the Japanese countryside at twilight",
+        "two friends running across a wheat field with kites in a wide blue sky",
+        "a small witch flying her broom over a coastal village at dusk",
+        "a quiet noodle stand glowing on a rainy Kyoto street",
+        "a girl reading in a tree house surrounded by drifting paper birds",
+        "a robot tending a garden of glowing flowers at midnight",
+        "a silent train carrying spirits over a moonlit ocean",
+        "a child holding hands with a tall, kind shadow in a snowy forest",
+        // Children's-book whimsy / cozy
+        "a tiny hedgehog reading a book by candlelight in a hollow tree",
+        "a teddy bear and a child watching a meteor shower from a treehouse",
+        "mice having a tea party in a thimble-sized house",
+        "a cozy reading nook by a window in a heavy snowstorm",
+        "a small dragon curled around a mug of cocoa in a cottage kitchen",
+        "a family of bunnies preparing soup in a cottage in autumn",
+        "a small fox lighting lanterns in a forest at twilight",
+        "a child walking a moose through a magical winter forest",
+        "a child reading a book under a tree of glowing fireflies",
+        "a cozy cottage in a mushroom forest under twin moons",
+        "a desert nomad and camel silhouetted against a giant orange moon",
+        // Watercolor / illustration
+        "a watercolor map of an imaginary coastline with hand-drawn compass",
+        "a children's-book illustration of a fox riding a bicycle through autumn",
+        "a loose ink-and-wash sketch of a Parisian café",
+        "a botanical watercolor of wildflowers and butterflies",
+        "a pen-and-ink illustration of a mountain village in winter",
+        "a soft watercolor portrait of a hummingbird mid-flight",
+        "an illustrated cross-section of a cozy underground burrow home",
+        "a vintage children's book illustration of a sailboat and a whale"
+      ],
+      modern: [
+        // Pop / graphic / modern
+        "bold geometric color blocks in saturated cyan, magenta, and yellow",
+        "abstract liquid shapes in molten gold against deep navy",
+        "a single red door on a vast white wall, geometric perfection",
+        "minimalist mountain ranges in three flat planes of blue",
+        "an oversized pop-art lemon on a hot pink background",
+        "mid-century modern living room rendered as flat illustration",
+        "a graphic poster of one perfect wave in three shades of blue",
+        "Bauhaus geometric composition in primary colors",
+        "abstract topographic map in muted earth tones",
+        "a single ripe pomegranate split open against deep crimson, fine art still life",
+        // Black & white / fine-art photography
+        "a stark Ansel Adams-style mountain range under towering clouds",
+        "a single tree on a hill in deep contrast, fine-art photography",
+        "a foggy harbor with one boat just visible, atmospheric monochrome",
+        "a New York street scene in heavy rain, mid-century photographic style",
+        "a portrait silhouette in a doorway, dramatic chiaroscuro",
+        "a winter forest with snow on bare branches, high contrast",
+        "a violinist on a rooftop in Brooklyn at golden hour",
+        "a sand dune in pure black and white with sweeping lines"
+      ],
+      vintage: [
+        "a 1950s diner at midnight in heavy rain, neon reflecting on chrome",
+        "a vintage motorcycle parked outside a desert motel at dusk",
+        "a 1970s living room frozen in time, sun streaming through orange curtains",
+        "a couple slow-dancing in a 1940s ballroom under a chandelier",
+        "a retro space helmet on a dusty workshop bench, Polaroid style",
+        "a vintage typewriter on a writer's desk by a rain-streaked window",
+        "a roadside Americana scene at golden hour, route 66 vibes",
+        "a 1960s drive-in theater with classic cars and a starry sky",
+        "an old-world barbershop interior with morning light through the front window",
+        "a vintage hot rod racing along a Pacific Coast cliff at sunset",
+        "a vintage train crossing a viaduct in the misty Scottish highlands"
+      ]
+    };
+    // Flat pool for "Any theme" + dev-time iteration. Derived from PROMPT_THEMES so
+    // the themed view stays the source of truth.
+    const RANDOM_PROMPTS = Object.values(PROMPT_THEMES).flat();
+    // Recent-pick memory keeps "Surprise me" from repeating within the last N picks.
+    // Cap is theme-aware: never starve a small theme by remembering more than half its pool.
+    const RECENT_PROMPT_MEMORY = 12;
+    const _recentPrompts = [];
     function pickFreshPrompt() {
-      let idx, tries = 0;
+      const themeKey = (document.getElementById('surpriseTheme')?.value) || 'any';
+      const pool = (themeKey === 'any' || !PROMPT_THEMES[themeKey])
+        ? RANDOM_PROMPTS
+        : PROMPT_THEMES[themeKey];
+      const memCap = Math.min(RECENT_PROMPT_MEMORY, Math.max(1, Math.floor(pool.length / 2)));
+      let pick, tries = 0;
       do {
-        idx = Math.floor(Math.random() * RANDOM_PROMPTS.length);
+        pick = pool[Math.floor(Math.random() * pool.length)];
         tries++;
-      } while (_recentPromptIdxs.includes(idx) && tries < 24);
-      _recentPromptIdxs.push(idx);
-      while (_recentPromptIdxs.length > RECENT_PROMPT_MEMORY) _recentPromptIdxs.shift();
-      return RANDOM_PROMPTS[idx];
+      } while (_recentPrompts.includes(pick) && tries < 24);
+      _recentPrompts.push(pick);
+      while (_recentPrompts.length > memCap) _recentPrompts.shift();
+      return pick;
     }
     function pickRandomOption(selectId) {
       const sel = document.getElementById(selectId);
@@ -3018,6 +3038,23 @@
     }
     const randBtn = document.getElementById('randomizeBtn');
     if (randBtn) randBtn.addEventListener('click', randomizeAll);
+
+    // Persist the user's last-picked theme across sessions — small UX nicety so
+    // someone hunting pet ideas doesn't have to re-pick the bucket every visit.
+    (function persistSurpriseTheme() {
+      const themeSel = document.getElementById('surpriseTheme');
+      if (!themeSel) return;
+      const KEY = 'aiprint_surprise_theme';
+      try {
+        const saved = localStorage.getItem(KEY);
+        if (saved && Array.from(themeSel.options).some(o => o.value === saved)) {
+          themeSel.value = saved;
+        }
+      } catch (_) { /* localStorage may be disabled — silently fall through */ }
+      themeSel.addEventListener('change', () => {
+        try { localStorage.setItem(KEY, themeSel.value); } catch (_) { /* ditto */ }
+      });
+    })();
     // ===== end Randomize =====
 
     $('#errorRetryBtn').addEventListener('click', () => { hide($('#errorState')); $('#genBtn').click(); });
