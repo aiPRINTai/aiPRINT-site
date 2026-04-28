@@ -112,10 +112,11 @@ export async function sendVerificationEmail(email, verifyUrl) {
 }
 
 export async function sendOrderConfirmationEmail(order) {
-  const { customer_email, customer_name, preview_url, clean_url, lookup_key, prompt, amount_total, currency, stripe_session_id, shipping_address } = order;
+  const { customer_email, customer_name, preview_url, clean_url, lookup_key, prompt, amount_total, currency, stripe_session_id, shipping_address, quantity } = order;
   if (!customer_email) return { skipped: true, reason: 'no email' };
   // Customer paid — show them the clean image, not the watermarked preview.
   const artworkImg = clean_url || preview_url;
+  const qty = Math.max(1, parseInt(quantity, 10) || 1);
 
   const html = `
     <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#0a0f1d;">
@@ -127,6 +128,7 @@ export async function sendOrderConfirmationEmail(order) {
       <table style="width:100%;border-collapse:collapse;font-size:14px">
         <tr><td style="padding:8px 0;color:#64748b">Order</td><td style="padding:8px 0;text-align:right;font-family:monospace;font-size:12px">${stripe_session_id}</td></tr>
         <tr><td style="padding:8px 0;color:#64748b">Finish / Size</td><td style="padding:8px 0;text-align:right">${lookup_key || '—'}</td></tr>
+        ${qty > 1 ? `<tr><td style="padding:8px 0;color:#64748b">Quantity</td><td style="padding:8px 0;text-align:right;font-weight:600">${qty} prints</td></tr>` : ''}
         <tr><td style="padding:8px 0;color:#64748b">Total</td><td style="padding:8px 0;text-align:right;font-weight:600">${fmtMoney(amount_total || 0, currency)}</td></tr>
       </table>
 
@@ -445,14 +447,18 @@ export async function sendContactFormCustomerAck({ name, email, subject, message
 export async function sendFulfillmentAlertEmail(order) {
   // New-order alerts go to orders@ (ORDERS_TO) — the fulfillment inbox.
   const to = ordersTo();
-  const { customer_email, customer_name, preview_url, clean_url, lookup_key, prompt, amount_total, currency, stripe_session_id, shipping_address, options } = order;
+  const { customer_email, customer_name, preview_url, clean_url, lookup_key, prompt, amount_total, currency, stripe_session_id, shipping_address, options, quantity } = order;
   // Lawrence (admin) needs the clean print master, not a watermarked preview.
   const printMaster = clean_url || preview_url;
+  const qty = Math.max(1, parseInt(quantity, 10) || 1);
+  const qtyBadge = qty > 1
+    ? `<span style="display:inline-block;background:#fde047;color:#422006;padding:2px 10px;border-radius:999px;font-size:13px;font-weight:700;margin-left:8px">PRINT × ${qty}</span>`
+    : '';
 
   const html = `
     <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:640px;margin:0 auto;padding:20px;color:#0a0f1d;">
-      <h2 style="margin:0 0 8px">🖨 New print order — ${fmtMoney(amount_total || 0, currency)}</h2>
-      <p style="margin:0 0 16px;color:#64748b">${lookup_key || '—'} · ${customer_email}</p>
+      <h2 style="margin:0 0 8px">🖨 New print order — ${fmtMoney(amount_total || 0, currency)}${qtyBadge}</h2>
+      <p style="margin:0 0 16px;color:#64748b">${lookup_key || '—'} · ${customer_email}${qty > 1 ? ` · <strong style="color:#0a0f1d">print ${qty} copies</strong>` : ''}</p>
 
       ${printMaster ? `<img src="${printMaster}" alt="Print master" style="width:100%;max-width:520px;border-radius:8px;margin-bottom:8px"/>` : ''}
       ${printMaster ? `<p style="margin:0 0 16px;font-size:12px"><a href="${printMaster}" style="color:#4f46e5;font-weight:600" download>⬇ Download print master (full-resolution, unwatermarked)</a></p>` : ''}
@@ -461,7 +467,7 @@ export async function sendFulfillmentAlertEmail(order) {
       <p style="margin:0;font-size:14px"><strong>${customer_name || ''}</strong><br>${fmtAddress(shipping_address)}</p>
 
       <h3 style="margin:16px 0 4px;font-size:14px">Creative settings</h3>
-      <pre style="background:#f1f5f9;padding:12px;border-radius:6px;font-size:12px;white-space:pre-wrap;word-break:break-word">${JSON.stringify({ prompt, ...(options || {}) }, null, 2)}</pre>
+      <pre style="background:#f1f5f9;padding:12px;border-radius:6px;font-size:12px;white-space:pre-wrap;word-break:break-word">${JSON.stringify({ prompt, quantity: qty, ...(options || {}) }, null, 2)}</pre>
 
       <p style="margin-top:16px;font-size:12px;color:#94a3b8">Stripe session: ${stripe_session_id}</p>
     </div>
@@ -469,7 +475,7 @@ export async function sendFulfillmentAlertEmail(order) {
 
   return sendEmail({
     to,
-    subject: `🖨 New order · ${lookup_key || 'print'} · ${fmtMoney(amount_total || 0, currency)}`,
+    subject: `🖨 New order · ${lookup_key || 'print'}${qty > 1 ? ` × ${qty}` : ''} · ${fmtMoney(amount_total || 0, currency)}`,
     html,
     replyTo: customer_email
   });

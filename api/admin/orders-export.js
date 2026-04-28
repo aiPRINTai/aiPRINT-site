@@ -33,7 +33,7 @@ export default async function handler(req, res) {
     const headers = [
       'id', 'created_at', 'status', 'stripe_session_id',
       'customer_name', 'customer_email',
-      'lookup_key', 'amount_total_cents', 'tax_amount_cents', 'currency',
+      'lookup_key', 'quantity', 'amount_total_cents', 'tax_amount_cents', 'currency',
       'tracking_number', 'carrier',
       'ship_line1', 'ship_line2', 'ship_city', 'ship_state', 'ship_postal_code', 'ship_country',
       'prompt',
@@ -48,7 +48,7 @@ export default async function handler(req, res) {
       lines.push([
         o.id, o.created_at, o.status, o.stripe_session_id,
         o.customer_name, o.customer_email,
-        o.lookup_key, o.amount_total, o.tax_amount, o.currency,
+        o.lookup_key, o.quantity || 1, o.amount_total, o.tax_amount, o.currency,
         o.tracking_number, o.carrier,
         a.line1, a.line2, a.city, a.state, a.postal_code, a.country,
         o.prompt,

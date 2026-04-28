@@ -115,6 +115,7 @@ async function ensureOrderEconomicsColumns() {
     ALTER TABLE orders
       ADD COLUMN IF NOT EXISTS shipping_amount INT,
       ADD COLUMN IF NOT EXISTS subtotal_amount INT,
+      ADD COLUMN IF NOT EXISTS quantity INT DEFAULT 1,
       ADD COLUMN IF NOT EXISTS utm_source TEXT,
       ADD COLUMN IF NOT EXISTS utm_medium TEXT,
       ADD COLUMN IF NOT EXISTS utm_campaign TEXT,
@@ -128,6 +129,7 @@ function isMissingColumnError(err) {
   return m.includes('reset_token') || m.includes('reset_expires')
     || m.includes('password_changed_at')
     || m.includes('shipping_amount') || m.includes('subtotal_amount')
+    || m.includes('quantity')
     || m.includes('utm_source') || m.includes('utm_medium') || m.includes('utm_campaign')
     || m.includes('utm_content') || m.includes('utm_term')
     || /column .* does not exist/i.test(m);
@@ -328,7 +330,7 @@ export async function getOrdersByUserId(userId, { limit = 50 } = {}) {
   const result = await sql`
     SELECT id, stripe_session_id, customer_email, lookup_key, preview_url,
            amount_total, tax_amount, currency, status, tracking_number, carrier,
-           shipping_address, created_at, updated_at
+           shipping_address, quantity, created_at, updated_at
     FROM orders
     WHERE user_id = ${userId}
     ORDER BY created_at DESC
@@ -342,7 +344,7 @@ export async function getOrdersByEmail(email, { limit = 50 } = {}) {
   const result = await sql`
     SELECT id, stripe_session_id, customer_email, lookup_key, preview_url,
            amount_total, tax_amount, currency, status, tracking_number, carrier,
-           shipping_address, created_at, updated_at
+           shipping_address, quantity, created_at, updated_at
     FROM orders
     WHERE LOWER(customer_email) = LOWER(${email})
     ORDER BY created_at DESC
@@ -359,6 +361,8 @@ export async function createOrder(order) {
     // Economic breakdown (cents). shipping_amount + subtotal_amount let us
     // compute real product margin per order. Both nullable for old rows.
     shipping_amount = null, subtotal_amount = null,
+    // Quantity of identical prints in this order (1..10). Default 1.
+    quantity = 1,
     // Marketing attribution. Captured from session.metadata in the webhook.
     utm_source = null, utm_medium = null, utm_campaign = null,
     utm_content = null, utm_term = null
@@ -368,14 +372,14 @@ export async function createOrder(order) {
       stripe_session_id, user_id, customer_email, customer_name,
       shipping_address, lookup_key, preview_url, clean_url, prompt, options,
       amount_total, tax_amount, currency,
-      shipping_amount, subtotal_amount,
+      shipping_amount, subtotal_amount, quantity,
       utm_source, utm_medium, utm_campaign, utm_content, utm_term
     ) VALUES (
       ${stripe_session_id}, ${user_id}, ${customer_email}, ${customer_name},
       ${JSON.stringify(shipping_address || null)}, ${lookup_key}, ${preview_url}, ${clean_url},
       ${prompt}, ${JSON.stringify(options || null)},
       ${amount_total}, ${tax_amount}, ${currency},
-      ${shipping_amount}, ${subtotal_amount},
+      ${shipping_amount}, ${subtotal_amount}, ${quantity},
       ${utm_source}, ${utm_medium}, ${utm_campaign}, ${utm_content}, ${utm_term}
     )
     ON CONFLICT (stripe_session_id) DO NOTHING
@@ -524,7 +528,7 @@ export async function getUserDetail(userId) {
   `;
   if (!base.rows[0]) return null;
   const [orders, txns, gens] = await Promise.all([
-    sql`SELECT id, stripe_session_id, customer_email, lookup_key, amount_total, currency,
+    sql`SELECT id, stripe_session_id, customer_email, lookup_key, quantity, amount_total, currency,
                status, tracking_number, carrier, preview_url, created_at
          FROM orders WHERE user_id = ${userId}
          ORDER BY created_at DESC LIMIT 50`,

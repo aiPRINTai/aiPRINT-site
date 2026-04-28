@@ -125,6 +125,14 @@ export default async function handler(req, res) {
           tax_amount,
           shipping_amount,
           subtotal_amount,
+          // Quantity is forwarded via session metadata from create-checkout-session.
+          // Coerce + clamp here too as defense-in-depth (in case a malformed
+          // value somehow made it through).
+          quantity: (() => {
+            const n = parseInt(m.quantity, 10);
+            if (!Number.isFinite(n) || n < 1) return 1;
+            return Math.min(n, 10);
+          })(),
           currency: s.currency || 'usd',
           // Marketing attribution — captured client-side on landing,
           // forwarded via the checkout request, and stored on the Stripe

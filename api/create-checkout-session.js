@@ -27,11 +27,21 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid JSON body' });
   }
 
-  const { lookup_key, preview, utm } = body || {};
+  const { lookup_key, preview, utm, quantity } = body || {};
   if (!lookup_key || typeof lookup_key !== 'string') return res.status(400).json({ error: 'Missing lookup_key' });
   if (!preview?.image || typeof preview.image !== 'string') return res.status(400).json({ error: 'Missing preview.image' });
   // Only accept https URLs for preview to avoid javascript:/data: schemes leaking into Stripe metadata
   if (!/^https:\/\//i.test(preview.image)) return res.status(400).json({ error: 'Invalid preview.image URL' });
+
+  // Quantity: integer 1..10 (cap matches client UI). Default 1 for any
+  // missing / malformed value. Clamping here is the server-side guard;
+  // the client also clamps but never trust the client.
+  const qty = (() => {
+    const n = Math.floor(Number(quantity));
+    if (!Number.isFinite(n) || n < 1) return 1;
+    if (n > 10) return 10;
+    return n;
+  })();
 
   // UTM marketing attribution forwarded from public/js/utm.js — sanitize each
   // value (string only, max 200 chars, no whitespace/control chars) so a
@@ -96,6 +106,7 @@ export default async function handler(req, res) {
       signature_json: preview.sig ? cap(JSON.stringify(preview.sig)) : '',
       product_name:        cap(price.product?.name),
       product_description: cap(price.product?.description),
+      quantity:    String(qty),
       // Marketing attribution — webhook reads these and writes them onto
       // the orders row so /admin/marketing.html can group by UTM source.
       utm_source:   cap(utmSafe.utm_source),
@@ -137,7 +148,7 @@ export default async function handler(req, res) {
     }
 
     const line_item = {
-      quantity: 1,
+      quantity: qty,
       price_data: {
         currency: price.currency,
         unit_amount: price.unit_amount,

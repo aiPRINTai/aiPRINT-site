@@ -1130,9 +1130,22 @@
       </div>
     </div>
 
-    <div class="mt-6 flex flex-col md:flex-row md:items-center gap-4">
+    <div class="mt-6 flex flex-col md:flex-row md:items-center gap-4 flex-wrap">
       <div id="selectionSummary" class="text-sm text-gray-400">Selected: —</div>
-      <button id="reviewBtn" class="btn disabled" aria-label="Review and checkout">Review & Checkout</button>
+      <div class="flex items-center gap-3">
+        <label for="qtyInput" class="text-sm text-gray-400">Quantity</label>
+        <div class="inline-flex items-center bg-white/5 border border-white/15 rounded-lg overflow-hidden">
+          <button type="button" id="qtyMinus" aria-label="Decrease quantity"
+                  class="w-9 h-9 text-lg text-gray-300 hover:bg-white/10 transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
+                  disabled>−</button>
+          <input id="qtyInput" type="number" min="1" max="10" value="1" inputmode="numeric"
+                 aria-label="Quantity"
+                 class="w-12 h-9 bg-transparent text-center text-white text-sm focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [-moz-appearance:textfield]"/>
+          <button type="button" id="qtyPlus" aria-label="Increase quantity"
+                  class="w-9 h-9 text-lg text-gray-300 hover:bg-white/10 transition-colors">+</button>
+        </div>
+        <button id="reviewBtn" class="btn disabled" aria-label="Review and checkout">Review & Checkout</button>
+      </div>
     </div>
 
     <!-- Trust badges + reassurance row -->
@@ -3106,6 +3119,35 @@
     })();
     // ===== end Randomize =====
 
+    // ===== Quantity stepper =====
+    // Clamps 1..10 (Stripe + DB will re-validate). Most orders are 1; the
+    // upper bound stops a misclick from accidentally creating a $7,000
+    // checkout. Disables the minus button at 1 and plus at 10 for clarity.
+    (function quantityStepper() {
+      const input = $('#qtyInput');
+      const minus = $('#qtyMinus');
+      const plus  = $('#qtyPlus');
+      if (!input || !minus || !plus) return;
+      const MIN = 1, MAX = 10;
+      function clamp(v) {
+        const n = Math.floor(Number(v));
+        if (!Number.isFinite(n)) return MIN;
+        return Math.max(MIN, Math.min(MAX, n));
+      }
+      function sync() {
+        const v = clamp(input.value);
+        input.value = String(v);
+        minus.disabled = v <= MIN;
+        plus.disabled  = v >= MAX;
+      }
+      minus.addEventListener('click', () => { input.value = String(clamp(Number(input.value) - 1)); sync(); });
+      plus .addEventListener('click', () => { input.value = String(clamp(Number(input.value) + 1)); sync(); });
+      input.addEventListener('input',  sync);
+      input.addEventListener('blur',   sync);
+      sync();
+    })();
+    // ===== end Quantity stepper =====
+
     $('#errorRetryBtn').addEventListener('click', () => { hide($('#errorState')); $('#genBtn').click(); });
     $('#startOverBtn').addEventListener('click', () => {
       currentPreview = null; hide($('#previewSection')); hide($('#errorState')); show($('#emptyPreviewState'));
@@ -3218,10 +3260,12 @@
         // Forward any UTM params captured on landing so the order row can be
         // attributed back to the ad source on /admin/marketing.html.
         const utm = (typeof window.aiprintUtm === 'function') ? window.aiprintUtm() : {};
+        // Quantity is clamped client-side to 1..10; server re-validates.
+        const qty = Math.max(1, Math.min(10, parseInt($('#qtyInput')?.value, 10) || 1));
         const r = await fetch('/api/create-checkout-session', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ lookup_key: selected.lookup, preview: previewPayload, utm })
+          body: JSON.stringify({ lookup_key: selected.lookup, preview: previewPayload, utm, quantity: qty })
         });
         const data = await r.json();
         if (!r.ok || !data.url) {

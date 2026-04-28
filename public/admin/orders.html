@@ -249,11 +249,14 @@
           <div class="flex items-center gap-3 flex-wrap">
             <span class="pill pill-${o.status}">${(o.status||'paid').replace('_',' ')}</span>
             <span class="font-bold text-base">${fmtMoney(o.amount_total, o.currency)}</span>
+            ${(o.quantity && o.quantity > 1)
+              ? `<span class="pill" style="background:#fde047;color:#422006">PRINT × ${o.quantity}</span>`
+              : ''}
             <span class="muted">·</span>
             <span class="muted">${fmtDate(o.created_at)}</span>
           </div>
           <div><span class="muted">Customer:</span> <strong>${o.customer_name || '—'}</strong> · <a href="mailto:${o.customer_email}" class="text-indigo-300">${o.customer_email || '—'}</a></div>
-          <div><span class="muted">Product:</span> ${o.lookup_key || '—'}</div>
+          <div><span class="muted">Product:</span> ${o.lookup_key || '—'}${(o.quantity && o.quantity > 1) ? ` <span class="muted">(× ${o.quantity})</span>` : ''}</div>
           <div><span class="muted">Prompt:</span> <em class="text-gray-300">${(o.prompt||'').slice(0,200)}${(o.prompt||'').length>200?'…':''}</em></div>
           <div class="text-xs grid grid-cols-2 gap-x-4 gap-y-1 mt-2 text-gray-400">
             ${opts.style    ? `<div><span class="muted">Style:</span> ${opts.style}</div>` : ''}
