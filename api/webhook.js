@@ -3,7 +3,7 @@ import { stripe } from './_stripe.js';
 import { json, rawBody } from './_util.js';
 import { addCreditsToUser } from './credits/utils.js';
 import { createOrder, getOrderByStripeSessionId, getCreditTransactionByStripePaymentId } from './db/index.js';
-import { sendOrderConfirmationEmail, sendFulfillmentAlertEmail, sendCreditPurchaseEmail } from './_email.js';
+import { sendOrderConfirmationEmail, sendFulfillmentAlertEmail, sendCreditPurchaseEmail, sendCartOrderConfirmationEmail, sendCartFulfillmentAlertEmail } from './_email.js';
 import { getUserById } from './db/index.js';
 
 export const config = { api: { bodyParser: false } }; // Vercel/Next tells not to parse
@@ -178,20 +178,16 @@ export default async function handler(req, res) {
           }
           console.log(`✅ Cart order saved: ${s.id} (${customerInfo.customer_email}) · ${lineItems.length} items`);
 
-          // Fire one customer confirmation + one fulfillment alert covering
-          // all items together. We rebuild the "order-shaped" payload from
-          // the persisted rows so the email templates can iterate them.
+          // Fire ONE combined customer confirmation + ONE combined fulfillment
+          // alert covering every item in the cart. The cart-aware email
+          // templates iterate the rows internally so the customer doesn't
+          // get N copies of the same email.
           const { getOrdersByStripeSessionId } = await import('./db/index.js');
           const allRows = await getOrdersByStripeSessionId(s.id);
-          // Templates only consume top-level fields today; the simplest way
-          // to keep them compatible is to send one email per row. Fine for
-          // small carts (≤10) and keeps fulfillment alerts grouped per item.
-          const emailPromises = [];
-          for (const row of allRows) {
-            emailPromises.push(sendOrderConfirmationEmail(row));
-            emailPromises.push(sendFulfillmentAlertEmail(row));
-          }
-          await Promise.allSettled(emailPromises).then(results => {
+          await Promise.allSettled([
+            sendCartOrderConfirmationEmail(allRows),
+            sendCartFulfillmentAlertEmail(allRows)
+          ]).then(results => {
             results.forEach((r, i) => {
               if (r.status === 'rejected') console.error(`❌ Cart email ${i} failed:`, r.reason);
             });

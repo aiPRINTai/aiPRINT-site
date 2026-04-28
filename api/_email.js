@@ -159,6 +159,148 @@ export async function sendOrderConfirmationEmail(order) {
   });
 }
 
+/**
+ * Combined customer confirmation for a multi-item cart purchase.
+ * Renders one email listing every print so the buyer doesn't get N copies
+ * of the same template. Falls back gracefully on bad input.
+ *
+ * @param {Array} orders  array of orders rows from a single cart session,
+ *                        sorted ascending by line_item_index.
+ */
+export async function sendCartOrderConfirmationEmail(orders) {
+  if (!Array.isArray(orders) || orders.length === 0) {
+    return { skipped: true, reason: 'empty cart array' };
+  }
+  const head = orders[0];
+  if (!head?.customer_email) return { skipped: true, reason: 'no email' };
+  const currency = head.currency || 'usd';
+  const sessionId = head.stripe_session_id || '';
+  const totalAll = orders.reduce((s, o) => s + (Number(o.amount_total) || 0), 0);
+  const totalPrints = orders.reduce((s, o) => s + Math.max(1, parseInt(o.quantity, 10) || 1), 0);
+
+  const itemRows = orders.map((o, i) => {
+    const img = o.clean_url || o.preview_url || '';
+    const qty = Math.max(1, parseInt(o.quantity, 10) || 1);
+    const lineCents = Number(o.subtotal_amount) || (Number(o.amount_total) || 0);
+    return `
+      <tr>
+        <td style="padding:14px 12px;border-top:1px solid #e2e8f0;vertical-align:top;width:96px">
+          ${img ? `<img src="${img}" alt="" style="width:96px;height:96px;border-radius:8px;object-fit:cover;display:block"/>` : ''}
+        </td>
+        <td style="padding:14px 12px;border-top:1px solid #e2e8f0;vertical-align:top;font-size:14px">
+          <div style="font-weight:600;color:#0a0f1d">${o.lookup_key || 'Print'}</div>
+          ${qty > 1 ? `<div style="color:#475569;font-size:13px;margin-top:2px">Quantity: ${qty} prints</div>` : ''}
+          <div style="color:#94a3b8;font-size:12px;margin-top:6px;line-height:1.4">${(o.prompt || '').slice(0, 120)}${(o.prompt || '').length > 120 ? '…' : ''}</div>
+        </td>
+        <td style="padding:14px 12px;border-top:1px solid #e2e8f0;vertical-align:top;text-align:right;font-weight:600;font-size:14px;white-space:nowrap">
+          ${fmtMoney(lineCents, currency)}
+        </td>
+      </tr>`;
+  }).join('');
+
+  const html = `
+    <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:600px;margin:0 auto;padding:24px;color:#0a0f1d;">
+      <h1 style="font-size:24px;margin:0 0 8px">Your ${orders.length}-piece order is in the works 🎨</h1>
+      <p style="color:#475569;margin:0 0 20px">Hi ${head.customer_name || 'there'}, your cart is confirmed. Here's everything you ordered:</p>
+
+      <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:20px">
+        ${itemRows}
+        <tr>
+          <td colspan="2" style="padding:14px 12px;border-top:2px solid #0a0f1d;text-align:right;font-weight:700;font-size:15px">Order total</td>
+          <td style="padding:14px 12px;border-top:2px solid #0a0f1d;text-align:right;font-weight:700;font-size:15px">${fmtMoney(totalAll, currency)}</td>
+        </tr>
+      </table>
+      <p style="color:#94a3b8;font-size:12px;margin:0 0 20px">Includes shipping + tax. ${totalPrints !== orders.length ? `${totalPrints} prints across ${orders.length} designs.` : `${orders.length} unique designs.`}</p>
+
+      <h3 style="margin:24px 0 8px;font-size:16px">Shipping to</h3>
+      <p style="margin:0;color:#334155;font-size:14px"><strong>${head.customer_name || ''}</strong><br>${fmtAddress(head.shipping_address)}</p>
+
+      <h3 style="margin:24px 0 8px;font-size:16px">What happens next</h3>
+      <ol style="color:#334155;font-size:14px;padding-left:20px;margin:0">
+        <li style="margin-bottom:6px">We color-correct and proof every piece.</li>
+        <li style="margin-bottom:6px">All prints are produced on archival materials at our Florida studio.</li>
+        <li style="margin-bottom:6px">Production: 3–7 business days · Shipping: 3–7 business days. Multi-piece orders ship together when possible.</li>
+        <li>You'll get a tracking email when it ships.</li>
+      </ol>
+
+      <p style="margin:24px 0 0;font-size:14px"><a href="https://aiprint.ai/track.html?id=${encodeURIComponent(sessionId)}" style="display:inline-block;background:#0a0f1d;color:#fff;text-decoration:none;font-weight:600;padding:10px 18px;border-radius:8px">Track this order →</a></p>
+
+      <p style="margin-top:28px;color:#64748b;font-size:13px">Questions? Just reply to this email — we respond within 24 hours.</p>
+      <p style="margin-top:8px;color:#94a3b8;font-size:12px">aiPRINT.ai · Made with care in Florida, USA</p>
+    </div>
+  `.trim();
+
+  return sendEmail({
+    to: head.customer_email,
+    subject: `Your aiPRINT cart is confirmed — ${orders.length} pieces 🎨`,
+    html,
+    replyTo: ordersTo()
+  });
+}
+
+/**
+ * Combined fulfillment alert covering every item in a cart purchase.
+ * One email instead of N — easier on the inbox + admin sees the full
+ * package at a glance.
+ */
+export async function sendCartFulfillmentAlertEmail(orders) {
+  if (!Array.isArray(orders) || orders.length === 0) {
+    return { skipped: true, reason: 'empty cart array' };
+  }
+  const head = orders[0];
+  const to = ordersTo();
+  const currency = head.currency || 'usd';
+  const sessionId = head.stripe_session_id || '';
+  const totalAll = orders.reduce((s, o) => s + (Number(o.amount_total) || 0), 0);
+  const totalPrints = orders.reduce((s, o) => s + Math.max(1, parseInt(o.quantity, 10) || 1), 0);
+
+  const itemBlocks = orders.map((o, i) => {
+    const printMaster = o.clean_url || o.preview_url || '';
+    const qty = Math.max(1, parseInt(o.quantity, 10) || 1);
+    const lineCents = Number(o.subtotal_amount) || (Number(o.amount_total) || 0);
+    const opts = o.options || {};
+    return `
+      <div style="margin:16px 0;padding:14px;border:1px solid #e2e8f0;border-radius:8px">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          ${printMaster ? `<img src="${printMaster}" alt="" style="width:140px;height:140px;border-radius:6px;object-fit:cover;flex-shrink:0"/>` : ''}
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px">
+              <div>
+                <span style="display:inline-block;background:#312e81;color:#c7d2fe;padding:2px 10px;border-radius:999px;font-size:11px;font-weight:700">CART ${i + 1} / ${orders.length}</span>
+                ${qty > 1 ? `<span style="display:inline-block;background:#fde047;color:#422006;padding:2px 10px;border-radius:999px;font-size:11px;font-weight:700;margin-left:6px">PRINT × ${qty}</span>` : ''}
+              </div>
+              <strong style="font-size:14px">${fmtMoney(lineCents, currency)}</strong>
+            </div>
+            <div style="font-weight:600;font-size:14px">${o.lookup_key || '—'}</div>
+            <div style="color:#475569;font-size:12px;margin-top:4px;line-height:1.4">${(o.prompt || '').slice(0, 200)}${(o.prompt || '').length > 200 ? '…' : ''}</div>
+            ${printMaster ? `<p style="margin:8px 0 0;font-size:12px"><a href="${printMaster}" download style="color:#4f46e5;font-weight:600">⬇ Download print master</a></p>` : ''}
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const html = `
+    <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:680px;margin:0 auto;padding:20px;color:#0a0f1d;">
+      <h2 style="margin:0 0 8px">🛒 New cart order — ${orders.length} pieces · ${fmtMoney(totalAll, currency)}</h2>
+      <p style="margin:0 0 8px;color:#64748b;font-size:14px">${head.customer_email}${totalPrints !== orders.length ? ` · ${totalPrints} prints across ${orders.length} designs` : ` · ${orders.length} designs`} · ship together</p>
+
+      ${itemBlocks}
+
+      <h3 style="margin:24px 0 4px;font-size:14px">Ship to</h3>
+      <p style="margin:0;font-size:14px"><strong>${head.customer_name || ''}</strong><br>${fmtAddress(head.shipping_address)}</p>
+
+      <p style="margin-top:16px;font-size:12px;color:#94a3b8">Stripe session: ${sessionId}</p>
+    </div>
+  `.trim();
+
+  return sendEmail({
+    to,
+    subject: `🛒 New cart order · ${orders.length} pieces · ${fmtMoney(totalAll, currency)}`,
+    html,
+    replyTo: head.customer_email
+  });
+}
+
 const CARRIER_TRACKING_URLS = {
   ups: (n) => `https://www.ups.com/track?tracknum=${encodeURIComponent(n)}`,
   fedex: (n) => `https://www.fedex.com/fedextrack/?trknbr=${encodeURIComponent(n)}`,
