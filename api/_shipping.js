@@ -3,25 +3,22 @@
 //
 // Customer-facing rates are intentionally lower than the true lab-fulfillment
 // shipping cost — we absorb the gap on the back end so the checkout feels
-// friendly and doesn't sticker-shock first-time buyers. The goal is "cheap-
-// feeling" plus a generous free-shipping threshold that nudges AOV upward.
+// friendly and doesn't sticker-shock first-time buyers.
 //
 // Tiers are computed from the SKU prefix (CAN/MET/ACR) + the dimensions
 // embedded in the lookup_key. Acrylic facemounts are heaviest per sq inch
 // (acrylic + dibond + foam packaging), metal (ChromaLuxe aluminum) is
-// mid-weight, canvas is lightest. Free shipping kicks in once the line-item
-// price is at or above the threshold below.
+// mid-weight, canvas is lightest. Every order pays its tier rate — there
+// is no free-shipping threshold today (can be reintroduced by adding a
+// 'free' tier and threshold check in buildShippingOptions).
 //
 // All amounts in USD cents.
-
-const FREE_SHIPPING_THRESHOLD_CENTS = 9900; // $99 retail
 
 const TIERS = {
   light:    { amount: 1000, display: 'Standard shipping (3–7 business days)' }, // $10
   standard: { amount: 1500, display: 'Standard shipping (3–7 business days)' }, // $15
   heavy:    { amount: 2500, display: 'Standard shipping (3–7 business days)' }, // $25
-  oversize: { amount: 3500, display: 'Standard shipping (3–7 business days)' }, // $35
-  free:     { amount: 0,    display: 'Free shipping (3–7 business days)' }
+  oversize: { amount: 3500, display: 'Standard shipping (3–7 business days)' }  // $35
 };
 
 // Pull dimensions out of a lookup_key like "CAN-08x12-PT", "MET-12-SQ", "ACR-24x36-PT".
@@ -70,17 +67,13 @@ function tierForLookupKey(lookup_key) {
 
 /**
  * Build the shipping_options[] array for a Stripe Checkout Session.
- * Returns a single rate appropriate for the given product, with a free-shipping
- * override when the line-item retail price is at or above the threshold.
+ * Returns a single flat-rate shipping option appropriate for the given product.
  *
- * @param {string} lookup_key       e.g. "CAN-16x24-PT"
- * @param {number} unitAmountCents  line-item unit amount in cents (price.unit_amount)
- * @returns {Array}                 shipping_options for stripe.checkout.sessions.create
+ * @param {string} lookup_key  e.g. "CAN-16x24-PT"
+ * @returns {Array}            shipping_options for stripe.checkout.sessions.create
  */
-export function buildShippingOptions(lookup_key, unitAmountCents) {
-  const eligibleForFree = Number.isFinite(unitAmountCents)
-    && unitAmountCents >= FREE_SHIPPING_THRESHOLD_CENTS;
-  const tierKey = eligibleForFree ? 'free' : tierForLookupKey(lookup_key);
+export function buildShippingOptions(lookup_key) {
+  const tierKey = tierForLookupKey(lookup_key);
   const t = TIERS[tierKey] || TIERS.standard;
   return [{
     shipping_rate_data: {
@@ -98,10 +91,6 @@ export function buildShippingOptions(lookup_key, unitAmountCents) {
     }
   }];
 }
-
-// Exposed for the customer-facing UI (trust badge / FAQ / etc.) so the
-// threshold message stays in sync with the checkout logic.
-export const SHIPPING_FREE_THRESHOLD_USD = FREE_SHIPPING_THRESHOLD_CENTS / 100;
 
 // Exposed for tests / admin tools if we want to display the tier table.
 export const SHIPPING_TIERS = TIERS;

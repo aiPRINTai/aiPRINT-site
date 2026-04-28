@@ -133,11 +133,9 @@ export default async function handler(req, res) {
       }
     };
 
-    // Tiered flat-rate shipping. Cheap-feeling on small SKUs (recoups some
-    // back-end shipping cost), free on anything ≥$99 retail (which is most of
-    // the catalog). Tier logic + threshold live in api/_shipping.js so the
-    // policy is one place to change.
-    const shipping_options = buildShippingOptions(lookup_key, price.unit_amount);
+    // Tiered flat-rate shipping based on product size + material.
+    // Tier logic lives in api/_shipping.js so the policy is one place to change.
+    const shipping_options = buildShippingOptions(lookup_key);
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
