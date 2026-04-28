@@ -192,6 +192,38 @@ comment. Add a `free` entry to `TIERS` (amount: 0) and an early-return check
 in `buildShippingOptions` that returns the free tier when the product price
 is at or above your threshold.
 
+### 5.3 Promo / discount codes
+Both checkout endpoints set `allow_promotion_codes: true`, so Stripe Checkout
+shows the "Add promotion code" link automatically. Codes themselves are
+created in **Stripe Dashboard → Coupons** (the underlying discount, e.g.
+"$10 off" or "20% off") and then **Stripe Dashboard → Promotion codes** (the
+human-typed code that customers enter, e.g. `LAUNCH20`). One coupon can have
+many promotion codes pointing at it.
+
+To run a launch promo:
+1. Stripe Dashboard → Products → Coupons → New → set type (% or fixed) +
+   duration (forever / once / repeating). Save the coupon.
+2. Stripe Dashboard → Promotion codes → New → pick the coupon, type a code
+   (`LAUNCH20`, `PETMOM50`, etc.), set redemption limits / expiration.
+3. Send the code in your ad / email — no redeploy needed.
+
+To kill a code: revoke it in the Promotion codes table — instant. The
+underlying coupon stays for future codes.
+
+### 5.4 Apple Pay / Google Pay (digital wallets)
+Both checkout endpoints **don't constrain** `payment_method_types`, which
+means Stripe Checkout uses whatever's enabled in the Stripe Dashboard. Apple
+Pay and Google Pay show up automatically on supported devices when the
+matching method is on in **Stripe Dashboard → Settings → Payment methods**.
+
+To verify they're working:
+1. Open `https://aiprint.ai/` on an iPhone (Safari) — start a checkout.
+2. The Stripe page should show an Apple Pay button at the top above "Pay
+   with card." If absent, check Dashboard payment-method settings.
+3. Same on Android Chrome → Google Pay button appears.
+
+No code change needed to enable; this is purely a Dashboard toggle.
+
 ---
 
 ## 6. Image pipeline

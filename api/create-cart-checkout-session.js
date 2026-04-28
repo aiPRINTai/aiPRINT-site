@@ -191,6 +191,10 @@ export default async function handler(req, res) {
       billing_address_collection: 'required',
       shipping_address_collection: { allowed_countries: ['US'] },
       shipping_options,
+      // Surfaces the "Add promo code" link on the Stripe Checkout page —
+      // applies to the whole cart subtotal. Codes managed in Stripe
+      // Dashboard → Coupons / Promotion codes (no redeploy to issue).
+      allow_promotion_codes: true,
       metadata: {
         // Webhook-side flag so we can route this as a cart vs single-item.
         type: 'cart',

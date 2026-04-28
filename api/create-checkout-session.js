@@ -179,6 +179,10 @@ export default async function handler(req, res) {
       billing_address_collection: 'required',
       shipping_address_collection: { allowed_countries: ['US'] },
       shipping_options,
+      // Surfaces the "Add promo code" link on the Stripe Checkout page.
+      // Codes themselves are managed in Stripe Dashboard → Coupons /
+      // Promotion codes — no redeploy needed to issue or revoke them.
+      allow_promotion_codes: true,
       metadata,
       success_url: `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${origin}/#order`
