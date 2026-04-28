@@ -1144,7 +1144,8 @@
           <button type="button" id="qtyPlus" aria-label="Increase quantity"
                   class="w-9 h-9 text-lg text-gray-300 hover:bg-white/10 transition-colors">+</button>
         </div>
-        <button id="reviewBtn" class="btn disabled" aria-label="Review and checkout">Review & Checkout</button>
+        <button id="addToCartBtn" class="btn-ghost disabled" aria-label="Add to cart">+ Add to cart</button>
+        <button id="reviewBtn" class="btn disabled" aria-label="Buy now">Buy now →</button>
       </div>
     </div>
 
@@ -2406,6 +2407,7 @@
                 data-material="${material}" data-shape="${bucket}"
                 data-size="${p.size_w_in}x${p.size_h_in}"
                 data-lookup="${p.lookup_key}"
+                data-price-cents="${Math.round(Number(p.price_usd || 0) * 100)}"
                 data-label="${material.toUpperCase()} ${p.size_w_in}×${p.size_h_in} — ${formatMoney(p.price_usd)}"
                 data-link="${p.stripe_payment_link}">
           <span class="${materialClass} material-badge">${material.toUpperCase()}</span>
@@ -2418,11 +2420,11 @@
           if (btn.classList.contains('disabled')) return;
           $$('.sizeBtn').forEach(x => x.classList.remove('ringy', 'bg-white/20'));
           btn.classList.add('ringy', 'bg-white/20');
-          selected = { material: btn.dataset.material, shape: btn.dataset.shape, size: btn.dataset.size, lookup: btn.dataset.lookup, label: btn.dataset.label, link: btn.dataset.link };
+          selected = { material: btn.dataset.material, shape: btn.dataset.shape, size: btn.dataset.size, lookup: btn.dataset.lookup, label: btn.dataset.label, link: btn.dataset.link, priceCents: parseInt(btn.dataset.priceCents, 10) || 0 };
           // Drive the wall mockup's frame styling off the selected material
           currentCollection = selected.material;
           $('#selectionSummary').textContent = `Selected: ${selected.label}`;
-          $('#reviewBtn').classList.remove('disabled');
+          $('#reviewBtn').classList.remove('disabled'); $('#addToCartBtn')?.classList.remove('disabled');
           const activeRoom = $('.room-tab.active')?.dataset.room || 'room1';
           updateMockup(activeRoom, selected.size);
         });
@@ -3173,7 +3175,7 @@
       $('#orderMsg').textContent = 'Generate a preview above to unlock ordering.';
       $$('.sizeBtn').forEach(x => x.classList.remove('ringy', 'bg-white/20'));
       selected = null; $('#selectionSummary').textContent = 'Selected: —';
-      $('#reviewBtn').classList.add('disabled');
+      $('#reviewBtn').classList.add('disabled'); $('#addToCartBtn')?.classList.add('disabled');
       localStorage.removeItem('aiprint_last_preview');
     });
 
@@ -3199,11 +3201,58 @@
       if (selected && selected.shape !== shape) {
         selected = null;
         $('#selectionSummary').textContent = 'Selected: —';
-        $('#reviewBtn').classList.add('disabled');
+        $('#reviewBtn').classList.add('disabled'); $('#addToCartBtn')?.classList.add('disabled');
         $$('.sizeBtn').forEach(x => x.classList.remove('ringy', 'bg-white/20'));
       }
     }
     $('#ratioSel')?.addEventListener('change', syncColumnsToRatio);
+
+    // ===== Add to Cart =====
+    // Pushes the currently-generated preview + selected size + chosen quantity
+    // onto the localStorage cart (managed by /js/cart.js + /js/cart-ui.js).
+    // Cart drawer slides in automatically so the customer can adjust qty,
+    // remove, or proceed to checkout. The single-item "Buy now" path stays
+    // intact alongside this for instant-checkout customers.
+    $('#addToCartBtn')?.addEventListener('click', () => {
+      if (!selected || !currentPreview) { alert('Please generate a preview and select a size first.'); return; }
+      if (!window.aiprintCart) { alert('Cart not loaded. Please refresh the page.'); return; }
+      if (window.aiprintCart.isFull()) { alert('Cart is full (max 10 items). Please check out or remove an item before adding more.'); return; }
+
+      const sig = {
+        text: $('#signatureInput').value,
+        font: $('#signatureFont').value,
+        color: $('#signatureColor').value,
+        size: $('#signatureSize').value,
+        position: signaturePosition
+      };
+      const qty = Math.max(1, Math.min(10, parseInt($('#qtyInput')?.value, 10) || 1));
+      const added = window.aiprintCart.add({
+        preview_url: currentPreview.url,
+        clean_url: null, // server resolves this at checkout time from generations table
+        prompt: currentPreview.prompt,
+        options: {
+          ratio: currentPreview.size,
+          style: $('#styleSelect').value,
+          mood:  $('#moodSelect').value,
+          light: $('#lightingSelect').value,
+          comp:  $('#cameraSelect').value,
+          medium:$('#mediumSelect').value,
+          sig: sig.text ? sig : null
+        },
+        lookup_key: selected.lookup,
+        product_name: selected.label || selected.lookup,
+        unit_amount: selected.priceCents || Math.round((selected.price || 0) * 100),
+        currency: 'usd',
+        quantity: qty
+      });
+      if (!added) { alert('Cart is full.'); return; }
+      window.track && window.track('cart_added', { lookup_key: selected.lookup, qty });
+      if (window.aiprintCartUI) {
+        window.aiprintCartUI.toast('Added to cart');
+        window.aiprintCartUI.open();
+      }
+    });
+    // ===== end Add to Cart =====
 
     $('#reviewBtn').addEventListener('click', async () => {
       if (!selected || !currentPreview) { alert('Please generate a preview and select a size first.'); return; }

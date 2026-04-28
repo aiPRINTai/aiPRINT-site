@@ -92,6 +92,45 @@ export function buildShippingOptions(lookup_key) {
   }];
 }
 
+/**
+ * Build shipping_options[] for a multi-item cart checkout.
+ * Strategy: pick the heaviest tier across all items in the cart — shipping
+ * is per-package, not per-item, and the heaviest item dictates the box.
+ * That's almost always cheaper for the customer than summing per-item rates,
+ * and matches how the lab actually ships (one package, mixed sizes go in
+ * the box sized for the largest piece).
+ *
+ * @param {string[]} lookupKeys  list of SKU lookup_keys in the cart
+ * @returns {Array}              shipping_options for stripe.checkout.sessions.create
+ */
+export function buildCartShippingOptions(lookupKeys) {
+  if (!Array.isArray(lookupKeys) || lookupKeys.length === 0) {
+    return buildShippingOptions('');
+  }
+  // Tier weights — higher = more shipping cost, picked over lower.
+  const RANK = { light: 1, standard: 2, heavy: 3, oversize: 4 };
+  let topTier = 'standard';
+  let topRank = RANK[topTier];
+  for (const k of lookupKeys) {
+    const t = tierForLookupKey(k);
+    const r = RANK[t] || 0;
+    if (r > topRank) { topRank = r; topTier = t; }
+  }
+  const t = TIERS[topTier] || TIERS.standard;
+  return [{
+    shipping_rate_data: {
+      type: 'fixed_amount',
+      fixed_amount: { amount: t.amount, currency: 'usd' },
+      display_name: t.display,
+      delivery_estimate: {
+        minimum: { unit: 'business_day', value: 3 },
+        maximum: { unit: 'business_day', value: 7 }
+      },
+      tax_behavior: 'exclusive'
+    }
+  }];
+}
+
 // Exposed for tests / admin tools if we want to display the tier table.
 export const SHIPPING_TIERS = TIERS;
 export { tierForLookupKey };

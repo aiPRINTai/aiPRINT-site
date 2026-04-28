@@ -78,7 +78,9 @@ export default async function handler(req, res) {
     // Handle print product orders
     else {
       try {
-        // Idempotency: Stripe can retry; skip if we've already processed this session
+        // Idempotency: Stripe can retry; skip if we've already processed this
+        // session. For both single-item and cart sessions, the existence of
+        // ANY orders row means we've already run.
         const existing = await getOrderByStripeSessionId(s.id);
         if (existing) {
           console.log(`ℹ️  Order ${s.id} already recorded — skipping duplicate webhook`);
@@ -104,39 +106,12 @@ export default async function handler(req, res) {
           ? s.amount_subtotal
           : Math.max(0, (s.amount_total || 0) - tax_amount - shipping_amount);
 
-        const order = {
-          stripe_session_id: s.id,
+        // Customer/shipping info is shared across all line items.
+        const customerInfo = {
           customer_email: s.customer_details?.email || '',
           customer_name: shipDetails?.name || s.customer_details?.name || '',
           shipping_address: shipDetails?.address || null,
-          lookup_key: m.lookup_key,
-          preview_url: m.preview_url,
-          // clean_url = the unwatermarked print master. For pre-watermark-feature
-          // orders, m.clean_url won't be set; fall back to preview_url so admin
-          // export still has *something*.
-          clean_url: m.clean_url || m.preview_url,
-          prompt: m.prompt,
-          options: {
-            ratio: m.ratio, style: m.style, mood: m.mood, light: m.light,
-            composition: m.composition, medium: m.medium,
-            signature: m.signature_json ? JSON.parse(m.signature_json) : null
-          },
-          amount_total: s.amount_total,
-          tax_amount,
-          shipping_amount,
-          subtotal_amount,
-          // Quantity is forwarded via session metadata from create-checkout-session.
-          // Coerce + clamp here too as defense-in-depth (in case a malformed
-          // value somehow made it through).
-          quantity: (() => {
-            const n = parseInt(m.quantity, 10);
-            if (!Number.isFinite(n) || n < 1) return 1;
-            return Math.min(n, 10);
-          })(),
           currency: s.currency || 'usd',
-          // Marketing attribution — captured client-side on landing,
-          // forwarded via the checkout request, and stored on the Stripe
-          // session metadata. Read back here for /admin/marketing.html.
           utm_source:   m.utm_source   || null,
           utm_medium:   m.utm_medium   || null,
           utm_campaign: m.utm_campaign || null,
@@ -144,18 +119,120 @@ export default async function handler(req, res) {
           utm_term:     m.utm_term     || null
         };
 
-        await createOrder(order);
-        console.log(`✅ Order saved: ${s.id} (${order.customer_email})`);
-
-        // Fire emails — failures here shouldn't fail the webhook
-        await Promise.allSettled([
-          sendOrderConfirmationEmail(order),
-          sendFulfillmentAlertEmail(order)
-        ]).then(results => {
-          results.forEach((r, i) => {
-            if (r.status === 'rejected') console.error(`❌ Email ${i} failed:`, r.reason);
+        // Cart sessions: m.type === 'cart'. Pull line_items + their per-line
+        // metadata via stripe.checkout.sessions.retrieve(... expand=...) so
+        // each line gets its own orders row. Single-item sessions stay on the
+        // original code path (creative settings on session.metadata).
+        if (m.type === 'cart') {
+          const full = await stripe.checkout.sessions.retrieve(s.id, {
+            expand: ['line_items.data.price.product']
           });
-        });
+          const lineItems = full.line_items?.data || [];
+          if (lineItems.length === 0) {
+            console.error(`❌ Cart session ${s.id} returned no line_items`);
+            return res.status(200).json({ received: true, error: 'no line items' });
+          }
+
+          // Allocate the shared session-level shipping + tax to the first
+          // item only — all line_items share one shipment, but the orders
+          // table is line-item-grained. Subtotal per line is amount_total
+          // for that line (Stripe gives us this via the line_items expansion).
+          for (let i = 0; i < lineItems.length; i++) {
+            const li = lineItems[i];
+            const lineMeta = li.price?.product?.metadata || {};
+            const lineQty = (() => {
+              const n = parseInt(lineMeta.quantity || li.quantity, 10);
+              if (!Number.isFinite(n) || n < 1) return li.quantity || 1;
+              return Math.min(n, 10);
+            })();
+            const idx = parseInt(lineMeta.line_item_index, 10);
+            const lineIndex = Number.isFinite(idx) ? idx : i;
+
+            const lineSubtotal = li.amount_subtotal ?? li.amount_total ?? 0;
+            const isFirst = i === 0;
+
+            const order = {
+              ...customerInfo,
+              stripe_session_id: s.id,
+              line_item_index: lineIndex,
+              lookup_key:  lineMeta.lookup_key  || '',
+              preview_url: lineMeta.preview_url || '',
+              clean_url:   lineMeta.clean_url   || lineMeta.preview_url || '',
+              prompt:      lineMeta.prompt      || '',
+              options: {
+                ratio: lineMeta.ratio, style: lineMeta.style, mood: lineMeta.mood,
+                light: lineMeta.light, composition: lineMeta.composition,
+                medium: lineMeta.medium,
+                signature: lineMeta.signature_json ? JSON.parse(lineMeta.signature_json) : null
+              },
+              // Per-line economics. Tax + shipping are session-level, so we
+              // attach them to the first line and zero them on the rest —
+              // sums across all rows then add up to the session total.
+              amount_total:    isFirst ? (lineSubtotal + tax_amount + shipping_amount) : lineSubtotal,
+              tax_amount:      isFirst ? tax_amount : 0,
+              shipping_amount: isFirst ? shipping_amount : 0,
+              subtotal_amount: lineSubtotal,
+              quantity: lineQty
+            };
+            await createOrder(order);
+          }
+          console.log(`✅ Cart order saved: ${s.id} (${customerInfo.customer_email}) · ${lineItems.length} items`);
+
+          // Fire one customer confirmation + one fulfillment alert covering
+          // all items together. We rebuild the "order-shaped" payload from
+          // the persisted rows so the email templates can iterate them.
+          const { getOrdersByStripeSessionId } = await import('./db/index.js');
+          const allRows = await getOrdersByStripeSessionId(s.id);
+          // Templates only consume top-level fields today; the simplest way
+          // to keep them compatible is to send one email per row. Fine for
+          // small carts (≤10) and keeps fulfillment alerts grouped per item.
+          const emailPromises = [];
+          for (const row of allRows) {
+            emailPromises.push(sendOrderConfirmationEmail(row));
+            emailPromises.push(sendFulfillmentAlertEmail(row));
+          }
+          await Promise.allSettled(emailPromises).then(results => {
+            results.forEach((r, i) => {
+              if (r.status === 'rejected') console.error(`❌ Cart email ${i} failed:`, r.reason);
+            });
+          });
+        } else {
+          // Single-item flow (legacy): all creative settings live on session.metadata.
+          const order = {
+            ...customerInfo,
+            stripe_session_id: s.id,
+            line_item_index: 0,
+            lookup_key: m.lookup_key,
+            preview_url: m.preview_url,
+            clean_url: m.clean_url || m.preview_url,
+            prompt: m.prompt,
+            options: {
+              ratio: m.ratio, style: m.style, mood: m.mood, light: m.light,
+              composition: m.composition, medium: m.medium,
+              signature: m.signature_json ? JSON.parse(m.signature_json) : null
+            },
+            amount_total: s.amount_total,
+            tax_amount,
+            shipping_amount,
+            subtotal_amount,
+            quantity: (() => {
+              const n = parseInt(m.quantity, 10);
+              if (!Number.isFinite(n) || n < 1) return 1;
+              return Math.min(n, 10);
+            })()
+          };
+          await createOrder(order);
+          console.log(`✅ Order saved: ${s.id} (${customerInfo.customer_email})`);
+
+          await Promise.allSettled([
+            sendOrderConfirmationEmail(order),
+            sendFulfillmentAlertEmail(order)
+          ]).then(results => {
+            results.forEach((r, i) => {
+              if (r.status === 'rejected') console.error(`❌ Email ${i} failed:`, r.reason);
+            });
+          });
+        }
       } catch (err) {
         console.error('❌ Error processing print order:', err);
         // Still ack to Stripe; we have the event in their dashboard for retry
