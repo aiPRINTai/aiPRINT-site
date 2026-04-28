@@ -75,6 +75,27 @@
     .aip-item .aip-qty-input::-webkit-inner-spin-button, .aip-item .aip-qty-input::-webkit-outer-spin-button { -webkit-appearance: none; }
     .aip-item .aip-remove { background: none; border: none; color: #94a3b8; font-size: 11px; cursor: pointer; padding: 0; }
     .aip-item .aip-remove:hover { color: #fca5a5; }
+    .aip-item .aip-save-link { background: none; border: none; color: #94a3b8; font-size: 11px; cursor: pointer; padding: 0; margin-right: 8px; }
+    .aip-item .aip-save-link:hover { color: #c7d2fe; }
+    .aip-item .aip-action-row { display: flex; gap: 4px; align-items: center; }
+
+    .aip-saved-section { margin-top: 12px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.10); }
+    .aip-saved-header { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; cursor: pointer; user-select: none; }
+    .aip-saved-header h3 { margin: 0; font-size: 13px; font-weight: 600; color: #cbd5e1; text-transform: uppercase; letter-spacing: .04em; }
+    .aip-saved-header .aip-saved-count { font-size: 11px; color: #94a3b8; }
+    .aip-saved-header .aip-chev { color: #94a3b8; transition: transform .18s ease; }
+    .aip-saved-section.aip-collapsed .aip-saved-list { display: none; }
+    .aip-saved-section.aip-collapsed .aip-chev { transform: rotate(-90deg); }
+    .aip-saved-item { display: grid; grid-template-columns: 48px 1fr auto; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.05); align-items: center; }
+    .aip-saved-item:last-child { border-bottom: none; }
+    .aip-saved-item img { width: 48px; height: 48px; border-radius: 6px; object-fit: cover; background: rgba(255,255,255,.05); }
+    .aip-saved-item .aip-name { font-size: 12px; font-weight: 600; color: #e7eef8; }
+    .aip-saved-item .aip-prompt { color: #94a3b8; font-size: 11px; margin-top: 1px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; }
+    .aip-saved-item .aip-saved-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .aip-saved-item .aip-move-btn { background: rgba(99,102,241,.20); border: 1px solid rgba(99,102,241,.40); color: #c7d2fe; font-size: 10px; padding: 3px 8px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+    .aip-saved-item .aip-move-btn:hover { background: rgba(99,102,241,.32); }
+    .aip-saved-item .aip-saved-remove { background: none; border: none; color: #94a3b8; font-size: 10px; cursor: pointer; padding: 0; }
+    .aip-saved-item .aip-saved-remove:hover { color: #fca5a5; }
 
     .aip-drawer footer { padding: 18px 20px; border-top: 1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.02); }
     .aip-totals { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
@@ -192,10 +213,21 @@
     showToast._t = setTimeout(() => t.classList.remove('aip-show'), 2400);
   }
 
+  // Persist the saved-for-later collapsed state across drawer opens so the
+  // user's preference sticks within the session.
+  let savedCollapsed = (() => {
+    try { return localStorage.getItem('aiprint_saved_collapsed') === '1'; } catch (_) { return false; }
+  })();
+  function setSavedCollapsed(v) {
+    savedCollapsed = !!v;
+    try { localStorage.setItem('aiprint_saved_collapsed', v ? '1' : '0'); } catch (_) {}
+  }
+
   function render() {
     const cart = window.aiprintCart;
     if (!cart) return;
     const items = cart.list();
+    const saved = cart.listSaved();
     const count = cart.count();
     const total = cart.totalCents();
 
@@ -212,58 +244,127 @@
     const footer = document.getElementById('aipCartFooter');
     if (!list || !footer) return;
 
+    let html = '';
     if (items.length === 0) {
-      list.innerHTML = `
+      html += `
         <div class="aip-empty-state">
           <strong>Your cart is empty</strong>
           Generate a print, pick a size, and click "Add to cart" to start your order.
         </div>`;
-      footer.style.display = 'none';
-      return;
+    } else {
+      html += items.map(it => {
+        const lineCents = (it.unit_amount || 0) * (it.quantity || 1);
+        const promptShort = (it.prompt || '').slice(0, 80);
+        return `
+          <div class="aip-item" data-id="${escapeHtml(it.id)}">
+            <img src="${escapeHtml(it.preview_url || '')}" alt="${escapeHtml(promptShort) || 'Cart item'}" loading="lazy"/>
+            <div class="aip-item-meta">
+              <div class="aip-name">${escapeHtml(it.product_name || it.lookup_key || 'Print')}</div>
+              <div class="aip-prompt">${escapeHtml(promptShort)}${(it.prompt || '').length > 80 ? '…' : ''}</div>
+              <div class="aip-qty-row" style="margin-top:6px">
+                <button class="aip-qty-btn" data-act="dec" aria-label="Decrease quantity"${(it.quantity || 1) <= cart.MIN_QTY ? ' disabled' : ''}>−</button>
+                <input class="aip-qty-input" type="number" min="${cart.MIN_QTY}" max="${cart.MAX_QTY}" value="${it.quantity || 1}" inputmode="numeric" aria-label="Quantity"/>
+                <button class="aip-qty-btn" data-act="inc" aria-label="Increase quantity"${(it.quantity || 1) >= cart.MAX_QTY ? ' disabled' : ''}>+</button>
+              </div>
+            </div>
+            <div class="aip-item-controls">
+              <span class="aip-price">${fmtMoney(lineCents, it.currency)}</span>
+              <div class="aip-action-row">
+                <button class="aip-save-link" data-act="save" aria-label="Save for later">Save for later</button>
+                <button class="aip-remove" data-act="remove" aria-label="Remove item">Remove</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
     }
 
-    list.innerHTML = items.map(it => {
-      const lineCents = (it.unit_amount || 0) * (it.quantity || 1);
-      const promptShort = (it.prompt || '').slice(0, 80);
-      return `
-        <div class="aip-item" data-id="${escapeHtml(it.id)}">
-          <img src="${escapeHtml(it.preview_url || '')}" alt="${escapeHtml(promptShort) || 'Cart item'}" loading="lazy"/>
-          <div class="aip-item-meta">
-            <div class="aip-name">${escapeHtml(it.product_name || it.lookup_key || 'Print')}</div>
-            <div class="aip-prompt">${escapeHtml(promptShort)}${(it.prompt || '').length > 80 ? '…' : ''}</div>
-            <div class="aip-qty-row" style="margin-top:6px">
-              <button class="aip-qty-btn" data-act="dec" aria-label="Decrease quantity"${(it.quantity || 1) <= cart.MIN_QTY ? ' disabled' : ''}>−</button>
-              <input class="aip-qty-input" type="number" min="${cart.MIN_QTY}" max="${cart.MAX_QTY}" value="${it.quantity || 1}" inputmode="numeric" aria-label="Quantity"/>
-              <button class="aip-qty-btn" data-act="inc" aria-label="Increase quantity"${(it.quantity || 1) >= cart.MAX_QTY ? ' disabled' : ''}>+</button>
-            </div>
+    // Saved-for-later section. Only renders if there's something saved OR if
+    // the user has historically used the feature (we don't show an empty
+    // section just to demo the feature).
+    if (saved.length > 0) {
+      html += `
+        <div class="aip-saved-section${savedCollapsed ? ' aip-collapsed' : ''}" id="aipSavedSection">
+          <div class="aip-saved-header" id="aipSavedHeader">
+            <h3>Saved for later <span class="aip-saved-count">(${saved.length})</span></h3>
+            <span class="aip-chev">▾</span>
           </div>
-          <div class="aip-item-controls">
-            <span class="aip-price">${fmtMoney(lineCents, it.currency)}</span>
-            <button class="aip-remove" data-act="remove" aria-label="Remove item">Remove</button>
+          <div class="aip-saved-list">
+            ${saved.map(it => {
+              const promptShort = (it.prompt || '').slice(0, 60);
+              return `
+                <div class="aip-saved-item" data-id="${escapeHtml(it.id)}">
+                  <img src="${escapeHtml(it.preview_url || '')}" alt="" loading="lazy"/>
+                  <div>
+                    <div class="aip-name">${escapeHtml(it.product_name || it.lookup_key || 'Print')}</div>
+                    <div class="aip-prompt">${escapeHtml(promptShort)}${(it.prompt || '').length > 60 ? '…' : ''}</div>
+                  </div>
+                  <div class="aip-saved-actions">
+                    <button class="aip-move-btn" data-act="move" aria-label="Move to cart">Move to cart</button>
+                    <button class="aip-saved-remove" data-act="rm-saved" aria-label="Remove">Remove</button>
+                  </div>
+                </div>`;
+            }).join('')}
           </div>
         </div>`;
-    }).join('');
+    }
 
-    // Wire per-item interactions
+    list.innerHTML = html;
+
+    // Wire per-item interactions (cart items)
     list.querySelectorAll('.aip-item').forEach(node => {
       const id = node.getAttribute('data-id');
-      node.querySelector('[data-act="dec"]').addEventListener('click', () => {
+      node.querySelector('[data-act="dec"]')?.addEventListener('click', () => {
         const cur = items.find(x => x.id === id);
         if (cur) cart.updateQuantity(id, (cur.quantity || 1) - 1);
       });
-      node.querySelector('[data-act="inc"]').addEventListener('click', () => {
+      node.querySelector('[data-act="inc"]')?.addEventListener('click', () => {
         const cur = items.find(x => x.id === id);
         if (cur) cart.updateQuantity(id, (cur.quantity || 1) + 1);
       });
-      node.querySelector('[data-act="remove"]').addEventListener('click', () => cart.remove(id));
-      node.querySelector('.aip-qty-input').addEventListener('change', (e) => {
+      node.querySelector('[data-act="remove"]')?.addEventListener('click', () => cart.remove(id));
+      node.querySelector('[data-act="save"]')?.addEventListener('click', () => {
+        if (cart.saveForLater(id)) {
+          showToast('Saved for later');
+        } else {
+          showToast('Saved-for-later list is full');
+        }
+      });
+      node.querySelector('.aip-qty-input')?.addEventListener('change', (e) => {
         cart.updateQuantity(id, e.target.value);
       });
     });
 
+    // Wire saved-for-later interactions
+    list.querySelectorAll('.aip-saved-item').forEach(node => {
+      const id = node.getAttribute('data-id');
+      node.querySelector('[data-act="move"]')?.addEventListener('click', () => {
+        if (cart.moveToCart(id)) {
+          showToast('Moved to cart');
+        } else {
+          showToast('Cart is full');
+        }
+      });
+      node.querySelector('[data-act="rm-saved"]')?.addEventListener('click', () => cart.removeSaved(id));
+    });
+
+    // Wire saved header collapse toggle
+    const savedHeader = document.getElementById('aipSavedHeader');
+    if (savedHeader) {
+      savedHeader.addEventListener('click', () => {
+        const sec = document.getElementById('aipSavedSection');
+        const next = !sec.classList.contains('aip-collapsed');
+        sec.classList.toggle('aip-collapsed', next);
+        setSavedCollapsed(next);
+      });
+    }
+
     // Footer
-    document.getElementById('aipCartTotal').textContent = fmtMoney(total, items[0]?.currency || 'usd');
-    footer.style.display = '';
+    if (items.length === 0) {
+      footer.style.display = 'none';
+    } else {
+      document.getElementById('aipCartTotal').textContent = fmtMoney(total, items[0]?.currency || 'usd');
+      footer.style.display = '';
+    }
   }
 
   async function startCheckout() {

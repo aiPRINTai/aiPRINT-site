@@ -66,6 +66,10 @@
     .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#e7eef8;cursor:pointer;padding:.75rem 1.5rem;border-radius:.6rem;transition:all .2s;}
     .btn-ghost:hover{background:rgba(255,255,255,.12);}
     .btn:disabled,.btn.disabled{opacity:0.5;cursor:not-allowed;filter:saturate(0.5);}
+    /* Generic .disabled class for any non-.btn button (e.g. the secondary
+       Add to cart button which uses Tailwind utilities, not .btn). */
+    button.disabled:not(.btn){opacity:0.4;cursor:not-allowed;}
+    button.disabled:not(.btn):hover{filter:none;}
     .ringy{box-shadow:0 0 0 2px #fff inset}
     .spinner{border:2px solid #333;border-top:2px solid #fff;border-radius:50%;width:20px;height:20px;animation:spin 1s linear infinite;}
     @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
@@ -555,7 +559,7 @@
     @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
     .fade-up { animation: fadeUp .6s ease forwards; }
   </style>
-<script defer src="/js/analytics.js"></script><script defer src="/js/utm.js"></script>
+<script defer src="/js/analytics.js"></script><script defer src="/js/utm.js"></script><script defer src="/js/cart.js"></script><script defer src="/js/cart-ui.js"></script>
   </head>
 <body>
 
@@ -1132,7 +1136,7 @@
 
     <div class="mt-6 flex flex-col md:flex-row md:items-center gap-4 flex-wrap">
       <div id="selectionSummary" class="text-sm text-gray-400">Selected: —</div>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3 flex-wrap">
         <label for="qtyInput" class="text-sm text-gray-400">Quantity</label>
         <div class="inline-flex items-center bg-white/5 border border-white/15 rounded-lg overflow-hidden">
           <button type="button" id="qtyMinus" aria-label="Decrease quantity"
@@ -1144,8 +1148,18 @@
           <button type="button" id="qtyPlus" aria-label="Increase quantity"
                   class="w-9 h-9 text-lg text-gray-300 hover:bg-white/10 transition-colors">+</button>
         </div>
-        <button id="addToCartBtn" class="btn-ghost disabled" aria-label="Add to cart">+ Add to cart</button>
-        <button id="reviewBtn" class="btn disabled" aria-label="Buy now">Buy now →</button>
+        <!-- Buy now is the PRIMARY CTA (right-aligned, gradient) — sends them straight to Stripe.
+             Add to cart is the SECONDARY action — same gating, but stashes the design and keeps
+             them browsing so they can buy multiple distinct designs in one transaction. -->
+        <button id="reviewBtn" class="btn disabled px-6 py-2.5 text-base font-bold" aria-label="Buy now — go to checkout">Buy now →</button>
+        <button id="addToCartBtn" class="disabled inline-flex items-center gap-1.5 text-sm font-medium text-gray-300 hover:text-white px-3 py-2 rounded-lg border border-white/15 hover:border-white/30 transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-gray-300 disabled:hover:border-white/15"
+                aria-label="Add to cart — keep browsing">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true">
+            <path d="M3 8h18l-1.5 11.5a2 2 0 0 1-2 1.5H6.5a2 2 0 0 1-2-1.5L3 8Z"/>
+            <path d="M8 8V6a4 4 0 1 1 8 0v2"/>
+          </svg>
+          Add to cart
+        </button>
       </div>
     </div>
 

@@ -43,13 +43,17 @@
   if (typeof window === 'undefined' || !window.localStorage) return;
 
   const KEY = 'aiprint_cart_v1';
+  const SAVED_KEY = 'aiprint_saved_v1';
   const MAX_ITEMS = 10;
+  const MAX_SAVED = 30;            // higher cap — saved-for-later is a wishlist
   const MIN_QTY = 1;
   const MAX_QTY = 10;
 
-  function safeRead() {
+  // Generic key-scoped reader/writer so cart + saved share the same plumbing
+  // without duplicating the JSON-safe try/catch dance.
+  function safeReadKey(k) {
     try {
-      const raw = localStorage.getItem(KEY);
+      const raw = localStorage.getItem(k);
       if (!raw) return [];
       const arr = JSON.parse(raw);
       return Array.isArray(arr) ? arr : [];
@@ -57,15 +61,20 @@
       return [];
     }
   }
-
-  function safeWrite(arr) {
-    try { localStorage.setItem(KEY, JSON.stringify(arr)); } catch (_) {}
-    notify(arr);
+  function safeWriteKey(k, arr) {
+    try { localStorage.setItem(k, JSON.stringify(arr)); } catch (_) {}
+    notify();
   }
+  function safeRead() { return safeReadKey(KEY); }
+  function safeWrite(arr) { safeWriteKey(KEY, arr); }
+  function safeReadSaved()  { return safeReadKey(SAVED_KEY); }
+  function safeWriteSaved(arr) { safeWriteKey(SAVED_KEY, arr); }
 
-  function notify(arr) {
+  function notify() {
     try {
-      window.dispatchEvent(new CustomEvent('aiprint-cart-changed', { detail: arr }));
+      window.dispatchEvent(new CustomEvent('aiprint-cart-changed', {
+        detail: { cart: safeRead(), saved: safeReadSaved() }
+      }));
     } catch (_) {}
   }
 
@@ -126,14 +135,58 @@
   }
   function isFull() { return safeRead().length >= MAX_ITEMS; }
 
+  // ── Saved-for-later (wishlist) ─────────────────────────────────────
+  // A second collection that hangs off the same UI but doesn't roll into
+  // the checkout subtotal. Items can hop between cart and saved.
+  function saveForLater(id) {
+    const cart = safeRead();
+    const idx = cart.findIndex(x => x && x.id === id);
+    if (idx === -1) return false;
+    const saved = safeReadSaved();
+    if (saved.length >= MAX_SAVED) return false;
+    const [moved] = cart.splice(idx, 1);
+    moved.quantity = 1; // saved items reset to 1; you usually re-pick qty when moving back
+    saved.push(moved);
+    safeWrite(cart);
+    safeWriteSaved(saved);
+    return true;
+  }
+  function moveToCart(id) {
+    const saved = safeReadSaved();
+    const idx = saved.findIndex(x => x && x.id === id);
+    if (idx === -1) return false;
+    const cart = safeRead();
+    if (cart.length >= MAX_ITEMS) return false;
+    const [moved] = saved.splice(idx, 1);
+    cart.push(moved);
+    safeWriteSaved(saved);
+    safeWrite(cart);
+    return true;
+  }
+  function removeSaved(id) {
+    safeWriteSaved(safeReadSaved().filter(x => x && x.id !== id));
+  }
+  function clearSaved() { safeWriteSaved([]); }
+  function listSaved() { return safeReadSaved().slice(); }
+  function savedCount() { return safeReadSaved().length; }
+
   window.aiprintCart = {
     add, remove, updateQuantity, clear,
     list, count, distinctCount, totalCents, isFull,
-    MAX_ITEMS, MIN_QTY, MAX_QTY
+    saveForLater, moveToCart, removeSaved, clearSaved, listSaved, savedCount,
+    // Replace both collections from an external source (e.g. a server-side
+    // sync). Single notify so the UI re-renders once.
+    replaceAll(cart, saved) {
+      try { localStorage.setItem(KEY, JSON.stringify(Array.isArray(cart) ? cart : [])); } catch (_) {}
+      try { localStorage.setItem(SAVED_KEY, JSON.stringify(Array.isArray(saved) ? saved : [])); } catch (_) {}
+      notify();
+    },
+    MAX_ITEMS, MIN_QTY, MAX_QTY, MAX_SAVED
   };
 
-  // Cross-tab sync: a cart edit in another tab should refresh this tab's UI.
+  // Cross-tab sync: a cart or saved edit in another tab should refresh
+  // this tab's UI. Both keys share the same change event.
   window.addEventListener('storage', (e) => {
-    if (e.key === KEY) notify(safeRead());
+    if (e.key === KEY || e.key === SAVED_KEY) notify();
   });
 })();
