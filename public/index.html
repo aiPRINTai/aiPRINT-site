@@ -655,6 +655,11 @@
         <div id="cartMount" class="flex items-center"></div>
         <div id="authButton" class="hidden sm:block"></div>
         <a href="#create" class="btn text-sm px-5 py-2 hidden lg:inline-block">Create a print</a>
+        <!-- Mobile/tablet-only "Create" CTA — desktop already has the
+             "Create a print" button above, but on mobile users would
+             otherwise have to scroll through the whole homepage to reach
+             the generator. This jumps them straight to #create. -->
+        <a href="#create" class="btn-accent text-sm px-3.5 py-2 lg:hidden whitespace-nowrap inline-flex items-center gap-1" aria-label="Jump to the create-a-preview section">Create <span aria-hidden="true">→</span></a>
         <button id="mobileMenuBtn" class="lg:hidden btn-ghost px-3 py-2" aria-label="Open menu" aria-expanded="false" onclick="(function(b){const m=document.getElementById('mobileMenu');const open=m.classList.toggle('hidden')===false;b.setAttribute('aria-expanded',open);b.innerHTML=open?'✕':'☰';})(this)">☰</button>
       </div>
     </div>
