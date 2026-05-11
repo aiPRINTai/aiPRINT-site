@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>aiPRINT.ai — Turn any idea into a gallery-worthy print</title>
-  <meta name="description" content="Create premium, ready-to-hang fine art prints from your idea. AI + human curation, archival materials, Certificate of Authenticity. Ships in 7–14 days." />
+  <meta name="description" content="Create premium, ready-to-hang fine art prints from your idea. AI + human curation, archival materials, hand-numbered Certificate of Authenticity. Custom-made and shipped in 7–14 business days." />
   <link rel="canonical" href="https://aiprint.ai/" />
   <meta name="theme-color" content="#0a0f1d" />
   <meta name="facebook-domain-verification" content="ya27rg1ncbguhc37iwo2heprvfce2n" />
@@ -17,7 +17,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="aiPRINT.ai" />
   <meta property="og:title" content="aiPRINT.ai — Turn any idea into a gallery-worthy print" />
-  <meta property="og:description" content="Premium AI-generated fine art prints. Archival materials, numbered Certificate of Authenticity, hand-reviewed by the founder. Ships in 7–14 days." />
+  <meta property="og:description" content="Premium AI-generated fine art prints. Archival materials, hand-numbered Certificate of Authenticity, founder-reviewed before production. Custom-made and shipped in 7–14 business days." />
   <meta property="og:url" content="https://aiprint.ai/" />
   <meta property="og:image" content="https://aiprint.ai/og-image.png" />
   <meta property="og:image:width" content="1200" />
@@ -26,7 +26,7 @@
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="aiPRINT.ai — Turn any idea into a gallery-worthy print" />
-  <meta name="twitter:description" content="Premium AI-generated fine art prints. Archival materials, numbered COA. Ships in 7–14 days." />
+  <meta name="twitter:description" content="Premium AI-generated fine art prints. Archival materials, hand-numbered COA. Custom-made and shipped in 7–14 business days." />
   <meta name="twitter:image" content="https://aiprint.ai/og-image.png" />
 
   <!-- JSON-LD -->
@@ -37,7 +37,7 @@
     "name": "aiPRINT.ai",
     "url": "https://aiprint.ai/",
     "logo": "https://aiprint.ai/og-image.png",
-    "description": "Premium AI-generated fine art prints. Archival materials, numbered Certificate of Authenticity, hand-reviewed by the founder.",
+    "description": "Premium AI-generated fine art prints. Archival materials, hand-numbered Certificate of Authenticity, founder-reviewed before production.",
     "founder": { "@type": "Person", "name": "Lawrence" },
     "sameAs": []
   }
@@ -45,8 +45,8 @@
 
   <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts for signatures -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Dancing+Script&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+  <!-- Google Fonts for signatures (6 curated for fine-art prints) -->
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Great+Vibes&family=Pinyon+Script&family=Sacramento&family=Homemade+Apple&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
 
   <style>
     :root { --bg:#0a0f1d; --ink:#e7eef8; --muted:#9fb3c8; --accent:#818cf8; }
@@ -347,11 +347,25 @@
     .sig-pos-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
     .sig-pos-btn.sig-pos-active { background: rgba(139,92,246,0.35); border-color: rgba(139,92,246,0.7); color: #fff; }
 
-    .font-elegant { font-family: 'Playfair Display', Georgia, serif; }
-    .font-script { font-family: 'Dancing Script', cursive; }
-    .font-modern { font-family: 'Arial', sans-serif; }
-    .font-classic { font-family: 'Cormorant Garamond', 'Times New Roman', serif; font-style: italic; }
-    .font-bold { font-family: 'Impact', sans-serif; }
+    /* New 6-font signature lineup. Each chosen for premium fine-art print
+       feel — heavy script bias since artist signatures are the marquee use.
+       Legacy classes (.font-elegant, .font-script, .font-modern, .font-classic,
+       .font-bold) are kept as ALIASES that resolve to the new fonts so any
+       saved preview from the previous lineup still renders, with the spirit
+       of the original choice preserved. */
+    .font-allura      { font-family: 'Allura', cursive; }
+    .font-vibes       { font-family: 'Great Vibes', cursive; }
+    .font-pinyon      { font-family: 'Pinyon Script', cursive; }
+    .font-sacramento  { font-family: 'Sacramento', cursive; }
+    .font-apple       { font-family: 'Homemade Apple', cursive; }
+    .font-cormorant   { font-family: 'Cormorant Garamond', 'Times New Roman', serif; font-style: italic; }
+    /* Legacy aliases — match the new font that closest preserves the prior
+       intent. Any pre-refresh preview still renders with the same spirit. */
+    .font-elegant     { font-family: 'Allura', cursive; }
+    .font-script      { font-family: 'Great Vibes', cursive; }
+    .font-classic     { font-family: 'Cormorant Garamond', 'Times New Roman', serif; font-style: italic; }
+    .font-modern      { font-family: 'Sacramento', cursive; }
+    .font-bold        { font-family: 'Homemade Apple', cursive; }
 
     /* Custom select: lets us render each option in its actual font / color.
        Chrome + Safari ignore font-family and color on native <option>, so we
@@ -384,7 +398,13 @@
     }
     .custom-select[data-open="true"] { z-index: 9999; }
     .custom-select-menu {
-      position: absolute; top: calc(100% + 4px); left: 0;
+      /* position: fixed so the menu escapes EVERY ancestor stacking context.
+         Coordinates are set dynamically in openMenu() from the button's
+         getBoundingClientRect(). Without fixed positioning, the menu's
+         z-index is capped by its parent's stacking context — which is why
+         it was rendering BEHIND sibling images (preview, hero) even with
+         z-index: 9999. */
+      position: fixed; top: 0; left: 0;
       min-width: 11rem;
       background: #111827; /* gray-900 */
       border: 1px solid rgba(255,255,255,0.18);
@@ -419,6 +439,33 @@
     .color-swatch-auto {
       background: linear-gradient(135deg, #fff 0%, #fff 50%, #000 50%, #000 100%);
     }
+    .theme-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 1.15rem; height: 1.15rem;
+      margin-right: 0.6rem;
+      flex-shrink: 0;
+      color: rgba(199, 210, 254, 0.92);
+    }
+    .theme-icon svg { width: 100%; height: 100%; }
+    .btn-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 1.05rem; height: 1.05rem;
+      flex-shrink: 0;
+    }
+    .btn-icon svg { width: 100%; height: 100%; }
+    /* Sized to current text — pairs cleanly with inline labels in trust pills,
+       banners, and body copy. Baseline-shifted so the optical center matches
+       the surrounding text rather than the descender line. */
+    .inline-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 1em; height: 1em;
+      vertical-align: -0.15em;
+      flex-shrink: 0;
+    }
+    .inline-icon svg { width: 100%; height: 100%; display: block; }
+    .custom-select-btn .theme-icon { color: rgba(199, 210, 254, 0.95); }
+    .custom-select-option:hover .theme-icon,
+    .custom-select-option[aria-selected="true"] .theme-icon { color: #fff; }
 
     /* Share modal styles */
     .share-modal {
@@ -572,7 +619,7 @@
   <div id="sharedBanner" class="hidden relative z-40 bg-gradient-to-r from-indigo-600/90 via-fuchsia-600/90 to-pink-600/90 border-b border-white/10">
     <div class="max-w-[1800px] mx-auto px-5 py-2.5 flex items-center justify-between gap-3 text-sm">
       <div class="flex items-center gap-2 min-w-0">
-        <span class="text-xl leading-none">🎨</span>
+        <span class="inline-icon" style="width:1.25rem;height:1.25rem" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3" width="13" height="11" rx="1"/><path d="M5 11l2.5-3 2 2.5 1.5-2 2 2.5"/><circle cx="11.5" cy="6.5" r="1"/></svg></span>
         <span class="font-medium truncate">
           <span class="hidden sm:inline">Someone shared this custom print with you — make it yours, tweak it, or order as-is.</span>
           <span class="sm:hidden">Someone shared this print — order it or tweak it.</span>
@@ -596,6 +643,7 @@
         <a href="#how">How it works</a>
         <a href="#materials">Materials</a>
         <a href="/care.html">Care</a>
+        <a href="/install.html">Install</a>
         <a href="/about.html">About</a>
         <a href="/faq.html">FAQ</a>
         <a href="/policies.html">Policies</a>
@@ -619,6 +667,7 @@
         <a href="#how" class="px-3 py-2.5 rounded-lg hover:bg-white/5">How it works</a>
         <a href="#materials" class="px-3 py-2.5 rounded-lg hover:bg-white/5">Materials</a>
         <a href="/care.html" class="px-3 py-2.5 rounded-lg hover:bg-white/5">Print Care</a>
+        <a href="/install.html" class="px-3 py-2.5 rounded-lg hover:bg-white/5">Install</a>
         <a href="/about.html" class="px-3 py-2.5 rounded-lg hover:bg-white/5">About</a>
         <a href="/faq.html" class="px-3 py-2.5 rounded-lg hover:bg-white/5">FAQ</a>
         <a href="/policies.html" class="px-3 py-2.5 rounded-lg hover:bg-white/5">Policies</a>
@@ -634,20 +683,20 @@
         <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
         AI + Human Artist · Limited Edition Prints
       </div>
-      <h1 class="h1">Turn any idea into a <span class="gradient-text">gallery-worthy</span> print.</h1>
-      <p class="muted mt-5 max-w-lg text-lg leading-relaxed hidden md:block">Type a prompt, generate your artwork in seconds, then have it printed on museum-grade canvas, metal, or acrylic and shipped to your door — ready to hang.</p>
-      <p class="mt-5 max-w-lg text-lg leading-snug font-semibold text-white md:hidden">Prompt → Generate → Print → Ship → Hang <span class="text-indigo-300">!! Canvas, Metal or Acrylic!!</span></p>
-      <p class="mt-3 max-w-lg text-base text-gray-300"><span class="font-semibold text-white">From $45.</span> Ships in 7–14 days. Numbered Certificate of Authenticity. Optional artist signature.</p>
+      <h1 class="h1">Turn any <span class="gradient-text">idea, memory, or moment</span> into a gallery-worthy print.</h1>
+      <p class="muted mt-5 max-w-lg text-lg leading-relaxed hidden md:block">Type a prompt — or upload a photo. Our <span class="text-white font-semibold">AI generates your artwork in seconds</span> (with a human artist's eye on every order), then we print it on museum-grade canvas, metal, or acrylic and ship it to your door — ready to hang.</p>
+      <p class="mt-5 max-w-lg text-lg leading-snug font-semibold text-white md:hidden">Prompt or Photo → AI generates → Human reviews → Shipped <span class="text-indigo-300">· Canvas, Metal, Acrylic</span></p>
+      <p class="mt-3 max-w-lg text-base text-gray-300"><span class="font-semibold text-white">From $45.</span> Ships in 7–14 business days. Numbered Certificate of Authenticity. Optional artist signature.</p>
       <div class="flex gap-3 mt-8 items-center">
         <a href="#create" class="btn-accent text-base">Create a preview →</a>
         <a href="#gallery" class="btn-ghost text-base">See examples</a>
       </div>
-      <p class="mt-4 text-sm text-indigo-300 font-medium">✨ Sign up free — get 10 credits (1 credit = 1 generation). No purchase required to try.</p>
+      <p class="mt-4 text-sm text-indigo-300 font-medium"><span class="inline-icon" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2.5l1.3 4 4 1.3-4 1.3-1.3 4-1.3-4-4-1.3 4-1.3z"/><path d="M14.5 2.5v2M15.5 3.5h-2M3.5 13.5v2M4.5 14.5h-2" opacity=".7"/></svg></span> Sign up free — get 10 credits (1 credit = 1 generation). No purchase required to try.</p>
       <div class="mt-6 flex flex-wrap gap-2">
         <a href="/faq.html#materials" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-gray-300 hover:bg-white/10 transition-colors"><span class="text-green-400">✓</span> Made in the USA</a>
         <a href="/faq.html#materials" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-gray-300 hover:bg-white/10 transition-colors"><span class="text-green-400">✓</span> Archival materials</a>
         <a href="/faq.html#authenticity" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-gray-300 hover:bg-white/10 transition-colors"><span class="text-green-400">✓</span> Certificate of Authenticity</a>
-        <a href="/faq.html#shipping" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-gray-300 hover:bg-white/10 transition-colors"><span class="text-green-400">✓</span> Ships in 7–14 days</a>
+        <a href="/faq.html#shipping" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-gray-300 hover:bg-white/10 transition-colors"><span class="text-green-400">✓</span> Ships in 7–14 business days</a>
       </div>
     </div>
     <div class="grid grid-cols-2 gap-4">
@@ -705,6 +754,171 @@
 
   <div class="section-divider with-dot"></div>
 
+  <!-- MADE FOR MOMENTS — gift / occasion entry points -->
+  <section id="moments" class="max-w-[1800px] mx-auto px-5 pt-20 pb-16">
+    <div class="text-center mb-10">
+      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Made For Moments</div><div class="section-label-line right"></div></div>
+      <h2 class="h2">A gift that means something</h2>
+      <p class="muted mt-3 max-w-2xl mx-auto">Most of our prints aren't bought for a wall — they're bought for a <span class="text-white">person, a pet, or a memory</span>. Pick a starting point and we'll set up the prompt for you.</p>
+    </div>
+
+    <div id="momentTiles" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+
+      <button type="button" class="moment-tile group"
+              data-prompt="A regal oil-portrait of a beloved pet, wise expression, soft window light, painterly brushwork, gallery-museum quality"
+              data-style="Painterly" data-mood="Nostalgic" data-palette="rich jewel tones" data-ratio="1024x1536">
+        <img src="/ai-art/moments/pet-portrait.webp" alt="Regal Dutch-master-style oil portrait of a noble golden retriever in a velvet collar" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">Pet portrait</div>
+          <div class="moment-title">Make them the masterpiece</div>
+        </div>
+      </button>
+
+      <button type="button" class="moment-tile group"
+              data-prompt="Two silhouettes walking a quiet beach at sunset, romantic warmth, soft film grain, cinematic"
+              data-style="Cinematic / Editorial" data-mood="Romantic" data-palette="warm color palette, reds and oranges" data-ratio="1536x1024">
+        <img src="/ai-art/moments/anniversary.webp" alt="Romantic painterly silhouettes walking a sunset beach" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">Anniversary</div>
+          <div class="moment-title">Their story, on the wall</div>
+        </div>
+      </button>
+
+      <button type="button" class="moment-tile group"
+              data-prompt="Whimsical storybook hot-air balloons drifting over rolling hills, dreamy clouds, soft pastels"
+              data-style="Fantasy / Magical" data-mood="Whimsical / Playful" data-palette="soft pastel palette" data-ratio="1024x1024">
+        <img src="/ai-art/moments/kids-room.webp" alt="Whimsical pastel hot-air balloons drifting over rolling spring hills at dawn" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">Kids' room</div>
+          <div class="moment-title">Magic above their bed</div>
+        </div>
+      </button>
+
+      <button type="button" class="moment-tile group"
+              data-prompt="Mediterranean coastal village at golden hour, terracotta rooftops, sparkling sea, painterly, nostalgic"
+              data-style="Painterly" data-mood="Nostalgic" data-palette="warm color palette, reds and oranges" data-ratio="1536x1024">
+        <img src="/ai-art/moments/travel-memory.webp" alt="Painterly Mediterranean coastal village at golden hour" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">Travel memory</div>
+          <div class="moment-title">The trip they'll never forget</div>
+        </div>
+      </button>
+
+      <button type="button" class="moment-tile group"
+              data-prompt="A still-life of a warm coffee mug, open book, and golden window light, soft painterly textures, cozy housewarming feel"
+              data-style="Painterly" data-mood="Bright / Uplifting" data-palette="muted, earthy tones" data-ratio="1536x1024">
+        <img src="/ai-art/moments/housewarming.webp" alt="Cozy painterly still-life of a warm coffee mug and open book in afternoon light" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">Housewarming</div>
+          <div class="moment-title">A piece that warms a room</div>
+        </div>
+      </button>
+
+      <button type="button" class="moment-tile group"
+              data-prompt="An imagined dreamlike coastline that does not exist, ethereal clouds, otherworldly horizon, painterly"
+              data-style="Surreal / Dreamlike" data-mood="Dreamlike / Ethereal" data-palette="rich jewel tones" data-ratio="1536x1024">
+        <img src="/ai-art/moments/has-everything-gift.webp" alt="Surreal dreamlike hidden lagoon glowing beneath twin pale moons" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">Has-everything gift</div>
+          <div class="moment-title">Something they can't buy elsewhere</div>
+        </div>
+      </button>
+
+      <button type="button" class="moment-tile group"
+              data-prompt="A serene memorial portrait of a beloved pet resting under a sunlit oak, warm afternoon light, peaceful and dignified, painterly"
+              data-style="Painterly" data-mood="Calm / Peaceful" data-palette="warm color palette, reds and oranges" data-ratio="1024x1536">
+        <img src="/ai-art/moments/in-their-honor.webp" alt="Tender serene memorial scene of a willow beside a still pond at dawn" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">In their honor</div>
+          <div class="moment-title">A piece that remembers them</div>
+        </div>
+      </button>
+
+      <button type="button" class="moment-tile group"
+              data-prompt="A favorite scene from a childhood home reimagined in soft watercolor, nostalgic, warm afternoon light"
+              data-style="Impressionistic" data-mood="Nostalgic" data-palette="soft pastel palette" data-ratio="1536x1024">
+        <img src="/ai-art/moments/for-mom-and-dad.webp" alt="Nostalgic watercolor of a childhood-home garden in spring bloom" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">For Mom &amp; Dad</div>
+          <div class="moment-title">A memory, finally framed</div>
+        </div>
+      </button>
+
+    </div>
+
+    <p class="muted text-xs text-center mt-6">Each tile sets a starting prompt — you can edit it, add reference photos of your real pet or place, or swap any setting before generating.</p>
+  </section>
+
+  <style>
+    .moment-tile{
+      position:relative; overflow:hidden; border-radius:14px;
+      aspect-ratio:4/5;
+      border:1px solid rgba(255,255,255,.08);
+      background:#11151f; cursor:pointer; padding:0;
+      transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+    .moment-tile:hover{ transform:translateY(-3px); border-color:rgba(129,140,248,.45); box-shadow:0 16px 40px -12px rgba(129,140,248,.3); }
+    .moment-tile img{ width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
+    .moment-tile:hover img{ transform:scale(1.06); }
+    .moment-overlay{
+      position:absolute; inset:0;
+      background:linear-gradient(to top, rgba(10,15,29,.92) 0%, rgba(10,15,29,.55) 45%, rgba(10,15,29,0) 75%);
+      display:flex; flex-direction:column; justify-content:flex-end;
+      padding:14px 14px 16px; text-align:left;
+    }
+    .moment-eyebrow{
+      font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+      color:#c7d2fe; margin-bottom:4px;
+    }
+    .moment-title{
+      font-size:15px; font-weight:700; color:#fff; line-height:1.25;
+    }
+    @media (min-width: 768px){
+      .moment-title{ font-size:17px; }
+    }
+  </style>
+
+  <script>
+    (function wireMomentTiles(){
+      const tiles = document.querySelectorAll('#momentTiles .moment-tile');
+      if (!tiles.length) return;
+      tiles.forEach(tile => {
+        tile.addEventListener('click', () => {
+          const promptEl = document.getElementById('promptInput');
+          const styleEl  = document.getElementById('styleSelect');
+          const moodEl   = document.getElementById('moodSelect');
+          const palEl    = document.getElementById('paletteSelect');
+          const ratioEl  = document.getElementById('ratioSel');
+          if (promptEl) promptEl.value = tile.dataset.prompt || '';
+          const setSelect = (el, val) => {
+            if (!el || !val) return;
+            const opt = Array.from(el.options).find(o => o.value === val);
+            if (opt) { el.value = val; el.dispatchEvent(new Event('change', { bubbles:true })); }
+          };
+          setSelect(styleEl, tile.dataset.style);
+          setSelect(moodEl,  tile.dataset.mood);
+          setSelect(palEl,   tile.dataset.palette);
+          setSelect(ratioEl, tile.dataset.ratio);
+          if (window.posthog && typeof window.posthog.capture === 'function') {
+            window.posthog.capture('moment_tile_clicked', {
+              eyebrow: tile.querySelector('.moment-eyebrow')?.textContent || '',
+              ratio: tile.dataset.ratio,
+              style: tile.dataset.style
+            });
+          }
+          const create = document.getElementById('create');
+          if (create) create.scrollIntoView({ behavior:'smooth', block:'start' });
+          if (promptEl) {
+            promptEl.classList.add('ring-2','ring-indigo-400/60');
+            setTimeout(() => promptEl.classList.remove('ring-2','ring-indigo-400/60'), 1600);
+          }
+        });
+      });
+    })();
+  </script>
+
+  <div class="section-divider with-dot"></div>
+
   <!-- CREATE -->
   <section id="create" class="max-w-[1800px] mx-auto px-5 py-20">
     <div class="text-center mb-10">
@@ -724,39 +938,92 @@
           <div class="flex items-center gap-2 flex-wrap">
             <select id="surpriseTheme" aria-label="Surprise me theme"
                     class="text-sm font-medium px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-indigo-100 cursor-pointer hover:bg-white/15 focus:outline-none focus:border-indigo-400/40 transition-colors">
-              <option value="any">✨ Any theme</option>
-              <option value="pets">🐾 Pets &amp; portraits</option>
-              <option value="nature">🏞️ Nature &amp; landscapes</option>
-              <option value="cities">🏙️ Cities &amp; travel</option>
-              <option value="cosmic">🌌 Cosmic &amp; sci-fi</option>
-              <option value="surreal">🪄 Surreal &amp; mythical</option>
-              <option value="cozy">🎨 Anime &amp; cozy</option>
-              <option value="modern">◼️ Modern &amp; graphic</option>
-              <option value="vintage">📻 Vintage &amp; retro</option>
+              <option value="any">Any theme</option>
+              <option value="pets">Pets &amp; portraits</option>
+              <option value="nature">Nature &amp; landscapes</option>
+              <option value="cities">Cities &amp; travel</option>
+              <option value="cosmic">Cosmic &amp; sci-fi</option>
+              <option value="surreal">Surreal &amp; mythical</option>
+              <option value="cozy">Anime &amp; cozy</option>
+              <option value="modern">Modern &amp; graphic</option>
+              <option value="vintage">Vintage &amp; retro</option>
             </select>
             <button type="button" id="randomizeBtn" aria-label="Randomize all settings"
                     class="text-sm font-semibold px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500/30 to-purple-500/30 border border-indigo-400/40 text-indigo-100 hover:from-indigo-500/50 hover:to-purple-500/50 transition-all inline-flex items-center gap-1.5">
-              <span class="text-base">🎲</span> Surprise me
+              <span class="btn-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="12" height="12" rx="2.2"/><circle cx="6" cy="6" r="0.85" fill="currentColor"/><circle cx="12" cy="6" r="0.85" fill="currentColor"/><circle cx="9" cy="9" r="0.85" fill="currentColor"/><circle cx="6" cy="12" r="0.85" fill="currentColor"/><circle cx="12" cy="12" r="0.85" fill="currentColor"/></svg></span> Surprise me
             </button>
           </div>
         </div>
         <textarea id="promptInput" aria-label="Describe your artwork" class="w-full rounded-xl bg-white/10 border border-white/15 px-4 py-4 min-h-[140px] md:min-h-[130px] text-base text-white resize-none focus:outline-none focus:border-white/30"
-                  placeholder="e.g., a wise fox in a velvet jacket sipping tea by a fireplace — storybook, painterly"></textarea>
+                  placeholder="e.g., my golden retriever as a wise old explorer in a cozy library, painterly oils — or upload a reference photo above to make it truly yours"></textarea>
       </div>
 
-      <!-- Reference images (optional) -->
+      <!-- Reference images (the personalization layer — visually emphasized) -->
       <!-- Lets users upload up to 3 photos the model will use as visual inspiration.
            Images are resized client-side to max 1024px edge + JPEG-encoded before upload,
            to stay well under the Vercel 4.5 MB request-body limit. A consent checkbox
            appears once any file is staged — required before generate unlocks. -->
-      <div class="mb-7" id="refImagesWrap">
-        <div class="flex items-center justify-between mb-2 gap-3 flex-wrap">
-          <label class="text-base font-semibold text-gray-200">Reference images <span class="text-xs font-normal text-gray-500">(optional, up to 3)</span></label>
-          <button type="button" id="toggleRefImages" class="text-sm text-indigo-300 hover:text-indigo-200 font-medium inline-flex items-center gap-2">
-            <span id="toggleRefImagesIcon">+</span> Add reference photos
+      <style>
+        .ref-images-frame {
+          background: linear-gradient(135deg, rgba(251,191,36,.07), rgba(245,158,11,.03));
+          border: 1px solid rgba(251,191,36,.28);
+          border-radius: 14px;
+          padding: 18px 20px;
+          box-shadow: 0 0 0 1px rgba(251,191,36,.05) inset, 0 8px 30px -10px rgba(251,191,36,.18);
+          transition: border-color .25s, box-shadow .25s;
+        }
+        .ref-images-frame:hover {
+          border-color: rgba(251,191,36,.5);
+          box-shadow: 0 0 0 1px rgba(251,191,36,.1) inset, 0 12px 40px -12px rgba(251,191,36,.3);
+        }
+        .ref-images-icon {
+          width: 44px; height: 44px;
+          flex-shrink: 0;
+          border-radius: 10px;
+          background: linear-gradient(135deg, rgba(251,191,36,.22), rgba(245,158,11,.15));
+          border: 1px solid rgba(251,191,36,.4);
+          color: #fbbf24;
+          display: inline-flex; align-items: center; justify-content: center;
+        }
+        .ref-images-icon svg { width: 22px; height: 22px; }
+        .ref-images-cta {
+          background: linear-gradient(135deg, #fbbf24, #f59e0b);
+          color: #1a1410;
+          font-weight: 700;
+          font-size: 14px;
+          padding: .6rem 1.1rem;
+          border-radius: .55rem;
+          border: none;
+          cursor: pointer;
+          transition: transform .15s, box-shadow .15s, filter .15s;
+          box-shadow: 0 6px 20px -6px rgba(251,191,36,.5);
+        }
+        .ref-images-cta:hover {
+          filter: brightness(1.08);
+          transform: translateY(-1px);
+          box-shadow: 0 10px 28px -8px rgba(251,191,36,.6);
+        }
+      </style>
+      <div class="mb-7 ref-images-frame" id="refImagesWrap">
+        <div class="flex items-center justify-between gap-3 flex-wrap">
+          <div class="flex items-start gap-3">
+            <div class="ref-images-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14.5 4h-5L7.5 6H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3.5l-2-2Z"/>
+                <circle cx="12" cy="13" r="3.5"/>
+                <path d="M19.5 9.5h.01" opacity=".7"/>
+              </svg>
+            </div>
+            <div>
+              <div class="text-lg font-bold text-white leading-tight">Make it truly personal</div>
+              <p class="text-sm text-amber-100/80 mt-1 leading-relaxed">Add a photo of <span class="font-semibold text-amber-200">your pet, your wedding, your kid, a place that matters</span> — and we'll build the artwork around it. <span class="text-amber-100/60 text-xs">(Optional, up to 3 photos)</span></p>
+            </div>
+          </div>
+          <button type="button" id="toggleRefImages" class="ref-images-cta inline-flex items-center gap-2 whitespace-nowrap">
+            <span id="toggleRefImagesIcon" class="text-lg leading-none">+</span> Upload photos
           </button>
         </div>
-        <div id="refImagesPanel" class="hidden">
+        <div id="refImagesPanel" class="hidden mt-4 pt-4 border-t border-amber-400/15">
           <p class="text-sm text-gray-400 mb-3">Upload up to 3 images to guide the AI — a pet, a place, an object, or yourself. Results take inspiration from references; they will not be an exact likeness. <a href="/policies.html#references" class="underline hover:text-white" target="_blank" rel="noopener">See our reference image policy</a>.</p>
           <div class="flex flex-wrap items-start gap-3 mb-3">
             <label for="refFileInput" id="refAddBtn"
@@ -941,27 +1208,33 @@
         <div class="signature-control-group">
           <label>Font</label>
           <select id="signatureFont" class="rounded bg-white/10 border border-white/15 px-2 py-1 text-sm text-white">
-            <option value="font-elegant" style="font-family:'Playfair Display',Georgia,serif">Elegant</option>
-            <option value="font-script" style="font-family:'Dancing Script',cursive">Script</option>
-            <option value="font-modern" style="font-family:Arial,sans-serif">Modern</option>
-            <option value="font-classic" style="font-family:'Cormorant Garamond','Times New Roman',serif;font-style:italic">Italic Classic</option>
-            <option value="font-bold" style="font-family:Impact,sans-serif">Bold</option>
+            <option value="font-allura"     style="font-family:'Allura',cursive">Elegant</option>
+            <option value="font-vibes"      style="font-family:'Great Vibes',cursive">Flowing</option>
+            <option value="font-pinyon"     style="font-family:'Pinyon Script',cursive">Refined</option>
+            <option value="font-sacramento" style="font-family:'Sacramento',cursive">Brush</option>
+            <option value="font-apple"      style="font-family:'Homemade Apple',cursive">Handwritten</option>
+            <option value="font-cormorant"  style="font-family:'Cormorant Garamond','Times New Roman',serif;font-style:italic">Italic Serif</option>
           </select>
         </div>
         <div class="signature-control-group">
           <label>Color</label>
           <select id="signatureColor" class="rounded bg-white/10 border border-white/15 px-2 py-1 text-sm text-white">
             <option value="auto">Auto (contrast)</option>
-            <option value="white">White</option>
-            <option value="black">Black</option>
-            <option value="gold">Gold</option>
-            <option value="silver">Silver</option>
+            <option value="white">Soft Ivory</option>
+            <option value="black">Soft Charcoal</option>
+            <option value="gold">Champagne Gold</option>
+            <option value="silver">Warm Pewter</option>
           </select>
         </div>
         <div class="signature-control-group">
           <label>Size</label>
           <input type="range" id="signatureSize" min="12" max="36" value="18"
                  class="w-24 accent-white">
+        </div>
+        <div class="signature-control-group">
+          <label>Opacity</label>
+          <input type="range" id="signatureOpacity" min="30" max="100" value="100"
+                 class="w-24 accent-white" aria-label="Signature opacity (30% to 100%)">
         </div>
         <div class="signature-control-group">
           <label>Position</label>
@@ -979,7 +1252,7 @@
       <div id="anonSignupNudge" class="hidden mt-6">
         <div class="rounded-xl border border-indigo-400/30 bg-gradient-to-r from-indigo-500/15 to-purple-500/10 p-5 flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
-            <div class="font-bold text-base">🎉 Love it? Sign up to order this print.</div>
+            <div class="font-bold text-base"><span class="inline-icon text-indigo-300" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2.5l1.3 4 4 1.3-4 1.3-1.3 4-1.3-4-4-1.3 4-1.3z"/><path d="M14.5 2.5v2M15.5 3.5h-2M3.5 13.5v2M4.5 14.5h-2" opacity=".7"/></svg></span> Love it? Sign up to order this print.</div>
             <div class="text-sm text-gray-300 mt-1">Free account · 10 credits to keep generating · No credit card required.</div>
           </div>
           <button onclick="window.auth && window.auth.showSignupModal()" class="btn-accent whitespace-nowrap">Create free account →</button>
@@ -991,7 +1264,7 @@
         <div id="previewWrap" class="preview-container relative w-full max-w-5xl mx-auto rounded-xl overflow-hidden border border-white/10 flex items-center justify-center p-2 min-h-[300px] md:min-h-[500px]" style="aspect-ratio:1/1;">
           <img id="previewImg" class="w-full h-full object-contain" alt="Preview" crossorigin="anonymous" />
           <div class="watermark-overlay">PREVIEW</div>
-          <div id="signatureOverlay" class="moveable-signature font-elegant" style="color: white; font-size: 18px; bottom: 20px; right: 20px;"></div>
+          <div id="signatureOverlay" class="moveable-signature font-allura" style="color: #F5EFE0; font-size: 18px; bottom: 20px; right: 20px;"></div>
         </div>
 
         <div class="mt-6 flex flex-col items-center gap-3">
@@ -1006,7 +1279,7 @@
         </div>
 
         <p class="text-center text-xs text-gray-500 mt-4">Watermark is for preview only — your final print arrives clean, inspected, and with a numbered Certificate of Authenticity.</p>
-        <p class="text-center text-xs text-gray-400 mt-2">📦 Ships in 7–14 days · ↩ 30-day satisfaction guarantee · 🎖 Certificate of Authenticity included</p>
+        <p class="text-center text-xs text-gray-400 mt-2"><span class="inline-flex items-center gap-1.5"><span class="inline-icon" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2.5L15.5 5.5V12.5L9 15.5L2.5 12.5V5.5z"/><path d="M9 9V15.5M9 9L2.5 5.5M9 9L15.5 5.5"/></svg></span>Ships in 7–14 business days</span> · <span class="inline-flex items-center gap-1.5"><span class="inline-icon" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2L15 4V9C15 12.5 12.5 14.5 9 16C5.5 14.5 3 12.5 3 9V4z"/><path d="M6.5 9L8 10.5L11.5 7"/></svg></span>30-day satisfaction guarantee</span> · <span class="inline-flex items-center gap-1.5"><span class="inline-icon" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7.5" r="4"/><path d="M6.5 11L5.5 15L9 13.5L12.5 15L11.5 11"/><path d="M7.5 7.5L8.5 8.5L10.5 6.5"/></svg></span>Certificate of Authenticity included</span></p>
 
         <!-- Room Mockup Section -->
         <div id="roomMockupSection" class="mt-8 hidden">
@@ -1171,10 +1444,10 @@
 
     <!-- Trust badges + reassurance row -->
     <div class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-gray-400">
-      <span class="inline-flex items-center gap-1.5"><span class="text-green-400" aria-hidden="true">🔒</span> Card, Apple Pay &amp; Google Pay · Secure checkout via Stripe</span>
-      <span class="inline-flex items-center gap-1.5"><span class="text-indigo-300" aria-hidden="true">🎖</span> Numbered Certificate of Authenticity included</span>
-      <span class="inline-flex items-center gap-1.5"><span class="text-blue-300" aria-hidden="true">📬</span> Low flat-rate shipping from $10 · Tracked to your door</span>
-      <span class="inline-flex items-center gap-1.5"><span class="text-yellow-300" aria-hidden="true">↩</span> 30-day satisfaction guarantee</span>
+      <span class="inline-flex items-center gap-1.5"><span class="inline-icon text-green-400" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8" width="11" height="7" rx="1.5"/><path d="M5.5 8V5.5a3.5 3.5 0 1 1 7 0V8"/><circle cx="9" cy="11" r="0.9" fill="currentColor"/></svg></span> Card, Apple Pay &amp; Google Pay · Secure checkout via Stripe</span>
+      <span class="inline-flex items-center gap-1.5"><span class="inline-icon text-indigo-300" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7.5" r="4"/><path d="M6.5 11L5.5 15L9 13.5L12.5 15L11.5 11"/><path d="M7.5 7.5L8.5 8.5L10.5 6.5"/></svg></span> Numbered Certificate of Authenticity included</span>
+      <span class="inline-flex items-center gap-1.5"><span class="inline-icon text-blue-300" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h8v8H2zM10 8h3.5l2 2.5v2.5h-5.5"/><circle cx="5" cy="14" r="1.3"/><circle cx="13" cy="14" r="1.3"/></svg></span> Low flat-rate shipping from $10 · Tracked to your door</span>
+      <span class="inline-flex items-center gap-1.5"><span class="inline-icon text-yellow-300" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2L15 4V9C15 12.5 12.5 14.5 9 16C5.5 14.5 3 12.5 3 9V4z"/><path d="M6.5 9L8 10.5L11.5 7"/></svg></span> 30-day satisfaction guarantee</span>
     </div>
     <p class="mt-2 text-[11px] text-gray-500">No credit-card data ever touches our servers — Stripe handles payment directly.</p>
   </section>
@@ -1286,7 +1559,7 @@
     </div>
 
     <div class="text-center mt-8">
-      <a href="#create" class="btn-accent px-8 py-3 text-base">✨ Create your own →</a>
+      <a href="#create" class="btn-accent px-8 py-3 text-base inline-flex items-center gap-2"><span class="btn-icon" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2.5l1.3 4 4 1.3-4 1.3-1.3 4-1.3-4-4-1.3 4-1.3z"/><path d="M14.5 2.5v2M15.5 3.5h-2M3.5 13.5v2M4.5 14.5h-2" opacity=".7"/></svg></span>Create your own →</a>
     </div>
   </section>
 
@@ -1356,7 +1629,7 @@
     <div class="grid md:grid-cols-3 gap-6">
       <div class="how-card">
         <div class="how-image">
-          <img src="/illustrations/step-1.jpg" alt="Describe your vision — typing a prompt" loading="lazy"/>
+          <img src="/illustrations/step-1.webp" alt="Describe your vision — typing a prompt" loading="lazy"/>
           <div class="how-num-pill"><span class="num">1</span> Describe</div>
         </div>
         <div class="how-body">
@@ -1370,7 +1643,7 @@
       </div>
       <div class="how-card">
         <div class="how-image">
-          <img src="/illustrations/step-2.jpg" alt="Printed on archival materials in our Florida studio" loading="lazy"/>
+          <img src="/illustrations/step-2.webp" alt="Printed on archival materials in our Florida studio" loading="lazy"/>
           <div class="how-num-pill"><span class="num">2</span> Preview</div>
         </div>
         <div class="how-body">
@@ -1384,7 +1657,7 @@
       </div>
       <div class="how-card">
         <div class="how-image">
-          <img src="/illustrations/step-3.jpg" alt="Framed print ready to hang on a wall" loading="lazy"/>
+          <img src="/illustrations/step-3.webp" alt="Framed print ready to hang on a wall" loading="lazy"/>
           <div class="how-num-pill"><span class="num">3</span> Hang</div>
         </div>
         <div class="how-body">
@@ -1411,7 +1684,7 @@
     <div class="grid md:grid-cols-3 gap-8">
       <div>
         <div class="material-showcase">
-          <img src="/materials/canvas.jpg" alt="Fine Art Canvas — sunset wave painting on a textured wall" loading="lazy">
+          <img src="/materials/canvas.webp" alt="Fine Art Canvas — sunset wave painting on a textured wall" loading="lazy">
           <div class="material-info">
             <div class="flex items-center gap-2 mb-1">
               <span class="text-xs font-semibold text-white/60">STARTING AT $45</span>
@@ -1430,7 +1703,7 @@
 
       <div>
         <div class="material-showcase">
-          <img src="/materials/metal.jpg" alt="ChromaLuxe Metal — desert dunes at golden hour, mounted on a light wall" loading="lazy">
+          <img src="/materials/metal.webp" alt="ChromaLuxe Metal — desert dunes at golden hour, mounted on a light wall" loading="lazy">
           <div class="material-info">
             <div class="flex items-center gap-2 mb-1">
               <span class="text-xs font-semibold text-white/60">STARTING AT $55</span>
@@ -1449,7 +1722,7 @@
 
       <div>
         <div class="material-showcase">
-          <img src="/materials/acrylic.jpg" alt="Acrylic Facemount — moss-covered rainforest scene with crystal-clear depth" loading="lazy">
+          <img src="/materials/acrylic.webp" alt="Acrylic Facemount — moss-covered rainforest scene with crystal-clear depth" loading="lazy">
           <div class="material-info">
             <div class="flex items-center gap-2 mb-1">
               <span class="text-xs font-semibold text-white/60">STARTING AT $95</span>
@@ -1467,7 +1740,11 @@
       </div>
     </div>
     <div class="mt-8 text-center">
-      <a href="/faq.html#materials" class="btn-ghost">Material details & FAQ →</a>
+      <p class="muted text-sm mb-3">Every print ships with a French cleat, screws, and drywall anchors — about 10 minutes to install.</p>
+      <div class="flex gap-3 justify-center flex-wrap">
+        <a href="/install.html" class="btn-ghost">How to hang →</a>
+        <a href="/faq.html#materials" class="btn-ghost">Material details &amp; FAQ →</a>
+      </div>
     </div>
   </section>
 
@@ -1502,7 +1779,7 @@
     <div class="text-center mb-12">
       <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Early Access</div><div class="section-label-line right"></div></div>
       <h2 class="h2">Be one of our first 100 collectors</h2>
-      <p class="muted mt-3 max-w-2xl mx-auto">We just opened. Every early order ships with a low, hand-numbered Certificate of Authenticity — and every piece still crosses the founder's desk before it prints. Real customer stories will live here as those orders arrive.</p>
+      <p class="muted mt-3 max-w-2xl mx-auto">Every order ships with a low, hand-numbered Certificate of Authenticity — and every piece crosses the founder's desk before it prints. Founding-customer stories arriving soon.</p>
     </div>
     <div class="max-w-3xl mx-auto grid md:grid-cols-3 gap-6 text-center">
       <div class="testimonial-card">
@@ -1513,7 +1790,7 @@
       <div class="testimonial-card">
         <div class="text-4xl font-extrabold text-indigo-400 mb-2">02</div>
         <div class="font-semibold text-sm mb-1">Numbered COA</div>
-        <p class="text-xs text-gray-500 leading-relaxed">Each print ships with a signed, hand-numbered Certificate of Authenticity.</p>
+        <p class="text-xs text-gray-500 leading-relaxed">Each print ships with a hand-numbered Certificate of Authenticity.</p>
       </div>
       <div class="testimonial-card">
         <div class="text-4xl font-extrabold text-indigo-400 mb-2">03</div>
@@ -1526,51 +1803,36 @@
     </div>
   </section>
 
-  <!-- TESTIMONIALS -->
+  <!-- WHAT'S IN THE BOX — honest pre-launch proof, no fabricated reviews -->
   <section class="max-w-[1800px] mx-auto px-5 py-20">
     <div class="text-center mb-12">
-      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Customer Stories</div><div class="section-label-line right"></div></div>
-      <h2 class="h2">People love their prints</h2>
-      <p class="muted mt-3 max-w-xl mx-auto">Gallery quality, hand-reviewed, numbered.</p>
+      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">What You Get</div><div class="section-label-line right"></div></div>
+      <h2 class="h2">Every first-edition print includes</h2>
+      <p class="muted mt-3 max-w-2xl mx-auto">No filler, no upsells. Each piece arrives complete — ready to hang in about ten minutes.</p>
     </div>
-    <div class="grid md:grid-cols-3 gap-6">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
       <div class="testimonial-card">
-        <div class="quote-deco">"</div>
-        <div class="stars mb-4">★★★★★</div>
-        <p class="text-sm leading-relaxed mb-5">"Ok I was skeptical. I've ordered prints from like 4 different sites before and they always look flat in person. This one… didn't. Got the 24x36 acrylic and it's genuinely the nicest thing on our wall. Got an email asking about the crop before they printed it which I was not expecting at all. 10/10."</p>
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-indigo-500/30 flex items-center justify-center font-bold text-indigo-300">SM</div>
-          <div>
-            <div class="font-semibold text-sm">Sarah M.</div>
-            <div class="text-xs text-gray-500">Austin, TX · Verified buyer</div>
-          </div>
-        </div>
+        <svg class="w-8 h-8 text-indigo-300 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="14" rx="1.5"/><path d="M8 9h6"/><path d="M8 13h4"/><path d="M10 18v2l2-1 2 1v-2"/></svg>
+        <div class="font-semibold text-base mb-1.5">Numbered Certificate of Authenticity</div>
+        <p class="text-sm text-gray-400 leading-relaxed">Hand-numbered, signed by the founder, and matched to your order. Yours is one of a small first-edition run.</p>
       </div>
       <div class="testimonial-card">
-        <div class="quote-deco">"</div>
-        <div class="stars mb-4">★★★★★</div>
-        <p class="text-sm leading-relaxed mb-5">"Print quality blew me away. I shoot photos professionally so I'm picky and I assumed an AI print site would cut corners on materials. Nope — it's real archival canvas, properly stretched, hardware was already on the back. Took 9 days door to door. The numbered COA in the box was a really nice touch."</p>
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-purple-500/30 flex items-center justify-center font-bold text-purple-300">JK</div>
-          <div>
-            <div class="font-semibold text-sm">James K.</div>
-            <div class="text-xs text-gray-500">Brooklyn, NY · Verified buyer</div>
-          </div>
-        </div>
+        <svg class="w-8 h-8 text-indigo-300 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+        <div class="font-semibold text-base mb-1.5">Inspected before &amp; after print</div>
+        <p class="text-sm text-gray-400 leading-relaxed">Every file crosses the founder's desk before it goes to the press, and every print is checked against your preview before it ships.</p>
       </div>
       <div class="testimonial-card">
-        <div class="quote-deco">"</div>
-        <div class="stars mb-4">★★★★★</div>
-        <p class="text-sm leading-relaxed mb-5">"Bought a metal print as a housewarming gift for my sister and she literally cried haha. Packaging was insane, like Apple-level. One small thing — corner of the float mount had a tiny scuff. Emailed support, got a reply within an hour and they reprinted it free. That alone earned my repeat business."</p>
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-green-500/30 flex items-center justify-center font-bold text-green-300">RC</div>
-          <div>
-            <div class="font-semibold text-sm">Rachel C.</div>
-            <div class="text-xs text-gray-500">Miami, FL · Verified buyer</div>
-          </div>
-        </div>
+        <svg class="w-8 h-8 text-indigo-300 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18"/><path d="M3 17h18"/><path d="m6 7 6 5 6-5"/><path d="m6 17 6-5 6 5"/></svg>
+        <div class="font-semibold text-base mb-1.5">Ready-to-hang hardware</div>
+        <p class="text-sm text-gray-400 leading-relaxed">French cleat, screws, and drywall anchors included. Most prints hang in under ten minutes, no framing required.</p>
+      </div>
+      <div class="testimonial-card">
+        <svg class="w-8 h-8 text-indigo-300 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.3 8.3 8 9 4.7-.7 8-4.5 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-5"/></svg>
+        <div class="font-semibold text-base mb-1.5">30-day satisfaction guarantee</div>
+        <p class="text-sm text-gray-400 leading-relaxed">If it's not something we'd hang in our own home, it doesn't ship. If it arrives damaged or you're not happy, we reprint or refund — no quibbles.</p>
       </div>
     </div>
+    <p class="muted text-xs text-center mt-8 max-w-xl mx-auto">Customer photos and reviews land here as our first prints ship. Want to be one of the first 100 collectors? <a href="#create" class="text-indigo-300 hover:text-indigo-200 underline">Start your print →</a></p>
   </section>
 
   <!-- FOOTER -->
@@ -1633,7 +1895,7 @@
   <script>
     const $ = (q, el = document) => el.querySelector(q);
     const $$ = (q, el = document) => [...el.querySelectorAll(q)];
-    document.getElementById('y').textContent = '2024';
+    document.getElementById('y').textContent = new Date().getFullYear();
 
     // Live "prints created" counter — drifts up deterministically over real time
     (function initPrintsCounter() {
@@ -1732,6 +1994,7 @@
             font: $('#signatureFont').value,
             color: $('#signatureColor').value,
             size: $('#signatureSize').value,
+            opacity: $('#signatureOpacity')?.value || 100,
             position: signaturePosition
           }
         },
@@ -1773,8 +2036,10 @@
         $('#signatureFont').value = data.settings.signature.font || 'font-elegant';
         $('#signatureColor').value = data.settings.signature.color || 'white';
         $('#signatureSize').value = data.settings.signature.size || 18;
+        $('#signatureOpacity').value = data.settings.signature.opacity || 100;
         $('#signatureFont').dispatchEvent(new Event('change', { bubbles: true }));
         $('#signatureColor').dispatchEvent(new Event('change', { bubbles: true }));
+        $('#signatureOpacity').dispatchEvent(new Event('input', { bubbles: true }));
         if (data.settings.signature.position) signaturePosition = data.settings.signature.position;
         $('#previewImg').src = data.preview.url;
         setWrapAspect(data.preview.size);
@@ -1968,15 +2233,25 @@
     function applySignatureColor(value) {
       const sig = $('#signatureOverlay');
       if (!sig) return;
-      const colors = { 'white': '#FFFFFF', 'black': '#000000', 'gold': '#FFD700', 'silver': '#C0C0C0' };
+      // Soft palette — must match COLOR_HEX in api/_signature.js so what the
+      // customer sees in preview is what gets burned into the print master.
+      // Pure white/black are intentionally avoided: pure white blooms against
+      // photographic skies; pure black reads as a magic marker rather than ink.
+      const colors = {
+        white:  '#F5EFE0',  // soft ivory
+        black:  '#2A2520',  // soft charcoal
+        gold:   '#C9A35E',  // champagne gold
+        silver: '#A8A39A'   // warm pewter
+      };
       if (value !== 'auto') {
-        sig.style.color = colors[value] || '#FFFFFF';
+        sig.style.color = colors[value] || colors.white;
         return;
       }
-      // Auto: sample the pixel under the signature center and pick white or black
+      // Auto: sample the pixel under the signature center and pick the
+      // contrast-appropriate soft tone (ivory on dark areas, charcoal on light).
       const img = $('#previewImg');
       if (!img || !img.complete || !img.naturalWidth) {
-        sig.style.color = '#FFFFFF';
+        sig.style.color = colors.white;
         return;
       }
       try {
@@ -1995,10 +2270,10 @@
         for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i+1]; b += d[i+2]; }
         const n = d.length / 4;
         const luma = (0.299 * (r/n) + 0.587 * (g/n) + 0.114 * (b/n)) / 255;
-        sig.style.color = luma > 0.5 ? '#000000' : '#FFFFFF';
+        sig.style.color = luma > 0.5 ? colors.black : colors.white;
       } catch (err) {
-        // Tainted canvas (cross-origin) — fall back to white with strong shadow
-        sig.style.color = '#FFFFFF';
+        // Tainted canvas (cross-origin) — fall back to soft ivory.
+        sig.style.color = colors.white;
       }
     }
 
@@ -2028,12 +2303,15 @@
       // actually renders in its font / color — native <option> styling is
       // ignored in Chrome & Safari.
       (function enhanceSignatureSelects() {
+        // Soft palette — these hex values match COLOR_HEX in api/_signature.js
+        // so the dropdown swatch the customer sees is the literal pigment
+        // that gets burned into the print master.
         const COLOR_SWATCH = {
           auto:   '<span class="color-swatch color-swatch-auto"></span>',
-          white:  '<span class="color-swatch" style="background:#ffffff"></span>',
-          black:  '<span class="color-swatch" style="background:#000000"></span>',
-          gold:   '<span class="color-swatch" style="background:#d4af37"></span>',
-          silver: '<span class="color-swatch" style="background:#c0c0c0"></span>',
+          white:  '<span class="color-swatch" style="background:#F5EFE0"></span>',
+          black:  '<span class="color-swatch" style="background:#2A2520"></span>',
+          gold:   '<span class="color-swatch" style="background:#C9A35E"></span>',
+          silver: '<span class="color-swatch" style="background:#A8A39A"></span>',
         };
         function enhance(selectEl, renderOption) {
           if (!selectEl) return;
@@ -2081,14 +2359,43 @@
               menu.appendChild(item);
             });
           }
+          function positionMenu() {
+            // Menu is position: fixed AND portaled to <body> (see openMenu).
+            // Both are needed: position: fixed alone is trapped by ANY
+            // ancestor with `transform`, `filter`, `perspective`, etc.
+            // (CSS spec: those properties create a containing block that
+            // captures fixed-positioned descendants). Portaling sidesteps
+            // that — the menu becomes a direct child of <body>, so the
+            // viewport is its containing block.
+            const r = btn.getBoundingClientRect();
+            const gap = 4;
+            const menuH = menu.offsetHeight || 280;
+            const wouldOverflow = (r.bottom + gap + menuH) > window.innerHeight;
+            const top = wouldOverflow
+              ? Math.max(8, r.top - gap - menuH)
+              : (r.bottom + gap);
+            menu.style.top    = top + 'px';
+            menu.style.left   = r.left + 'px';
+            menu.style.minWidth = r.width + 'px';
+          }
           function openMenu() {
             rebuildMenu();
+            // Portal the menu to <body> so no ancestor with transform/filter
+            // can trap its `position: fixed`. The wrap still owns the menu
+            // logically (events, lifecycle); we only move it visually.
+            if (menu.parentElement !== document.body) {
+              document.body.appendChild(menu);
+            }
             menu.dataset.open = 'true';
             wrap.dataset.open = 'true';
             btn.setAttribute('aria-expanded', 'true');
+            // Position AFTER display:block so offsetHeight is real.
+            positionMenu();
             setTimeout(() => {
               document.addEventListener('click', outsideClick);
               document.addEventListener('keydown', keyHandler);
+              window.addEventListener('scroll', onScrollOrResize, true);
+              window.addEventListener('resize', onScrollOrResize);
             }, 0);
           }
           function closeMenu() {
@@ -2097,9 +2404,16 @@
             btn.setAttribute('aria-expanded', 'false');
             document.removeEventListener('click', outsideClick);
             document.removeEventListener('keydown', keyHandler);
+            window.removeEventListener('scroll', onScrollOrResize, true);
+            window.removeEventListener('resize', onScrollOrResize);
           }
-          function outsideClick(e) { if (!wrap.contains(e.target)) closeMenu(); }
+          function outsideClick(e) { if (!wrap.contains(e.target) && !menu.contains(e.target)) closeMenu(); }
           function keyHandler(e) { if (e.key === 'Escape') closeMenu(); }
+          // Scroll the page → reposition the menu so it tracks the button.
+          // (Preferred over close-on-scroll: feels more native and avoids
+          // the menu slamming shut if the user scrolls a tiny bit while the
+          // menu is open.)
+          function onScrollOrResize() { positionMenu(); }
 
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -2121,9 +2435,37 @@
           const swatch = COLOR_SWATCH[opt.value] || '';
           return `${swatch}<span>${opt.textContent}</span>`;
         });
+
+        // Premium SVG icon set for the "Surprise me" theme dropdown — replaces
+        // the mixed-style emoji set that didn't match the rest of the site's
+        // typographic polish. Monoline, 1.5px stroke, currentColor so the
+        // dropdown's hover/selected states tint the icons in sync.
+        const THEME_ICONS = {
+          any: '<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v3.5M9 12.5V16M2 9h3.5M12.5 9H16M4.5 4.5l2.4 2.4M11.1 11.1l2.4 2.4M4.5 13.5l2.4-2.4M11.1 6.9l2.4-2.4"/></svg>',
+          pets: '<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="5" cy="6.5" rx="1.3" ry="1.7"/><ellipse cx="9" cy="5" rx="1.3" ry="1.7"/><ellipse cx="13" cy="6.5" rx="1.3" ry="1.7"/><path d="M5.5 11.5C5.5 9.7 7 8.5 9 8.5s3.5 1.2 3.5 3c0 1.7-1.5 3-3.5 3s-3.5-1.3-3.5-3z"/></svg>',
+          nature: '<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="5" r="1.6"/><path d="M2 14.5l3.5-5.5 2.5 3.5L11 8l4 6.5z"/></svg>',
+          cities: '<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15V9h2.5v6M4.5 15V6h3v9M7.5 15v-4h3v4M10.5 15V7.5h3V15M13.5 15v-3h2v3M2 15.3h14"/></svg>',
+          cosmic: '<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="3.3"/><ellipse cx="9" cy="9" rx="7" ry="2.3" transform="rotate(-22 9 9)"/></svg>',
+          surreal: '<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9a5 5 0 1 1-5-5 4 4 0 0 0 5 5z"/><path d="M3.5 4v1.8M2.6 4.9h1.8" opacity=".85"/></svg>',
+          cozy: '<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="4.5" r="2.1"/><circle cx="13.5" cy="9" r="2.1"/><circle cx="9" cy="13.5" r="2.1"/><circle cx="4.5" cy="9" r="2.1"/><circle cx="9" cy="9" r="0.85" fill="currentColor"/></svg>',
+          modern: '<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="10" r="3.8"/><path d="M10 3.5l4.5 8h-9z"/></svg>',
+          vintage: '<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.3"/><circle cx="9" cy="9" r="3"/><circle cx="9" cy="9" r="0.75" fill="currentColor"/></svg>',
+        };
+        enhance(document.getElementById('surpriseTheme'), (opt) => {
+          const icon = THEME_ICONS[opt.value] || '';
+          return `<span class="theme-icon">${icon}</span><span>${opt.textContent}</span>`;
+        });
       })();
       $('#signatureSize').addEventListener('input', (e) => {
         signatureOverlay.style.fontSize = `${e.target.value}px`;
+      });
+      // Opacity slider — value is 30..100 (percent). Apply as CSS opacity
+      // on the overlay so the customer sees the effect live, and pass it
+      // through to the signature spec so the server-side compositor uses
+      // the same value when burning into the print master.
+      $('#signatureOpacity').addEventListener('input', (e) => {
+        const pct = Math.max(30, Math.min(100, parseInt(e.target.value, 10) || 100));
+        signatureOverlay.style.opacity = String(pct / 100);
       });
       // Position preset buttons (4 clean spots: TR, BL, BC, BR)
       $$('#sigPosButtons .sig-pos-btn').forEach(btn => {
@@ -2196,7 +2538,7 @@
 
     function buildSharePayload() {
       if (!currentPreview) return null;
-      return { preview: currentPreview, prompt: $('#promptInput').value, style: $('#styleSelect').value, mood: $('#moodSelect').value, palette: $('#paletteSelect').value, time: $('#timeSelect').value, lighting: $('#lightingSelect').value, camera: $('#cameraSelect').value, medium: $('#mediumSelect').value, signature: { text: $('#signatureInput').value, font: $('#signatureFont').value, color: $('#signatureColor').value, size: $('#signatureSize').value, position: signaturePosition } };
+      return { preview: currentPreview, prompt: $('#promptInput').value, style: $('#styleSelect').value, mood: $('#moodSelect').value, palette: $('#paletteSelect').value, time: $('#timeSelect').value, lighting: $('#lightingSelect').value, camera: $('#cameraSelect').value, medium: $('#mediumSelect').value, signature: { text: $('#signatureInput').value, font: $('#signatureFont').value, color: $('#signatureColor').value, size: $('#signatureSize').value, opacity: $('#signatureOpacity')?.value || 100, position: signaturePosition } };
     }
 
     // Legacy long-link generator. Only used as a fallback if the short-link
@@ -2300,8 +2642,10 @@
           $('#signatureFont').value = data.signature.font;
           $('#signatureColor').value = data.signature.color;
           $('#signatureSize').value = data.signature.size;
+          $('#signatureOpacity').value = data.signature.opacity || 100;
           $('#signatureFont').dispatchEvent(new Event('change', { bubbles: true }));
           $('#signatureColor').dispatchEvent(new Event('change', { bubbles: true }));
+          $('#signatureOpacity').dispatchEvent(new Event('input', { bubbles: true }));
           if (data.signature.position) {
             signaturePosition = data.signature.position;
             if (signaturePosition.preset) {
@@ -3116,7 +3460,7 @@
       const btn = document.getElementById('randomizeBtn');
       if (btn) {
         const prev = btn.innerHTML;
-        btn.innerHTML = '<span class="text-sm">✨</span> Randomized!';
+        btn.innerHTML = '<span class="btn-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 9.5l3.5 3.5L14.5 5.5"/></svg></span> Randomized!';
         btn.classList.add('scale-105');
         setTimeout(() => { btn.innerHTML = prev; btn.classList.remove('scale-105'); }, 900);
       }
@@ -3244,6 +3588,7 @@
         font: $('#signatureFont').value,
         color: $('#signatureColor').value,
         size: $('#signatureSize').value,
+        opacity: $('#signatureOpacity')?.value || 100,
         position: signaturePosition
       };
       const qty = Math.max(1, Math.min(10, parseInt($('#qtyInput')?.value, 10) || 1));
@@ -3268,6 +3613,20 @@
       });
       if (!added) { alert('Cart is full.'); return; }
       window.track && window.track('cart_added', { lookup_key: selected.lookup, qty });
+      window.metaTrack && window.metaTrack('AddToCart', {
+        content_ids: [selected.lookup],
+        content_name: selected.label || selected.lookup,
+        content_type: 'product',
+        currency: 'usd',
+        value: ((selected.priceCents || Math.round((selected.price || 0) * 100)) * qty) / 100
+      });
+      window.pinTrack && window.pinTrack('addtocart', {
+        product_id: selected.lookup,
+        product_name: selected.label || selected.lookup,
+        value: ((selected.priceCents || Math.round((selected.price || 0) * 100)) * qty) / 100,
+        order_quantity: qty,
+        currency: 'USD'
+      });
       if (window.aiprintCartUI) {
         window.aiprintCartUI.toast('Added to cart');
         window.aiprintCartUI.open();
@@ -3293,11 +3652,31 @@
         window.auth.showSignupModal({
           title: 'Sign up to order this print',
           subtitle: 'New accounts get 10 free credits — keep generating until it\'s perfect.',
-          pendingShareSlug
+          pendingShareSlug,
+          // Continue where you left off: after instant login (no email-
+          // verify path), automatically re-fire the Buy click so the
+          // customer doesn't have to find the button again. Skipped if
+          // signup hits the verification gate — they're going to a fresh
+          // tab via the verification email anyway.
+          onSuccess: (result) => {
+            if (result?.verificationRequired) return;   // user is going to email
+            // Re-trigger the buy flow now that they're authed.
+            const btn = document.getElementById('reviewBtn');
+            if (btn) btn.click();
+          }
         });
         return;
       }
       window.track && window.track('preview_selected', { shape: currentPreview.shape, ratio: currentPreview.size });
+      const _qty = Math.max(1, Math.min(10, parseInt($('#qtyInput')?.value, 10) || 1));
+      window.metaTrack && window.metaTrack('InitiateCheckout', {
+        content_ids: [selected.lookup],
+        content_name: selected.label || selected.lookup,
+        content_type: 'product',
+        num_items: _qty,
+        currency: 'usd',
+        value: ((selected.priceCents || Math.round((selected.price || 0) * 100)) * _qty) / 100
+      });
       const btn = $('#reviewBtn');
       const originalText = btn.textContent;
       savePreviewToStorage();
@@ -3307,6 +3686,7 @@
         font: $('#signatureFont').value,
         color: $('#signatureColor').value,
         size: $('#signatureSize').value,
+        opacity: $('#signatureOpacity')?.value || 100,
         position: signaturePosition
       };
       sessionStorage.setItem('aiprint_order', JSON.stringify({
@@ -3332,9 +3712,16 @@
         const utm = (typeof window.aiprintUtm === 'function') ? window.aiprintUtm() : {};
         // Quantity is clamped client-side to 1..10; server re-validates.
         const qty = Math.max(1, Math.min(10, parseInt($('#qtyInput')?.value, 10) || 1));
+        // Forward the auth token (if logged in) so the server can capture
+        // user_id in Stripe metadata. Without this, orders placed via
+        // Stripe Link auto-fill can land with a different email than the
+        // site account → orphaned from /account.html order history.
+        const authToken = (typeof localStorage !== 'undefined') ? localStorage.getItem('auth_token') : null;
+        const headers = { 'Content-Type': 'application/json' };
+        if (authToken) headers['Authorization'] = 'Bearer ' + authToken;
         const r = await fetch('/api/create-checkout-session', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers,
           body: JSON.stringify({ lookup_key: selected.lookup, preview: previewPayload, utm, quantity: qty })
         });
         const data = await r.json();
