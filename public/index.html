@@ -699,11 +699,21 @@
         <a href="/faq.html#shipping" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-gray-300 hover:bg-white/10 transition-colors"><span class="text-green-400">✓</span> Ships in 5–10 business days</a>
       </div>
     </div>
-    <div class="grid grid-cols-2 gap-4">
+    <!-- Hero gallery: 6 square tiles in a 3x2 grid (on desktop) deliberately
+         mixing palettes and styles — warm landscape, cool urban, painterly,
+         photoreal wildlife, anime, and vibrant pop-art — so a visitor sees
+         the full range of what we can print at a glance. -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
       <div class="aspect-square rounded-2xl overflow-hidden relative">
         <img src="/ai-art/art-cyberpunk-tokyo.webp" class="w-full h-full object-cover" alt="Neon-soaked cyberpunk Tokyo street at midnight">
         <div class="absolute bottom-2 left-2 right-2">
           <div class="glass rounded px-2 py-1 text-xs">"Neon Tokyo at midnight" — Canvas</div>
+        </div>
+      </div>
+      <div class="aspect-square rounded-2xl overflow-hidden relative">
+        <img src="/ai-art/art-tuscan-sunset.webp" class="w-full h-full object-cover" alt="Painterly Tuscan hills at golden hour with cypress trees and a stone farmhouse">
+        <div class="absolute bottom-2 left-2 right-2">
+          <div class="glass rounded px-2 py-1 text-xs">"Tuscan hills, golden hour" — Canvas</div>
         </div>
       </div>
       <div class="aspect-square rounded-2xl overflow-hidden relative">
@@ -713,15 +723,21 @@
         </div>
       </div>
       <div class="aspect-square rounded-2xl overflow-hidden relative">
-        <img src="/ai-art/art-coastal-cliffs.webp" class="w-full h-full object-cover" alt="North Atlantic basalt sea cliffs with crashing surf">
+        <img src="/ai-art/art-wolf-snow.webp" class="w-full h-full object-cover" alt="Photoreal portrait of a lone gray wolf in a snowy forest at golden hour">
         <div class="absolute bottom-2 left-2 right-2">
-          <div class="glass rounded px-2 py-1 text-xs">"Coastal cliffs, Atlantic" — Acrylic</div>
+          <div class="glass rounded px-2 py-1 text-xs">"Lone wolf in golden snow" — Metal</div>
         </div>
       </div>
       <div class="aspect-square rounded-2xl overflow-hidden relative">
         <img src="/ai-art/art-anime-blossoms.webp" class="w-full h-full object-cover" alt="Anime-style cherry blossoms in full bloom">
         <div class="absolute bottom-2 left-2 right-2">
           <div class="glass rounded px-2 py-1 text-xs">"Anime blossoms" — Canvas</div>
+        </div>
+      </div>
+      <div class="aspect-square rounded-2xl overflow-hidden relative">
+        <img src="/ai-art/art-pop-bird.webp" class="w-full h-full object-cover" alt="Bold pop-art scarlet macaw with saturated color blocks">
+        <div class="absolute bottom-2 left-2 right-2">
+          <div class="glass rounded px-2 py-1 text-xs">"Pop scarlet macaw" — Acrylic</div>
         </div>
       </div>
     </div>
@@ -1502,98 +1518,58 @@
       <p class="muted mt-3 max-w-2xl mx-auto">From photoreal landscapes to whimsical pet portraits, anime, pop graphics, surreal cosmic scenes — <span class="text-white">if you can describe it, we can print it.</span> A few real examples below; yours will be entirely your own.</p>
     </div>
 
+    <!-- Clean 3x2 gallery: six carefully chosen examples that each fill their
+         tile edge-to-edge — no white paper margins, no framed mockups, no
+         duplicated subjects with the hero. Six distinct styles: classical oil
+         portrait, B&W urban photography, vibrant macro nature, classical oil
+         still life, abstract painterly motion, and cinematic landscape. -->
     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-      <!-- Row 1 - large feature tile + 2 squares -->
-      <div class="gallery-item col-span-2 md:col-span-1 row-span-2" style="height:500px;">
-        <img src="/ai-art/hero-whimsy.webp" alt="Whimsical storybook illustration, hot-air balloons over rolling hills">
-        <div class="gallery-caption">
-          <div class="text-xs text-purple-300 font-semibold mb-1">ACRYLIC · 24×36"</div>
-          <div class="font-bold">"Hot-air balloons over rolling hills"</div>
-          <div class="text-xs text-gray-400 mt-1">Storybook whimsy · vertical print</div>
-        </div>
-      </div>
-      <div class="gallery-item" style="height:240px;">
-        <img src="/ai-art/hero-pop.webp" alt="Bold pop-art graphic with saturated color blocks">
-        <div class="gallery-caption">
-          <div class="text-xs text-cyan-300 font-semibold mb-1">METAL · 30×20"</div>
-          <div class="font-bold">"Pop-art color blocks"</div>
-        </div>
-      </div>
-      <div class="gallery-item" style="height:240px;">
-        <img src="/ai-art/art-pet-portrait.webp" alt="Classical oil portrait of a golden retriever">
+      <div class="gallery-item aspect-[3/2]">
+        <img src="/ai-art/art-pet-portrait.webp" alt="Classical oil portrait of a regal golden retriever">
         <div class="gallery-caption">
           <div class="text-xs text-amber-300 font-semibold mb-1">CANVAS · 30×20"</div>
           <div class="font-bold">"Regal golden retriever, oil portrait"</div>
+          <div class="text-xs text-gray-400 mt-1">Classical pet portrait</div>
         </div>
       </div>
-
-      <!-- Row 2 - cosmic + still life + abstract -->
-      <div class="gallery-item" style="height:280px;">
-        <img src="/ai-art/art-ocean-abstract.webp" alt="Abstract ocean waves in deep blues and silver">
-        <div class="gallery-caption">
-          <div class="text-xs text-indigo-300 font-semibold mb-1">ACRYLIC · 36×24"</div>
-          <div class="font-bold">"Ocean abstraction in motion"</div>
-        </div>
-      </div>
-      <div class="gallery-item" style="height:280px;">
-        <img src="/ai-art/art-still-life.webp" alt="Dutch-master still life with copper kettle and grapes">
-        <div class="gallery-caption">
-          <div class="text-xs text-amber-300 font-semibold mb-1">CANVAS · 24×16"</div>
-          <div class="font-bold">"Dutch-master still life, copper kettle"</div>
-        </div>
-      </div>
-      <div class="gallery-item" style="height:280px;">
-        <img src="/ai-art/art-abstract-bold.webp" alt="Bold abstract palette-knife color field">
-        <div class="gallery-caption">
-          <div class="text-xs text-pink-300 font-semibold mb-1">ACRYLIC · 30×30"</div>
-          <div class="font-bold">"Color field study, palette knife"</div>
-        </div>
-      </div>
-
-      <!-- Row 3 — vertical BW street + 2 tiles (botanical, watercolor) -->
-      <div class="gallery-item col-span-2 md:col-span-1 row-span-2" style="height:500px;">
-        <img src="/ai-art/art-bw-street.webp" alt="Black-and-white Parisian street photograph with a lone silhouette">
+      <div class="gallery-item aspect-[3/2]">
+        <img src="/ai-art/art-bw-street.webp" alt="Black-and-white Parisian street photograph with a lone walker">
         <div class="gallery-caption">
           <div class="text-xs text-gray-300 font-semibold mb-1">METAL · 24×36"</div>
           <div class="font-bold">"Lone walker, Parisian alley"</div>
-          <div class="text-xs text-gray-400 mt-1">Cartier-Bresson–style B&amp;W · vertical</div>
+          <div class="text-xs text-gray-400 mt-1">Cartier-Bresson–style B&amp;W</div>
         </div>
       </div>
-      <div class="gallery-item" style="height:240px;">
-        <img src="/ai-art/art-botanical.webp" alt="Vintage botanical illustration of a magnolia branch">
-        <div class="gallery-caption">
-          <div class="text-xs text-emerald-300 font-semibold mb-1">CANVAS · 16×24"</div>
-          <div class="font-bold">"Magnolia branch, vintage botanical"</div>
-        </div>
-      </div>
-      <div class="gallery-item" style="height:240px;">
-        <img src="/ai-art/art-watercolor-coast.webp" alt="Loose watercolor of a Mediterranean coastal village">
-        <div class="gallery-caption">
-          <div class="text-xs text-sky-300 font-semibold mb-1">CANVAS · 30×20"</div>
-          <div class="font-bold">"Mediterranean village, watercolor"</div>
-        </div>
-      </div>
-
-      <!-- Row 4 — macro butterfly square (with 2 hero squares re-purposed for richness) -->
-      <div class="gallery-item" style="height:280px;">
-        <img src="/ai-art/art-macro-wing.webp" alt="Macro photograph of an iridescent butterfly wing">
+      <div class="gallery-item aspect-[3/2]">
+        <img src="/ai-art/art-macro-wing.webp" alt="Macro photograph of an iridescent morpho butterfly wing">
         <div class="gallery-caption">
           <div class="text-xs text-blue-300 font-semibold mb-1">METAL · 24×24"</div>
           <div class="font-bold">"Morpho wing, iridescent macro"</div>
+          <div class="text-xs text-gray-400 mt-1">Vibrant macro nature</div>
         </div>
       </div>
-      <div class="gallery-item" style="height:280px;">
-        <img src="/ai-art/hero-canyon.webp" alt="Desert canyon at golden hour">
+      <div class="gallery-item aspect-[3/2]">
+        <img src="/ai-art/art-still-life.webp" alt="Dutch-master still life with copper kettle, grapes, and pomegranate">
+        <div class="gallery-caption">
+          <div class="text-xs text-amber-300 font-semibold mb-1">CANVAS · 24×16"</div>
+          <div class="font-bold">"Dutch-master still life"</div>
+          <div class="text-xs text-gray-400 mt-1">Classical oil painting</div>
+        </div>
+      </div>
+      <div class="gallery-item aspect-[3/2]">
+        <img src="/ai-art/art-ocean-abstract.webp" alt="Painterly abstract ocean waves in deep teal and silver">
+        <div class="gallery-caption">
+          <div class="text-xs text-indigo-300 font-semibold mb-1">ACRYLIC · 36×24"</div>
+          <div class="font-bold">"Ocean abstraction in motion"</div>
+          <div class="text-xs text-gray-400 mt-1">Painterly abstract</div>
+        </div>
+      </div>
+      <div class="gallery-item aspect-[3/2]">
+        <img src="/ai-art/hero-canyon.webp" alt="Cinematic desert canyon at golden hour">
         <div class="gallery-caption">
           <div class="text-xs text-orange-300 font-semibold mb-1">METAL · 30×30"</div>
           <div class="font-bold">"Desert canyon at golden hour"</div>
-        </div>
-      </div>
-      <div class="gallery-item" style="height:280px;">
-        <img src="/ai-art/art-forest-mist.webp" alt="Misty forest at dawn">
-        <div class="gallery-caption">
-          <div class="text-xs text-emerald-300 font-semibold mb-1">CANVAS · 30×20"</div>
-          <div class="font-bold">"Redwood forest in morning mist"</div>
+          <div class="text-xs text-gray-400 mt-1">Cinematic landscape</div>
         </div>
       </div>
     </div>
