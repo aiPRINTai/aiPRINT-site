@@ -61,6 +61,10 @@ class AuthManager {
         throw new Error(data.error || 'Signup failed');
       }
 
+      // Account was created — fire signup conversion before returning.
+      // Pinterest hashes the email client-side via enhanced match; safe to pass.
+      try { window.pinTrack && window.pinTrack('signup', { lead_type: 'account' }); } catch (e) {}
+
       // Verification-required flow: account created but no JWT issued
       if (data.verificationRequired) {
         return { success: true, verificationRequired: true, email: data.email || email };
@@ -294,8 +298,13 @@ class AuthManager {
     if (mobileAuthButton) mobileAuthButton.innerHTML = mobileHTML;
   }
 
-  showLoginModal() {
-    const modal = this.createAuthModal('login');
+  // showLoginModal / showSignupModal both accept opts.onSuccess — a callback
+  // that fires AFTER the user is fully authenticated (no email verification
+  // pending). The login-success path uses this to "continue where you left
+  // off": the homepage Buy button passes onSuccess that re-fires the click,
+  // so the customer doesn't have to find the button again after signing in.
+  showLoginModal(opts = {}) {
+    const modal = this.createAuthModal('login', opts);
     document.body.appendChild(modal);
   }
 
@@ -409,6 +418,15 @@ class AuthManager {
         if (window.aiprintCartSync && typeof window.aiprintCartSync.refresh === 'function') {
           try { window.aiprintCartSync.refresh(); } catch (_) {}
         }
+        // "Continue where you left off" — if a caller passed an onSuccess
+        // callback (e.g. the homepage Buy button gating signups), fire it
+        // now so the customer doesn't have to find the button again.
+        // Wrapped in a microtask so the modal removal/UI updates settle first.
+        if (typeof opts.onSuccess === 'function') {
+          Promise.resolve().then(() => {
+            try { opts.onSuccess(result); } catch (cbErr) { console.warn('auth onSuccess threw:', cbErr); }
+          });
+        }
       } else {
         errorDiv.textContent = result.error;
         errorDiv.classList.remove('hidden');
@@ -423,38 +441,135 @@ class AuthManager {
   showAccountMenu(event) {
     event.stopPropagation();
 
-    // Remove existing menu if any
+    // Remove existing menu if any (toggle behavior).
     const existing = document.getElementById('accountMenu');
     if (existing) {
       existing.remove();
       return;
     }
 
+    // Defensive HTML escape for the email since we drop it into innerHTML.
+    const escape = (s) => String(s ?? '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+    const email = escape(this.user.email || '');
+    const credits = Number(this.user.credits_balance || 0);
+
     const menu = document.createElement('div');
     menu.id = 'accountMenu';
-    menu.className = 'absolute top-full right-0 mt-2 bg-[#1a1f2e] border border-white/20 rounded-lg shadow-xl py-2 min-w-[200px] z-50';
+    // Width: 260px desktop minimum, but capped at 'viewport - 1rem' so the
+    // menu never overflows on phones (iPhone SE is 320px — menu fits with
+    // room for the right-edge gutter).
+    menu.className = 'absolute top-full right-0 mt-2 bg-[#1a1f2e] border border-white/15 rounded-xl shadow-2xl overflow-hidden min-w-[260px] max-w-[calc(100vw-1rem)] z-50';
+    // Premium typographic dropdown — no icons, clean section dividers,
+    // subtle hover states. Mirrors the pattern of Stripe / Linear / Apple
+    // account menus where structure carries the meaning, not iconography.
     menu.innerHTML = `
-      <a href="/account.html" class="block px-4 py-2 hover:bg-white/10 transition-colors">
-        <div class="font-medium">My Account</div>
-        <div class="text-xs text-gray-400">${this.user.credits_balance} credits</div>
+      <!-- Identity header — clickable to /account.html -->
+      <a href="/account.html" class="block px-4 py-3 border-b border-white/10 hover:bg-white/5 transition-colors">
+        <div class="text-[10px] uppercase tracking-[0.12em] text-gray-500 mb-1">Signed in as</div>
+        <div class="text-sm text-white truncate">${email}</div>
+        <div class="flex items-center justify-between mt-2">
+          <div class="flex items-center gap-1.5">
+            <span class="text-amber-300 text-xs">⚡</span>
+            <span class="text-sm font-semibold text-white">${credits} credit${credits === 1 ? '' : 's'}</span>
+          </div>
+          <button
+            type="button"
+            onclick="event.stopPropagation();event.preventDefault();window.credits&&window.credits.showPurchaseModal&&window.credits.showPurchaseModal();var m=document.getElementById('accountMenu');if(m)m.remove();"
+            class="text-[11px] px-2.5 py-1 rounded-md bg-indigo-500/20 text-indigo-200 hover:bg-indigo-500/30 transition-colors font-medium">
+            + Buy
+          </button>
+        </div>
       </a>
-      <hr class="border-white/10 my-2">
-      <button onclick="auth.logout()" class="w-full text-left px-4 py-2 hover:bg-white/10 transition-colors text-red-400">
-        Logout
-      </button>
+
+      <!-- My Stuff: deep links into /account.html sections -->
+      <div class="py-1.5">
+        <a href="/account.html#designs" class="block px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 hover:text-white transition-colors">My Gallery</a>
+        <a id="acctMenuOrdersLink" href="/account.html#orders" class="flex items-center justify-between px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 hover:text-white transition-colors">
+          <span>My Orders</span>
+          <!-- Open-order badge injected dynamically when there are any -->
+          <span id="acctMenuOrdersBadge" class="hidden text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-200"></span>
+        </a>
+        <a href="/account.html#credits" class="block px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 hover:text-white transition-colors">Credit History</a>
+      </div>
+
+      <!-- Quick actions: external pages -->
+      <div class="py-1.5 border-t border-white/10">
+        <a href="/track.html"   class="block px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 hover:text-white transition-colors">Track an Order</a>
+        <a href="/contact.html" class="block px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 hover:text-white transition-colors">Help &amp; Contact</a>
+      </div>
+
+      <!-- Sign out -->
+      <div class="border-t border-white/10 py-1.5">
+        <button onclick="auth.logout()" class="w-full text-left px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors">
+          Sign out
+        </button>
+      </div>
     `;
 
     const button = event.currentTarget;
     button.parentElement.style.position = 'relative';
     button.parentElement.appendChild(menu);
 
-    // Close menu when clicking outside
+    // Open-order badge: show "1 in production" or similar next to "My Orders"
+    // if the customer has any orders that aren't shipped/delivered yet. We
+    // cache the count in sessionStorage for 60s so opening the menu
+    // repeatedly doesn't hammer /api/user/orders.
+    this._populateOrderBadge();
+
+    // Close on outside click. Uses a self-removing listener so we don't
+    // leak handlers if the user opens/closes the menu repeatedly.
     setTimeout(() => {
-      document.addEventListener('click', function closeMenu() {
+      document.addEventListener('click', function closeMenu(e) {
+        if (menu.contains(e.target)) return;  // ignore clicks INSIDE the menu (let links/buttons fire)
         menu.remove();
         document.removeEventListener('click', closeMenu);
       });
+      // Also close on Escape — accessibility / keyboard users.
+      document.addEventListener('keydown', function escClose(e) {
+        if (e.key === 'Escape') {
+          menu.remove();
+          document.removeEventListener('keydown', escClose);
+        }
+      });
     }, 10);
+  }
+
+  // Fetch open order count and inject a badge next to "My Orders" in the
+  // dropdown. Cached in sessionStorage with a 60s TTL so the menu is fast
+  // and we don't pile API calls on every open.
+  async _populateOrderBadge() {
+    const badgeEl = document.getElementById('acctMenuOrdersBadge');
+    if (!badgeEl) return;
+    const CACHE_KEY = 'aiprint_open_orders_v1';
+    const TTL_MS = 60_000;
+    const setBadge = (n) => {
+      if (!n || n <= 0) { badgeEl.classList.add('hidden'); return; }
+      badgeEl.textContent = `${n} in production`;
+      badgeEl.classList.remove('hidden');
+    };
+    // Try cache first
+    try {
+      const cached = sessionStorage.getItem(CACHE_KEY);
+      if (cached) {
+        const { n, t } = JSON.parse(cached);
+        if (Date.now() - t < TTL_MS) { setBadge(n); return; }
+      }
+    } catch (_) {}
+    // Fetch fresh
+    try {
+      const r = await fetch('/api/user/orders?limit=20', { headers: this.getAuthHeader() });
+      if (!r.ok) return;
+      const { orders = [] } = await r.json();
+      // "Open" = anything that isn't shipped/delivered/canceled/refunded.
+      const openCount = orders.filter(o => !['shipped','delivered','canceled','refunded'].includes(o.status || 'paid')).length;
+      sessionStorage.setItem(CACHE_KEY, JSON.stringify({ n: openCount, t: Date.now() }));
+      setBadge(openCount);
+    } catch (e) {
+      // Silent — badge just stays hidden. Not worth surfacing an error.
+    }
   }
 
   showToast(message, type = 'info') {

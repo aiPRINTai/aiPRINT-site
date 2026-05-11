@@ -216,25 +216,29 @@ send to the printer → mark `shipped` + paste tracking → done.
 | # | Service | Role | Dashboard | Env vars |
 |---|---|---|---|---|
 | 1 | **Vercel** | Hosting + serverless functions | vercel.com | _deploy config_ |
-| 2 | **Neon Postgres** (via Vercel) | Users, orders, generations, credits, audit log | Vercel → Storage → Postgres | `POSTGRES_*` (auto) |
+| 2 | **Neon Postgres** (via Vercel) | Users, orders, generations, credits, audit log, cart sync | Vercel → Storage → Postgres | `POSTGRES_*` (auto) |
 | 3 | **Vercel Blob** | Generated PNGs (public URLs, 1y cache) | Vercel → Storage → Blob | `BLOB_READ_WRITE_TOKEN` |
 | 4 | **Google Gemini** | Text → image generation | aistudio.google.com | `GOOGLE_GEMINI_API_KEY` |
-| 5 | **Stripe** | Checkout, payments, tax, address collection | dashboard.stripe.com | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` |
+| 5 | **Stripe** | Checkout, payments, tax, tiered flat-rate shipping, address collection (single-item + cart flows) | dashboard.stripe.com | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` |
 | 6 | **Resend** | Transactional email (HTTP API) | resend.com | `RESEND_API_KEY`, `EMAIL_FROM`, `ORDERS_TO`, `CONTACT_TO` |
 | 7 | **GoDaddy** | DNS for aiprint.ai | godaddy.com | — |
 | 8 | **PostHog** | Product analytics, funnels | us.posthog.com | public key in `/js/analytics.js` |
-| 9 | **GitHub** | Source control + CI deploy trigger | github.com/aiPRINTai/aiPRINT-site | (repo secrets) |
+| 9 | **Meta (Facebook/Instagram)** | Pixel + Conversions API for ad attribution; Instagram Business linked to FB Page via Meta Business Suite | business.facebook.com, ads.facebook.com | `META_CAPI_ACCESS_TOKEN` |
+| 10 | **Pinterest** | Tag + Conversions API for ad attribution | ads.pinterest.com | `PINTEREST_CAPI_TOKEN`, `PINTEREST_AD_ACCOUNT_ID` |
+| 11 | **GitHub** | Source control + CI deploy trigger | github.com/aiPRINTai/aiPRINT-site | (repo secrets) |
 
 ### 3.2 What each service does (one line each)
 
 - **Vercel** serves every HTML page and every function in `api/`. A `git push` to `main` triggers a build and is live ~45s later.
-- **Neon Postgres** is the only stateful system. If Neon is down, the site still generates previews (they're stateless), but checkout/orders fail.
+- **Neon Postgres** is the only stateful system. If Neon is down, the site still generates previews (they're stateless), but checkout/orders fail. Also stores cart sync rows for logged-in users.
 - **Vercel Blob** stores every generated PNG. URLs are public + long-cached. No deletion job — expect storage to grow slowly.
 - **Gemini** is the brain. Used in exactly one function: `api/generate-image.js`.
-- **Stripe** collects money, shipping address, and sales tax. We never see card numbers.
-- **Resend** sends all transactional email. All templates live in `api/_email.js`.
+- **Stripe** collects money, shipping address, sales tax, and shipping fees. We never see card numbers. Two checkout flows: single-item (`api/create-checkout-session.js`) and multi-item cart (`api/create-cart-checkout-session.js`).
+- **Resend** sends all transactional email. All templates live in `api/_email.js`. Cart-aware variants (`sendCartOrderConfirmationEmail`, `sendCartFulfillmentAlertEmail`) consolidate N items into one email each.
 - **GoDaddy** just points `aiprint.ai` at Vercel. DNS changes rarely.
 - **PostHog** tracks funnels (home → generate → checkout → success). Public key, not a secret.
+- **Meta** = browser Pixel (ID `2679208262451729`) + server-side CAPI (`api/_meta-capi.js`) firing `Purchase` from the Stripe webhook. Deduped via shared `event_id`. Same Meta business owns the Facebook Page that's linked to the `@aiprintai` Instagram account.
+- **Pinterest** = browser Tag (ID `2613756746292`) + server-side CAPI (`api/_pinterest-capi.js`). Events wired: PageVisit (auto), Signup (after account create), AddToCart (after add-to-cart click), Checkout (on success page + from webhook). Enhanced match passes login email so Pinterest can attribute returning visitors.
 - **GitHub** is source of truth for code and the deploy trigger for Vercel.
 
 ---
@@ -443,6 +447,10 @@ Response includes:
 | **Signup account-enumeration hardening** | `api/auth/signup.js` | Identical HTTP response for existing-verified / existing-unverified / new; signal is email-only. |
 | **SEO** | OG tags + Twitter cards on every page, `robots.txt`, `sitemap.xml`, JSON-LD org schema | |
 | **PostHog funnels** | `public/js/analytics.js` | Page loads + key events (generate, checkout, purchase). |
+| **Meta Pixel + Conversions API** | `public/js/analytics.js` (browser) + `api/_meta-capi.js` (server) | Pixel ID `2679208262451729`. Browser fires PageView, AddToCart, InitiateCheckout, Purchase. Server CAPI fires Purchase from Stripe webhook with SHA256-hashed PII. Same `event_id = purchase_${session.id}` on both sides → Meta dedupes automatically. Helper: `window.metaTrack(event, params, eventId)`. |
+| **Pinterest Tag + Conversions API** | `public/js/analytics.js` (browser) + `api/_pinterest-capi.js` (server) | Tag ID `2613756746292`. Browser fires PageVisit (auto), Signup (in `auth.js`), AddToCart (in `index.html`), Checkout (in `success.html`). Enhanced match passes login email via `pintrk('set', {em})`. Server CAPI fires `checkout` from Stripe webhook with same `event_id` as browser → Pinterest dedupes. Helper: `window.pinTrack(event, params)`. |
+| **Multi-item cart** | `public/js/cart.js` (state) + `cart-ui.js` (drawer/badge/toast) + `api/cart.js` (sync) + `api/create-cart-checkout-session.js` (Stripe) | localStorage-backed, max 10 distinct items, qty 1–10 each, snapshot prices at add-time. Logged-in users sync cross-device via JWT-auth GET/PUT `/api/cart`; server sanitizes everything (string caps, qty clamp, https-only, drop unknowns) and rejects stale tokens after a password reset. Separate "saved for later" bucket up to 30 items. |
+| **Cart Stripe Checkout** | `api/create-cart-checkout-session.js` + `buildCartShippingOptions` in `api/_shipping.js` | Multi-line-item Stripe session. Shipping = heaviest item's tier (one box). Webhook writes one `orders` row per line item, then sends one combined customer confirmation + one combined fulfillment alert (not N copies). |
 | **Rate limiting** | Per-IP + per-email on every auth endpoint (login, signup, reset-request, reset-password, verify, resend-verification), contact form (3/hr/IP), generate (anonymous_generations table) | `api/_rate-limit.js`; dual layer catches broad abuse + per-target bombing. |
 | **Scheduled cleanup (cron)** | `api/cron/*` gated by `CRON_SECRET` | Daily purge of `shared_designs` past retention window. |
 
@@ -534,6 +542,14 @@ reference file — **NOT** auto-run on deploy.
 │ PORT                           3000 (local dev only)                │
 │ DEBUG_LOGS                     (optional, truthy = verbose logs)    │
 └─────────────────────────────────────────────────────────────────────┘
+┌─ AD-NETWORK CONVERSIONS API (optional, server-side) ────────────────┐
+│ META_CAPI_ACCESS_TOKEN         from business.facebook.com → Events  │
+│                                Manager → Pixel → Conversions API    │
+│ PINTEREST_CAPI_TOKEN           from ads.pinterest.com → Conversions │
+│                                → Set up API → Generate token        │
+│ PINTEREST_AD_ACCOUNT_ID        digits-only, from your ads dashboard │
+│                                URL: /advertiser/<this number>/...   │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
 ### 7.2 Can this go missing and what happens?
@@ -551,6 +567,8 @@ reference file — **NOT** auto-run on deploy.
 | `POSTGRES_URL` | Every DB query 500s | Orders, accounts, credits all down |
 | `ORDERS_TO` | Defaults to orders@aiprint.ai | None — works out of the box |
 | `CONTACT_TO` | Defaults to info@aiprint.ai (via FULFILLMENT_TO if set) | None — works out of the box |
+| `META_CAPI_ACCESS_TOKEN` | `sendMetaEvent` returns `{skipped: 'no_token'}` and exits cleanly | Browser pixel still fires; Meta only sees client-side events (ad-blocker / iOS ITP losses, ~5–15% of Purchases) |
+| `PINTEREST_CAPI_TOKEN` or `PINTEREST_AD_ACCOUNT_ID` | `sendPinterestEvent` returns `{skipped: 'no_token_or_account'}` and exits cleanly | Same impact: browser tag still fires, Pinterest just loses the server-side backstop |
 
 ---
 

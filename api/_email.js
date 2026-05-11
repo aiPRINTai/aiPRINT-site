@@ -73,6 +73,57 @@ function fmtAddress(a) {
     .filter(Boolean).join('<br>');
 }
 
+/**
+ * Compute the next aiPRINT Friday production-start date for a given order
+ * timestamp, honoring the 5 PM ET Friday submission cutoff.
+ *
+ *   • Mon–Thu        → THIS Friday
+ *   • Fri before 5pm → THIS Friday
+ *   • Fri after 5pm  → NEXT Friday
+ *   • Sat / Sun      → NEXT Friday
+ *
+ * Returns a friendly string like "Friday, May 16" (formatted in ET).
+ * Customers see this in their order-confirmation email so they know
+ * exactly when their print enters production. Internal courier rhythm
+ * is intentionally not surfaced — see INTERNAL-FULFILLMENT.md.
+ *
+ * @param {Date|string|number} [orderDate]  defaults to now
+ * @returns {string}
+ */
+function nextProductionFriday(orderDate) {
+  const d = orderDate ? new Date(orderDate) : new Date();
+  if (isNaN(d.getTime())) return '';
+
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York',
+    weekday: 'short',
+    hour: 'numeric',
+    hour12: false
+  }).formatToParts(d);
+
+  const weekdayMap = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  const weekday = weekdayMap[parts.find(p => p.type === 'weekday')?.value];
+  const hour = parseInt(parts.find(p => p.type === 'hour')?.value, 10);
+  if (weekday === undefined || isNaN(hour)) return '';
+
+  // Days until next Friday submission. 5 PM ET is the cutoff.
+  let daysToAdd;
+  if (weekday >= 1 && weekday <= 4) daysToAdd = 5 - weekday;     // Mon–Thu
+  else if (weekday === 5) daysToAdd = hour < 17 ? 0 : 7;          // Friday
+  else if (weekday === 6) daysToAdd = 6;                          // Saturday
+  else daysToAdd = 5;                                             // Sunday
+
+  const productionDate = new Date(d);
+  productionDate.setDate(productionDate.getDate() + daysToAdd);
+
+  return new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York',
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric'
+  }).format(productionDate);
+}
+
 export async function sendVerificationEmail(email, verifyUrl) {
   if (!email) return { skipped: true, reason: 'no email' };
 
@@ -112,11 +163,14 @@ export async function sendVerificationEmail(email, verifyUrl) {
 }
 
 export async function sendOrderConfirmationEmail(order) {
-  const { customer_email, customer_name, preview_url, clean_url, lookup_key, prompt, amount_total, currency, stripe_session_id, shipping_address, quantity } = order;
+  const { customer_email, customer_name, preview_url, clean_url, lookup_key, prompt, amount_total, currency, stripe_session_id, shipping_address, quantity, created_at } = order;
   if (!customer_email) return { skipped: true, reason: 'no email' };
   // Customer paid — show them the clean image, not the watermarked preview.
   const artworkImg = clean_url || preview_url;
   const qty = Math.max(1, parseInt(quantity, 10) || 1);
+  // Next Friday production-start date (5pm ET cutoff). Honest expectation,
+  // not the customer-facing language about courier rhythm.
+  const productionStart = nextProductionFriday(created_at);
 
   const html = `
     <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#0a0f1d;">
@@ -138,14 +192,14 @@ export async function sendOrderConfirmationEmail(order) {
       <h3 style="margin:24px 0 8px;font-size:16px">What happens next</h3>
       <ol style="color:#334155;font-size:14px;padding-left:20px;margin:0">
         <li style="margin-bottom:6px">Our team color-corrects and proofs your artwork.</li>
-        <li style="margin-bottom:6px">We print on archival materials at our Florida studio.</li>
+        ${productionStart ? `<li style="margin-bottom:6px"><strong>Production begins ${productionStart}</strong> at our Florida studio.</li>` : `<li style="margin-bottom:6px">We print on archival materials at our Florida studio.</li>`}
         <li style="margin-bottom:6px">Production: 3–7 business days · Shipping: 3–7 business days after production.</li>
         <li>You'll get a tracking email when it ships.</li>
       </ol>
 
       <p style="margin:24px 0 0;font-size:14px"><a href="https://aiprint.ai/track.html?id=${encodeURIComponent(stripe_session_id)}" style="display:inline-block;background:#0a0f1d;color:#fff;text-decoration:none;font-weight:600;padding:10px 18px;border-radius:8px">Track this order →</a></p>
 
-      <p style="margin-top:24px;font-size:13px;color:#475569">Once your print arrives, our <a href="https://aiprint.ai/care.html" style="color:#4f46e5;font-weight:600">Print Care guide</a> walks through how to clean, hang, and live with it.</p>
+      <p style="margin-top:24px;font-size:13px;color:#475569">When your print arrives, the <a href="https://aiprint.ai/install.html" style="color:#4f46e5;font-weight:600">install guide</a> walks through hanging it (about 10 minutes — French cleat hardware is in the box). The <a href="https://aiprint.ai/care.html" style="color:#4f46e5;font-weight:600">care guide</a> covers cleaning and longevity for the long haul.</p>
       <p style="margin-top:20px;color:#64748b;font-size:13px">Questions? Just reply to this email — we respond within 24 hours.</p>
       <p style="margin-top:8px;color:#94a3b8;font-size:12px">aiPRINT.ai · Made with care in Florida, USA</p>
     </div>
@@ -178,6 +232,9 @@ export async function sendCartOrderConfirmationEmail(orders) {
   const sessionId = head.stripe_session_id || '';
   const totalAll = orders.reduce((s, o) => s + (Number(o.amount_total) || 0), 0);
   const totalPrints = orders.reduce((s, o) => s + Math.max(1, parseInt(o.quantity, 10) || 1), 0);
+  // Next Friday production-start date (5pm ET cutoff) — same logic as
+  // single-item flow; the cart all flows through the same Friday batch.
+  const productionStart = nextProductionFriday(head.created_at);
 
   const itemRows = orders.map((o, i) => {
     const img = o.clean_url || o.preview_url || '';
@@ -219,12 +276,14 @@ export async function sendCartOrderConfirmationEmail(orders) {
       <h3 style="margin:24px 0 8px;font-size:16px">What happens next</h3>
       <ol style="color:#334155;font-size:14px;padding-left:20px;margin:0">
         <li style="margin-bottom:6px">We color-correct and proof every piece.</li>
-        <li style="margin-bottom:6px">All prints are produced on archival materials at our Florida studio.</li>
+        ${productionStart ? `<li style="margin-bottom:6px"><strong>Production begins ${productionStart}</strong> at our Florida studio.</li>` : `<li style="margin-bottom:6px">All prints are produced on archival materials at our Florida studio.</li>`}
         <li style="margin-bottom:6px">Production: 3–7 business days · Shipping: 3–7 business days. Multi-piece orders ship together when possible.</li>
         <li>You'll get a tracking email when it ships.</li>
       </ol>
 
       <p style="margin:24px 0 0;font-size:14px"><a href="https://aiprint.ai/track.html?id=${encodeURIComponent(sessionId)}" style="display:inline-block;background:#0a0f1d;color:#fff;text-decoration:none;font-weight:600;padding:10px 18px;border-radius:8px">Track this order →</a></p>
+
+      <p style="margin-top:24px;font-size:13px;color:#475569">When your prints arrive, the <a href="https://aiprint.ai/install.html" style="color:#4f46e5;font-weight:600">install guide</a> walks through hanging them (about 10 minutes each — French cleat hardware is in every box). The <a href="https://aiprint.ai/care.html" style="color:#4f46e5;font-weight:600">care guide</a> covers cleaning and longevity per material.</p>
 
       <p style="margin-top:28px;color:#64748b;font-size:13px">Questions? Just reply to this email — we respond within 24 hours.</p>
       <p style="margin-top:8px;color:#94a3b8;font-size:12px">aiPRINT.ai · Made with care in Florida, USA</p>
@@ -256,14 +315,24 @@ export async function sendCartFulfillmentAlertEmail(orders) {
   const totalPrints = orders.reduce((s, o) => s + Math.max(1, parseInt(o.quantity, 10) || 1), 0);
 
   const itemBlocks = orders.map((o, i) => {
-    const printMaster = o.clean_url || o.preview_url || '';
+    const cleanUrl  = o.clean_url || o.preview_url || '';
+    const signedUrl = o.signed_url || '';
+    const previewImg = signedUrl || cleanUrl;
     const qty = Math.max(1, parseInt(o.quantity, 10) || 1);
     const lineCents = Number(o.subtotal_amount) || (Number(o.amount_total) || 0);
     const opts = o.options || {};
+    // Two download links when a signed version exists — admin picks per-print.
+    const downloadLinks = signedUrl
+      ? `<p style="margin:8px 0 0;font-size:12px;line-height:1.6">
+            <a href="${signedUrl}" download style="color:#4f46e5;font-weight:600">⬇ With signature</a>
+            &nbsp;·&nbsp;
+            <a href="${cleanUrl}" download style="color:#64748b;font-weight:600">⬇ Without signature (clean)</a>
+         </p>`
+      : (cleanUrl ? `<p style="margin:8px 0 0;font-size:12px"><a href="${cleanUrl}" download style="color:#4f46e5;font-weight:600">⬇ Download print master</a></p>` : '');
     return `
       <div style="margin:16px 0;padding:14px;border:1px solid #e2e8f0;border-radius:8px">
         <div style="display:flex;align-items:flex-start;gap:14px">
-          ${printMaster ? `<img src="${printMaster}" alt="" style="width:140px;height:140px;border-radius:6px;object-fit:cover;flex-shrink:0"/>` : ''}
+          ${previewImg ? `<img src="${previewImg}" alt="" style="width:140px;height:140px;border-radius:6px;object-fit:cover;flex-shrink:0"/>` : ''}
           <div style="flex:1;min-width:0">
             <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px">
               <div>
@@ -274,7 +343,7 @@ export async function sendCartFulfillmentAlertEmail(orders) {
             </div>
             <div style="font-weight:600;font-size:14px">${o.lookup_key || '—'}</div>
             <div style="color:#475569;font-size:12px;margin-top:4px;line-height:1.4">${(o.prompt || '').slice(0, 200)}${(o.prompt || '').length > 200 ? '…' : ''}</div>
-            ${printMaster ? `<p style="margin:8px 0 0;font-size:12px"><a href="${printMaster}" download style="color:#4f46e5;font-weight:600">⬇ Download print master</a></p>` : ''}
+            ${downloadLinks}
           </div>
         </div>
       </div>`;
@@ -590,21 +659,35 @@ export async function sendContactFormCustomerAck({ name, email, subject, message
 export async function sendFulfillmentAlertEmail(order) {
   // New-order alerts go to orders@ (ORDERS_TO) — the fulfillment inbox.
   const to = ordersTo();
-  const { customer_email, customer_name, preview_url, clean_url, lookup_key, prompt, amount_total, currency, stripe_session_id, shipping_address, options, quantity } = order;
+  const { customer_email, customer_name, preview_url, clean_url, signed_url, lookup_key, prompt, amount_total, currency, stripe_session_id, shipping_address, options, quantity } = order;
   // Lawrence (admin) needs the clean print master, not a watermarked preview.
-  const printMaster = clean_url || preview_url;
+  // signed_url (when present) is the same image with the customer's signature
+  // already burned in; clean_url is the unsigned original. Both are exposed
+  // so admin can choose which to send to the lab.
+  const cleanMaster  = clean_url  || preview_url;
+  const signedMaster = signed_url || '';
+  const heroImg = signedMaster || cleanMaster;
   const qty = Math.max(1, parseInt(quantity, 10) || 1);
   const qtyBadge = qty > 1
     ? `<span style="display:inline-block;background:#fde047;color:#422006;padding:2px 10px;border-radius:999px;font-size:13px;font-weight:700;margin-left:8px">PRINT × ${qty}</span>`
     : '';
+
+  // Two download links when a signed version exists — admin picks per order.
+  const downloadLinks = signedMaster
+    ? `<p style="margin:0 0 16px;font-size:12px;line-height:1.7">
+         <a href="${signedMaster}" style="color:#4f46e5;font-weight:600" download>⬇ Download print master <strong>with signature</strong></a>
+         <br>
+         <a href="${cleanMaster}" style="color:#64748b;font-weight:600" download>⬇ Download print master <strong>without signature</strong> (clean)</a>
+       </p>`
+    : (cleanMaster ? `<p style="margin:0 0 16px;font-size:12px"><a href="${cleanMaster}" style="color:#4f46e5;font-weight:600" download>⬇ Download print master (full-resolution, unwatermarked)</a></p>` : '');
 
   const html = `
     <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:640px;margin:0 auto;padding:20px;color:#0a0f1d;">
       <h2 style="margin:0 0 8px">🖨 New print order — ${fmtMoney(amount_total || 0, currency)}${qtyBadge}</h2>
       <p style="margin:0 0 16px;color:#64748b">${lookup_key || '—'} · ${customer_email}${qty > 1 ? ` · <strong style="color:#0a0f1d">print ${qty} copies</strong>` : ''}</p>
 
-      ${printMaster ? `<img src="${printMaster}" alt="Print master" style="width:100%;max-width:520px;border-radius:8px;margin-bottom:8px"/>` : ''}
-      ${printMaster ? `<p style="margin:0 0 16px;font-size:12px"><a href="${printMaster}" style="color:#4f46e5;font-weight:600" download>⬇ Download print master (full-resolution, unwatermarked)</a></p>` : ''}
+      ${heroImg ? `<img src="${heroImg}" alt="Print master" style="width:100%;max-width:520px;border-radius:8px;margin-bottom:8px"/>` : ''}
+      ${downloadLinks}
 
       <h3 style="margin:16px 0 4px;font-size:14px">Ship to</h3>
       <p style="margin:0;font-size:14px"><strong>${customer_name || ''}</strong><br>${fmtAddress(shipping_address)}</p>

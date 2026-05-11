@@ -1,5 +1,5 @@
 // scripts/convert-to-webp.js
-// One-shot: convert every JPG/PNG in public/{ai-art,gallery,rooms,banners}
+// One-shot: convert every JPG/PNG in the listed public/ subdirectories
 // to WebP at quality 80, max 1600px on the long edge. Originals stay on
 // disk as a fallback (and as the source if we ever need to re-encode).
 //
@@ -8,6 +8,8 @@
 // After running, the build is just an HTML edit pass: swap every .jpg /
 // .png src reference to .webp. Modern browsers (96%+ in 2026) handle
 // WebP natively; the originals stay parked on Vercel for any odd request.
+//
+// 2026-04-28: extended to include /materials, /studio, /illustrations.
 
 import sharp from 'sharp';
 import fs from 'node:fs';
@@ -18,7 +20,10 @@ const TARGET_DIRS = [
   'public/ai-art',
   'public/gallery',
   'public/rooms',
-  'public/banners'
+  'public/banners',
+  'public/materials',
+  'public/studio',
+  'public/illustrations'
 ];
 const MAX_DIM = 1600;
 const QUALITY = 80;

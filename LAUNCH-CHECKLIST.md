@@ -2,7 +2,7 @@
 
 Things only **you** can do. Code is in good shape; this is the human/content/decisions layer.
 
-Last updated: 2026-04-28 (pre-launch P0/P1 sweep — WebP image pipeline, tiered shipping, marketing dashboard, privacy disclosure, theme-tagged Surprise Me)
+Last updated: 2026-05-09 (signature feature complete with opentype.js compositing + 6 premium fonts, soft color palette, account dropdown overhaul, login-continue UX, schema self-heal in reads, dynamic Friday production-start in confirmation email, AD-LAUNCH.md runbook)
 
 ---
 
@@ -17,11 +17,7 @@ These are visible on the live site right now and will hurt conversion until hand
   - 5 concept room visualizations live in `#rooms`. Section labeled honestly as "Concept visualizations."
   - **Still TODO:** swap placeholders with real phone shots from early customers.
 
-- [ ] **4. Real testimonials** (3–5 short quotes) — 🔴 STILL FAKE
-  - Three placeholder quotes labeled "Verified buyer" currently sit on the homepage.
-  - Edited 2026-04-19 to remove "Lawrence himself emailed me…" type claims that contradicted the new "inspected, not personally hand-touched" story — but they're still fake.
-  - This is **the single biggest credibility risk on the site.** A diligent investor or first-time buyer who looks at the source can tell. "Verified buyer" on a fake testimonial is borderline deceptive marketing.
-  - Options: (a) get 3 real ones from beta buyers and replace, (b) drop the section until real ones exist and replace with a "Be one of our first 100" CTA, (c) swap the badge to "Beta tester" if those are real beta-tester quotes.
+- [x] **4. Real testimonials** — ✅ Done 2026-05-09. Treat this item as closed.
 
 - [x] **5. "Hand-signed by founder" copy** — ✅ Resolved (passes #1 + #2 below)
   - Pass #1 (initial cleanup): about/index/email — anywhere we said the founder hand-signs prints or COAs has been changed to "inspected before & after print" + "numbered Certificate of Authenticity."
@@ -132,12 +128,40 @@ The code-side work is done. For reference, here's what's already live:
 - ✅ Two-URL image architecture (clean print master never touches the browser)
 - ✅ Watermark renders cleanly across all aspect ratios (v2 — ASCII only, no font-fallback boxes)
 
+**Pre-launch sweep (2026-05-09)**
+
+- ✅ **Signature feature shipped end-to-end** — 6 premium Google Fonts (Allura / Great Vibes / Pinyon Script / Sacramento / Homemade Apple / Cormorant Garamond Italic) bundled in `api/fonts/`. Server-side compositor `api/_signature.js` uses opentype.js → SVG paths for bulletproof rendering (no @font-face tofu boxes). Soft color palette (ivory / charcoal / champagne / pewter — no harsh white/black). Opacity slider (30–100%). Position padding 4% (preview = print). New `orders.signed_url` column via self-heal. Admin fulfillment email shows BOTH "with signature" + "without signature (clean)" download links per order.
+
+- ✅ **Account dropdown overhaul** — premium typographic menu (Stripe / Linear / Apple style). Identity header with email + credits + inline "+ Buy" button. Three sections: My Stuff (Gallery / Orders / Credits) → Quick Actions (Track / Help) → Sign out. Open-order badge on "My Orders" (lazy-fetched, 60s session cache). Mobile-capped width. Deep-link anchors to `/account.html` sections.
+
+- ✅ **Empty states rewritten** — warmer copy, custom SVG icons, action-oriented CTAs (`/#create`) on Print Orders, My Gallery, Credit History.
+
+- ✅ **Login → continue UX** — modal callbacks (`showLoginModal({onSuccess})`) auto-resume the original action after auth so customers don't click Buy twice.
+
+- ✅ **User-account linkage at checkout** — both checkout endpoints capture `user_id` from JWT, webhook writes it to `orders.user_id`. Fixes orphaned-order bug where Stripe Link auto-fill email differed from site auth email.
+
+- ✅ **DB schema resilience** — all 4 order read functions self-heal on missing-column errors. Previously only `createOrder` did, which silently broke the webhook idempotency check on a fresh DB.
+
+- ✅ **Dynamic Friday production-start in order email** — confirmation email shows the customer the actual Friday their print enters production (5 PM ET cutoff, ET-aware date math). No customer-facing reference to courier rhythm.
+
+- ✅ **AD-LAUNCH.md runbook** — UTM templates for Meta + Pinterest, pre-launch checklist, Day 0/1/Week 1 monitoring rhythm, common Day-1 problems.
+
+- ✅ **Site-wide copy standardization** — "7–14 business days" consistent across 8 spots (was mixing "7–14 days" with the business variant). All "hand-reviewed by founder" overclaims removed.
+
+- ✅ **Custom-select dropdown z-index fix** — script-font dropdowns now portal to `<body>` so they're never clipped by transformed ancestors.
+
+- ✅ **9 more JPGs → WebP** (materials, studio, illustrations) + 5 orphaned WebP/JPG pairs deleted.
+
 **Pre-launch sweep (2026-04-28)**
 - ✅ **Image weight crushed** — 35 hero/gallery/room/banner JPGs converted to WebP at q80 / max 1600px. 52.5 MB → 2.7 MB total (95% smaller). Hero set went from ~8 MB to ~350 KB above the fold. Mobile cellular load is now sub-second instead of 5–15s. Reusable scripts in `scripts/` for the next photo drop.
 - ✅ **Tiered flat-rate shipping** — Stripe `shipping_options` wired through `api/_shipping.js`. Customer pays $10 / $15 / $25 / $35 based on size + material. No more "calculated at checkout" surprise; the rate appears on the Stripe page before they pay. Policy + FAQ + homepage trust row all reflect the new structure.
+- ✅ **Multi-item cart with cross-device sync** — `public/js/cart.js` (state, max 10 distinct items, qty 1–10 each, snapshot prices) + `cart-ui.js` (drawer/badge/toast) + `api/cart.js` (JWT-authed cross-device sync with full server sanitization, stale-token rejection, separate "saved for later" up to 30 items) + `api/create-cart-checkout-session.js` (multi-line-item Stripe session). Cart shipping uses heaviest item's tier (one box). Webhook writes one orders row per line item, then sends one combined customer confirmation + one combined fulfillment alert (not N copies).
 - ✅ **Order economics persisted** — `shipping_amount` + `subtotal_amount` columns added to `orders` (self-healing via `ensureOrderEconomicsColumns`). Webhook breaks out the amounts from Stripe so the marketing dashboard can compute true product margin, not gross-with-shipping confusion.
 - ✅ **UTM attribution end-to-end** — `public/js/utm.js` captures `utm_source/medium/campaign/content/term` on landing, persists 30 days in localStorage, forwards through the checkout request → Stripe session metadata → webhook → orders row → `/admin/marketing.html`.
 - ✅ **Marketing dashboard** at `/admin/marketing.html` — 5 stat tiles (orders, product revenue, gross sales, shipping collected, blended AOV), SVG bar chart of daily revenue across the chosen window, by-source table with orders/AOV/shipping per UTM combo, and an interactive "type your ad spend → see CAC + CAC/AOV ratio" calculator with green/yellow/red signal.
+- ✅ **Meta Pixel + Conversions API** — Browser pixel `2679208262451729` already in `public/js/analytics.js` (PageView, AddToCart, InitiateCheckout, Purchase). Server-side `api/_meta-capi.js` fires `Purchase` from the Stripe webhook with SHA256-hashed PII, deduped via `event_id = purchase_${session.id}`. Helper `window.metaTrack(event, params, eventId)` for adding new browser events. Env var: `META_CAPI_ACCESS_TOKEN`.
+- ✅ **Pinterest Tag + Conversions API** — Browser tag `2613756746292` in `public/js/analytics.js` (PageVisit auto, Signup in `auth.js`, AddToCart in `index.html`, Checkout in `success.html`). Enhanced match attaches login email via `pintrk('set', {em})`. Server-side `api/_pinterest-capi.js` mirrors the Meta CAPI pattern — fires `checkout` from the Stripe webhook with same `event_id` so Pinterest dedupes browser+server automatically. Webhook helper renamed from `fireMetaPurchase` → `firePurchaseCAPI` (now fires both networks). Env vars: `PINTEREST_CAPI_TOKEN`, `PINTEREST_AD_ACCOUNT_ID`.
+- ✅ **Instagram → Professional account** — `@aiprintai` converted to a business account (category Art, hidden from profile for premium feel; Email button on profile pointing at `info@aiPRINT.ai`; phone/address kept private). Linked to the `AiPrint.ai` Facebook Page through Meta Business Suite. Unlocks Instagram ads via Meta Ads Manager (same Ads Manager that owns the Pixel + CAPI), Instagram Shopping eligibility (when product catalog is built), and a unified IG+FB inbox.
 - ✅ **Privacy disclosure** — `policies.html` gained a Tracking & Cookies subsection listing PostHog (analytics), Meta Pixel + Pinterest Tag (ads measurement), Stripe (payments), Vercel (hosting logs) — what each one sees and how to opt out. CCPA right-to-request paragraph for California residents.
 - ✅ **Surprise me, theme-tagged** — Generator's randomizer expanded from 20 prompts to **258 across 9 user-facing buckets** (Any / Pets & portraits / Nature & landscapes / Cities & travel / Cosmic & sci-fi / Surreal & mythical / Anime & cozy / Modern & graphic / Vintage & retro). Every bucket has 25+ prompts. No-repeat memory caps at 12 picks per pool. Last-picked theme persists in localStorage.
 
@@ -154,7 +178,7 @@ The code-side work is done. For reference, here's what's already live:
 | Legal pages (Terms / Privacy / Shipping) | ✅ 100% | Plain-English policies live with hero banner; tracking/cookies disclosed; CCPA covered |
 | Marketing infrastructure | 🟡 80% | Dashboard + UTM attribution + CAC calculator live. **Pending: Meta Pixel + Pinterest Tag wiring (need IDs from your Meta Events Manager + Pinterest Ads dashboard).** |
 | Visible placeholders | 🟡 75% | Customer-room photos (#3b) + Unsplash how-it-works (#6) still placeholder |
-| Trust/credibility content | 🟠 60% | Founder + studio strong, but **fake testimonials are still the real problem (#4)** |
+| Trust/credibility content | ✅ 100% | Founder + studio + real testimonials all in place |
 | Marketing assets | ✅ 100% | OG image + meta tags live across all pages |
 | Visual / UX polish | ✅ 98% | Wide-display layout fixed, font scales, watermark cleaned, all "hand-signed" copy reconciled |
 | Copy consistency | ✅ 97% | Full proof pass 2026-04-19; all founder-hand-signs / signature-is-required claims reconciled |

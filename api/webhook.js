@@ -2,9 +2,81 @@
 import { stripe } from './_stripe.js';
 import { json, rawBody } from './_util.js';
 import { addCreditsToUser } from './credits/utils.js';
-import { createOrder, getOrderByStripeSessionId, getCreditTransactionByStripePaymentId } from './db/index.js';
+import { createOrder, getOrderByStripeSessionId, getOrdersByStripeSessionId, getCreditTransactionByStripePaymentId, setOrderSignedUrl } from './db/index.js';
 import { sendOrderConfirmationEmail, sendFulfillmentAlertEmail, sendCreditPurchaseEmail, sendCartOrderConfirmationEmail, sendCartFulfillmentAlertEmail } from './_email.js';
 import { getUserById } from './db/index.js';
+import { sendMetaEvent } from './_meta-capi.js';
+import { sendPinterestEvent } from './_pinterest-capi.js';
+import { composeSignature } from './_signature.js';
+import crypto from 'crypto';
+
+function splitName(full) {
+  if (!full) return { firstName: undefined, lastName: undefined };
+  const parts = String(full).trim().split(/\s+/);
+  return { firstName: parts[0], lastName: parts.slice(1).join(' ') || undefined };
+}
+
+async function firePurchaseCAPI({ session, value, contentName, contentIds }) {
+  const shipDetails = session.collected_information?.shipping_details
+    || session.shipping_details || null;
+  const { firstName, lastName } = splitName(shipDetails?.name || session.customer_details?.name);
+  const addr = shipDetails?.address || session.customer_details?.address || {};
+  const eventId = `purchase_${session.id}`;
+  const eventSourceUrl = session.success_url || 'https://aiprint.ai/success.html';
+  const currency = (session.currency || 'usd').toUpperCase();
+  const valueDollars = Number(((value || 0) / 100).toFixed(2));
+  const userData = {
+    email: session.customer_details?.email,
+    phone: session.customer_details?.phone,
+    firstName,
+    lastName,
+    city: addr.city,
+    state: addr.state,
+    zip: addr.postal_code,
+    country: addr.country
+  };
+
+  // Meta CAPI
+  try {
+    await sendMetaEvent({
+      eventName: 'Purchase',
+      eventId,
+      eventSourceUrl,
+      userData,
+      customData: {
+        currency,
+        value: valueDollars,
+        content_name: contentName,
+        content_ids: contentIds,
+        content_type: 'product'
+      }
+    });
+  } catch (err) {
+    console.error('❌ Meta CAPI Purchase failed:', err);
+  }
+
+  // Pinterest CAPI — same event_id so the browser tag and CAPI dedupe.
+  // Pinterest's standard "checkout" event = purchase completed.
+  try {
+    await sendPinterestEvent({
+      eventName: 'checkout',
+      eventId,
+      eventSourceUrl,
+      userData: { ...userData, externalId: session.customer_details?.email },
+      customData: {
+        currency,
+        value: String(valueDollars),
+        order_id: session.id,
+        content_ids: contentIds,
+        content_name: contentName,
+        num_items: Array.isArray(contentIds) ? contentIds.length : 1
+      }
+    });
+  } catch (err) {
+    console.error('❌ Pinterest CAPI Purchase failed:', err);
+  }
+}
+
 
 export const config = { api: { bodyParser: false } }; // Vercel/Next tells not to parse
 
@@ -107,7 +179,11 @@ export default async function handler(req, res) {
           : Math.max(0, (s.amount_total || 0) - tax_amount - shipping_amount);
 
         // Customer/shipping info is shared across all line items.
+        // user_id (if present in metadata) links this order to the logged-in
+        // account at the moment of checkout — survives the case where Stripe
+        // Link auto-fills a different email than the site account email.
         const customerInfo = {
+          user_id: m.user_id || null,
           customer_email: s.customer_details?.email || '',
           customer_name: shipDetails?.name || s.customer_details?.name || '',
           shipping_address: shipDetails?.address || null,
@@ -178,12 +254,38 @@ export default async function handler(req, res) {
           }
           console.log(`✅ Cart order saved: ${s.id} (${customerInfo.customer_email}) · ${lineItems.length} items`);
 
+          await firePurchaseCAPI({
+            session: s,
+            value: s.amount_total,
+            contentName: `Cart: ${lineItems.length} items`,
+            contentIds: lineItems.map(li => li.price?.product?.metadata?.lookup_key).filter(Boolean)
+          });
+
           // Fire ONE combined customer confirmation + ONE combined fulfillment
           // alert covering every item in the cart. The cart-aware email
           // templates iterate the rows internally so the customer doesn't
           // get N copies of the same email.
-          const { getOrdersByStripeSessionId } = await import('./db/index.js');
           const allRows = await getOrdersByStripeSessionId(s.id);
+
+          // Embed signatures for any lines that have one. Each line is
+          // independent — a cart of 3 items might have signatures on 2 of
+          // them. Run sequentially to avoid hammering Vercel Blob in
+          // parallel; this happens AFTER createOrder so the order rows
+          // are already safe in the DB. Mutate `row.signed_url` in-place so
+          // the email blocks below render both download links per line.
+          for (const row of allRows) {
+            if (row?.options?.signature?.text && row.clean_url) {
+              try {
+                const signedUrl = await composeSignature(row.clean_url, row.options.signature);
+                if (signedUrl) {
+                  await setOrderSignedUrl(row.id, signedUrl);
+                  row.signed_url = signedUrl;
+                }
+              } catch (sigErr) {
+                console.error(`⚠️  Cart signature embedding failed for ${s.id} line ${row.line_item_index}:`, sigErr?.message || sigErr);
+              }
+            }
+          }
           await Promise.allSettled([
             sendCartOrderConfirmationEmail(allRows),
             sendCartFulfillmentAlertEmail(allRows)
@@ -219,6 +321,34 @@ export default async function handler(req, res) {
           };
           await createOrder(order);
           console.log(`✅ Order saved: ${s.id} (${customerInfo.customer_email})`);
+
+          // If the customer added a signature, composite it onto the clean
+          // image and stamp the resulting signed_url onto the order row.
+          // Failure here is non-fatal — admin can still ship from clean_url.
+          // We also stamp signed_url onto the in-memory order object so the
+          // fulfillment email below shows BOTH download links.
+          if (order.options?.signature?.text) {
+            try {
+              const signedUrl = await composeSignature(order.clean_url, order.options.signature);
+              if (signedUrl) {
+                const [savedRow] = await getOrdersByStripeSessionId(s.id);
+                if (savedRow?.id) {
+                  await setOrderSignedUrl(savedRow.id, signedUrl);
+                  console.log(`✅ Signed URL saved for ${s.id}`);
+                }
+                order.signed_url = signedUrl;
+              }
+            } catch (sigErr) {
+              console.error(`⚠️  Signature embedding failed for ${s.id}:`, sigErr?.message || sigErr);
+            }
+          }
+
+          await firePurchaseCAPI({
+            session: s,
+            value: s.amount_total,
+            contentName: m.lookup_key || 'aiPRINT order',
+            contentIds: m.lookup_key ? [m.lookup_key] : []
+          });
 
           await Promise.allSettled([
             sendOrderConfirmationEmail(order),

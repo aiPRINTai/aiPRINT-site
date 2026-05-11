@@ -1,7 +1,8 @@
 // scripts/swap-img-refs.js
 // Update HTML files to reference .webp versions of images we just generated.
-// Only swaps references inside the four asset dirs (ai-art, gallery, rooms,
-// banners) — leaves favicons, og-image, marks SVGs, etc. untouched.
+// Swaps references inside the seven asset dirs (ai-art, gallery, rooms,
+// banners, materials, studio, illustrations) — leaves favicons, og-image,
+// marks SVGs, etc. untouched.
 //
 // Verifies the target .webp file exists on disk before each swap so a typo
 // can never produce a broken reference. Reports diff per file.
@@ -10,15 +11,17 @@
 //
 // Idempotent — running twice is a no-op (.jpg → .webp, then nothing left
 // matching the regex).
+//
+// 2026-04-28: extended to include /materials, /studio, /illustrations.
 
 import fs from 'node:fs';
 import path from 'node:path';
 
 const ROOT = process.cwd();
 
-// Paths matching /ai-art/, /gallery/, /rooms/, /banners/ followed by a name + jpg|png.
+// Paths matching the seven asset dirs followed by a name + jpg|png.
 // Captures: 1=full match, 2=path-up-to-extension, 3=ext
-const PATH_RE = /(\/(?:ai-art|gallery|rooms|banners)\/[^"'`\s)]+?)\.(jpe?g|png)/gi;
+const PATH_RE = /(\/(?:ai-art|gallery|rooms|banners|materials|studio|illustrations)\/[^"'`\s)]+?)\.(jpe?g|png)/gi;
 
 function listHtmlFiles(dir) {
   const out = [];

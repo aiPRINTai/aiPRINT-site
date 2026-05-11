@@ -408,10 +408,23 @@
     btn.disabled = true;
     btn.textContent = 'Opening secure checkout…';
     try {
+      window.metaTrack && window.metaTrack('InitiateCheckout', {
+        content_ids: items.map(it => it.lookup_key).filter(Boolean),
+        content_type: 'product',
+        num_items: items.reduce((s, it) => s + (parseInt(it.quantity, 10) || 1), 0),
+        currency: items[0]?.currency || 'usd',
+        value: items.reduce((s, it) => s + (Number(it.unit_amount) || 0) * (parseInt(it.quantity, 10) || 1), 0) / 100
+      });
       const utm = (typeof window.aiprintUtm === 'function') ? window.aiprintUtm() : {};
+      // Forward the auth token (if logged in) so server can stamp user_id
+      // onto the Stripe metadata → webhook writes orders.user_id → order
+      // shows up in /account.html for the buyer.
+      const authToken = (typeof localStorage !== 'undefined') ? localStorage.getItem('auth_token') : null;
+      const cartHeaders = { 'Content-Type': 'application/json' };
+      if (authToken) cartHeaders['Authorization'] = 'Bearer ' + authToken;
       const r = await fetch('/api/create-cart-checkout-session', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: cartHeaders,
         body: JSON.stringify({
           items: items.map(it => ({
             preview_url: it.preview_url,

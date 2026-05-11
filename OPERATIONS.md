@@ -304,6 +304,28 @@ WHERE id IN ('...uuid...', '...uuid...');
 Use sparingly — the dashboard is more useful when the stored values reflect
 what the customer actually clicked.
 
+### 7.5 Ad-network conversion tracking (Meta + Pinterest)
+
+The marketing dashboard above is **first-party** attribution (UTMs → orders).
+Independently, both ad networks get their own server-side conversion feed
+so they can optimize delivery against actual purchases:
+
+- **Browser pixels** fire from the customer's browser:
+  - Meta Pixel `2679208262451729` — wired in `public/js/analytics.js`. Events: PageView (auto), AddToCart (in `index.html`), InitiateCheckout (in `index.html` + `cart-ui.js`), Purchase (in `success.html`).
+  - Pinterest Tag `2613756746292` — wired in `public/js/analytics.js`. Events: PageVisit (auto), Signup (in `auth.js`), AddToCart (in `index.html`), Checkout (in `success.html`). Enhanced match attaches the user's email after login via `pintrk('set', {em})`.
+- **Server-side CAPI** fires from `api/webhook.js` on `checkout.session.completed`:
+  - `api/_meta-capi.js` → Meta CAPI Purchase event
+  - `api/_pinterest-capi.js` → Pinterest CAPI Checkout event
+  - Both share the same `event_id = purchase_${session.id}` as their browser-side counterparts → each network dedupes the pair automatically. The CAPI half catches the ~5–15% of buyers who close the tab before `success.html` ever loads.
+
+**Verifying signal is reaching each network:**
+- Meta — Events Manager → Pixel → "Test events" tab. Or wait 24h and the Events overview shows volume by Source: Browser / Server / Both.
+- Pinterest — Conversions → "Test events" or "Events overview". Same Both / Browser-only / Server-only breakdown. Score each event in **Event quality** (target ≥7/10).
+
+**Adding a new event** to either network: fire `window.metaTrack(eventName, params, eventId)` or `window.pinTrack(eventName, params)` from the browser. To add the server-side companion, import and call `sendMetaEvent` / `sendPinterestEvent` from a backend handler with the same `eventId`.
+
+**Rotating CAPI tokens:** see §1.3.
+
 ---
 
 ## 8. Environment variable reference

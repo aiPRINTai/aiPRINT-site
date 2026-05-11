@@ -48,14 +48,15 @@
   <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
     <div class="max-w-[1800px] mx-auto px-5 h-16 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2">
-        <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
-        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span></span>
+        <img src="/favicon.svg" class="w-8 h-8 rounded-lg" alt="" aria-hidden="true"/>
+        <span class="font-extrabold tracking-tight text-lg">aiPRINT.<span class="text-indigo-400">ai</span></span>
       </a>
       <nav class="hidden md:flex items-center gap-6 text-base">
         <a href="/" class="hover:text-white">Home</a>
         <a href="/#how" class="hover:text-white">How it works</a>
         <a href="/#materials" class="hover:text-white">Materials</a>
         <a href="/care.html" class="hover:text-white font-semibold">Care</a>
+        <a href="/install.html" class="hover:text-white">Install</a>
         <a href="/about.html" class="hover:text-white">About</a>
         <a href="/faq.html" class="hover:text-white">FAQ</a>
         <a href="/policies.html" class="hover:text-white">Policies</a>
@@ -68,6 +69,40 @@
       </button>
     </div>
   </header>
+
+  <!-- Mobile nav drawer -->
+  <div id="navSheet" class="fixed inset-0 z-[100] hidden">
+    <div id="navBackdrop" class="absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-200"></div>
+    <aside id="navDrawer" class="absolute right-0 top-0 h-full w-80 max-w-[88vw] bg-[#0b1020] border-l border-white/10 translate-x-full transition-transform duration-300">
+      <div class="h-14 px-4 border-b border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <img src="/favicon.svg" class="w-8 h-8 rounded-lg" alt="" aria-hidden="true"/>
+          <span class="font-extrabold tracking-tight text-lg">aiPRINT.<span class="text-indigo-400">ai</span></span>
+        </div>
+        <button id="navClose" class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 hover:bg-white/10" aria-label="Close menu">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <nav class="px-4 py-4">
+        <ul class="space-y-2 text-white/90 text-base">
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/">Home</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/#how">How it works</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/#materials">Materials</a></li>
+          <li><a class="block rounded-lg px-3 py-2 bg-white/10 font-semibold" href="/care.html">Print Care</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/install.html">Install</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/about.html">About</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/faq.html">FAQ</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/policies.html">Policies</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/contact.html">Contact</a></li>
+        </ul>
+        <div class="mt-6 space-y-2">
+          <a href="/#create" class="block w-full text-center rounded-lg px-4 py-2 font-semibold bg-white text-black">Create a preview</a>
+        </div>
+      </nav>
+    </aside>
+  </div>
 
   <!-- Hero (gradient-only — care page gets its own original banner image
        in the upcoming asset refresh; no duplicates from other pages). -->
@@ -123,7 +158,7 @@
 
         <div>
           <h3 class="text-lg font-semibold mb-2">Hanging</h3>
-          <p class="muted">Gallery wraps are light. Two D-rings and picture-rated wall anchors rated to at least 25 lbs are plenty for any size we make. Use a level. Keep the bottom edge a few inches off any baseboard heater.</p>
+          <p class="muted">Every aiPRINT canvas ships with a pre-attached <strong class="text-white">French cleat</strong> on the back, plus the matching wall-side cleat, screws, and drywall anchors. Lift the print onto the wall cleat and it locks flush and level — no D-rings, no wires, no slipping. Keep the bottom edge a few inches off any baseboard heater. Full step-by-step in the <a href="/install.html" class="text-indigo-300 hover:underline">install guide</a>.</p>
         </div>
 
         <div>
@@ -164,7 +199,7 @@
 
         <div>
           <h3 class="text-lg font-semibold mb-2">Hanging</h3>
-          <p class="muted">We ship metal prints with an inset float-mount block. Use one wall anchor rated to at least 2× the print's weight. Because the panel sits ~0.75" off the wall, center the anchor and check level — there's no wiggle room to adjust after.</p>
+          <p class="muted">Every metal print ships with a pre-attached <strong class="text-white">French cleat</strong> on the back, the matching wall-side cleat, screws, and drywall anchors. The cleat seats the panel slightly off the wall so the print appears to float. Slide left or right along the cleat to fine-tune position after mounting — no re-drilling needed. Step-by-step in the <a href="/install.html" class="text-indigo-300 hover:underline">install guide</a>.</p>
         </div>
 
         <div>
@@ -205,7 +240,7 @@
 
         <div>
           <h3 class="text-lg font-semibold mb-2">Hanging</h3>
-          <p class="muted">Acrylic facemounts are heavy. We ship with a French cleat or inset rail sized to the piece. Always anchor into a stud or use a toggle bolt rated to at least 2× the panel's weight. For pieces over 30×40", consider two cleats and a second pair of hands during installation.</p>
+          <p class="muted">Acrylic facemounts are the heaviest of our three materials (5–15 lbs by size). Every piece ships with a pre-attached heavy-duty <strong class="text-white">French cleat</strong>, the matching wall-side cleat, anchor-rated screws, and toggle anchors. Always anchor into a stud or use the included toggle anchors — both rated for 3× the panel's weight. For pieces 24×36" and larger, a second pair of hands makes the lift safer. Step-by-step in the <a href="/install.html" class="text-indigo-300 hover:underline">install guide</a>.</p>
         </div>
 
         <div>
@@ -252,11 +287,41 @@
 
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
-    // Mobile nav re-uses the pattern from policies/faq so this page feels native.
-    document.getElementById('navOpen')?.addEventListener('click', () => {
+
+    // Mobile nav drawer
+    (() => {
       const sheet = document.getElementById('navSheet');
-      if (sheet) sheet.classList.toggle('hidden');
-    });
+      const drawer = document.getElementById('navDrawer');
+      const backdrop = document.getElementById('navBackdrop');
+      const openBtn = document.getElementById('navOpen');
+      const closeBtn = document.getElementById('navClose');
+      if (!sheet || !drawer || !backdrop || !openBtn || !closeBtn) return;
+
+      const openSheet = () => {
+        sheet.classList.remove('hidden');
+        requestAnimationFrame(() => {
+          drawer.classList.remove('translate-x-full');
+          backdrop.classList.remove('opacity-0');
+          document.body.classList.add('overflow-hidden');
+        });
+      };
+      const closeSheet = () => {
+        drawer.classList.add('translate-x-full');
+        backdrop.classList.add('opacity-0');
+        setTimeout(() => {
+          sheet.classList.add('hidden');
+          document.body.classList.remove('overflow-hidden');
+        }, 250);
+      };
+
+      openBtn.addEventListener('click', openSheet);
+      closeBtn.addEventListener('click', closeSheet);
+      backdrop.addEventListener('click', closeSheet);
+      sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSheet));
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !sheet.classList.contains('hidden')) closeSheet();
+      });
+    })();
   </script>
 </body>
 </html>

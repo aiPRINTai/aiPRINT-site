@@ -24,6 +24,7 @@
 import Stripe from 'stripe';
 import { getCleanUrlForPreview } from './db/index.js';
 import { buildCartShippingOptions } from './_shipping.js';
+import { getUserFromRequest } from './auth/utils.js';
 
 const MAX_ITEMS = 10;
 const MAX_QTY = 10;
@@ -101,6 +102,16 @@ export default async function handler(req, res) {
 
     // Stripe metadata values must be strings; cap at 500 chars each.
     const cap = (v, n = 500) => (v == null ? '' : String(v).slice(0, n));
+
+    // Capture the logged-in user_id from the JWT (if present). See same
+    // comment + rationale in create-checkout-session.js.
+    let loggedInUserId = '';
+    try {
+      const tokenData = getUserFromRequest(req);
+      if (tokenData?.userId) loggedInUserId = String(tokenData.userId);
+    } catch (e) {
+      // Guest cart checkout is supported.
+    }
 
     // Build line_items. Per-item creative settings live on product_data.metadata.
     const line_items = [];
@@ -199,6 +210,8 @@ export default async function handler(req, res) {
         // Webhook-side flag so we can route this as a cart vs single-item.
         type: 'cart',
         item_count: String(items.length),
+        // Account linkage — see same comment in create-checkout-session.js.
+        user_id: loggedInUserId,
         utm_source:   utmSafe.utm_source,
         utm_medium:   utmSafe.utm_medium,
         utm_campaign: utmSafe.utm_campaign,

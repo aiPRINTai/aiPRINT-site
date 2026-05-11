@@ -73,7 +73,7 @@
       <!-- Unverified Email Banner (shown only when email_verified = false) -->
       <div id="unverifiedBanner" class="hidden rounded-xl p-5 border border-amber-500/40 bg-amber-500/10">
         <div class="flex items-start gap-4">
-          <div class="text-3xl leading-none">📬</div>
+          <div class="text-amber-300 flex-shrink-0" style="width:1.875rem;height:1.875rem" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="100%" height="100%"><rect x="2" y="4" width="14" height="10" rx="1"/><path d="M2 5l7 5 7-5"/></svg></div>
           <div class="flex-1 min-w-0">
             <div class="font-bold mb-1">Please verify your email</div>
             <p class="text-sm text-gray-300 mb-3">We sent a verification link to your inbox. Click it to confirm your account and unlock full access.</p>
@@ -104,7 +104,7 @@
       </div>
 
       <!-- My Gallery -->
-      <div>
+      <div id="designs" class="scroll-mt-24">
         <div class="flex items-end justify-between mb-4">
           <div>
             <h2 class="text-2xl font-bold">My Gallery</h2>
@@ -121,7 +121,7 @@
       </div>
 
       <!-- Print Orders -->
-      <div>
+      <div id="orders" class="scroll-mt-24">
         <div class="flex items-end justify-between mb-4">
           <div>
             <h2 class="text-2xl font-bold">Print Orders</h2>
@@ -138,7 +138,7 @@
       </div>
 
       <!-- Purchase History -->
-      <div>
+      <div id="credits" class="scroll-mt-24">
         <h2 class="text-2xl font-bold mb-4">Credit History</h2>
         <div id="historyContainer" class="space-y-2">
           <div class="text-center py-8 glass rounded-xl">
@@ -218,7 +218,16 @@
           const historyContainer = document.getElementById('historyContainer');
 
           if (historyData.history.length === 0) {
-            historyContainer.innerHTML = '<div class="glass rounded-xl p-4 text-center text-gray-400">No credit history yet</div>';
+            historyContainer.innerHTML = `
+              <div class="glass rounded-xl p-8 text-center">
+                <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-yellow-500/10 border border-yellow-400/25 grid place-items-center text-yellow-300">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" class="w-6 h-6">
+                    <path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <p class="text-gray-300 text-sm mb-1">No credit activity yet</p>
+                <p class="text-gray-500 text-xs">Every generation, purchase, and refund will show up here.</p>
+              </div>`;
           } else {
             historyContainer.innerHTML = historyData.history.map(item => {
               const isPositive = item.amount > 0;
@@ -226,23 +235,29 @@
               const time = new Date(item.created_at).toLocaleTimeString();
 
               let typeLabel = item.type;
-              let icon = '•';
+              // Inline SVG strings — monoline 1.5px stroke, currentColor so
+              // the icon tints with the surrounding text color.
+              const ICON_DOT = '<svg viewBox="0 0 18 18" fill="currentColor" width="100%" height="100%"><circle cx="9" cy="9" r="2"/></svg>';
+              const ICON_GIFT = '<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="100%" height="100%"><rect x="2.5" y="7" width="13" height="8" rx="0.5"/><path d="M2 6.5h14M9 7v8"/><path d="M9 7c-1.8-2-4.5 0-3 2M9 7c1.8-2 4.5 0 3 2"/></svg>';
+              const ICON_CARD = '<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="100%" height="100%"><rect x="2" y="4.5" width="14" height="9" rx="1.5"/><path d="M2 7.5h14"/><path d="M4.5 11h2"/></svg>';
+              const ICON_FRAME = '<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="100%" height="100%"><rect x="2.5" y="3" width="13" height="11" rx="1"/><path d="M5 11l2.5-3 2 2.5 1.5-2 2 2.5"/><circle cx="11.5" cy="6.5" r="1"/></svg>';
+              let icon = ICON_DOT;
 
               if (item.type === 'signup_bonus') {
                 typeLabel = 'Signup Bonus';
-                icon = '🎁';
+                icon = ICON_GIFT;
               } else if (item.type === 'purchase') {
                 typeLabel = 'Credits Purchased';
-                icon = '💳';
+                icon = ICON_CARD;
               } else if (item.type === 'generation_use') {
                 typeLabel = 'Image Generated';
-                icon = '🎨';
+                icon = ICON_FRAME;
               }
 
               return `
                 <div class="glass rounded-lg p-4 flex justify-between items-center">
                   <div class="flex items-center gap-3">
-                    <span class="text-2xl">${icon}</span>
+                    <span class="inline-flex items-center justify-center text-indigo-300" style="width:1.5rem;height:1.5rem" aria-hidden="true">${icon}</span>
                     <div>
                       <div class="font-medium">${typeLabel}</div>
                       <div class="text-sm text-gray-400">${date} at ${time}</div>
@@ -279,9 +294,15 @@
           if (orders.length === 0) {
             ordersContainer.innerHTML = `
               <div class="glass rounded-xl p-10 text-center">
-                <div class="text-5xl mb-3">🖼</div>
-                <p class="text-gray-300 mb-4">No print orders yet.</p>
-                <a href="/" class="btn inline-block">Order your first print</a>
+                <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-amber-500/10 border border-amber-400/25 grid place-items-center text-amber-300">
+                  <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" class="w-10 h-10">
+                    <path d="M5 9h22l-2 16H7L5 9z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M11 9V7a5 5 0 0110 0v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <h3 class="text-lg font-bold mb-1">Your prints will live here</h3>
+                <p class="text-gray-400 text-sm mb-5 max-w-sm mx-auto">When you order a print, you'll see its status, tracking, and delivery updates right on this page.</p>
+                <a href="/#create" class="btn inline-block">Create your first print →</a>
               </div>`;
           } else {
             const fmtMoney = (cents, cur='usd') => ((cents||0)/100).toLocaleString('en-US', { style:'currency', currency:(cur||'usd').toUpperCase() });
@@ -338,8 +359,9 @@
                     <path d="M26 3l0.9 1.8L28.7 5.7l-1.8 0.9L26 8.4l-0.9-1.8L23.3 5.7l1.8-0.9z" fill="currentColor"/>
                   </svg>
                 </div>
-                <p class="text-gray-300 mb-4">Your gallery is empty.</p>
-                <a href="/" class="btn inline-block">Create your first print</a>
+                <h3 class="text-lg font-bold mb-1">Your canvas, ready when you are</h3>
+                <p class="text-gray-400 text-sm mb-5 max-w-sm mx-auto">Every artwork you generate lands here — ready to revisit, refine, or order as a print.</p>
+                <a href="/#create" class="btn inline-block">Create your first piece →</a>
               </div>`;
           } else {
             galleryContainer.innerHTML = `
@@ -377,7 +399,7 @@
       // Check for purchase success
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('credits_purchased') === 'true') {
-        auth.showToast('Credits added successfully! 🎉', 'success');
+        auth.showToast('Credits added successfully!', 'success');
         credits.loadBalance().then(balance => {
           document.getElementById('creditsBalance').textContent = balance;
         });

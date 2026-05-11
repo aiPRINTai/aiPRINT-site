@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>aiPRINT.ai — Order Confirmed 🎉</title>
+  <title>aiPRINT.ai — Order Confirmed</title>
   <meta name="description" content="Your aiPRINT order is confirmed and entering production. Track your custom AI art print here."/>
   <meta name="robots" content="noindex,follow"/>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -11,7 +11,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
   <meta property="og:title" content="Order Confirmed · aiPRINT.ai"/>
-  <meta property="og:description" content="Your custom AI art print is in production. Ships in 7–14 days."/>
+  <meta property="og:description" content="Your custom AI art print is in production. Ships in 7–14 business days."/>
   <meta property="og:type" content="website"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
@@ -33,8 +33,8 @@
   <header class="sticky top-0 z-10 bg-[#0b1020]/90 backdrop-blur border-b border-white/10">
     <div class="max-w-[1800px] mx-auto px-5 h-14 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2">
-        <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
-        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span></span>
+        <img src="/favicon.svg" class="w-8 h-8 rounded-lg" alt="" aria-hidden="true"/>
+        <span class="font-extrabold tracking-tight text-lg">aiPRINT.<span class="text-indigo-400">ai</span></span>
       </a>
       <a href="/" class="text-sm text-gray-400 hover:text-white transition-colors">← Back to home</a>
     </div>
@@ -89,7 +89,8 @@
         <!-- Order Summary -->
         <div class="glass rounded-2xl p-6">
           <div class="font-bold text-lg mb-4 flex items-center gap-2">
-            📦 Order Summary
+            <span class="inline-flex items-center justify-center" style="width:1.4rem;height:1.4rem" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="100%" height="100%"><path d="M9 2.5L15.5 5.5V12.5L9 15.5L2.5 12.5V5.5z"/><path d="M9 9V15.5M9 9L2.5 5.5M9 9L15.5 5.5"/></svg></span>
+            Order Summary
           </div>
           <div class="grid grid-cols-2 gap-y-3 text-sm">
             <div class="muted">Order ID</div><div id="orderId" class="font-mono text-xs break-all"></div>
@@ -102,12 +103,12 @@
 
         <!-- Shipping -->
         <div class="glass rounded-2xl p-6">
-          <div class="font-bold text-lg mb-4">🚚 Shipping To</div>
+          <div class="font-bold text-lg mb-4 flex items-center gap-2"><span class="inline-flex items-center justify-center" style="width:1.4rem;height:1.4rem" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="100%" height="100%"><path d="M2 5h8v8H2zM10 8h3.5l2 2.5v2.5h-5.5"/><circle cx="5" cy="14" r="1.3"/><circle cx="13" cy="14" r="1.3"/></svg></span>Shipping To</div>
           <div id="shipName" class="font-semibold"></div>
           <div id="shipAddr" class="text-sm whitespace-pre-line muted mt-1"></div>
           <div class="mt-4 pt-4 border-t border-white/10 text-sm text-gray-400">
-            <div class="flex items-center gap-2 mb-1.5"><span class="text-yellow-400">⏱</span> Production: 3–7 business days</div>
-            <div class="flex items-center gap-2"><span class="text-blue-400">📬</span> Shipping: 3–7 business days after production</div>
+            <div class="flex items-center gap-2 mb-1.5"><span class="inline-flex items-center justify-center text-yellow-400" style="width:1em;height:1em" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="100%" height="100%"><circle cx="9" cy="10" r="6"/><path d="M9 7v3l2 1.5"/><path d="M7 2h4M9 2v2"/></svg></span> Production: 3–7 business days</div>
+            <div class="flex items-center gap-2"><span class="inline-flex items-center justify-center text-blue-400" style="width:1em;height:1em" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="100%" height="100%"><path d="M2 5h8v8H2zM10 8h3.5l2 2.5v2.5h-5.5"/><circle cx="5" cy="14" r="1.3"/><circle cx="13" cy="14" r="1.3"/></svg></span> Shipping: 3–7 business days after production</div>
           </div>
         </div>
 
@@ -167,10 +168,16 @@
         <!-- Create Another / Track -->
         <div class="text-center pt-2 flex flex-col sm:flex-row gap-3 justify-center">
           <a id="trackLink" href="/track.html" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white text-black font-semibold hover:bg-gray-100 transition-colors">
-            📦 Track this order
+            <span class="inline-flex items-center justify-center" style="width:1.1rem;height:1.1rem" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="100%" height="100%"><path d="M9 2.5L15.5 5.5V12.5L9 15.5L2.5 12.5V5.5z"/><path d="M9 9V15.5M9 9L2.5 5.5M9 9L15.5 5.5"/></svg></span>
+            Track this order
+          </a>
+          <a href="/install.html" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 font-semibold transition-colors">
+            <span class="inline-flex items-center justify-center" style="width:1.1rem;height:1.1rem" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="100%" height="100%"><path d="M9 2v2.5M7.5 4.5h3M9 4.5v3"/><rect x="3.5" y="7.5" width="11" height="7.5" rx="0.5"/></svg></span>
+            How to hang it
           </a>
           <a href="/" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 font-semibold transition-colors">
-            ✨ Create another print
+            <span class="inline-flex items-center justify-center" style="width:1.1rem;height:1.1rem" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="100%" height="100%"><path d="M9 2.5l1.3 4 4 1.3-4 1.3-1.3 4-1.3-4-4-1.3 4-1.3z"/><path d="M14.5 2.5v2M15.5 3.5h-2M3.5 13.5v2M4.5 14.5h-2" opacity=".7"/></svg></span>
+            Create another print
           </a>
         </div>
 
@@ -243,6 +250,22 @@
               amount: (data.amount_total || 0) / 100,
               currency: data.currency || 'usd',
               product: li?.description || data?.metadata?.lookup_key || 'unknown'
+            });
+            // Meta Pixel Purchase — same event_id as the server-side CAPI
+            // call in api/webhook.js so Meta dedupes the two.
+            window.metaTrack && window.metaTrack('Purchase', {
+              content_ids: [data?.metadata?.lookup_key].filter(Boolean),
+              content_name: li?.description || data?.metadata?.lookup_key || 'aiPRINT order',
+              content_type: 'product',
+              currency: (data.currency || 'usd').toUpperCase(),
+              value: (data.amount_total || 0) / 100
+            }, 'purchase_' + id);
+            window.pinTrack && window.pinTrack('checkout', {
+              event_id: 'purchase_' + id,
+              order_id: id,
+              value: (data.amount_total || 0) / 100,
+              order_quantity: 1,
+              currency: (data.currency || 'usd').toUpperCase()
             });
             localStorage.setItem(dedupeKey, '1');
           }

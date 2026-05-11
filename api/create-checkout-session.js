@@ -12,6 +12,7 @@
 import Stripe from 'stripe';
 import { getCleanUrlForPreview } from './db/index.js';
 import { buildShippingOptions } from './_shipping.js';
+import { getUserFromRequest } from './auth/utils.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -92,6 +93,20 @@ export default async function handler(req, res) {
     // Stripe metadata values must be strings; cap at 500 chars each.
     const cap = (v, n = 500) => (v == null ? '' : String(v).slice(0, n));
 
+    // Capture the logged-in user_id from the JWT (if present) so the webhook
+    // can link the order to the user's account directly. Without this, the
+    // order is only matched to an account by customer_email — which fails
+    // when Stripe Link auto-fills a different email than the one the user
+    // signed up with on the site (a real case: site auth = personal email,
+    // Stripe Link = work email → order orphaned from account history).
+    let loggedInUserId = '';
+    try {
+      const tokenData = getUserFromRequest(req);
+      if (tokenData?.userId) loggedInUserId = String(tokenData.userId);
+    } catch (e) {
+      // No JWT present is fine — guest checkout is supported.
+    }
+
     const metadata = {
       lookup_key,
       preview_url: cap(preview.image),
@@ -107,6 +122,8 @@ export default async function handler(req, res) {
       product_name:        cap(price.product?.name),
       product_description: cap(price.product?.description),
       quantity:    String(qty),
+      // Account linkage — webhook reads this and stores it on orders.user_id.
+      user_id: cap(loggedInUserId),
       // Marketing attribution — webhook reads these and writes them onto
       // the orders row so /admin/marketing.html can group by UTM source.
       utm_source:   cap(utmSafe.utm_source),

@@ -77,10 +77,57 @@ stacking-context index. Setting `z-index: 50` on an open dropdown menu will
 still render **below** a sibling image if that image's parent has a higher
 stacking context.
 
-**Fix:** lift the wrapper itself when opening. Toggle
-`wrap.dataset.open = 'true'/'false'` in `openMenu`/`closeMenu` and add
-`.custom-select[data-open="true"] { z-index: 9999; }` in CSS so the whole
-dropdown region floats above neighbors for the duration of the interaction.
+**First attempted fix (insufficient):** lift the wrapper itself when opening.
+Toggle `wrap.dataset.open = 'true'/'false'` in `openMenu`/`closeMenu` and add
+`.custom-select[data-open="true"] { z-index: 9999; }`. Works for some cases
+but fails when ancestors have `transform`, `filter`, or `perspective` — those
+properties create a containing block that **also captures `position: fixed`**
+descendants. Symptom: menu's inline `top`/`left` is set correctly but the
+rendered rect is offset somewhere else.
+
+**Robust fix (2026-05-09):** in `openMenu`, **portal the menu element to
+`document.body`** so it has no transformed ancestors:
+```js
+if (menu.parentElement !== document.body) document.body.appendChild(menu);
+```
+Combined with `position: fixed` + dynamic coords from
+`btn.getBoundingClientRect()`, the menu renders relative to the viewport
+no matter what stacking contexts exist in between. Add a scroll/resize
+listener that re-runs `positionMenu()` so the menu tracks its anchor button
+when the user scrolls. Click handlers attached to options still fire because
+the option elements weren't recreated — only their parent moved.
+
+This is implemented in `enhanceSignatureSelects` in `public/index.html`.
+
+### librsvg + @font-face → tofu boxes on Vercel
+Sharp uses libvips → librsvg under the hood. **librsvg's `@font-face` data-URI
+support is unreliable** on Vercel's Linux runtime: it silently falls back to a
+default font that doesn't have the right glyphs, producing □ rectangles
+instead of text. Locally it often works fine, masking the bug until prod.
+
+This bit the watermark module first (fixed by switching to ASCII-only text +
+system font fallbacks) and bit the signature compositor second (server-side
+signatures rendered as tofu when @font-face was used to load the bundled
+Google Fonts).
+
+**Fix: convert text to SVG vector paths with `opentype.js`.** Parse the TTF
+at module load (fast, ~tens of ms per font, cached), then on each render
+call `font.getPath(text, x, y, fontSize).toPathData(2)` and embed that as
+a single `<path d="..."/>` in the SVG. No runtime font loading, no fallback
+chains, no fontconfig. Pixel-perfect at any resolution.
+
+`api/_signature.js` is the canonical example. The TTFs live in `api/fonts/`
+and are bundled into the function via `vercel.json` `includeFiles`.
+
+**Gotcha when downloading Google Fonts from GitHub:** the path
+`github.com/google/fonts/raw/main/ofl/FAMILY/Family-Style.ttf` works for
+many but not all fonts. Some fonts live in `apache/` instead of `ofl/`,
+and variable fonts may need `static/` subdirectories or `[wght].ttf` axis
+filenames. Verify by checking magic bytes — a real TTF starts with
+`00010000` or `4f54544f` (`OTTO`); HTML 404 pages start with
+`0a0a0a0a` (newlines from GitHub's HTML response). When GitHub fails,
+jsdelivr's fontsource CDN (`cdn.jsdelivr.net/fontsource/fonts/...`) is
+a reliable alternative.
 
 ### The "preview didn't update the wall" bug
 Any UI that derives from a cached state variable (e.g. `currentPreview.url`)

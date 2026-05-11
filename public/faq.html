@@ -47,14 +47,15 @@
   <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
     <div class="max-w-[1800px] mx-auto px-5 h-16 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2">
-        <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
-        <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span></span>
+        <img src="/favicon.svg" class="w-8 h-8 rounded-lg" alt="" aria-hidden="true"/>
+        <span class="font-extrabold tracking-tight text-lg">aiPRINT.<span class="text-indigo-400">ai</span></span>
       </a>
       <nav class="hidden md:flex items-center gap-6 text-base">
         <a href="/" class="hover:text-white">Home</a>
         <a href="/#how" class="hover:text-white">How it works</a>
         <a href="/#materials" class="hover:text-white">Materials</a>
         <a href="/care.html" class="hover:text-white">Care</a>
+        <a href="/install.html" class="hover:text-white">Install</a>
         <a href="/about.html" class="hover:text-white">About</a>
         <a href="/faq.html" class="hover:text-white font-semibold">FAQ</a>
         <a href="/policies.html" class="hover:text-white">Policies</a>
@@ -62,7 +63,7 @@
       </nav>
 
       <!-- Mobile hamburger -->
-      <div id="cartMount" class="flex items-center mr-2"></div><button id="navOpen" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10">
+      <div id="cartMount" class="flex items-center mr-2"></div><button id="navOpen" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10" aria-label="Open menu">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
@@ -76,10 +77,10 @@
     <aside id="navDrawer" class="absolute right-0 top-0 h-full w-80 max-w-[88vw] bg-[#0b1020] border-l border-white/10 translate-x-full transition-transform duration-300">
       <div class="h-14 px-4 border-b border-white/10 flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
-          <span class="font-extrabold tracking-tight">aiPRINT.<span class="text-indigo-400">ai</span></span>
+          <img src="/favicon.svg" class="w-8 h-8 rounded-lg" alt="" aria-hidden="true"/>
+          <span class="font-extrabold tracking-tight text-lg">aiPRINT.<span class="text-indigo-400">ai</span></span>
         </div>
-        <button id="navClose" class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 hover:bg-white/10">
+        <button id="navClose" class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 hover:bg-white/10" aria-label="Close menu">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
           </svg>
@@ -91,6 +92,7 @@
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/#how">How it works</a></li>
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/#materials">Materials</a></li>
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/care.html">Print Care</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/install.html">Install</a></li>
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/about.html">About</a></li>
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/faq.html">FAQ</a></li>
           <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/policies.html">Policies</a></li>
@@ -254,8 +256,7 @@
               </svg>
             </summary>
             <p class="muted mt-3">
-              Yes! All prints arrive ready to hang with appropriate mounting hardware included. Canvas is gallery-wrapped, 
-              metal has float mounts, and acrylic includes standoffs.
+              Yes — every print ships with a pre-attached <strong class="text-white">French cleat</strong>, the matching wall-side cleat, screws, and drywall anchors. About 10 minutes start to finish. Step-by-step photos and FAQ in our <a href="/install.html" class="text-indigo-300 hover:underline font-semibold">install guide</a>.
             </p>
           </details>
 
@@ -267,8 +268,9 @@
               </svg>
             </summary>
             <p class="muted mt-3">
-              Currently up to 36" on the longest side. Our AI upscales intelligently to ensure crisp, gallery-quality 
-              results even at large sizes. Each material offers 5 size options per aspect ratio.
+              Currently up to 36" on the longest side. Each artwork is prepared at archival print resolution and
+              quality-checked before production, so even our largest pieces stay crisp and gallery-grade. Each
+              material offers 5 size options per aspect ratio.
             </p>
           </details>
 
@@ -316,7 +318,7 @@
             </summary>
             <p class="muted mt-3">
               Production takes 3–7 business days depending on material, with shipping typically 3–7 days after that.
-              Most orders arrive within 7–14 days total. We'll keep you updated with tracking every step of the way.
+              Most orders arrive within 7–14 business days total. We'll keep you updated with tracking every step of the way.
             </p>
           </details>
 
@@ -358,8 +360,8 @@
               </svg>
             </summary>
             <p class="muted mt-3">
-              Contact us immediately with photos of the damage and packaging. We'll send a replacement at no cost. 
-              Our packaging is museum-grade, but accidents happen and we'll make it right.
+              Contact us within 14 days with photos of the damage and packaging — we'll ship a replacement at no
+              cost, no need to return the damaged piece. Shipping damage is always replaced free.
             </p>
           </details>
 
@@ -371,8 +373,9 @@
               </svg>
             </summary>
             <p class="muted mt-3">
-              Since each piece is custom-made, we can't accept returns for buyer's remorse. However, we offer a 30-day 
-              satisfaction guarantee - if you're not happy, contact us and we'll work to make it right.
+              Since each piece is custom-made, we can't accept returns for buyer's remorse — but if you're not
+              satisfied with the print quality (color, sharpness, materials), contact us within 30 days for a
+              replacement or full refund, no questions asked.
             </p>
           </details>
         </div>
@@ -459,7 +462,7 @@
   </footer>
 
   <script>
-    document.getElementById('y').textContent = '2024';
+    document.getElementById('y').textContent = new Date().getFullYear();
     
     // Mobile menu
     (() => {

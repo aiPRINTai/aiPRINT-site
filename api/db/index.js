@@ -121,7 +121,8 @@ async function ensureOrderEconomicsColumns() {
       ADD COLUMN IF NOT EXISTS utm_medium TEXT,
       ADD COLUMN IF NOT EXISTS utm_campaign TEXT,
       ADD COLUMN IF NOT EXISTS utm_content TEXT,
-      ADD COLUMN IF NOT EXISTS utm_term TEXT
+      ADD COLUMN IF NOT EXISTS utm_term TEXT,
+      ADD COLUMN IF NOT EXISTS signed_url TEXT
   `;
   // Cart support: an order can have multiple rows sharing one
   // stripe_session_id (one row per line_item). Drop the old single-row
@@ -167,6 +168,7 @@ function isMissingColumnError(err) {
     || m.includes('quantity') || m.includes('line_item_index')
     || m.includes('utm_source') || m.includes('utm_medium') || m.includes('utm_campaign')
     || m.includes('utm_content') || m.includes('utm_term')
+    || m.includes('signed_url')
     || /column .* does not exist/i.test(m);
 }
 
@@ -362,26 +364,54 @@ export async function cleanupOldAnonymousGenerations(daysOld = 7) {
 // Returns the FIRST order row matching the session_id (lowest line_item_index).
 // Cart sessions can produce multiple orders rows sharing one stripe_session_id;
 // callers that need all of them should use getOrdersByStripeSessionId.
+// Wrap a read query so a missing-column error triggers the same self-heal
+// migration that createOrder uses, then retries. Without this, ANY read of
+// the orders table fails on a fresh DB or after a column was added — which
+// also cascades into the webhook (its idempotency check is a read), causing
+// silent webhook failures, no order rows, no confirmation emails, etc.
+async function withOrderColumnHeal(run) {
+  try {
+    return await run();
+  } catch (err) {
+    if (!isMissingColumnError(err)) throw err;
+    await ensureOrderEconomicsColumns();
+    return await run();
+  }
+}
+
 export async function getOrderByStripeSessionId(stripeSessionId) {
-  const result = await sql`
-    SELECT * FROM orders
-    WHERE stripe_session_id = ${stripeSessionId}
-    ORDER BY COALESCE(line_item_index, 0) ASC
-    LIMIT 1
-  `;
-  return result.rows[0];
+  return withOrderColumnHeal(async () => {
+    const result = await sql`
+      SELECT * FROM orders
+      WHERE stripe_session_id = ${stripeSessionId}
+      ORDER BY COALESCE(line_item_index, 0) ASC
+      LIMIT 1
+    `;
+    return result.rows[0];
+  });
 }
 
 // Returns ALL order rows for the given session_id (cart-aware). Used by the
 // admin orders panel + the order-confirmation email rendering for multi-item
 // carts so we can show every print the customer bought in one display.
 export async function getOrdersByStripeSessionId(stripeSessionId) {
-  const result = await sql`
-    SELECT * FROM orders
-    WHERE stripe_session_id = ${stripeSessionId}
-    ORDER BY COALESCE(line_item_index, 0) ASC
-  `;
-  return result.rows;
+  return withOrderColumnHeal(async () => {
+    const result = await sql`
+      SELECT * FROM orders
+      WHERE stripe_session_id = ${stripeSessionId}
+      ORDER BY COALESCE(line_item_index, 0) ASC
+    `;
+    return result.rows;
+  });
+}
+
+// Stamps signed_url onto a specific order row (single-item or one cart line).
+// Called from the webhook after composeSignature() finishes uploading the
+// signed image. Idempotent — running twice with the same URL is a no-op.
+export async function setOrderSignedUrl(orderId, signedUrl) {
+  return withOrderColumnHeal(async () => {
+    await sql`UPDATE orders SET signed_url = ${signedUrl} WHERE id = ${orderId}`;
+  });
 }
 
 // ── Cross-device cart sync ─────────────────────────────────────────────────
@@ -443,30 +473,34 @@ export async function getOrderById(id) {
 }
 
 export async function getOrdersByUserId(userId, { limit = 50 } = {}) {
-  const result = await sql`
-    SELECT id, stripe_session_id, customer_email, lookup_key, preview_url,
-           amount_total, tax_amount, currency, status, tracking_number, carrier,
-           shipping_address, quantity, created_at, updated_at
-    FROM orders
-    WHERE user_id = ${userId}
-    ORDER BY created_at DESC
-    LIMIT ${limit}
-  `;
-  return result.rows;
+  return withOrderColumnHeal(async () => {
+    const result = await sql`
+      SELECT id, stripe_session_id, customer_email, lookup_key, preview_url,
+             amount_total, tax_amount, currency, status, tracking_number, carrier,
+             shipping_address, quantity, created_at, updated_at
+      FROM orders
+      WHERE user_id = ${userId}
+      ORDER BY created_at DESC
+      LIMIT ${limit}
+    `;
+    return result.rows;
+  });
 }
 
 export async function getOrdersByEmail(email, { limit = 50 } = {}) {
   if (!email) return [];
-  const result = await sql`
-    SELECT id, stripe_session_id, customer_email, lookup_key, preview_url,
-           amount_total, tax_amount, currency, status, tracking_number, carrier,
-           shipping_address, quantity, created_at, updated_at
-    FROM orders
-    WHERE LOWER(customer_email) = LOWER(${email})
-    ORDER BY created_at DESC
-    LIMIT ${limit}
-  `;
-  return result.rows;
+  return withOrderColumnHeal(async () => {
+    const result = await sql`
+      SELECT id, stripe_session_id, customer_email, lookup_key, preview_url,
+             amount_total, tax_amount, currency, status, tracking_number, carrier,
+             shipping_address, quantity, created_at, updated_at
+      FROM orders
+      WHERE LOWER(customer_email) = LOWER(${email})
+      ORDER BY created_at DESC
+      LIMIT ${limit}
+    `;
+    return result.rows;
+  });
 }
 
 export async function createOrder(order) {

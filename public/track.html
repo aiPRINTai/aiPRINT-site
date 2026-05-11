@@ -98,10 +98,10 @@
     const $ = (q, el=document) => el.querySelector(q);
 
     const STEPS = [
-      { key: 'paid',          label: 'Order received',    icon: '🧾' },
-      { key: 'in_production', label: 'In production',     icon: '🖨' },
-      { key: 'shipped',       label: 'Shipped',           icon: '📦' },
-      { key: 'delivered',     label: 'Delivered',         icon: '🏠' }
+      { key: 'paid',          label: 'Order received' },
+      { key: 'in_production', label: 'In production' },
+      { key: 'shipped',       label: 'Shipped' },
+      { key: 'delivered',     label: 'Delivered' }
     ];
 
     function fmtMoney(cents, cur='usd') {

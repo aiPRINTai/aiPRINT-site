@@ -23,6 +23,10 @@
           email: u.email,
           credits_balance: u.credits_balance
         });
+        // Pinterest enhanced match — attach email to subsequent events
+        if (window.pintrk && u.email) {
+          try { window.pintrk('set', { em: u.email }); } catch (e) {}
+        }
       }
     } catch (e) {}
   }
@@ -57,5 +61,18 @@
       window.fbq('track', event, params || {}, { eventID: id });
       return id;
     } catch (e) {}
+  };
+
+  // ---------------------------------------------------------------------------
+  // Pinterest tag — base code + PageVisit
+  // Tag ID: 2613756746292 (aiPRINT.ai)
+  // ---------------------------------------------------------------------------
+  !function(e){if(!window.pintrk){window.pintrk=function(){window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var n=window.pintrk;n.queue=[],n.version="3.0";var t=document.createElement("script");t.async=!0,t.src=e;var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r)}}("https://s.pinimg.com/ct/core.js");
+  window.pintrk('load', '2613756746292');
+  window.pintrk('page');
+
+  // Helper: fire a Pinterest event with optional params (value, order_id, etc.)
+  window.pinTrack = function (event, params) {
+    try { window.pintrk && window.pintrk('track', event, params || {}); } catch (e) {}
   };
 })();
