@@ -264,7 +264,10 @@ class AuthManager {
             <span class="font-bold text-sm">${this.user.credits_balance || 0}</span>
             <span class="text-xs text-gray-400 hidden sm:inline">credits</span>
           </div>
-          <button onclick="auth.showAccountMenu(event)" class="btn-ghost px-3 py-1.5 text-sm truncate max-w-[120px] sm:max-w-none">
+          <!-- Email chip capped at 140px so it never balloons and pushes
+               the nav into the logo. Full email is visible in the dropdown
+               on click. -->
+          <button onclick="auth.showAccountMenu(event)" class="btn-ghost px-3 py-1.5 text-sm truncate max-w-[140px]">
             ${this.user.email}
           </button>
         </div>
