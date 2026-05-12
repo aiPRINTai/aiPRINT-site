@@ -78,6 +78,38 @@ const CATEGORIES = [
       { slug:'dog-beach-action', eyebrow:'Beach run', title:'Caught mid-joy', alt:'A golden retriever running on a wet beach at golden hour',
         prompt:'A hyperrealistic action photograph of a happy golden retriever mid-run on a wet beach at golden hour, water splashing, motion blur on legs, sharp focus on the dog, real sports photography',
         style:'Realistic (photo-realistic)', mood:'Bright / Uplifting', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'pet-pencil-sketch', eyebrow:'Pencil sketch', title:'Drawn by hand, kept forever', alt:'A pencil and charcoal portrait of a noble golden retriever on cream paper',
+        prompt:'A hand-drawn pencil and charcoal portrait of a beloved dog on cream paper, soft graphite shading, fine cross-hatching, tender expression, fine-art sketch',
+        style:'Minimalist', mood:'Nostalgic', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Pencil / Charcoal Sketch', lighting:'Natural / Soft Light', camera:'Portrait / Headshot Framing' },
+      { slug:'pet-ink-linework', eyebrow:'Ink drawing', title:'A single line that says it all', alt:'A black ink line drawing of a cat in profile on cream paper',
+        prompt:'A clean black ink line drawing of a sitting cat in profile on cream paper, single confident contour line, minimal interior detail, fine-art linework',
+        style:'Minimalist', mood:'Calm / Peaceful', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Ink / Pen Drawing', lighting:'Natural / Soft Light', camera:'Portrait / Headshot Framing' },
+      { slug:'pet-anime-companion', eyebrow:'Anime / Ghibli', title:'Their best friend, Ghibli-style', alt:'An anime scene of a child hugging a small fluffy dog in a sunlit meadow',
+        prompt:'A Studio-Ghibli-style anime scene of a young child sitting in a sunlit meadow hugging a small fluffy dog, soft painterly clouds, warm wind, vibrant green grass',
+        style:'Anime / Stylized', mood:'Whimsical / Playful', palette:'vibrant, saturated colors', ratio:'1024x1536',
+        medium:'Digital Painting', lighting:'Warm / Golden Light', camera:'Wide Angle / Expansive', expression:'joyful, smiling, warm expression' },
+      { slug:'pet-3d-render', eyebrow:'3D render', title:'Modern, polished, them', alt:'A 3D CGI render of a small fluffy puppy on a pastel pedestal',
+        prompt:'A stylized 3D CGI render of a small fluffy puppy sitting on a soft pastel pedestal, soft studio lighting, clean modern look like a Pixar short, cream background',
+        style:'Minimalist', mood:'Bright / Uplifting', palette:'soft pastel palette', ratio:'1024x1536',
+        medium:'3D Render / CGI', lighting:'Studio Lighting', camera:'Eye-Level / Natural Perspective' },
+      { slug:'pet-popart', eyebrow:'Pop art', title:'Their portrait, in four colors', alt:'A pop-art quadrant screenprint of a dog portrait in four bold color combos',
+        prompt:'A pop-art quadrant screenprint of the same dog portrait repeated in 4 panels, each panel a different bold color combo, thick outlines, Ben-Day dots, retro 1960s',
+        style:'Pop Art / Graphic', mood:'Energetic / Dynamic', palette:'high contrast bold colors', ratio:'1024x1024',
+        medium:'Poster / Graphic Design', lighting:'Studio Lighting', camera:'Symmetry / Centered' },
+      { slug:'pet-vintage-poster', eyebrow:'Vintage poster', title:'A keepsake, mid-century', alt:'A vintage mid-century travel-style poster of a happy dog running through tall grass',
+        prompt:'A vintage mid-century travel-style poster of a happy dog running through tall grass, retro flat shapes, limited 4-color palette of teal, mustard, cream, brick-red, screenprinted texture',
+        style:'Vintage / Retro', mood:'Nostalgic', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', lighting:'Warm / Golden Light', camera:'Wide Angle / Expansive' },
+      { slug:'pet-sculpture', eyebrow:'Bronze sculpture', title:'A monument to their loyalty', alt:'A bronze sculpture of a sitting Labrador on a wooden gallery pedestal',
+        prompt:'A small bronze sculpture of a sitting Labrador on a wooden gallery pedestal, soft warm museum lighting, visible patina on the bronze, dark gallery background, fine-art sculpture',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Sculpture / 3D Model', lighting:'Studio Lighting', camera:'Portrait / Headshot Framing' },
+      { slug:'pet-mixed-media', eyebrow:'Mixed media', title:'A piece made from their pieces', alt:'A mixed-media collage with Polaroid photos of a pet, dried flowers, and a leather collar',
+        prompt:'A mixed-media collage memorial of a beloved pet — torn vintage paper background, layered Polaroid photos of the dog, dried flowers, a leather collar, stitched thread, handwritten name across the bottom',
+        style:'Abstract', mood:'Nostalgic', palette:'muted, earthy tones', ratio:'1024x1536',
+        medium:'Mixed Media / Collage', lighting:'Natural / Soft Light', camera:'High Angle (Looking Down)' },
       { slug:'pet-sunbeam', eyebrow:'Sunbeam nap', title:'Their favorite hour', alt:'A tabby cat sleeping in a sunbeam on a wood floor',
         prompt:'A hyperrealistic lifestyle photograph of a sleeping tabby cat curled on a wood floor in a single shaft of warm afternoon sunbeam through a window, dust motes visible, real lifestyle photography',
         style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
@@ -146,6 +178,38 @@ const CATEGORIES = [
       { slug:'couple-wildflowers', eyebrow:'Through the meadow', title:'Their summer walk', alt:'A couple walking through a real wildflower meadow at golden hour',
         prompt:'A hyperrealistic lifestyle photograph of a faceless couple walking hand in hand through a real wildflower meadow at golden hour, lupines and daisies brushing past their hands, real photography',
         style:'Realistic (photo-realistic)', mood:'Bright / Uplifting', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'couple-pencil-sketch', eyebrow:'Pencil sketch', title:'Two hands, drawn by hand', alt:'A pencil sketch of two intertwined hands on cream paper',
+        prompt:'A hand-drawn pencil portrait of two intertwined hands on cream paper, soft graphite shading on the skin and wedding bands, fine cross-hatching, tender fine-art linework',
+        style:'Minimalist', mood:'Romantic', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Pencil / Charcoal Sketch', lighting:'Natural / Soft Light', camera:'Macro / Close Detail' },
+      { slug:'couple-ink-linework', eyebrow:'Ink drawing', title:'Their dance, in a single line', alt:'A black ink line drawing of a couple dancing on cream paper',
+        prompt:'A black ink line drawing of a faceless couple dancing — single confident contour line, minimal interior detail, on cream paper, fine-art linework',
+        style:'Minimalist', mood:'Romantic', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Ink / Pen Drawing', lighting:'Natural / Soft Light', camera:'Cinematic Framing' },
+      { slug:'couple-anime-festival', eyebrow:'Anime / Ghibli', title:'The night the lanterns flew', alt:'An anime scene of a couple watching fireworks from a hilltop',
+        prompt:'A Studio-Ghibli-style anime scene of a young couple watching summer fireworks from a hilltop, warm pink-orange sky, vibrant lanterns, soft cel-shaded characters from behind, painterly background',
+        style:'Anime / Stylized', mood:'Romantic', palette:'vibrant, saturated colors', ratio:'1024x1536',
+        medium:'Digital Painting', time:'at sunset', lighting:'Warm / Golden Light', camera:'Wide Angle / Expansive', expression:'loving, tender expression' },
+      { slug:'couple-3d-silhouette', eyebrow:'3D render', title:'Their silhouette, modern', alt:'A 3D CGI render of two figures holding hands against a pastel sky',
+        prompt:'A stylized 3D CGI render of two abstract figures holding hands silhouetted against a soft pastel-gradient sky, polished matte materials, gentle ambient occlusion, modern Pixar-clean look',
+        style:'Minimalist', mood:'Romantic', palette:'soft pastel palette', ratio:'1024x1536',
+        medium:'3D Render / CGI', lighting:'Studio Lighting', camera:'Symmetry / Centered' },
+      { slug:'couple-popart-kiss', eyebrow:'Pop art', title:'A kiss in four colors', alt:'A pop-art screenprint of a couple kissing in profile',
+        prompt:'A pop-art screenprint of a couple silhouette kissing in profile, bold magenta and yellow blocks, Ben-Day dots in the background, thick black outlines, retro 1960s',
+        style:'Pop Art / Graphic', mood:'Energetic / Dynamic', palette:'high contrast bold colors', ratio:'1024x1024',
+        medium:'Poster / Graphic Design', lighting:'Studio Lighting', camera:'Portrait / Headshot Framing' },
+      { slug:'couple-vintage-poster', eyebrow:'Vintage poster', title:'Their getaway, mid-century', alt:'A vintage mid-century travel poster of a couple walking toward the Mediterranean',
+        prompt:'A vintage mid-century travel poster of a couple walking hand-in-hand toward a Mediterranean coastline, retro flat shapes, limited 4-color palette of coral, teal, cream, navy, screenprinted texture',
+        style:'Vintage / Retro', mood:'Nostalgic', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', lighting:'Warm / Golden Light', camera:'Wide Angle / Expansive' },
+      { slug:'couple-sculpture', eyebrow:'Marble sculpture', title:'Carved, like Rodin', alt:'A marble sculpture of two embracing figures on a gallery pedestal',
+        prompt:'A carved white marble sculpture of two embracing faceless figures on a gallery pedestal, soft warm museum lighting, dark background, visible chisel marks, fine-art sculpture',
+        style:'Realistic (photo-realistic)', mood:'Romantic', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Sculpture / 3D Model', lighting:'Studio Lighting', camera:'Portrait / Headshot Framing' },
+      { slug:'couple-mixed-media', eyebrow:'Mixed media', title:'Letters and petals, layered', alt:'A mixed-media love-letter collage with pressed rose and stamp',
+        prompt:'A mixed-media love-letter collage — torn cream paper background, layered handwritten love-letter fragments, a pressed rose, a vintage stamp, a small Polaroid of intertwined hands, washi tape, stitched red thread',
+        style:'Abstract', mood:'Romantic', palette:'muted, earthy tones', ratio:'1024x1536',
+        medium:'Mixed Media / Collage', lighting:'Natural / Soft Light', camera:'High Angle (Looking Down)' },
     ]
   },
   {
@@ -211,6 +275,38 @@ const CATEGORIES = [
       { slug:'hand-holding-foot', eyebrow:'Tiny foot', title:'The hand that holds them', alt:'A parent\'s hand cradling a newborn foot',
         prompt:'A hyperrealistic photograph close-up of a parent\'s hand gently cradling a tiny newborn baby foot, soft warm window light catching the skin texture and tiny toes, real intimate photography',
         style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'soft pastel palette', ratio:'1024x1536' },
+      { slug:'baby-pencil-sketch', eyebrow:'Pencil sketch', title:'Drawn in their first week', alt:'A pencil sketch of a sleeping newborn baby on cream paper',
+        prompt:'A hand-drawn pencil portrait of a sleeping newborn baby on cream paper, soft graphite shading on the cheek and blanket, tender expression, fine-art sketch',
+        style:'Minimalist', mood:'Calm / Peaceful', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Pencil / Charcoal Sketch', lighting:'Natural / Soft Light', camera:'Portrait / Headshot Framing', expression:'serene, peaceful expression' },
+      { slug:'baby-ink-linework', eyebrow:'Ink drawing', title:'A single line of love', alt:'A black ink line drawing of a tiny newborn hand and parent finger',
+        prompt:'A black ink line drawing of a tiny newborn hand wrapped around a parent finger on cream paper, single confident contour line, fine-art linework',
+        style:'Minimalist', mood:'Calm / Peaceful', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Ink / Pen Drawing', lighting:'Natural / Soft Light', camera:'Macro / Close Detail' },
+      { slug:'baby-anime-nursery', eyebrow:'Anime / Ghibli', title:'Their nursery, Ghibli-style', alt:'An anime scene of a cozy nursery with wooden crib and hanging mobile',
+        prompt:'A Studio-Ghibli-style anime scene of a soft cozy nursery — wooden crib, plush stuffed animals, hanging mobile, warm window light, vibrant colors, painterly clouds outside',
+        style:'Anime / Stylized', mood:'Whimsical / Playful', palette:'soft pastel palette', ratio:'1024x1536',
+        medium:'Digital Painting', time:'in morning light', lighting:'Warm / Golden Light', camera:'Wide Angle / Expansive' },
+      { slug:'baby-3d-toys', eyebrow:'3D render', title:'Their first toys, polished', alt:'A 3D CGI still-life of wooden rocking horse, plush bear, and baby blocks',
+        prompt:'A stylized 3D CGI render of a soft pastel still-life — a wooden rocking horse, a tiny plush bear, three building blocks spelling out BABY, clean studio lighting, cream background',
+        style:'Minimalist', mood:'Bright / Uplifting', palette:'soft pastel palette', ratio:'1024x1536',
+        medium:'3D Render / CGI', lighting:'Studio Lighting', camera:'Eye-Level / Natural Perspective' },
+      { slug:'baby-popart-prints', eyebrow:'Pop art', title:'Tiny shoes, four colors', alt:'A pop-art screenprint of four baby-shoe silhouettes in a grid',
+        prompt:'A pop-art screenprint of four tiny baby-shoe silhouettes in a 2x2 grid, each panel a different bold color combo — pastel pink/red, cyan/yellow, mint/black, lavender/orange, thick outlines',
+        style:'Pop Art / Graphic', mood:'Whimsical / Playful', palette:'high contrast bold colors', ratio:'1024x1024',
+        medium:'Poster / Graphic Design', lighting:'Studio Lighting', camera:'Symmetry / Centered' },
+      { slug:'baby-vintage-poster', eyebrow:'Vintage poster', title:'A nursery alphabet, framed', alt:'A vintage nursery alphabet poster with the letter B and stylized animals',
+        prompt:'A vintage nursery alphabet-style poster — a single ornate capital letter "B" surrounded by retro stylized animals, balloons, and stars, limited 4-color pastel palette',
+        style:'Vintage / Retro', mood:'Whimsical / Playful', palette:'soft pastel palette', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', lighting:'Warm / Golden Light', camera:'Symmetry / Centered' },
+      { slug:'baby-sculpture', eyebrow:'Bronze sculpture', title:'Mother and child, in bronze', alt:'A bronze sculpture of a mother cradling a newborn baby',
+        prompt:'A small bronze sculpture of a mother cradling a newborn baby on a wooden gallery pedestal, soft warm museum lighting, visible patina on the bronze, dark background',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Sculpture / 3D Model', lighting:'Studio Lighting', camera:'Portrait / Headshot Framing' },
+      { slug:'baby-mixed-media', eyebrow:'Mixed media', title:'Announcement, layered', alt:'A mixed-media baby-announcement collage with knit sock and Polaroid',
+        prompt:'A mixed-media baby-announcement collage — torn cream paper background, a tiny knit baby sock, a hospital wristband, a pressed daisy, a small Polaroid of newborn feet, washi tape, stitched pink thread',
+        style:'Abstract', mood:'Nostalgic', palette:'soft pastel palette', ratio:'1024x1536',
+        medium:'Mixed Media / Collage', lighting:'Natural / Soft Light', camera:'High Angle (Looking Down)' },
     ]
   },
   {
@@ -276,6 +372,38 @@ const CATEGORIES = [
       { slug:'family-couch-laugh', eyebrow:'Laughing on the couch', title:'Their best afternoon', alt:'A family laughing together on a sofa in afternoon light',
         prompt:'A hyperrealistic lifestyle photograph of a faceless family lounging together on a cream sofa with a soft throw blanket, candid moment, soft warm afternoon light, real documentary photography',
         style:'Realistic (photo-realistic)', mood:'Bright / Uplifting', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'family-pencil-sketch', eyebrow:'Pencil sketch', title:'The family, drawn by hand', alt:'A pencil sketch of a family of four standing together on cream paper',
+        prompt:'A hand-drawn pencil sketch of a family of four standing together in soft pose on cream paper, faceless silhouetted style, graphite shading and cross-hatching, fine-art linework',
+        style:'Minimalist', mood:'Nostalgic', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Pencil / Charcoal Sketch', lighting:'Natural / Soft Light', camera:'Portrait / Headshot Framing' },
+      { slug:'family-ink-linework', eyebrow:'Ink drawing', title:'Their family tree, in ink', alt:'A black ink line drawing of a stylized family tree with five portraits',
+        prompt:'A black ink line drawing of a family tree — a stylized branching tree with five small portraits hanging like leaves on cream paper, confident fine-art linework',
+        style:'Minimalist', mood:'Nostalgic', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Ink / Pen Drawing', lighting:'Natural / Soft Light', camera:'Symmetry / Centered' },
+      { slug:'family-anime-porch', eyebrow:'Anime / Ghibli', title:'Their porch at golden hour', alt:'An anime scene of a family gathered on a wraparound porch at golden hour',
+        prompt:'A Studio-Ghibli-style anime scene of a family gathered on a wraparound porch at golden hour — grandparents, parents, kids — string lights overhead, painterly garden, warm cinematic light',
+        style:'Anime / Stylized', mood:'Bright / Uplifting', palette:'warm color palette, reds and oranges', ratio:'1024x1536',
+        medium:'Digital Painting', time:'at sunset', lighting:'Warm / Golden Light', camera:'Wide Angle / Expansive', expression:'joyful, smiling, warm expression' },
+      { slug:'family-3d-isometric', eyebrow:'3D isometric', title:'Their home, cutaway', alt:'A 3D isometric CGI render of a cutaway dollhouse with family inside',
+        prompt:'A stylized 3D isometric CGI render of a cutaway dollhouse showing a family home — kitchen, living room, bedroom, garden — tiny figures inside, soft pastel palette, clean modern stylized look',
+        style:'Minimalist', mood:'Whimsical / Playful', palette:'soft pastel palette', ratio:'1024x1536',
+        medium:'3D Render / CGI', lighting:'Studio Lighting', camera:'High Angle (Looking Down)' },
+      { slug:'family-popart', eyebrow:'Pop art', title:'Sunday dinner, screenprinted', alt:'A pop-art screenprint of a Sunday-dinner table from above with bold colors',
+        prompt:'A pop-art screenprint of a family Sunday-dinner table from above — plates, hands reaching in, bowls of food — bold flat colors of red, mustard, teal, cream, Ben-Day dots, thick outlines',
+        style:'Pop Art / Graphic', mood:'Energetic / Dynamic', palette:'high contrast bold colors', ratio:'1024x1024',
+        medium:'Poster / Graphic Design', lighting:'Studio Lighting', camera:'Aerial / Drone View' },
+      { slug:'family-vintage-poster', eyebrow:'Vintage poster', title:'The 70s family roadtrip', alt:'A vintage 1970s poster of a station wagon and family at a desert overlook',
+        prompt:'A vintage 1970s family-road-trip poster — a station wagon at a desert overlook with a family silhouetted, retro flat shapes, limited 4-color palette of orange, brown, mustard, cream, screenprinted texture',
+        style:'Vintage / Retro', mood:'Nostalgic', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', time:'at sunset', lighting:'Warm / Golden Light', camera:'Wide Angle / Expansive' },
+      { slug:'family-sculpture', eyebrow:'Bronze sculpture', title:'The huddle, in bronze', alt:'A bronze sculpture of four figures embracing in a tight circle',
+        prompt:'A bronze sculpture of a family huddle — four faceless figures embracing in a tight circle — on a wooden gallery pedestal, soft warm museum lighting, dark background',
+        style:'Realistic (photo-realistic)', mood:'Nostalgic', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Sculpture / 3D Model', lighting:'Studio Lighting', camera:'Portrait / Headshot Framing' },
+      { slug:'family-mixed-media', eyebrow:'Mixed media', title:'Generations, layered', alt:'A mixed-media collage of three generations of black-and-white family photos',
+        prompt:'A mixed-media family heirloom collage — torn vintage paper background, three layered black-and-white family photos across generations, a pressed flower, handwritten names, washi tape, stitched gold thread',
+        style:'Abstract', mood:'Nostalgic', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Mixed Media / Collage', lighting:'Natural / Soft Light', camera:'High Angle (Looking Down)' },
     ]
   },
   {
@@ -341,6 +469,38 @@ const CATEGORIES = [
       { slug:'backyard-hammock', eyebrow:'Hammock day', title:'Their quiet afternoon', alt:'A striped hammock between two trees with an open book',
         prompt:'A hyperrealistic lifestyle photograph of a backyard scene with a striped fabric hammock strung between two trees, an open paperback book on the hammock, dappled afternoon sun, lush green grass, real outdoor lifestyle photography',
         style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'home-pencil-sketch', eyebrow:'Pencil sketch', title:'Their home, hand-drawn', alt:'A pencil architectural sketch of a family home on cream paper',
+        prompt:'A hand-drawn architectural pencil sketch of a charming family home with a wraparound porch and front garden on cream paper, fine linework, soft graphite shading, hand-drafted feel',
+        style:'Minimalist', mood:'Nostalgic', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Pencil / Charcoal Sketch', lighting:'Natural / Soft Light', camera:'Wide Angle / Expansive' },
+      { slug:'home-ink-linework', eyebrow:'Ink drawing', title:'The kitchen, in ink', alt:'A black ink line drawing of a cozy kitchen interior with hanging lamp',
+        prompt:'A black ink line drawing of a cozy kitchen interior — countertop with a coffee pot, hanging pendant lamp, open shelving with mugs — confident linework, no fills, on cream paper',
+        style:'Minimalist', mood:'Calm / Peaceful', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Ink / Pen Drawing', lighting:'Natural / Soft Light', camera:'Eye-Level / Natural Perspective' },
+      { slug:'home-anime-cottage', eyebrow:'Anime / Ghibli', title:'Their cottage, Ghibli-style', alt:'An anime scene of a flower-covered cottage at golden hour',
+        prompt:'A Studio-Ghibli-style anime scene of a small cottage in a flower garden at golden hour, vibrant climbing roses, painterly clouds, warm window light glowing from inside, soft cinematic',
+        style:'Anime / Stylized', mood:'Whimsical / Playful', palette:'vibrant, saturated colors', ratio:'1024x1536',
+        medium:'Digital Painting', time:'at sunset', lighting:'Warm / Golden Light', camera:'Wide Angle / Expansive' },
+      { slug:'home-3d-isometric', eyebrow:'3D isometric', title:'Apartment, cutaway', alt:'A 3D isometric CGI render of a cutaway modern apartment',
+        prompt:'A stylized 3D isometric CGI render of a cutaway modern apartment showing a living room, kitchen, and bedroom in cross-section, tiny plants and books, soft pastel palette, clean modern look',
+        style:'Minimalist', mood:'Bright / Uplifting', palette:'soft pastel palette', ratio:'1024x1536',
+        medium:'3D Render / CGI', lighting:'Studio Lighting', camera:'High Angle (Looking Down)' },
+      { slug:'home-popart-interior', eyebrow:'Pop art', title:'Living room, screenprinted', alt:'A pop-art screenprint of a stylized living-room interior',
+        prompt:'A pop-art screenprint of a stylized living-room interior — armchair, lamp, side table with a coffee mug — bold flat colors of teal, mustard, cream, brick-red, Ben-Day dots, thick outlines',
+        style:'Pop Art / Graphic', mood:'Energetic / Dynamic', palette:'high contrast bold colors', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', lighting:'Studio Lighting', camera:'Eye-Level / Natural Perspective' },
+      { slug:'home-vintage-poster', eyebrow:'Vintage poster', title:'Mid-century home', alt:'A vintage mid-century-modern poster of a stylized home exterior',
+        prompt:'A vintage mid-century-modern poster of a stylized home exterior — flat geometric shapes, retro chimney with smoke, a tree, a sun — limited 4-color palette of mustard, teal, brown, cream, screenprinted texture',
+        style:'Vintage / Retro', mood:'Nostalgic', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', lighting:'Warm / Golden Light', camera:'Symmetry / Centered' },
+      { slug:'home-sculpture-vase', eyebrow:'Ceramic still-life', title:'A piece for the shelf', alt:'A still-life of a handmade ceramic vase with dried branch',
+        prompt:'A still-life of a handmade ceramic vase with a single dried branch on a gallery pedestal, soft warm museum lighting, visible thumbprint texture on the clay, dark background, fine-art sculpture photography',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'muted, earthy tones', ratio:'1024x1536',
+        medium:'Sculpture / 3D Model', lighting:'Studio Lighting', camera:'Portrait / Headshot Framing' },
+      { slug:'home-mixed-media', eyebrow:'Mixed media', title:'Their moodboard, framed', alt:'A mixed-media collage of architectural blueprint, fabric swatches, polaroid',
+        prompt:'A mixed-media home-moodboard collage — torn architectural blueprint paper background, fabric swatches, a pressed leaf, a polaroid of a window, paint chips in cream/sage/terracotta, stitched thread',
+        style:'Abstract', mood:'Calm / Peaceful', palette:'muted, earthy tones', ratio:'1024x1536',
+        medium:'Mixed Media / Collage', lighting:'Natural / Soft Light', camera:'High Angle (Looking Down)' },
     ]
   },
   {
@@ -406,6 +566,38 @@ const CATEGORIES = [
       { slug:'serengeti-elephant', eyebrow:'Safari (photo)', title:'The plain they crossed', alt:'A real wildlife photograph of an African elephant walking the Serengeti at golden hour',
         prompt:'A hyperrealistic wildlife photograph of a single magnificent African elephant walking across the Serengeti plain at golden hour, acacia trees in the distance, soft warm light, real wildlife photography',
         style:'Realistic (photo-realistic)', mood:'Dramatic / Intense', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'travel-pencil-sketch', eyebrow:'Pencil sketch', title:'Paris, hand-drawn', alt:'A pencil sketch of a Paris cafe with cobblestones on cream paper',
+        prompt:'A hand-drawn pencil sketch of a quiet Paris side-street cafe with cobblestones and a bistro table, soft graphite shading, fine architectural linework, on cream paper',
+        style:'Minimalist', mood:'Nostalgic', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Pencil / Charcoal Sketch', lighting:'Natural / Soft Light', camera:'Wide Angle / Expansive' },
+      { slug:'travel-ink-citymap', eyebrow:'Ink map', title:'Their city, in ink', alt:'A black ink line drawing of a stylized city map',
+        prompt:'A black ink line drawing of a stylized city map — winding streets, tiny landmarks, a river, a bridge — confident hand-drafted linework on cream paper, no fills',
+        style:'Minimalist', mood:'Nostalgic', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Ink / Pen Drawing', lighting:'Natural / Soft Light', camera:'Aerial / Drone View' },
+      { slug:'travel-anime-train', eyebrow:'Anime / Ghibli', title:'Through the train window', alt:'An anime scene of a young traveler watching countryside from a train',
+        prompt:'A Studio-Ghibli-style anime scene of a young traveler watching the countryside roll past from a vintage train window — golden fields, distant mountains, painterly clouds, warm cinematic light',
+        style:'Anime / Stylized', mood:'Calm / Peaceful', palette:'warm color palette, reds and oranges', ratio:'1024x1536',
+        medium:'Digital Painting', time:'in afternoon light', lighting:'Warm / Golden Light', camera:'Wide Angle / Expansive', expression:'contemplative, thoughtful expression' },
+      { slug:'travel-3d-globe', eyebrow:'3D render', title:'The globe with their pins', alt:'A 3D CGI render of a pastel globe with golden push-pins',
+        prompt:'A stylized 3D CGI render of a soft pastel globe on a wooden desk with tiny golden push-pins marking destinations, soft studio lighting, clean modern look',
+        style:'Minimalist', mood:'Whimsical / Playful', palette:'soft pastel palette', ratio:'1024x1536',
+        medium:'3D Render / CGI', lighting:'Studio Lighting', camera:'Eye-Level / Natural Perspective' },
+      { slug:'travel-popart-city', eyebrow:'Pop art', title:'The skyline, screenprinted', alt:'A pop-art screenprint of the New York skyline in bold colors',
+        prompt:'A pop-art screenprint of the New York skyline — bold flat colors of magenta, yellow, cyan, black — repeating panels with Ben-Day-dot sky, thick outlines, retro 1960s',
+        style:'Pop Art / Graphic', mood:'Energetic / Dynamic', palette:'high contrast bold colors', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', lighting:'Studio Lighting', camera:'Wide Angle / Expansive' },
+      { slug:'travel-vintage-poster', eyebrow:'Vintage poster', title:'Italian coastline, 1930s', alt:'A vintage 1930s travel poster of an Italian coastline',
+        prompt:'A vintage 1930s Italian-coastline travel poster — flat geometric coastline, terracotta rooftops, a small sailboat, retro flat shapes, limited 4-color palette of teal, terracotta, cream, mustard, screenprinted texture',
+        style:'Vintage / Retro', mood:'Nostalgic', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', time:'at midday', lighting:'Warm / Golden Light', camera:'Wide Angle / Expansive' },
+      { slug:'travel-sculpture', eyebrow:'Bronze sculpture', title:'Their monument, miniature', alt:'A small bronze sculpture of a stylized world monument',
+        prompt:'A small bronze sculpture of a stylized world monument silhouette on a wooden gallery pedestal, soft warm museum lighting, visible patina, dark background',
+        style:'Realistic (photo-realistic)', mood:'Mysterious', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Sculpture / 3D Model', lighting:'Studio Lighting', camera:'Portrait / Headshot Framing' },
+      { slug:'travel-mixed-media', eyebrow:'Mixed media', title:'Stamps, tickets, postcards', alt:'A mixed-media collage of map, postcards, tickets, passport pages',
+        prompt:'A mixed-media travel-scrapbook collage — torn map background, layered vintage postcards, train tickets, stamped passport pages, a pressed flower from a foreign country, washi tape, stitched thread',
+        style:'Abstract', mood:'Nostalgic', palette:'muted, earthy tones', ratio:'1024x1536',
+        medium:'Mixed Media / Collage', lighting:'Natural / Soft Light', camera:'High Angle (Looking Down)' },
     ]
   },
   {
@@ -471,6 +663,38 @@ const CATEGORIES = [
       { slug:'finish-line-real', eyebrow:'Finish line (photo)', title:'The moment they crossed it', alt:'A real photograph of a marathon runner crossing the finish line tape',
         prompt:'A hyperrealistic sports photograph of a marathon runner mid-stride crossing a real finish line tape, arms raised in triumph, motion blur on the background, sharp focus on the runner, real athletic editorial photography',
         style:'Realistic (photo-realistic)', mood:'Energetic / Dynamic', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'milestone-pencil-sketch', eyebrow:'Pencil sketch', title:'The graduate, drawn', alt:'A pencil sketch of a graduate in cap and gown holding a diploma',
+        prompt:'A hand-drawn pencil sketch of a graduate in cap and gown holding a diploma on cream paper, soft graphite shading, tender expressive linework, fine-art sketch',
+        style:'Minimalist', mood:'Nostalgic', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Pencil / Charcoal Sketch', lighting:'Natural / Soft Light', camera:'Portrait / Headshot Framing', expression:'confident, determined gaze' },
+      { slug:'milestone-ink-cake', eyebrow:'Ink drawing', title:'A birthday, in ink', alt:'A black ink line drawing of a tall birthday cake with candles',
+        prompt:'A black ink line drawing of a single tall birthday cake with lit candles on cream paper, confident linework, minimal cross-hatching, no fills',
+        style:'Minimalist', mood:'Whimsical / Playful', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Ink / Pen Drawing', lighting:'Natural / Soft Light', camera:'Symmetry / Centered' },
+      { slug:'milestone-anime-school', eyebrow:'Anime / Ghibli', title:'First day, Ghibli-style', alt:'An anime scene of a child on the first day of school walking under cherry blossoms',
+        prompt:'A Studio-Ghibli-style anime scene of a child on the first day of school, backpack on, walking down a path with cherry blossoms falling, warm painterly cinematic',
+        style:'Anime / Stylized', mood:'Bright / Uplifting', palette:'soft pastel palette', ratio:'1024x1536',
+        medium:'Digital Painting', time:'in morning light', lighting:'Warm / Golden Light', camera:'Wide Angle / Expansive', expression:'joyful, smiling, warm expression' },
+      { slug:'milestone-3d-trophy', eyebrow:'3D render', title:'The trophy, polished', alt:'A 3D CGI render of a gold trophy with confetti frozen in air',
+        prompt:'A stylized 3D CGI render of a gold trophy on a wooden pedestal with confetti frozen in mid-air around it, soft studio lighting, clean modern Pixar-clean look',
+        style:'Minimalist', mood:'Bright / Uplifting', palette:'high contrast bold colors', ratio:'1024x1536',
+        medium:'3D Render / CGI', lighting:'Studio Lighting', camera:'Portrait / Headshot Framing' },
+      { slug:'milestone-popart-confetti', eyebrow:'Pop art', title:'Confetti, screenprinted', alt:'A pop-art screenprint of celebratory confetti and balloons',
+        prompt:'A pop-art screenprint of celebratory confetti and balloons exploding outward, bold flat colors of magenta, yellow, cyan, lime, Ben-Day-dot background, thick outlines',
+        style:'Pop Art / Graphic', mood:'Energetic / Dynamic', palette:'high contrast bold colors', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', lighting:'Studio Lighting', camera:'Symmetry / Centered' },
+      { slug:'milestone-vintage-poster', eyebrow:'Vintage poster', title:'Congratulations, framed', alt:'A vintage mid-century Congratulations poster with ribbon and champagne',
+        prompt:'A vintage mid-century "Congratulations!" poster — flat geometric ribbon banner, a stylized champagne glass, retro flat shapes, limited 4-color palette of gold, cream, navy, coral, screenprinted texture',
+        style:'Vintage / Retro', mood:'Bright / Uplifting', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', lighting:'Warm / Golden Light', camera:'Symmetry / Centered' },
+      { slug:'milestone-sculpture', eyebrow:'Bronze sculpture', title:'Their laurel, in bronze', alt:'A bronze sculpture of a laurel-wreath crown on a gallery pedestal',
+        prompt:'A small bronze sculpture of a laurel-wreath crown on a wooden gallery pedestal, soft warm museum lighting, visible patina on the bronze, dark background',
+        style:'Realistic (photo-realistic)', mood:'Dramatic / Intense', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Sculpture / 3D Model', lighting:'Studio Lighting', camera:'Portrait / Headshot Framing' },
+      { slug:'milestone-mixed-media', eyebrow:'Mixed media', title:'The day, layered', alt:'A mixed-media milestone collage with diploma, polaroid, and gold confetti',
+        prompt:'A mixed-media milestone collage — torn cream paper background, a printed diploma corner, a pressed flower, a polaroid of a celebratory toast, gold-foil confetti, washi tape, stitched gold thread',
+        style:'Abstract', mood:'Nostalgic', palette:'warm color palette, reds and oranges', ratio:'1024x1536',
+        medium:'Mixed Media / Collage', lighting:'Natural / Soft Light', camera:'High Angle (Looking Down)' },
     ]
   },
   {
@@ -536,6 +760,38 @@ const CATEGORIES = [
       { slug:'city-skyline-night', eyebrow:'City (photo)', title:'The skyline they live under', alt:'A real photograph of a city skyline at blue hour with reflections in water',
         prompt:'A hyperrealistic night photograph of a major city skyline at deep blue hour with thousands of warm window lights glowing, smooth water reflection in the foreground, real long-exposure cityscape photography',
         style:'Realistic (photo-realistic)', mood:'Moody / Atmospheric', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'hardshop-pencil-sketch', eyebrow:'Pencil sketch', title:'A face from a daydream', alt:'A pencil sketch of an abstract face emerging from clouds',
+        prompt:'A hand-drawn pencil sketch of an abstract face emerging from clouds on cream paper, dreamy soft graphite shading, expressive surreal linework',
+        style:'Surreal / Dreamlike', mood:'Dreamlike / Ethereal', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Pencil / Charcoal Sketch', lighting:'Natural / Soft Light', camera:'Portrait / Headshot Framing' },
+      { slug:'hardshop-ink-pattern', eyebrow:'Ink mandala', title:'Pattern, made by hand', alt:'A black ink line drawing of an intricate ornamental mandala pattern',
+        prompt:'A black ink line drawing of an intricate ornamental mandala pattern on cream paper, confident hand-drafted geometric linework, no fills',
+        style:'Minimalist', mood:'Calm / Peaceful', palette:'monochrome black and white', ratio:'1024x1024',
+        medium:'Ink / Pen Drawing', lighting:'Natural / Soft Light', camera:'Symmetry / Centered' },
+      { slug:'hardshop-anime-figure', eyebrow:'Anime / Ghibli', title:'A scene from a dream', alt:'An anime scene of a lone figure on a hilltop at twilight with fireflies',
+        prompt:'A Studio-Ghibli-style anime scene of a mysterious lone figure on a hilltop at twilight, soft painterly clouds, glowing fireflies, vibrant teal and amber palette, cinematic',
+        style:'Anime / Stylized', mood:'Mysterious', palette:'rich jewel tones', ratio:'1024x1536',
+        medium:'Digital Painting', time:'at twilight, blue hour', lighting:'Cool / Twilight Tones', camera:'Wide Angle / Expansive' },
+      { slug:'hardshop-3d-crystal', eyebrow:'3D render', title:'Crystals, refracted', alt:'A 3D CGI render of a floating translucent crystal cluster',
+        prompt:'A stylized 3D CGI render of a single floating translucent crystal cluster on a soft gradient pastel background, polished refractive materials, gentle ambient occlusion, modern Pixar-clean look',
+        style:'Minimalist', mood:'Dreamlike / Ethereal', palette:'soft pastel palette', ratio:'1024x1536',
+        medium:'3D Render / CGI', lighting:'Studio Lighting', camera:'Symmetry / Centered' },
+      { slug:'hardshop-popart-psyche', eyebrow:'Pop art', title:'Psychedelic, screenprinted', alt:'A pop-art psychedelic screenprint of swirling circles and shapes',
+        prompt:'A pop-art psychedelic screenprint of swirling concentric circles and abstract shapes in bold magenta, lime, cyan, and yellow, Ben-Day dots, thick outlines, retro 1960s',
+        style:'Pop Art / Graphic', mood:'Energetic / Dynamic', palette:'high contrast bold colors', ratio:'1024x1024',
+        medium:'Poster / Graphic Design', lighting:'Studio Lighting', camera:'Symmetry / Centered' },
+      { slug:'hardshop-vintage-poster', eyebrow:'Vintage poster', title:'Art deco cocktail', alt:'A vintage art-deco-style cocktail poster',
+        prompt:'A vintage art-deco-style cocktail poster — flat geometric stylized cocktail glass with olives, retro typography stripped out, limited 4-color palette of black, gold, cream, deep red, screenprinted texture',
+        style:'Vintage / Retro', mood:'Moody / Atmospheric', palette:'rich jewel tones', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', lighting:'Warm / Golden Light', camera:'Symmetry / Centered' },
+      { slug:'hardshop-sculpture', eyebrow:'Abstract sculpture', title:'Ribbons in bronze', alt:'An abstract bronze sculpture of swirling intertwined ribbons',
+        prompt:'An abstract bronze sculpture of swirling intertwined ribbons on a wooden gallery pedestal, soft warm museum lighting, visible patina, dark background, modern fine-art piece',
+        style:'Abstract', mood:'Mysterious', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Sculpture / 3D Model', lighting:'Studio Lighting', camera:'Portrait / Headshot Framing' },
+      { slug:'hardshop-mixed-media', eyebrow:'Mixed media', title:'Layers of color', alt:'A mixed-media abstract collage with paint swatches, gold leaf, ink',
+        prompt:'A mixed-media abstract art collage — torn book pages, layered paint swatches in jewel tones, gold-leaf fragments, a stitched grid, washi tape, fine ink scribbles on top',
+        style:'Abstract', mood:'Energetic / Dynamic', palette:'rich jewel tones', ratio:'1024x1536',
+        medium:'Mixed Media / Collage', lighting:'Natural / Soft Light', camera:'High Angle (Looking Down)' },
     ]
   },
   // ─── NEW CATEGORIES ─────────────────────────────────────────────────
@@ -602,6 +858,38 @@ const CATEGORIES = [
       { slug:'latte-topdown-real', eyebrow:'Latte (photo)', title:'Their morning, from above', alt:'A real top-down photograph of a rosetta latte-art coffee with a biscotti',
         prompt:'A hyperrealistic food photograph of a top-down view of a perfect rosetta latte-art coffee on a white ceramic saucer with a tiny spoon and a small almond biscotti beside it, soft natural light, real food editorial photography',
         style:'Realistic (photo-realistic)', mood:'Bright / Uplifting', palette:'muted, earthy tones', ratio:'1024x1536' },
+      { slug:'bookcoffee-pencil-sketch', eyebrow:'Pencil sketch', title:'Their books, hand-drawn', alt:'A pencil sketch of vintage hardback books with a steaming mug',
+        prompt:'A hand-drawn pencil sketch of a stack of vintage hardback books with a steaming mug on top on cream paper, soft graphite shading, fine linework',
+        style:'Minimalist', mood:'Calm / Peaceful', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Pencil / Charcoal Sketch', lighting:'Natural / Soft Light', camera:'Eye-Level / Natural Perspective' },
+      { slug:'bookcoffee-ink-cup', eyebrow:'Ink drawing', title:'Coffee, in line', alt:'A black ink line drawing of a coffee cup with steam and open book',
+        prompt:'A black ink line drawing of a single coffee cup with steam curling up, beside an open book on cream paper, confident linework, no fills',
+        style:'Minimalist', mood:'Calm / Peaceful', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Ink / Pen Drawing', lighting:'Natural / Soft Light', camera:'Eye-Level / Natural Perspective' },
+      { slug:'bookcoffee-anime-cafe', eyebrow:'Anime / Ghibli', title:'A rainy bookstore cafe', alt:'An anime scene of a cozy bookstore-cafe interior at rainy twilight',
+        prompt:'A Studio-Ghibli-style anime scene of a cozy bookstore-cafe interior at rainy twilight, warm window light, towering bookshelves, a tabby cat napping on a chair, painterly',
+        style:'Anime / Stylized', mood:'Moody / Atmospheric', palette:'warm color palette, reds and oranges', ratio:'1024x1536',
+        medium:'Digital Painting', time:'at twilight, blue hour', lighting:'Candlelight / Warm Low Light', camera:'Eye-Level / Natural Perspective' },
+      { slug:'bookcoffee-3d-stack', eyebrow:'3D render', title:'Books, polished', alt:'A 3D CGI render of a stack of pastel hardback books with a coffee cup',
+        prompt:'A stylized 3D CGI render of a neat stack of pastel-colored hardback books with a tiny ceramic coffee cup balanced on top, soft studio lighting, cream background, clean modern look',
+        style:'Minimalist', mood:'Bright / Uplifting', palette:'soft pastel palette', ratio:'1024x1536',
+        medium:'3D Render / CGI', lighting:'Studio Lighting', camera:'Eye-Level / Natural Perspective' },
+      { slug:'bookcoffee-popart-mug', eyebrow:'Pop art', title:'The mug, screenprinted', alt:'A pop-art screenprint of a steaming coffee mug',
+        prompt:'A pop-art screenprint of a steaming coffee mug, bold flat colors of red, mustard, cream, black, Ben-Day-dot background, thick outlines, retro 1960s',
+        style:'Pop Art / Graphic', mood:'Energetic / Dynamic', palette:'high contrast bold colors', ratio:'1024x1024',
+        medium:'Poster / Graphic Design', lighting:'Studio Lighting', camera:'Portrait / Headshot Framing' },
+      { slug:'bookcoffee-vintage-poster', eyebrow:'Vintage poster', title:'1950s espresso bar', alt:'A vintage 1950s espresso-bar poster with stylized cup and steam',
+        prompt:'A vintage 1950s espresso-bar poster — a stylized cup with curling steam, flat geometric shapes, retro typography stripped out, limited 4-color palette of cream, deep brown, terracotta, mustard, screenprinted texture',
+        style:'Vintage / Retro', mood:'Nostalgic', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', lighting:'Warm / Golden Light', camera:'Symmetry / Centered' },
+      { slug:'bookcoffee-sculpture', eyebrow:'Marble bust', title:'The reader, in marble', alt:'A marble bust of a classical reader holding an open book',
+        prompt:'A marble bust of a classical reader holding an open book on a wooden gallery pedestal, soft warm museum lighting, visible chisel marks, dark background',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Sculpture / 3D Model', lighting:'Studio Lighting', camera:'Portrait / Headshot Framing' },
+      { slug:'bookcoffee-mixed-media', eyebrow:'Mixed media', title:'Pages, layered', alt:'A mixed-media literary collage with book pages, tea leaves, ink',
+        prompt:'A mixed-media literary collage — torn vintage book pages background, dried tea leaves, a coffee-stained letter, a pressed leaf, handwritten quotes in ink, washi tape, stitched thread',
+        style:'Abstract', mood:'Nostalgic', palette:'muted, earthy tones', ratio:'1024x1536',
+        medium:'Mixed Media / Collage', lighting:'Natural / Soft Light', camera:'High Angle (Looking Down)' },
     ]
   },
   {
@@ -667,6 +955,38 @@ const CATEGORIES = [
       { slug:'studio-mic-real', eyebrow:'Studio mic (photo)', title:'The mic they recorded into', alt:'A real photograph of a vintage chrome studio microphone with blurred acoustic foam behind',
         prompt:'A hyperrealistic photograph of a vintage chrome studio microphone on a stand in a recording booth, soft warm tungsten key light, blurred acoustic foam panels behind, real product photography',
         style:'Realistic (photo-realistic)', mood:'Moody / Atmospheric', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'music-pencil-sketch', eyebrow:'Pencil sketch', title:'The violinist, drawn', alt:'A pencil sketch of a faceless violinist playing on cream paper',
+        prompt:'A hand-drawn pencil sketch of a faceless violinist playing on cream paper, soft graphite shading, fine cross-hatching on the instrument and folds of clothing',
+        style:'Minimalist', mood:'Nostalgic', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Pencil / Charcoal Sketch', lighting:'Natural / Soft Light', camera:'Portrait / Headshot Framing' },
+      { slug:'music-ink-guitar', eyebrow:'Ink drawing', title:'The guitar, in ink', alt:'A black ink line drawing of an acoustic guitar against a chair',
+        prompt:'A black ink line drawing of an acoustic guitar leaning against a chair on cream paper, confident linework, minimal interior detail',
+        style:'Minimalist', mood:'Calm / Peaceful', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Ink / Pen Drawing', lighting:'Natural / Soft Light', camera:'Eye-Level / Natural Perspective' },
+      { slug:'music-anime-concert', eyebrow:'Anime / Ghibli', title:'Sunset festival, Ghibli', alt:'An anime scene of a sunset music festival with raised silhouettes',
+        prompt:'A Studio-Ghibli-style anime scene of a sunset music festival — faceless crowd silhouettes with raised hands, vibrant pink-orange sky, painterly clouds, warm cinematic light, stage lights in distance',
+        style:'Anime / Stylized', mood:'Energetic / Dynamic', palette:'vibrant, saturated colors', ratio:'1024x1536',
+        medium:'Digital Painting', time:'at sunset', lighting:'Warm / Golden Light', camera:'Wide Angle / Expansive' },
+      { slug:'music-3d-headphones', eyebrow:'3D render', title:'Headphones, polished', alt:'A 3D CGI render of pastel headphones on a gradient background',
+        prompt:'A stylized 3D CGI render of premium pastel-colored over-ear headphones floating on a soft gradient background, polished matte materials, soft studio lighting, modern Pixar-clean look',
+        style:'Minimalist', mood:'Bright / Uplifting', palette:'soft pastel palette', ratio:'1024x1536',
+        medium:'3D Render / CGI', lighting:'Studio Lighting', camera:'Portrait / Headshot Framing' },
+      { slug:'music-popart-records', eyebrow:'Pop art', title:'Records, screenprinted', alt:'A pop-art screenprint of four vinyl records in a grid',
+        prompt:'A pop-art screenprint of four vinyl records in a 2x2 grid, each a different bold color combo — magenta/yellow center, cyan/red, lime/black, orange/blue — thick outlines, Ben-Day dots, Warhol-style',
+        style:'Pop Art / Graphic', mood:'Energetic / Dynamic', palette:'high contrast bold colors', ratio:'1024x1024',
+        medium:'Poster / Graphic Design', lighting:'Studio Lighting', camera:'Symmetry / Centered' },
+      { slug:'music-vintage-poster', eyebrow:'Vintage poster', title:'1950s jazz club', alt:'A vintage 1950s jazz-club poster with silhouetted saxophone player',
+        prompt:'A vintage 1950s jazz-club poster — a stylized silhouetted saxophone player under a spotlight, flat geometric shapes, retro typography stripped out, limited 4-color palette of black, gold, cream, deep red, screenprinted texture',
+        style:'Vintage / Retro', mood:'Moody / Atmospheric', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', time:'at night', lighting:'Backlit / Rim Light', camera:'Portrait / Headshot Framing' },
+      { slug:'music-sculpture', eyebrow:'Bronze sculpture', title:'Hand at the keys', alt:'A bronze sculpture of a hand playing a piano keyboard',
+        prompt:'A bronze sculpture of a single hand playing a piano keyboard on a wooden gallery pedestal, soft warm museum lighting, visible patina, dark background',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Sculpture / 3D Model', lighting:'Studio Lighting', camera:'Macro / Close Detail' },
+      { slug:'music-mixed-media', eyebrow:'Mixed media', title:'Sheet music, layered', alt:'A mixed-media music collage with sheet music, concert ticket, guitar pick',
+        prompt:'A mixed-media music collage — torn yellowed sheet-music background, a pressed flower, a vintage concert ticket, a guitar pick, handwritten lyric fragments in ink, washi tape, stitched thread',
+        style:'Abstract', mood:'Nostalgic', palette:'muted, earthy tones', ratio:'1024x1536',
+        medium:'Mixed Media / Collage', lighting:'Natural / Soft Light', camera:'High Angle (Looking Down)' },
     ]
   },
   {
@@ -732,6 +1052,38 @@ const CATEGORIES = [
       { slug:'patagonia-real', eyebrow:'Patagonia (photo)', title:'The peaks at sunrise', alt:'A real photograph of Patagonia\'s Torres del Paine reflected in a still lake at sunrise',
         prompt:'A hyperrealistic landscape photograph of Patagonia\'s dramatic Torres del Paine peaks at sunrise reflected in a perfectly still lake, real National-Geographic-style landscape photography',
         style:'Realistic (photo-realistic)', mood:'Dramatic / Intense', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'nature-pencil-sketch', eyebrow:'Pencil sketch', title:'Mountains, hand-drawn', alt:'A pencil sketch of a mountain landscape with foreground pine tree',
+        prompt:'A hand-drawn pencil sketch of a mountain landscape with a foreground pine tree on cream paper, soft graphite shading, fine cross-hatching, atmospheric depth',
+        style:'Minimalist', mood:'Calm / Peaceful', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Pencil / Charcoal Sketch', lighting:'Natural / Soft Light', camera:'Wide Angle / Expansive' },
+      { slug:'nature-ink-bird', eyebrow:'Ink drawing', title:'A bird, in line', alt:'A black ink line drawing of a songbird perched on a leafy branch',
+        prompt:'A black ink line drawing of a single songbird perched on a leafy branch on cream paper, confident hand-drafted linework, no fills',
+        style:'Minimalist', mood:'Calm / Peaceful', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Ink / Pen Drawing', lighting:'Natural / Soft Light', camera:'Macro / Close Detail' },
+      { slug:'nature-anime-forest', eyebrow:'Anime / Ghibli', title:'The forest spirit', alt:'An anime scene of a sun-dappled forest clearing with a glowing spirit',
+        prompt:'A Studio-Ghibli-style anime scene of a sun-dappled forest clearing with a small glowing forest spirit, painterly leaves and moss, vibrant greens, warm cinematic light filtering through the canopy',
+        style:'Anime / Stylized', mood:'Dreamlike / Ethereal', palette:'vibrant, saturated colors', ratio:'1024x1536',
+        medium:'Digital Painting', time:'in afternoon light', lighting:'Volumetric / God Rays', camera:'Wide Angle / Expansive' },
+      { slug:'nature-3d-mountain', eyebrow:'3D render', title:'Low-poly peaks', alt:'A 3D CGI render of a low-poly mountain landscape with a small lake',
+        prompt:'A stylized 3D CGI render of a low-poly mountain landscape with a small lake, soft pastel sunset palette of peach, lavender, teal, clean modern look',
+        style:'Minimalist', mood:'Calm / Peaceful', palette:'soft pastel palette', ratio:'1024x1536',
+        medium:'3D Render / CGI', time:'at sunset', lighting:'Studio Lighting', camera:'Wide Angle / Expansive' },
+      { slug:'nature-popart-wildlife', eyebrow:'Pop art', title:'The bear, screenprinted', alt:'A pop-art screenprint of a stylized bear silhouette',
+        prompt:'A pop-art screenprint of a stylized bear silhouette, bold flat colors of teal, mustard, cream, black, Ben-Day-dot background, thick outlines, retro 1960s wildlife',
+        style:'Pop Art / Graphic', mood:'Energetic / Dynamic', palette:'high contrast bold colors', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', lighting:'Studio Lighting', camera:'Portrait / Headshot Framing' },
+      { slug:'nature-vintage-poster', eyebrow:'Vintage poster', title:'1930s National Park', alt:'A vintage 1930s national-park travel poster of a stylized mountain peak',
+        prompt:'A vintage 1930s national-park travel poster — a stylized mountain peak with a small pine tree in foreground, retro flat shapes, limited 4-color palette of teal, mustard, brown, cream, screenprinted texture',
+        style:'Vintage / Retro', mood:'Nostalgic', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', lighting:'Warm / Golden Light', camera:'Wide Angle / Expansive' },
+      { slug:'nature-sculpture', eyebrow:'Bronze sculpture', title:'The deer, in bronze', alt:'A bronze sculpture of a leaping deer on a gallery pedestal',
+        prompt:'A bronze sculpture of a leaping deer on a wooden gallery pedestal, soft warm museum lighting, visible patina on the bronze, dark background',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Sculpture / 3D Model', lighting:'Studio Lighting', camera:'Portrait / Headshot Framing' },
+      { slug:'nature-mixed-media', eyebrow:'Mixed media', title:'Botanicals, layered', alt:'A mixed-media botanical collage with pressed leaves and feather',
+        prompt:'A mixed-media botanical collage — torn vintage botanical-illustration pages background, pressed real leaves and flowers, a feather, hand-labeled botanical names in ink, washi tape, stitched green thread',
+        style:'Abstract', mood:'Calm / Peaceful', palette:'muted, earthy tones', ratio:'1024x1536',
+        medium:'Mixed Media / Collage', lighting:'Natural / Soft Light', camera:'High Angle (Looking Down)' },
     ]
   },
   {
@@ -797,40 +1149,114 @@ const CATEGORIES = [
       { slug:'summer-beach-real', eyebrow:'Summer (photo)', title:'The beach at sunset', alt:'A real photograph of a summer beach at sunset with wet sand reflecting the sky',
         prompt:'A hyperrealistic landscape photograph of a real summer beach scene at sunset with smooth wet sand reflecting a vibrant orange and pink sky, gentle low waves rolling in, real travel landscape photography',
         style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'seasons-pencil-winter', eyebrow:'Pencil sketch', title:'Winter cottage, drawn', alt:'A pencil sketch of a snowy winter cottage with smoke from chimney',
+        prompt:'A hand-drawn pencil sketch of a snowy winter cottage with smoke from the chimney on cream paper, soft graphite shading, fine cross-hatching on the snow',
+        style:'Minimalist', mood:'Calm / Peaceful', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Pencil / Charcoal Sketch', lighting:'Natural / Soft Light', camera:'Wide Angle / Expansive' },
+      { slug:'seasons-ink-leaves', eyebrow:'Ink drawing', title:'Three leaves, in line', alt:'A black ink line drawing of three autumn leaves on cream paper',
+        prompt:'A black ink line drawing of three different fallen autumn leaves laid out on cream paper, confident botanical linework, fine vein detail, no fills',
+        style:'Minimalist', mood:'Nostalgic', palette:'monochrome black and white', ratio:'1024x1536',
+        medium:'Ink / Pen Drawing', lighting:'Natural / Soft Light', camera:'High Angle (Looking Down)' },
+      { slug:'seasons-anime-spring', eyebrow:'Anime / Ghibli', title:'Cherry blossom tunnel', alt:'An anime scene of a path beneath full-bloom cherry blossoms',
+        prompt:'A Studio-Ghibli-style anime scene of a path beneath a tunnel of full-bloom cherry-blossom trees, petals falling like snow, vibrant pink and soft blue sky, painterly',
+        style:'Anime / Stylized', mood:'Whimsical / Playful', palette:'soft pastel palette', ratio:'1024x1536',
+        medium:'Digital Painting', time:'in morning light', lighting:'Natural / Soft Light', camera:'Wide Angle / Expansive' },
+      { slug:'seasons-3d-snowglobe', eyebrow:'3D render', title:'Snow globe, polished', alt:'A 3D CGI render of a winter snow-globe with tiny cottage inside',
+        prompt:'A stylized 3D CGI render of a winter snow-globe on a wooden table — tiny cottage inside, falling snow, soft warm interior glow, polished glass globe, soft studio lighting',
+        style:'Minimalist', mood:'Whimsical / Playful', palette:'soft pastel palette', ratio:'1024x1536',
+        medium:'3D Render / CGI', lighting:'Studio Lighting', camera:'Portrait / Headshot Framing' },
+      { slug:'seasons-popart-summer', eyebrow:'Pop art', title:'Summer umbrellas, bold', alt:'A pop-art screenprint of stylized summer beach umbrellas in a row',
+        prompt:'A pop-art screenprint of stylized summer beach umbrellas in a row, bold flat colors of magenta, yellow, cyan, orange against a Ben-Day-dot sky, thick outlines',
+        style:'Pop Art / Graphic', mood:'Bright / Uplifting', palette:'high contrast bold colors', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', lighting:'Studio Lighting', camera:'Wide Angle / Expansive' },
+      { slug:'seasons-vintage-poster', eyebrow:'Vintage poster', title:'1950s autumn', alt:'A vintage 1950s autumn poster with stylized tree, pumpkin, coffee cup',
+        prompt:'A vintage 1950s seasonal poster set in autumn — a stylized tree with falling leaves, a pumpkin, a coffee cup, retro flat shapes, limited 4-color palette of mustard, brick-red, cream, deep brown, screenprinted texture',
+        style:'Vintage / Retro', mood:'Nostalgic', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Poster / Graphic Design', lighting:'Warm / Golden Light', camera:'Symmetry / Centered' },
+      { slug:'seasons-sculpture', eyebrow:'Bronze relief', title:'Four seasons, carved', alt:'A bronze relief sculpture of the four seasons in panels',
+        prompt:'A bronze relief sculpture of the four seasons in four panels — a budding branch, a sunflower, a fallen leaf, a pinecone — on a gallery wall, soft warm museum lighting, visible patina',
+        style:'Realistic (photo-realistic)', mood:'Nostalgic', palette:'sepia vintage tones', ratio:'1024x1536',
+        medium:'Sculpture / 3D Model', lighting:'Studio Lighting', camera:'Symmetry / Centered' },
+      { slug:'seasons-mixed-media', eyebrow:'Mixed media', title:'A year, in petals', alt:'A mixed-media collage with petals, leaf, pinecone, tulip pressing',
+        prompt:'A mixed-media seasonal nature collage — torn cream paper background, a pressed cherry-blossom petal, a tiny dried autumn leaf, a small pinecone, a single tulip pressing, handwritten season names, washi tape',
+        style:'Abstract', mood:'Nostalgic', palette:'muted, earthy tones', ratio:'1024x1536',
+        medium:'Mixed Media / Collage', lighting:'Natural / Soft Light', camera:'High Angle (Looking Down)' },
     ]
   },
 ];
 
-// Sanity check: every category should have 20 tiles.
+// Sanity check: every category should have 28 tiles. Each tile slug must
+// be globally unique so we don't have file collisions or surprise overrides.
+const allSlugs = new Set();
 for (const cat of CATEGORIES) {
-  if (cat.tiles.length !== 20) {
-    console.error(`[!] Category ${cat.id} has ${cat.tiles.length} tiles (expected 20).`);
+  if (cat.tiles.length !== 28) {
+    console.error(`[!] Category ${cat.id} has ${cat.tiles.length} tiles (expected 28).`);
     process.exit(1);
+  }
+  for (const t of cat.tiles) {
+    if (allSlugs.has(t.slug)) {
+      console.error(`[!] Duplicate slug across categories: ${t.slug}`);
+      process.exit(1);
+    }
+    allSlugs.add(t.slug);
   }
 }
 const TOTAL = CATEGORIES.reduce((n,c) => n + c.tiles.length, 0);
-console.log(`Building gifts.html with ${CATEGORIES.length} categories x 20 tiles = ${TOTAL} tiles.`);
+console.log(`Building gifts.html with ${CATEGORIES.length} categories x 28 tiles = ${TOTAL} tiles.`);
 
 // ─── HTML helpers ─────────────────────────────────────────────────────────
 function enc(s) { return encodeURIComponent(s); }
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function tileHTML(t) {
-  const href = `/?prompt=${enc(t.prompt)}&style=${enc(t.style)}&mood=${enc(t.mood)}&palette=${enc(t.palette)}&ratio=${enc(t.ratio)}#create`;
+  // Build the deep-link with whatever URL params this tile sets. Tiles
+  // without medium/time/lighting/camera/expression simply omit those keys
+  // so the homepage form keeps its current default for that dropdown.
+  const parts = [
+    `prompt=${enc(t.prompt)}`,
+    `style=${enc(t.style)}`,
+    `mood=${enc(t.mood)}`,
+    `palette=${enc(t.palette)}`,
+    `ratio=${enc(t.ratio)}`,
+  ];
+  if (t.medium)     parts.push(`medium=${enc(t.medium)}`);
+  if (t.time)       parts.push(`time=${enc(t.time)}`);
+  if (t.lighting)   parts.push(`lighting=${enc(t.lighting)}`);
+  if (t.camera)     parts.push(`camera=${enc(t.camera)}`);
+  if (t.expression) parts.push(`expression=${enc(t.expression)}`);
+  const href = `/?${parts.join('&')}#create`;
   return `        <a class="moment-tile" href="${href}">
           <img src="/ai-art/moments/${t.slug}.webp" alt="${esc(t.alt)}" loading="lazy">
           <div class="moment-overlay"><div class="moment-eyebrow">${esc(t.eyebrow)}</div><div class="moment-title">${esc(t.title)}</div></div>
         </a>`;
 }
 
+// Deterministic per-category interleave. Tiles inside each category arrive
+// by generation round (v1 → v2 → v3 → v4 → v5), so the same medium/style
+// clusters together. We shuffle with a seeded RNG keyed on `cat.id` so
+// (a) the order varies meaningfully across categories, (b) it's stable
+// across rebuilds so a user sees the same arrangement on each visit.
+function seededShuffle(arr, seed) {
+  let s = 0;
+  for (let i = 0; i < seed.length; i++) s = (s * 31 + seed.charCodeAt(i)) >>> 0;
+  const rand = () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 0x100000000; };
+  const out = arr.slice();
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
 function categoryHTML(cat) {
+  const tiles = seededShuffle(cat.tiles, cat.id);
   return `    <section id="${cat.id}" class="scroll-mt-32">
       <div class="cat-header">
         <h2>${esc(cat.label)} <span class="text-indigo-400">${cat.emoji}</span></h2>
-        <span class="count">20 starting points</span>
+        <span class="count">${tiles.length} starting points</span>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
-${cat.tiles.map(tileHTML).join('\n\n')}
+${tiles.map(tileHTML).join('\n\n')}
       </div>
     </section>`;
 }

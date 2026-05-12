@@ -928,11 +928,11 @@
     <p class="muted text-xs text-center mt-6">Each tile sets a starting prompt — you can edit it, add reference photos of your real pet or place, or swap any setting before generating.</p>
 
     <!-- Link to the full /gifts page: the homepage shows 12 emotional entry
-         points; /gifts has 240 across 12 browseable categories (the full
+         points; /gifts has 336 across 12 browseable categories (the full
          "gift card aisle"). -->
     <div class="text-center mt-8">
       <a href="/gifts.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-400/30 hover:border-indigo-400/50 text-indigo-200 hover:text-white text-sm font-semibold transition-all">
-        Browse all 240 gift ideas
+        Browse all 336 gift ideas
         <svg class="w-4 h-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
       </a>
     </div>
@@ -1008,27 +1008,38 @@
     // ─────────────────────────────────────────────────────────────────────
     // Prefill from URL params — lets /gifts.html (or any other deep link)
     // route a buyer into the create form already filled out. We accept the
-    // same 5 keys the Moments tiles use: ?prompt=...&style=...&mood=...
-    // &palette=...&ratio=...  with #create as the hash so we also auto-scroll.
+    // same keys the Moments tiles use: ?prompt=...&style=...&mood=...
+    // &palette=...&ratio=...&medium=...&time=...&lighting=...&camera=...
+    // &expression=... with #create as the hash so we also auto-scroll.
     // Runs once on load; silently no-ops if the homepage was opened without
     // any of those params.
     // ─────────────────────────────────────────────────────────────────────
     (function prefillFromQueryParams(){
       const params = new URLSearchParams(window.location.search);
-      const prompt  = params.get('prompt');
-      const style   = params.get('style');
-      const mood    = params.get('mood');
-      const palette = params.get('palette');
-      const ratio   = params.get('ratio');
-      if (!prompt && !style && !mood && !palette && !ratio) return;
+      const prompt     = params.get('prompt');
+      const style      = params.get('style');
+      const mood       = params.get('mood');
+      const palette    = params.get('palette');
+      const ratio      = params.get('ratio');
+      const medium     = params.get('medium');
+      const time       = params.get('time');
+      const lighting   = params.get('lighting');
+      const camera     = params.get('camera');
+      const expression = params.get('expression');
+      if (!prompt && !style && !mood && !palette && !ratio && !medium && !time && !lighting && !camera && !expression) return;
 
       // Wait until DOM + select options are populated.
       const apply = () => {
-        const promptEl = document.getElementById('promptInput');
-        const styleEl  = document.getElementById('styleSelect');
-        const moodEl   = document.getElementById('moodSelect');
-        const palEl    = document.getElementById('paletteSelect');
-        const ratioEl  = document.getElementById('ratioSel');
+        const promptEl     = document.getElementById('promptInput');
+        const styleEl      = document.getElementById('styleSelect');
+        const moodEl       = document.getElementById('moodSelect');
+        const palEl        = document.getElementById('paletteSelect');
+        const ratioEl      = document.getElementById('ratioSel');
+        const mediumEl     = document.getElementById('mediumSelect');
+        const timeEl       = document.getElementById('timeSelect');
+        const lightingEl   = document.getElementById('lightingSelect');
+        const cameraEl     = document.getElementById('cameraSelect');
+        const expressionEl = document.getElementById('expressionSelect');
         if (!promptEl) return;
 
         if (prompt) promptEl.value = prompt;
@@ -1037,10 +1048,15 @@
           const opt = Array.from(el.options).find(o => o.value === val);
           if (opt) { el.value = val; el.dispatchEvent(new Event('change', { bubbles:true })); }
         };
-        setSelect(styleEl, style);
-        setSelect(moodEl,  mood);
-        setSelect(palEl,   palette);
-        setSelect(ratioEl, ratio);
+        setSelect(styleEl,      style);
+        setSelect(moodEl,       mood);
+        setSelect(palEl,        palette);
+        setSelect(ratioEl,      ratio);
+        setSelect(mediumEl,     medium);
+        setSelect(timeEl,       time);
+        setSelect(lightingEl,   lighting);
+        setSelect(cameraEl,     camera);
+        setSelect(expressionEl, expression);
 
         // Brief visual confirmation so the buyer can see the form was filled.
         if (prompt) {
