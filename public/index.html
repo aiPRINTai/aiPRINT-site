@@ -1087,11 +1087,65 @@
 
   <!-- CREATE -->
   <section id="create" class="max-w-[1800px] mx-auto px-5 py-20">
-    <div class="text-center mb-10">
+    <div class="text-center mb-10" id="createIntro" data-auth-state="anonymous">
       <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Step 1 · Create</div><div class="section-label-line right"></div></div>
-      <h2 class="h2">Create a preview — free</h2>
-      <p class="muted mt-3">Try <span class="text-indigo-300 font-semibold">1 free preview</span> right now — no signup. Then sign up for <span class="text-indigo-300 font-semibold">10 free credits</span> (1 credit = 1 generation, just $0.20 each after that).</p>
+      <!-- Anonymous: free-preview pitch. Logged-in copy is swapped in by
+           refreshCreateIntro() below. -->
+      <h2 class="h2" id="createIntroHeading">Create a preview — free</h2>
+      <p class="muted mt-3" id="createIntroSubhead">Try <span class="text-indigo-300 font-semibold">1 free preview</span> right now — no signup. Then sign up for <span class="text-indigo-300 font-semibold">10 free credits</span> (1 credit = 1 generation, just $0.20 each after that).</p>
     </div>
+    <script>
+      // ─────────────────────────────────────────────────────────────────
+      // The Step 1 heading + subhead reads wrong for logged-in users —
+      // they don't need a "sign up" pitch, and a returning buyer who has
+      // credits should see their balance reflected. This swaps copy
+      // based on auth state. Runs on load, after auth modules init, and
+      // again whenever auth/credits state changes.
+      // ─────────────────────────────────────────────────────────────────
+      (function setupCreateIntro(){
+        const intro    = document.getElementById('createIntro');
+        const heading  = document.getElementById('createIntroHeading');
+        const subhead  = document.getElementById('createIntroSubhead');
+        if (!intro || !heading || !subhead) return;
+
+        function refreshCreateIntro() {
+          const authed = !!(window.auth && window.auth.isAuthenticated && window.auth.isAuthenticated());
+          if (!authed) {
+            intro.setAttribute('data-auth-state', 'anonymous');
+            heading.textContent = 'Create a preview — free';
+            subhead.innerHTML = 'Try <span class="text-indigo-300 font-semibold">1 free preview</span> right now — no signup. Then sign up for <span class="text-indigo-300 font-semibold">10 free credits</span> (1 credit = 1 generation, just $0.20 each after that).';
+            return;
+          }
+          const bal = Number(window.auth?.user?.credits_balance ?? window.credits?.balance ?? 0);
+          if (bal > 0) {
+            intro.setAttribute('data-auth-state', 'logged-in-credits');
+            heading.textContent = 'Create your next print';
+            subhead.innerHTML = `You have <span class="text-indigo-300 font-semibold">${bal} credit${bal === 1 ? '' : 's'}</span> — each generation uses 1 ($0.20 to top up). Describe your idea below.`;
+          } else {
+            intro.setAttribute('data-auth-state', 'logged-in-empty');
+            heading.textContent = 'Create your next print';
+            subhead.innerHTML = `You’re out of credits — <a href="#" onclick="event.preventDefault(); window.credits && window.credits.showPurchaseModal && window.credits.showPurchaseModal();" class="text-indigo-300 font-semibold underline decoration-indigo-400/40 hover:decoration-indigo-300">grab a pack</a> to keep creating ($0.20 each).`;
+          }
+        }
+
+        // Run after auth + credits modules have loaded. They init on
+        // DOMContentLoaded and fire credits.loadBalance() async, so we
+        // also poll briefly to catch the balance once it arrives.
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', refreshCreateIntro, { once:true });
+        } else {
+          refreshCreateIntro();
+        }
+        // Re-refresh shortly after, to pick up credits-balance once the
+        // /api/credits/balance fetch resolves.
+        setTimeout(refreshCreateIntro,  300);
+        setTimeout(refreshCreateIntro, 1500);
+        // Also listen for any auth/credits change events the modules dispatch.
+        ['auth:login','auth:logout','credits:update'].forEach(ev => {
+          window.addEventListener(ev, refreshCreateIntro);
+        });
+      })();
+    </script>
 
     <!-- Anonymous Limit Message (filled dynamically when limit hit) -->
     <div id="anonymousLimitMessage" class="hidden mb-4"></div>
