@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Custom AI Art Gifts — 48 Ideas to Start From | aiPRINT.ai</title>
-  <meta name="description" content="48 personalized AI-art gift ideas for pets, couples, new parents, families, homes, travelers, milestones, and the hard-to-shop-for. Founder-reviewed. Numbered Certificate of Authenticity. Ships in 5–10 business days." />
+  <title>Custom AI Art Gifts — 144 Ideas to Start From | aiPRINT.ai</title>
+  <meta name="description" content="144 personalized AI-art gift ideas across 12 categories — pets, couples, new parents, families, homes, travelers, milestones, hard-to-shop-for, book & coffee lovers, music lovers, nature & adventure, and the seasons. Founder-reviewed. Numbered Certificate of Authenticity. Ships in 5–10 business days." />
   <link rel="canonical" href="https://aiprint.ai/gifts.html" />
   <meta name="theme-color" content="#0a0f1d" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -14,12 +14,12 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="aiPRINT.ai" />
   <meta property="og:title" content="Custom AI Art Gifts | aiPRINT.ai" />
-  <meta property="og:description" content="48 gift ideas for the moments that matter. Pets, couples, new parents, families, homes, travelers, milestones, and the hard-to-shop-for." />
+  <meta property="og:description" content="144 gift ideas across 12 categories for the moments that matter." />
   <meta property="og:url" content="https://aiprint.ai/gifts.html" />
   <meta property="og:image" content="https://aiprint.ai/og-image.png?v=20260513d" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Custom AI Art Gifts | aiPRINT.ai" />
-  <meta name="twitter:description" content="48 personalized art-print gift ideas. Founder-reviewed. Ships in 5–10 business days." />
+  <meta name="twitter:description" content="144 personalized art-print gift ideas. Founder-reviewed. Ships in 5–10 business days." />
   <meta name="twitter:image" content="https://aiprint.ai/og-image.png?v=20260513d" />
   <link rel="stylesheet" href="/css/tailwind.min.css" />
 
@@ -41,62 +41,25 @@
     .btn-ghost:hover{background:rgba(255,255,255,.12);}
     .gradient-text{background:linear-gradient(135deg,#a78bfa,#818cf8,#60a5fa);-webkit-background-clip:text;background-clip:text;color:transparent;}
 
-    /* Tile (same visual language as the homepage Moments grid) */
-    .moment-tile{
-      position:relative; overflow:hidden; border-radius:14px;
-      aspect-ratio:4/5;
-      border:1px solid rgba(255,255,255,.08);
-      background:#11151f; cursor:pointer; padding:0;
-      transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
-      text-decoration:none; color:inherit; display:block;
-    }
-    .moment-tile:hover{ transform:translateY(-3px); border-color:rgba(129,140,248,.45); box-shadow:0 16px 40px -12px rgba(129,140,248,.3); }
-    .moment-tile img{ width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
-    .moment-tile:hover img{ transform:scale(1.06); }
-    .moment-overlay{
-      position:absolute; inset:0;
-      background:linear-gradient(to top, rgba(10,15,29,.92) 0%, rgba(10,15,29,.55) 45%, rgba(10,15,29,0) 75%);
-      display:flex; flex-direction:column; justify-content:flex-end;
-      padding:12px 12px 14px; text-align:left;
-    }
-    .moment-eyebrow{
-      font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
-      color:#c7d2fe; margin-bottom:3px;
-    }
-    .moment-title{
-      font-size:13px; font-weight:700; color:#fff; line-height:1.25;
-    }
-    @media (min-width: 768px){ .moment-title{ font-size:14px; } .moment-eyebrow{ font-size:11px; } }
-    @media (min-width: 1024px){ .moment-title{ font-size:15px; } }
+    .moment-tile{position:relative;overflow:hidden;border-radius:14px;aspect-ratio:4/5;border:1px solid rgba(255,255,255,.08);background:#11151f;cursor:pointer;padding:0;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease;text-decoration:none;color:inherit;display:block;}
+    .moment-tile:hover{transform:translateY(-3px);border-color:rgba(129,140,248,.45);box-shadow:0 16px 40px -12px rgba(129,140,248,.3);}
+    .moment-tile img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+    .moment-tile:hover img{transform:scale(1.06);}
+    .moment-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,29,.92) 0%,rgba(10,15,29,.55) 45%,rgba(10,15,29,0) 75%);display:flex;flex-direction:column;justify-content:flex-end;padding:12px 12px 14px;text-align:left;}
+    .moment-eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#c7d2fe;margin-bottom:3px;}
+    .moment-title{font-size:13px;font-weight:700;color:#fff;line-height:1.25;}
+    @media (min-width: 768px){.moment-title{font-size:14px;}.moment-eyebrow{font-size:11px;}}
+    @media (min-width: 1024px){.moment-title{font-size:15px;}}
 
-    /* Category section header */
-    .cat-header{
-      display:flex; align-items:baseline; justify-content:space-between; gap:1rem;
-      flex-wrap:wrap; margin-bottom:1rem;
-      padding-bottom:.6rem; border-bottom:1px solid rgba(255,255,255,.08);
-    }
-    .cat-header h2{
-      font-size:clamp(1.3rem,2.2vw,1.9rem); font-weight:800; line-height:1.1;
-    }
-    .cat-header .count{
-      font-size:.85rem; color:var(--muted); font-weight:500;
-    }
+    .cat-header{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid rgba(255,255,255,.08);}
+    .cat-header h2{font-size:clamp(1.3rem,2.2vw,1.9rem);font-weight:800;line-height:1.1;}
+    .cat-header .count{font-size:.85rem;color:var(--muted);font-weight:500;}
 
-    /* Sticky category nav (jump to section) */
-    .cat-nav{
-      position:sticky; top:64px; z-index:20;
-      background:rgba(10,15,29,.85); backdrop-filter:blur(10px);
-      border-bottom:1px solid rgba(255,255,255,.08);
-    }
-    .cat-nav-inner{ display:flex; gap:.4rem; overflow-x:auto; padding:.65rem 1rem; scrollbar-width:none; }
-    .cat-nav-inner::-webkit-scrollbar{ display:none; }
-    .cat-nav a{
-      flex-shrink:0; padding:.4rem .9rem; border-radius:999px;
-      font-size:.8rem; font-weight:600; color:#cbd5e1; white-space:nowrap;
-      border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.04);
-      text-decoration:none; transition:all .15s;
-    }
-    .cat-nav a:hover{ background:rgba(129,140,248,.18); color:#fff; border-color:rgba(129,140,248,.4); }
+    .cat-nav{position:sticky;top:64px;z-index:20;background:rgba(10,15,29,.85);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08);}
+    .cat-nav-inner{display:flex;gap:.4rem;overflow-x:auto;padding:.65rem 1rem;scrollbar-width:none;}
+    .cat-nav-inner::-webkit-scrollbar{display:none;}
+    .cat-nav a{flex-shrink:0;padding:.4rem .9rem;border-radius:999px;font-size:.8rem;font-weight:600;color:#cbd5e1;white-space:nowrap;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);text-decoration:none;transition:all .15s;}
+    .cat-nav a:hover{background:rgba(129,140,248,.18);color:#fff;border-color:rgba(129,140,248,.4);}
 
     .section-label{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;}
     .section-label-line{flex:0 0 28px;height:1px;background:linear-gradient(90deg,transparent,rgba(129,140,248,.5));}
@@ -179,7 +142,7 @@
     <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">For the people you love</div><div class="section-label-line right"></div></div>
     <h1 class="h1 max-w-4xl mx-auto">Custom <span class="gradient-text">AI art gifts</span> that mean something.</h1>
     <p class="muted mt-5 max-w-2xl mx-auto text-lg leading-relaxed">
-      48 starting points for the moments that matter. Pick the one that feels right and we'll set up the prompt — your final piece is one of a kind.
+      144 starting points across 12 categories. Pick the one that feels right — we'll set up the prompt, and your final piece is one of a kind.
     </p>
     <div class="flex flex-wrap items-center justify-center gap-2 mt-7">
       <span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l9-4 9 4v5c0 5-3.5 8.5-9 10-5.5-1.5-9-5-9-10V7Z"/><path d="m9 12 2 2 4-4"/></svg> Made in the USA</span>
@@ -200,36 +163,38 @@
       <a href="#travelers">For travelers</a>
       <a href="#milestones">For milestones</a>
       <a href="#hard-to-shop-for">Hard-to-shop-for</a>
+      <a href="#book-coffee">For book &amp; coffee lovers</a>
+      <a href="#music">For music lovers</a>
+      <a href="#nature">For nature &amp; adventure</a>
+      <a href="#seasons">For the seasons</a>
     </div>
   </div>
 
   <main class="max-w-[1800px] mx-auto px-5 pb-12 pt-8 space-y-12">
 
-    <!-- ─── FOR PET LOVERS ───────────────────────────────────────────── -->
     <section id="pet-lovers" class="scroll-mt-32">
       <div class="cat-header">
         <h2>For pet lovers <span class="text-indigo-400">🐾</span></h2>
-        <span class="count">6 starting points</span>
+        <span class="count">12 starting points</span>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-
         <a class="moment-tile" href="/?prompt=A%20regal%20oil-portrait%20of%20a%20beloved%20pet%2C%20wise%20expression%2C%20soft%20window%20light%2C%20painterly%20brushwork%2C%20gallery-museum%20quality&style=Painterly&mood=Nostalgic&palette=rich%20jewel%20tones&ratio=1024x1536#create">
-          <img src="/ai-art/moments/pet-portrait.webp" alt="Regal Dutch-master-style oil portrait of a noble golden retriever" loading="lazy">
+          <img src="/ai-art/moments/pet-portrait.webp" alt="Regal Dutch-master oil portrait of a noble golden retriever" loading="lazy">
           <div class="moment-overlay"><div class="moment-eyebrow">Pet portrait</div><div class="moment-title">Make them the masterpiece</div></div>
         </a>
 
         <a class="moment-tile" href="/?prompt=A%20serene%20memorial%20scene%20honoring%20a%20beloved%20pet%2C%20their%20leather%20collar%20resting%20on%20a%20sun-dappled%20bench%20in%20a%20flowering%20garden%20at%20golden%20hour%2C%20peaceful%20and%20dignified%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
-          <img src="/ai-art/moments/pet-memorial.webp" alt="A pet's collar resting on a sun-dappled bench in a flowering garden" loading="lazy">
+          <img src="/ai-art/moments/pet-memorial.webp" alt="A pet collar resting on a sun-dappled bench in a flowering garden" loading="lazy">
           <div class="moment-overlay"><div class="moment-eyebrow">Pet memorial</div><div class="moment-title">In loving memory</div></div>
         </a>
 
-        <a class="moment-tile" href="/?prompt=Two%20beloved%20pets%20nuzzling%20together%20at%20golden%20hour%2C%20deep%20bond%20and%20trust%2C%20painterly%20fine-art%20oil%20brushwork%2C%20warm%20sunset%20light&style=Painterly&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+        <a class="moment-tile" href="/?prompt=Two%20beloved%20pets%20nuzzling%20together%20at%20golden%20hour%2C%20deep%20bond%20and%20trust%2C%20painterly%20oil%20brushwork%2C%20warm%20sunset%20light&style=Painterly&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
           <img src="/ai-art/moments/two-best-friends.webp" alt="Two dogs nuzzling together at golden hour" loading="lazy">
           <div class="moment-overlay"><div class="moment-eyebrow">Two best friends</div><div class="moment-title">The pair they love</div></div>
         </a>
 
         <a class="moment-tile" href="/?prompt=A%20small%20wide-eyed%20puppy%20curled%20in%20a%20soft%20knit%20blanket%20in%20a%20sunlit%20room%2C%20dappled%20afternoon%20window%20light%2C%20curious%20and%20tender%2C%20painterly%20watercolor&style=Impressionistic&mood=Whimsical%20%2F%20Playful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
-          <img src="/ai-art/moments/first-day-home.webp" alt="A small puppy curled in a knit blanket in a sunlit room" loading="lazy">
+          <img src="/ai-art/moments/first-day-home.webp" alt="A puppy curled in a knit blanket in a sunlit room" loading="lazy">
           <div class="moment-overlay"><div class="moment-eyebrow">First day home</div><div class="moment-title">The day they arrived</div></div>
         </a>
 
@@ -243,17 +208,44 @@
           <div class="moment-overlay"><div class="moment-eyebrow">Quiet companion</div><div class="moment-title">Their window-side soul</div></div>
         </a>
 
+        <a class="moment-tile" href="/?prompt=A%20joyful%20pet%20wearing%20a%20tiny%20party%20hat%20surrounded%20by%20colorful%20balloons%20in%20a%20sunlit%20room%20at%20golden%20hour%2C%20joyful%20celebration%20mood%2C%20painterly&style=Painterly&mood=Whimsical%20%2F%20Playful&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/pet-birthday.webp" alt="A dog in a party hat with floating balloons" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Pet birthday</div><div class="moment-title">Their special day</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20faceless%20young%20child%20hugging%20a%20large%20fluffy%20golden%20retriever%20in%20a%20sunlit%20meadow%20at%20golden%20hour%2C%20deep%20love%20between%20child%20and%20pet%2C%20painterly%20oils&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/pet-and-child.webp" alt="A child hugging a golden retriever in a sunlit meadow" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Pet &amp; child</div><div class="moment-title">Their best friend</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20serene%20long-haired%20cat%20sitting%20on%20a%20sunlit%20windowsill%20silhouetted%20against%20a%20vibrant%20warm%20sunset%20sky%2C%20peaceful%20golden%20glow%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/pet-window-sunset.webp" alt="A long-haired cat silhouetted at a sunset window" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Window watcher</div><div class="moment-title">Their quiet hour</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20small%20kitten%20and%20a%20puppy%20curled%20up%20sleeping%20together%20on%20a%20soft%20cream%20blanket%2C%20deeply%20tender%20interspecies%20friendship%2C%20painterly%20watercolor%20textures&style=Impressionistic&mood=Whimsical%20%2F%20Playful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/cat-and-dog-friends.webp" alt="A kitten and a puppy sleeping together on a blanket" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Unlikely friends</div><div class="moment-title">The duo you adore</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20happy%20golden%20retriever%20running%20joyfully%20through%20a%20vibrant%20wildflower%20meadow%20at%20golden%20hour%2C%20ears%20flying%2C%20deep%20happiness%2C%20painterly%20oils&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=vibrant%2C%20saturated%20colors&ratio=1536x1024#create">
+          <img src="/ai-art/moments/pet-in-wildflowers.webp" alt="A happy dog running through a vibrant wildflower meadow" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Joyful pup</div><div class="moment-title">Running wild and free</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20sleeping%20pet%20curled%20on%20a%20soft%20sheepskin%20rug%20in%20front%20of%20a%20glowing%20stone%20fireplace%2C%20warm%20firelight%20catching%20the%20fur%2C%20deeply%20peaceful%20winter-evening%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/pet-by-fireplace.webp" alt="A sleeping dog by a glowing stone fireplace" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Hearthside</div><div class="moment-title">Their cozy spot</div></div>
+        </a>
       </div>
     </section>
 
-    <!-- ─── FOR COUPLES ──────────────────────────────────────────────── -->
     <section id="couples" class="scroll-mt-32">
       <div class="cat-header">
         <h2>For couples <span class="text-indigo-400">💞</span></h2>
-        <span class="count">6 starting points</span>
+        <span class="count">12 starting points</span>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-
         <a class="moment-tile" href="/?prompt=Two%20silhouettes%20walking%20a%20quiet%20beach%20at%20sunset%2C%20romantic%20warmth%2C%20soft%20film%20grain%2C%20cinematic&style=Cinematic%20%2F%20Editorial&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
           <img src="/ai-art/moments/anniversary.webp" alt="Romantic painterly silhouettes walking a sunset beach" loading="lazy">
           <div class="moment-overlay"><div class="moment-eyebrow">Anniversary</div><div class="moment-title">Their story, on the wall</div></div>
@@ -269,7 +261,7 @@
           <div class="moment-overlay"><div class="moment-eyebrow">Where it all began</div><div class="moment-title">Your meeting place</div></div>
         </a>
 
-        <a class="moment-tile" href="/?prompt=A%20close-up%20of%20a%20couple%27s%20hands%2C%20one%20gently%20slipping%20a%20gold%20ring%20onto%20the%20other%27s%20finger%2C%20soft%20warm%20bokeh%20background%2C%20painterly%20cinematic%20romantic%20light&style=Cinematic%20%2F%20Editorial&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1024#create">
+        <a class="moment-tile" href="/?prompt=A%20close-up%20of%20a%20couple's%20hands%2C%20one%20gently%20slipping%20a%20gold%20ring%20onto%20the%20other's%20finger%2C%20soft%20warm%20bokeh%20background%2C%20painterly%20cinematic%20romantic%20light&style=Cinematic%20%2F%20Editorial&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1024#create">
           <img src="/ai-art/moments/engagement.webp" alt="Close-up of a hand slipping a ring onto a finger" loading="lazy">
           <div class="moment-overlay"><div class="moment-eyebrow">Engagement</div><div class="moment-title">The moment you said yes</div></div>
         </a>
@@ -284,17 +276,44 @@
           <div class="moment-overlay"><div class="moment-eyebrow">Adventures together</div><div class="moment-title">All the miles you've shared</div></div>
         </a>
 
+        <a class="moment-tile" href="/?prompt=A%20faceless%20couple%20dancing%20barefoot%20together%20in%20their%20sunlit%20kitchen%20at%20golden%20hour%2C%20mid-spin%2C%20deep%20candid%20joy%2C%20painterly%20warm%20light&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/dancing-in-kitchen.webp" alt="A couple dancing barefoot in a sunlit kitchen" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Kitchen dance</div><div class="moment-title">The song that's yours</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20faceless%20couple%20hiking%20hand%20in%20hand%20along%20a%20misty%20mountain%20ridge%20trail%20at%20sunrise%2C%20vibrant%20pink%20and%20gold%20dawn%20sky%2C%20deep%20adventure%20mood%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Bright%20%2F%20Uplifting&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536#create">
+          <img src="/ai-art/moments/sunrise-hike.webp" alt="A couple hiking a misty mountain ridge at sunrise" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Sunrise hike</div><div class="moment-title">The trail you chose together</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20faceless%20couple%20sitting%20close%20together%20on%20a%20wooden%20porch%20with%20glasses%20of%20wine%20watching%20a%20deep%20warm%20sunset%20over%20rolling%20hills%2C%20peaceful%20end-of-day%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/porch-at-sunset.webp" alt="A couple on a porch with wine watching a deep sunset" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Sunset porch</div><div class="moment-title">The end of every day</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20faceless%20couple%20sitting%20close%20together%20on%20a%20wooden%20park%20bench%20in%20autumn%2C%20scattered%20amber%20and%20rust%20leaves%20all%20around%2C%20soft%20golden%20afternoon%20light%2C%20painterly&style=Painterly&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/autumn-park-bench.webp" alt="A couple on a park bench with autumn leaves all around" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Autumn bench</div><div class="moment-title">A walk that became a life</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=Two%20faceless%20hands%20meeting%20across%20a%20small%20cafe%20table%20holding%20two%20ceramic%20coffee%20cups%2C%20soft%20cool%20window%20light%20on%20the%20wet%20street%20outside%2C%20intimate%20quiet%20moment%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Calm%20%2F%20Peaceful&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1024#create">
+          <img src="/ai-art/moments/cafe-coffee-together.webp" alt="Two hands meeting across a cafe table with coffee" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Coffee at the cafe</div><div class="moment-title">Two cups, one story</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=Two%20empty%20armchairs%20facing%20each%20other%20in%20a%20warm-lit%20reading%20corner%20with%20two%20open%20hardback%20books%20resting%20on%20them%2C%20soft%20amber%20lamp%20glow%2C%20painterly%20cozy&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=muted%2C%20earthy%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/reading-together.webp" alt="Two armchairs facing each other with open books and warm lamp light" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Reading together</div><div class="moment-title">Their evenings, side by side</div></div>
+        </a>
       </div>
     </section>
 
-    <!-- ─── FOR NEW PARENTS ─────────────────────────────────────────── -->
     <section id="new-parents" class="scroll-mt-32">
       <div class="cat-header">
         <h2>For new parents <span class="text-indigo-400">👶</span></h2>
-        <span class="count">6 starting points</span>
+        <span class="count">12 starting points</span>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-
         <a class="moment-tile" href="/?prompt=A%20tender%20soft%20watercolor%20of%20a%20peacefully%20sleeping%20newborn%20baby%20under%20a%20knit%20blanket%2C%20dappled%20warm%20sunlight%2C%20pastel%20cream%20and%20rose%20palette%2C%20deeply%20gentle%20and%20protective&style=Impressionistic&mood=Calm%20%2F%20Peaceful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
           <img src="/ai-art/moments/new-baby.webp" alt="Soft watercolor of a sleeping newborn under a knit blanket" loading="lazy">
           <div class="moment-overlay"><div class="moment-eyebrow">New baby</div><div class="moment-title">Welcome to the world</div></div>
@@ -325,24 +344,51 @@
           <div class="moment-overlay"><div class="moment-eyebrow">Nursery dreamscape</div><div class="moment-title">Where they dream</div></div>
         </a>
 
+        <a class="moment-tile" href="/?prompt=A%20toddler%20in%20soft%20cream%20pajamas%20taking%20wobbly%20first%20steps%20across%20a%20sunlit%20wooden%20floor%20with%20arms%20outstretched%2C%20joyful%20milestone%2C%20painterly%20watercolor&style=Impressionistic&mood=Bright%20%2F%20Uplifting&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/babys-first-steps.webp" alt="A toddler taking first steps across a sunlit wooden floor" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">First steps</div><div class="moment-title">The day they ran to you</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20faceless%20parent%20sitting%20on%20the%20edge%20of%20a%20small%20bed%20reading%20an%20open%20storybook%20to%20a%20tiny%20child%20curled%20under%20a%20soft%20cream%20blanket%2C%20glowing%20warm%20bedside%20lamp%2C%20tender%20watercolor&style=Impressionistic&mood=Calm%20%2F%20Peaceful&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/bedtime-stories.webp" alt="A parent reading a storybook to a child in soft amber lamp light" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Bedtime story</div><div class="moment-title">The pages they grew up on</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20faceless%20family%20of%20three%20silhouetted%20walking%20together%20hand%20in%20hand%20on%20a%20quiet%20beach%20at%20sunset%2C%20deeply%20tender%20new-family%20mood%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/family-of-three-sunset.webp" alt="A faceless family of three silhouetted on a beach at sunset" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Three at sunset</div><div class="moment-title">The first family walk</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20faceless%20parent's%20arm%20cradling%20a%20tiny%20sleeping%20newborn%20in%20a%20soft%20cream%20knit%20blanket%2C%20dappled%20warm%20window%20light%2C%20deeply%20protective%20bond%2C%20watercolor&style=Impressionistic&mood=Calm%20%2F%20Peaceful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/parent-with-baby.webp" alt="A parent's arm cradling a tiny sleeping newborn in a blanket" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Held close</div><div class="moment-title">In your arms</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20curious%20small%20puppy%20sniffing%20a%20sleeping%20baby's%20tiny%20hand%20on%20a%20soft%20cream%20knit%20blanket%2C%20soft%20warm%20morning%20light%2C%20deep%20gentle%20baby-and-pet%20bond%2C%20watercolor&style=Impressionistic&mood=Whimsical%20%2F%20Playful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/baby-and-puppy.webp" alt="A puppy sniffing a sleeping baby's tiny hand" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Baby &amp; puppy</div><div class="moment-title">Their first friend</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20tiny%20pair%20of%20silver%20scissors%20beside%20a%20small%20lock%20of%20soft%20baby%20curl%20resting%20on%20a%20piece%20of%20cream%20paper%20on%20a%20wooden%20table%2C%20soft%20warm%20afternoon%20window%20light%2C%20painterly&style=Painterly&mood=Nostalgic&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/first-haircut.webp" alt="Tiny scissors beside a soft baby curl on cream paper" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">First haircut</div><div class="moment-title">The lock they kept</div></div>
+        </a>
       </div>
     </section>
 
-    <!-- ─── FOR FAMILY ──────────────────────────────────────────────── -->
     <section id="family" class="scroll-mt-32">
       <div class="cat-header">
         <h2>For family <span class="text-indigo-400">🤍</span></h2>
-        <span class="count">6 starting points</span>
+        <span class="count">12 starting points</span>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-
         <a class="moment-tile" href="/?prompt=A%20favorite%20scene%20from%20a%20childhood%20home%20reimagined%20in%20soft%20watercolor%2C%20nostalgic%2C%20warm%20afternoon%20light&style=Impressionistic&mood=Nostalgic&palette=soft%20pastel%20palette&ratio=1536x1024#create">
           <img src="/ai-art/moments/for-mom-and-dad.webp" alt="Watercolor of a childhood-home garden in spring" loading="lazy">
           <div class="moment-overlay"><div class="moment-eyebrow">For Mom &amp; Dad</div><div class="moment-title">A memory, finally framed</div></div>
         </a>
 
-        <a class="moment-tile" href="/?prompt=A%20tender%20painterly%20watercolor%20of%20a%20mother%27s%20hands%20cradling%20her%20child%27s%20small%20hands%2C%20warm%20afternoon%20light%2C%20deeply%20tender%20mother-love%20moment%2C%20faceless%20cropped%20to%20just%20hands&style=Impressionistic&mood=Nostalgic&palette=soft%20pastel%20palette&ratio=1024x1536#create">
-          <img src="/ai-art/moments/for-mom.webp" alt="Tender watercolor of a mother's hands holding a child's hands" loading="lazy">
+        <a class="moment-tile" href="/?prompt=A%20tender%20painterly%20watercolor%20of%20a%20mother's%20hands%20cradling%20her%20child's%20small%20hands%2C%20warm%20afternoon%20light%2C%20deeply%20tender%20mother-love%20moment%2C%20faceless%20cropped%20to%20just%20hands&style=Impressionistic&mood=Nostalgic&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/for-mom.webp" alt="A mother's hands cradling a child's small hands in warm light" loading="lazy">
           <div class="moment-overlay"><div class="moment-eyebrow">For Mom</div><div class="moment-title">Everything she gave you</div></div>
         </a>
 
@@ -352,7 +398,7 @@
         </a>
 
         <a class="moment-tile" href="/?prompt=Three%20generations%20walking%20hand%20in%20hand%20along%20a%20beach%20at%20sunset%20-%20grandparent%2C%20parent%2C%20child%20-%20painterly%20warm%20nostalgic&style=Cinematic%20%2F%20Editorial&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
-          <img src="/ai-art/moments/for-grandparents.webp" alt="Three generations walking hand-in-hand along a beach at sunset" loading="lazy">
+          <img src="/ai-art/moments/for-grandparents.webp" alt="Three generations walking hand-in-hand on a beach at sunset" loading="lazy">
           <div class="moment-overlay"><div class="moment-eyebrow">Grandparents</div><div class="moment-title">Three generations, one walk</div></div>
         </a>
 
@@ -366,17 +412,44 @@
           <div class="moment-overlay"><div class="moment-eyebrow">Family tree</div><div class="moment-title">Roots and branches</div></div>
         </a>
 
+        <a class="moment-tile" href="/?prompt=A%20still-life%20of%20scattered%20colorful%20board-game%20pieces%2C%20dice%2C%20and%20popcorn%20on%20a%20wooden%20table%20at%20warm%20lamp%20light%2C%20joyful%20family-night%2C%20painterly&style=Painterly&mood=Whimsical%20%2F%20Playful&palette=vibrant%2C%20saturated%20colors&ratio=1536x1024#create">
+          <img src="/ai-art/moments/family-game-night.webp" alt="Scattered board game pieces and dice on a wooden table at warm lamp light" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Game night</div><div class="moment-title">The night you laughed til midnight</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20long%20wooden%20farmhouse%20dining%20table%20set%20with%20simple%20plates%2C%20a%20centerpiece%20of%20wildflowers%2C%20warm%20pendant%20light%20glowing%20above%2C%20late-afternoon%20golden%20light%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/sunday-dinner-table.webp" alt="A long farmhouse table set with simple plates and wildflowers" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Sunday dinner</div><div class="moment-title">The table where everyone sits</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20bright%20tropical%20beach%20with%20vibrant%20turquoise%20water%2C%20scattered%20colorful%20beach%20umbrellas%2C%20a%20sandcastle%2C%20soft%20warm%20midday%20sun%2C%20joyful%20family-vacation%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=vibrant%2C%20saturated%20colors&ratio=1536x1024#create">
+          <img src="/ai-art/moments/beach-family-vacation.webp" alt="A bright tropical beach with colorful umbrellas and a sandcastle" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Beach vacation</div><div class="moment-title">The summer you all remember</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20glowing%20fireplace%20with%20stockings%20hanging%2C%20a%20small%20lit%20Christmas%20tree%2C%20scattered%20wrapped%20presents%20in%20vibrant%20colors%2C%20warm%20holiday-gathering%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/holiday-gathering.webp" alt="A glowing fireplace with stockings and a small Christmas tree" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Holiday gathering</div><div class="moment-title">The years you came home</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20sunny%20backyard%20with%20string%20lights%20overhead%2C%20a%20wooden%20picnic%20table%2C%20scattered%20colorful%20drinks%20in%20glass%20jars%2C%20sunflowers%20in%20a%20vase%2C%20joyful%20summer-afternoon%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=vibrant%2C%20saturated%20colors&ratio=1536x1024#create">
+          <img src="/ai-art/moments/backyard-summer.webp" alt="A sunny backyard with string lights, picnic table, and sunflowers" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Backyard summer</div><div class="moment-title">The afternoons that lasted forever</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20faceless%20family%20of%20four%20hiking%20together%20along%20a%20mountain%20trail%20at%20golden%20hour%2C%20vast%20cool%20blue%20valley%20behind%2C%20adventurous%20family%20bond%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Bright%20%2F%20Uplifting&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536#create">
+          <img src="/ai-art/moments/mountain-hike-family.webp" alt="A faceless family of four hiking a mountain trail at golden hour" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Family hike</div><div class="moment-title">The view you found together</div></div>
+        </a>
       </div>
     </section>
 
-    <!-- ─── FOR THEIR HOME ──────────────────────────────────────────── -->
     <section id="home" class="scroll-mt-32">
       <div class="cat-header">
         <h2>For their home <span class="text-indigo-400">🏠</span></h2>
-        <span class="count">6 starting points</span>
+        <span class="count">12 starting points</span>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-
         <a class="moment-tile" href="/?prompt=A%20still-life%20of%20a%20warm%20coffee%20mug%2C%20open%20book%2C%20and%20golden%20window%20light%2C%20soft%20painterly%20textures%2C%20cozy%20housewarming%20feel&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=muted%2C%20earthy%20tones&ratio=1536x1024#create">
           <img src="/ai-art/moments/housewarming.webp" alt="Cozy painterly still-life of a warm coffee mug and open book" loading="lazy">
           <div class="moment-overlay"><div class="moment-eyebrow">Housewarming</div><div class="moment-title">A piece that warms a room</div></div>
@@ -407,17 +480,44 @@
           <div class="moment-overlay"><div class="moment-eyebrow">Reading nook</div><div class="moment-title">A page-turner of a place</div></div>
         </a>
 
+        <a class="moment-tile" href="/?prompt=A%20lush%20sunlit%20cottage%20flower%20garden%20in%20full%20spring%20bloom%20-%20vibrant%20pink%20roses%2C%20blue%20delphiniums%2C%20sunshine-yellow%20daisies%2C%20painterly%20impressionist&style=Impressionistic&mood=Bright%20%2F%20Uplifting&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/garden-in-bloom.webp" alt="A lush sunlit cottage flower garden in full spring bloom" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Garden in bloom</div><div class="moment-title">The yard that brings them joy</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20stone%20fireplace%20with%20a%20warm%20crackling%20fire%2C%20a%20stack%20of%20split%20logs%20beside%20it%2C%20a%20soft%20throw%20blanket%20on%20a%20leather%20armchair%2C%20cozy%20winter-night%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/fireplace-winter.webp" alt="A stone fireplace with a crackling fire and split logs" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Winter fireplace</div><div class="moment-title">The fire they curl up by</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20stone%20patio%20with%20a%20single%20wicker%20armchair%20and%20a%20small%20wooden%20table%20holding%20a%20glass%20of%20wine%2C%20overlooking%20a%20warm%20sunset%20over%20rolling%20hills%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/patio-sunset.webp" alt="A stone patio with a wicker chair and wine overlooking a sunset" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Patio sunset</div><div class="moment-title">Their favorite chair</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20soft%20cream-linen%20bed%20with%20white%20duvet%2C%20partially-open%20sheer%20curtains%20letting%20in%20cool%20blue-pink%20dawn%20light%2C%20eucalyptus%20stems%20on%20the%20bedside%20table%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536#create">
+          <img src="/ai-art/moments/bedroom-dawn.webp" alt="A linen bed with sheer curtains letting in cool dawn light" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Bedroom at dawn</div><div class="moment-title">The first light of day</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20bright%20sunlit%20sunroom%20overflowing%20with%20vibrant%20green%20houseplants%20-%20monstera%2C%20fiddle%20leaf%2C%20palm%20-%20backlit%20by%20warm%20midday%20sun%2C%20joyful%20plant-lover%2C%20painterly%20impressionist&style=Impressionistic&mood=Bright%20%2F%20Uplifting&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/plant-sunroom.webp" alt="A bright sunroom overflowing with vibrant green houseplants" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Plant sunroom</div><div class="moment-title">Their indoor jungle</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20freestanding%20soaking%20tub%20by%20a%20tall%20window%20overlooking%20a%20misty%20forest%2C%20folded%20white%20towels%20and%20a%20glass%20vase%20with%20eucalyptus%2C%20peaceful%20spa-retreat%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536#create">
+          <img src="/ai-art/moments/bath-spa-retreat.webp" alt="A freestanding tub by a tall window overlooking a misty forest" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Spa retreat</div><div class="moment-title">Their place to breathe</div></div>
+        </a>
       </div>
     </section>
 
-    <!-- ─── FOR TRAVELERS ───────────────────────────────────────────── -->
     <section id="travelers" class="scroll-mt-32">
       <div class="cat-header">
         <h2>For travelers <span class="text-indigo-400">✈️</span></h2>
-        <span class="count">6 starting points</span>
+        <span class="count">12 starting points</span>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-
         <a class="moment-tile" href="/?prompt=Mediterranean%20coastal%20village%20at%20golden%20hour%2C%20terracotta%20rooftops%2C%20sparkling%20sea%2C%20painterly%2C%20nostalgic&style=Painterly&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
           <img src="/ai-art/moments/travel-memory.webp" alt="Painterly Mediterranean coastal village at golden hour" loading="lazy">
           <div class="moment-overlay"><div class="moment-eyebrow">Travel memory</div><div class="moment-title">The trip they'll never forget</div></div>
@@ -448,17 +548,44 @@
           <div class="moment-overlay"><div class="moment-eyebrow">Mountain memory</div><div class="moment-title">That trail, that view</div></div>
         </a>
 
+        <a class="moment-tile" href="/?prompt=A%20Paris%20sidewalk%20cafe%20at%20twilight%2C%20red%20awning%20over%20wicker%20chairs%20and%20small%20round%20tables%2C%20glowing%20warm%20interior%20light%2C%20distant%20blue%20rooftop%20silhouettes%2C%20painterly&style=Painterly&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/paris-cafe.webp" alt="A Paris sidewalk cafe at twilight with red awning" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Paris cafe</div><div class="moment-title">That afternoon in Paris</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20hidden%20tropical%20island%20lagoon%20with%20vibrant%20turquoise%20water%2C%20soft%20white%20sand%2C%20palm%20trees%20with%20golden%20fronds%2C%20joyful%20island-paradise%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=vibrant%2C%20saturated%20colors&ratio=1536x1024#create">
+          <img src="/ai-art/moments/tropical-island.webp" alt="A hidden tropical lagoon with turquoise water and palm trees" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Tropical island</div><div class="moment-title">The lagoon they dream of</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20vast%20Iceland%20snow%20plain%20at%20midnight%20with%20vibrant%20green%20and%20violet%20aurora%20borealis%20swirling%20across%20the%20deep%20navy%20sky%2C%20a%20single%20small%20cabin%20glowing%20warm%2C%20painterly&style=Painterly&mood=Dramatic%20%2F%20Intense&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536#create">
+          <img src="/ai-art/moments/iceland-aurora.webp" alt="A snowy plain with vibrant aurora borealis in the night sky" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Aurora night</div><div class="moment-title">The sky they chased</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20narrow%20Tokyo%20back-alley%20at%20night%20with%20glowing%20neon%20signs%20in%20pink%20and%20cyan%2C%20wet%20pavement%20reflecting%20the%20colors%2C%20moody%20cinematic%20Japan-travel%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Moody%20%2F%20Atmospheric&palette=high%20contrast%20bold%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/tokyo-street.webp" alt="A narrow Tokyo back-alley at night with glowing neon signs" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Tokyo nights</div><div class="moment-title">That neon alley</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=Rows%20of%20Italian%20Tuscan%20vineyards%20stretching%20toward%20a%20distant%20stone%20villa%20at%20golden%20hour%2C%20deep%20amber%20vines%2C%20warm%20afternoon%20light%2C%20painterly&style=Painterly&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/italian-vineyard.webp" alt="Rows of Italian vineyards stretching toward a stone villa" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Tuscan vineyard</div><div class="moment-title">The land they fell for</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20vast%20African%20savanna%20at%20sunset%20with%20silhouetted%20acacia%20trees%20and%20a%20distant%20herd%20of%20elephants%20walking%20peacefully%2C%20majestic%20safari-travel%2C%20painterly&style=Painterly&mood=Dramatic%20%2F%20Intense&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/safari-savanna.webp" alt="African savanna at sunset with silhouetted elephants" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Safari</div><div class="moment-title">The day they saw the elephants</div></div>
+        </a>
       </div>
     </section>
 
-    <!-- ─── FOR MILESTONES ──────────────────────────────────────────── -->
     <section id="milestones" class="scroll-mt-32">
       <div class="cat-header">
         <h2>For milestones <span class="text-indigo-400">🎓</span></h2>
-        <span class="count">6 starting points</span>
+        <span class="count">12 starting points</span>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-
         <a class="moment-tile" href="/?prompt=A%20serene%20memorial%20portrait%20of%20a%20beloved%20pet%20resting%20under%20a%20sunlit%20oak%2C%20warm%20afternoon%20light%2C%20peaceful%20and%20dignified%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
           <img src="/ai-art/moments/in-their-honor.webp" alt="Tender memorial scene of a willow beside a still pond at dawn" loading="lazy">
           <div class="moment-overlay"><div class="moment-eyebrow">In their honor</div><div class="moment-title">A piece that remembers them</div></div>
@@ -489,19 +616,46 @@
           <div class="moment-overlay"><div class="moment-eyebrow">Birthday</div><div class="moment-title">Their year</div></div>
         </a>
 
+        <a class="moment-tile" href="/?prompt=Two%20glass%20champagne%20flutes%20clinking%20together%20in%20soft%20warm%20window%20light%20with%20city%20skyline%20blurred%20behind%2C%20joyful%20achievement-celebration%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/promotion-celebration.webp" alt="Two champagne flutes clinking in warm light with city skyline" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Promotion</div><div class="moment-title">The win you toasted</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=Two%20faceless%20aged%20hands%20clasped%20together%2C%20both%20wearing%20simple%20gold%20wedding%20bands%2C%20soft%20warm%20window%20light%2C%20tender%20long-anniversary%2C%20painterly&style=Painterly&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1024#create">
+          <img src="/ai-art/moments/anniversary-milestone.webp" alt="Two aged hands clasped together wearing gold wedding bands" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Years together</div><div class="moment-title">Decades, in one frame</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=An%20open%20cardboard%20moving%20box%20in%20a%20sunlit%20empty%20apartment%20with%20bare%20wood%20floors%20and%20tall%20windows%2C%20a%20single%20set%20of%20keys%20on%20top%2C%20joyful%20fresh-start%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=muted%2C%20earthy%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/first-apartment.webp" alt="An open moving box in a sunlit empty apartment with keys on top" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">First apartment</div><div class="moment-title">The first set of keys</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20faceless%20expectant%20parent's%20hands%20cradling%20their%20pregnant%20belly%20under%20a%20soft%20linen%20dress%2C%20dappled%20warm%20window%20light%2C%20tender%20expectancy%2C%20watercolor&style=Impressionistic&mood=Calm%20%2F%20Peaceful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/pregnancy.webp" alt="An expectant parent's hands cradling a pregnant belly in soft light" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Expecting</div><div class="moment-title">Before they met you</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20single%20steaming%20mug%20of%20tea%20on%20a%20sunlit%20windowsill%20beside%20a%20small%20vase%20of%20pale%20dusty%20pink%20peonies%20and%20a%20folded%20blanket%2C%20gentle%20morning%20light%2C%20peaceful%20recovery%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/healing-recovery.webp" alt="A steaming mug of tea on a sunlit windowsill with peonies" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Healing</div><div class="moment-title">A quiet road back</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20single%20faceless%20figure%20standing%20on%20a%20high%20cliff%20facing%20a%20vibrant%20cool%20pink%20and%20gold%20dawn%20sky%20over%20a%20misty%20ocean%2C%20hopeful%20new-chapter%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Bright%20%2F%20Uplifting&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536#create">
+          <img src="/ai-art/moments/fresh-start-dawn.webp" alt="A figure on a cliff facing a pink-gold dawn sky over the ocean" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">New chapter</div><div class="moment-title">The first morning of after</div></div>
+        </a>
       </div>
     </section>
 
-    <!-- ─── HARD TO SHOP FOR ────────────────────────────────────────── -->
     <section id="hard-to-shop-for" class="scroll-mt-32">
       <div class="cat-header">
         <h2>Hard-to-shop-for <span class="text-indigo-400">💡</span></h2>
-        <span class="count">6 starting points</span>
+        <span class="count">12 starting points</span>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-
         <a class="moment-tile" href="/?prompt=An%20imagined%20dreamlike%20coastline%20that%20does%20not%20exist%2C%20ethereal%20clouds%2C%20otherworldly%20horizon%2C%20painterly&style=Surreal%20%2F%20Dreamlike&mood=Dreamlike%20%2F%20Ethereal&palette=rich%20jewel%20tones&ratio=1536x1024#create">
-          <img src="/ai-art/moments/has-everything-gift.webp" alt="Surreal dreamlike hidden lagoon glowing beneath twin pale moons" loading="lazy">
+          <img src="/ai-art/moments/has-everything-gift.webp" alt="Surreal dreamlike hidden lagoon beneath twin moons" loading="lazy">
           <div class="moment-overlay"><div class="moment-eyebrow">Has-everything</div><div class="moment-title">Something they can't buy</div></div>
         </a>
 
@@ -525,11 +679,312 @@
           <div class="moment-overlay"><div class="moment-eyebrow">Abstract for them</div><div class="moment-title">Color, made personal</div></div>
         </a>
 
-        <a class="moment-tile" href="/?prompt=A%20vintage%20writer%27s%20wooden%20desk%20at%20dusk%20with%20a%20single%20candle%2C%20fountain%20pen%2C%20half-written%20letter%2C%20leather-bound%20journal%2C%20painterly%20intimate%20creative%20mood&style=Painterly&mood=Nostalgic&palette=muted%2C%20earthy%20tones&ratio=1024x1536#create">
-          <img src="/ai-art/moments/anything-you-describe.webp" alt="A vintage writer's desk with candle, pen, and letter at dusk" loading="lazy">
+        <a class="moment-tile" href="/?prompt=A%20vintage%20writer's%20wooden%20desk%20at%20dusk%20with%20a%20single%20candle%2C%20fountain%20pen%2C%20half-written%20letter%2C%20leather-bound%20journal%2C%20painterly%20intimate%20creative%20mood&style=Painterly&mood=Nostalgic&palette=muted%2C%20earthy%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/anything-you-describe.webp" alt="A vintage writer's desk with candle, pen, and letter" loading="lazy">
           <div class="moment-overlay"><div class="moment-eyebrow">Anything else</div><div class="moment-title">Describe it, we'll print it</div></div>
         </a>
 
+        <a class="moment-tile" href="/?prompt=An%20imagined%20fantasy%20landscape%20with%20floating%20islands%20above%20a%20glowing%20pastel%20ocean%20at%20twilight%2C%20a%20distant%20glowing%20crystal%20palace%2C%20dreamlike%20fantasy&style=Fantasy%20%2F%20Magical&mood=Dreamlike%20%2F%20Ethereal&palette=rich%20jewel%20tones&ratio=1536x1024#create">
+          <img src="/ai-art/moments/fantasy-landscape.webp" alt="A fantasy landscape with floating islands and crystal palace" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Fantasy world</div><div class="moment-title">A place from a daydream</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20vast%20deep%20night%20sky%20filled%20with%20vibrant%20constellations%20and%20a%20swirling%20spiral%20galaxy%2C%20deep%20cosmic%20blue%20and%20violet%20with%20bright%20golden%20stars%20and%20pink%20nebulae%2C%20painterly&style=Surreal%20%2F%20Dreamlike&mood=Mysterious&palette=rich%20jewel%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/cosmic-constellation.webp" alt="A vast deep night sky filled with constellations and the Milky Way" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Cosmic</div><div class="moment-title">A piece of the sky</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20single%20empty%20wooden%20park%20bench%20on%20a%20quiet%20rainy%20city%20street%20at%20night%2C%20wet%20pavement%20reflecting%20a%20glowing%20warm%20streetlamp%2C%20moody%20atmospheric%20film-noir%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Moody%20%2F%20Atmospheric&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536#create">
+          <img src="/ai-art/moments/cinematic-moody.webp" alt="An empty bench on a rainy city street at night with streetlamp" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Cinematic noir</div><div class="moment-title">The street that stays in your head</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=An%20abstract%20repeating%20geometric%20pattern%20of%20intersecting%20triangles%20and%20circles%20in%20saturated%20jewel%20tones%2C%20contemporary%20mid-century-modern%2C%20painterly&style=Abstract&mood=Energetic%20%2F%20Dynamic&palette=rich%20jewel%20tones&ratio=1024x1024#create">
+          <img src="/ai-art/moments/geometric-pattern.webp" alt="An abstract geometric pattern in saturated jewel tones" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Geometric</div><div class="moment-title">Pattern, perfectly placed</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20vibrant%20Victorian-style%20botanical%20illustration%20of%20a%20tall%20stem%20of%20birds-of-paradise%20flowers%20against%20a%20soft%20cream%20background%2C%20watercolor%20textures&style=Vintage%20%2F%20Retro&mood=Bright%20%2F%20Uplifting&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/botanical-illustration.webp" alt="A vibrant botanical illustration of birds-of-paradise flowers" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Botanical</div><div class="moment-title">A single perfect bloom</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20faceless%20figure%20standing%20in%20an%20open%20meadow%20with%20a%20giant%20moon%20and%20floating%20clouds%20emerging%20from%20where%20their%20head%20would%20be%2C%20dreamlike%20surreal%20in%20the%20spirit%20of%20Magritte%2C%20painterly&style=Surreal%20%2F%20Dreamlike&mood=Dreamlike%20%2F%20Ethereal&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/surreal-portrait.webp" alt="A surreal figure with clouds emerging from where their head would be" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Surreal portrait</div><div class="moment-title">A face from a dream</div></div>
+        </a>
+      </div>
+    </section>
+
+    <section id="book-coffee" class="scroll-mt-32">
+      <div class="cat-header">
+        <h2>For book &amp; coffee lovers <span class="text-indigo-400">☕</span></h2>
+        <span class="count">12 starting points</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+        <a class="moment-tile" href="/?prompt=A%20quiet%20cafe%20at%20dawn%20with%20a%20single%20steaming%20espresso%20cup%20on%20a%20wooden%20bar%2C%20a%20brass%20cake%20bell%2C%20a%20small%20white%20vase%20with%20eucalyptus%2C%20warm%20morning%20light&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=muted%2C%20earthy%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/cafe-at-dawn.webp" alt="A quiet cafe at dawn with a steaming espresso" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Cafe at dawn</div><div class="moment-title">Their first cup</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20quiet%20library%20reading%20nook%20-%20a%20tall%20leather%20wingback%20chair%20tucked%20between%20ceiling-high%20bookshelves%20filled%20with%20worn%20vintage%20hardbacks%2C%20brass%20floor%20lamp%20casting%20soft%20amber%20light%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=muted%2C%20earthy%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/library-nook.webp" alt="A leather wingback chair between tall bookshelves with a brass lamp" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Library nook</div><div class="moment-title">Their reading chair</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20tall%20stack%20of%20antique%20leather-bound%20books%20with%20weathered%20gold-embossed%20spines%20on%20a%20worn%20wooden%20table%2C%20a%20single%20tarnished%20brass%20key%20on%20top%2C%20soft%20afternoon%20light%2C%20painterly&style=Vintage%20%2F%20Retro&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/vintage-books.webp" alt="Antique leather-bound books with a tarnished brass key on top" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Vintage books</div><div class="moment-title">The shelf that means something</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20top-down%20view%20of%20a%20perfect%20rosetta%20latte-art%20coffee%20on%20a%20small%20white%20ceramic%20saucer%20with%20a%20tiny%20spoon%2C%20soft%20warm%20morning%20light%2C%20scattered%20coffee%20beans%20beside%20it%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=muted%2C%20earthy%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/latte-art.webp" alt="A perfect rosetta latte-art coffee on a small white saucer" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Latte art</div><div class="moment-title">Their morning ritual</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20cozy%20independent%20bookstore%20corner%20with%20warm%20amber%20pendant%20lighting%2C%20tall%20shelves%20of%20hardback%20books%2C%20a%20small%20wooden%20ladder%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=muted%2C%20earthy%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/bookstore-corner.webp" alt="A cozy independent bookstore corner with amber pendant lighting" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Bookstore corner</div><div class="moment-title">The shop they hide in</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20vintage%20writer's%20wooden%20desk%20at%20golden%20afternoon%20-%20an%20open%20leather-bound%20journal%20with%20elegant%20handwriting%2C%20a%20brass%20fountain%20pen%2C%20a%20steaming%20mug%20of%20tea%2C%20a%20small%20vase%20with%20one%20rose%2C%20painterly&style=Painterly&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/writers-desk.webp" alt="A writer's wooden desk with journal, fountain pen, tea, and a rose" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Writer's desk</div><div class="moment-title">The page they wrote</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20worn%20leather%20armchair%20beside%20a%20glowing%20stone%20fireplace%20with%20an%20open%20hardback%20book%20on%20the%20chair%2C%20a%20wool%20tartan%20throw%2C%20a%20small%20side%20table%20with%20a%20steaming%20mug%2C%20painterly%20cozy&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/fireside-reading.webp" alt="A leather armchair beside a fireplace with an open book and tartan throw" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Fireside reading</div><div class="moment-title">The chair, the book, the fire</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20delicate%20porcelain%20teacup%20and%20matching%20small%20teapot%20on%20a%20marble%20table%20beside%20a%20small%20plate%20of%20shortbread%20biscuits%2C%20a%20tiny%20vase%20with%20one%20pink%20peony%2C%20soft%20cool%20afternoon%20light%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/tea-time.webp" alt="A porcelain teacup and teapot beside shortbread biscuits and a pink peony" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Tea time</div><div class="moment-title">Their elegant hour</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20coffee%20shop%20window%20at%20rainy%20twilight%2C%20raindrops%20streaking%20the%20glass%2C%20blurry%20city%20lights%20beyond%2C%20a%20single%20steaming%20ceramic%20mug%20and%20an%20open%20paperback%20book%20on%20the%20windowsill%20in%20soft%20warm%20interior%20light%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Moody%20%2F%20Atmospheric&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536#create">
+          <img src="/ai-art/moments/coffee-shop-rain.webp" alt="A coffee shop window at rainy twilight with a mug and book on the sill" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Cafe in the rain</div><div class="moment-title">The window they read by</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20tall%20stack%20of%20hardback%20books%20in%20vibrant%20cloth-bound%20colors%20topped%20with%20a%20small%20bouquet%20of%20fresh%20wildflowers%20and%20a%20stem%20of%20greenery%2C%20soft%20warm%20afternoon%20light%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/books-and-flowers.webp" alt="A stack of cloth-bound books topped with a bouquet of wildflowers" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Books &amp; flowers</div><div class="moment-title">A library that blooms</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20small%20dark-wood%20espresso%20bar%20at%20moody%20evening%20light%20-%20a%20vintage%20chrome%20espresso%20machine%2C%20two%20small%20glass%20cups%2C%20scattered%20coffee%20beans%2C%20warm%20pendant%20light%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Moody%20%2F%20Atmospheric&palette=muted%2C%20earthy%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/espresso-bar.webp" alt="A dark-wood espresso bar with vintage chrome espresso machine" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Espresso bar</div><div class="moment-title">The cafe they belong to</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20wrought-iron%20garden%20table%20set%20for%20tea%20in%20a%20sunlit%20cottage%20flower%20garden%20-%20porcelain%20teacups%2C%20a%20tiered%20cake%20stand%20with%20pastries%2C%20vibrant%20fresh%20flowers%20in%20a%20vase%2C%20warm%20afternoon%20sun%2C%20painterly%20impressionist&style=Impressionistic&mood=Bright%20%2F%20Uplifting&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/garden-tea-party.webp" alt="A wrought-iron garden table set for tea in a sunlit flower garden" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Garden tea party</div><div class="moment-title">A spring afternoon</div></div>
+        </a>
+      </div>
+    </section>
+
+    <section id="music" class="scroll-mt-32">
+      <div class="cat-header">
+        <h2>For music lovers <span class="text-indigo-400">🎵</span></h2>
+        <span class="count">12 starting points</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+        <a class="moment-tile" href="/?prompt=A%20vintage%20vinyl%20record%20spinning%20on%20a%20record%20player%20at%20warm%20lamp%20light%2C%20slight%20motion%20blur%20on%20the%20spinning%20disk%2C%20a%20tumbler%20of%20amber%20whisky%20on%20the%20side%20table%2C%20moody%20music-lover%2C%20painterly&style=Painterly&mood=Moody%20%2F%20Atmospheric&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/vinyl-record-glow.webp" alt="A vintage vinyl record spinning on a record player in warm lamp light" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Vinyl</div><div class="moment-title">The record they spin</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20sea%20of%20silhouetted%20concert%20hands%20raised%20in%20the%20air%20against%20a%20vibrant%20magenta%20and%20amber%20stage-light%20backdrop%2C%20joyful%20music-festival%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Energetic%20%2F%20Dynamic&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/concert-silhouette.webp" alt="Silhouetted concert hands raised against vibrant stage lights" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Concert lights</div><div class="moment-title">The show that changed them</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20worn%20acoustic%20guitar%20resting%20against%20a%20wooden%20chair%20beside%20a%20small%20open%20notebook%20with%20handwritten%20lyrics%2C%20soft%20warm%20window%20light%2C%20tender%20songwriter-evening%2C%20painterly&style=Painterly&mood=Nostalgic&palette=muted%2C%20earthy%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/acoustic-guitar.webp" alt="A worn acoustic guitar resting against a wooden chair with a notebook" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Acoustic guitar</div><div class="moment-title">The song they wrote you</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20black%20upright%20piano%20against%20a%20sunlit%20room%20wall%20with%20cool%20blue%20morning%20light%20streaming%20through%20a%20tall%20window%20onto%20the%20keys%2C%20sheet%20music%20on%20the%20stand%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536#create">
+          <img src="/ai-art/moments/piano-window-light.webp" alt="A black upright piano with cool morning light streaming onto the keys" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Piano at dawn</div><div class="moment-title">The keys they came back to</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20single%20pair%20of%20premium%20over-ear%20headphones%20resting%20on%20a%20wooden%20table%20against%20a%20vibrant%20abstract%20painted%20background%20of%20swirling%20cyan%2C%20magenta%2C%20gold%2C%20and%20emerald%20color%2C%20painterly&style=Pop%20Art%20%2F%20Graphic&mood=Energetic%20%2F%20Dynamic&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/headphones-color.webp" alt="Headphones on a wooden table against a vibrant abstract painted background" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Headphones</div><div class="moment-title">The world inside their ears</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20small%20intimate%20jazz%20club%20at%20night%20-%20a%20silhouetted%20saxophone%20player%20on%20a%20small%20stage%20under%20a%20warm%20amber%20spotlight%2C%20scattered%20small%20tables%20with%20glowing%20candles%2C%20moody%20late-night%20jazz%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Moody%20%2F%20Atmospheric&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/jazz-cafe.webp" alt="A silhouetted saxophone player under a warm amber spotlight at a jazz club" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Jazz club</div><div class="moment-title">The room where it played</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20top-down%20view%20of%20old%20yellowed%20sheet%20music%20pages%20with%20elegant%20musical%20notation%2C%20a%20single%20small%20dried%20pressed%20flower%20laid%20across%20them%2C%20soft%20warm%20afternoon%20light%2C%20painterly&style=Vintage%20%2F%20Retro&mood=Nostalgic&palette=muted%2C%20earthy%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/music-sheet-typography.webp" alt="Old yellowed sheet music with a dried pressed flower across it" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Sheet music</div><div class="moment-title">The song they remember</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20dramatic%20view%20from%20below%20of%20vibrant%20colorful%20concert%20stage%20lights%20beaming%20down%20-%20magenta%2C%20cyan%2C%20amber%2C%20emerald%20-%20against%20a%20dark%20concert%20hall%2C%20energetic%20concert%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Dramatic%20%2F%20Intense&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/stage-lights.webp" alt="Dramatic colorful concert stage lights beaming down in a dark hall" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Stage lights</div><div class="moment-title">The night they performed</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20silhouetted%20saxophone%20player%20from%20behind%20on%20an%20empty%20street%20corner%20at%20night%20under%20a%20warm%20amber%20streetlamp%2C%20moody%20street-jazz%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Moody%20%2F%20Atmospheric&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/sax-silhouette.webp" alt="A silhouetted saxophone player under a warm streetlamp at night" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Street jazz</div><div class="moment-title">The corner where they played</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20moody%20close-up%20of%20a%20drum%20kit%20-%20chrome%20cymbals%20catching%20warm%20amber%20stage%20light%2C%20a%20worn%20snare%20drum%20with%20sticks%20resting%20across%20it%2C%20drummer-stage%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Moody%20%2F%20Atmospheric&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536#create">
+          <img src="/ai-art/moments/drum-kit-moody.webp" alt="A drum kit with chrome cymbals catching warm amber stage light" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Drums</div><div class="moment-title">The kit they sat behind</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=An%20ornamental%20still-life%20of%20a%20stack%20of%20vintage%20sheet%20music%20topped%20with%20a%20single%20rose%20and%20a%20violin%20bow%2C%20soft%20warm%20afternoon%20window%20light%2C%20elegant%20classical-music%2C%20painterly&style=Vintage%20%2F%20Retro&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/music-notes-ornamental.webp" alt="A still-life of vintage sheet music with a rose and violin bow" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Ornamental music</div><div class="moment-title">The piece that moved them</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20quiet%20home%20recording%20studio%20-%20a%20vintage%20microphone%20in%20the%20foreground%2C%20a%20wooden%20chair%2C%20an%20acoustic%20guitar%20leaning%20against%20the%20wall%2C%20soft%20warm%20window%20light%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=muted%2C%20earthy%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/studio-session.webp" alt="A quiet home recording studio with vintage microphone and guitar" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Studio session</div><div class="moment-title">The mic they recorded into</div></div>
+        </a>
+      </div>
+    </section>
+
+    <section id="nature" class="scroll-mt-32">
+      <div class="cat-header">
+        <h2>For nature &amp; adventure <span class="text-indigo-400">🌲</span></h2>
+        <span class="count">12 starting points</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+        <a class="moment-tile" href="/?prompt=Towering%20ancient%20redwood%20trees%20rising%20into%20a%20misty%20morning%20canopy%20with%20vibrant%20golden%20sun%20rays%20streaming%20down%20through%20the%20trunks%2C%20awe-inspiring%20forest%2C%20painterly&style=Painterly&mood=Mysterious&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/forest-cathedral.webp" alt="Towering redwoods with golden sun rays streaming through" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Forest cathedral</div><div class="moment-title">The grove they walk through</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20perfectly%20still%20mirror-like%20mountain%20lake%20at%20dawn%2C%20surrounded%20by%20dark%20pine%20trees%2C%20soft%20pink%20and%20gold%20dawn%20sky%20reflected%20on%20the%20water%2C%20peaceful%20dawn-wilderness%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536#create">
+          <img src="/ai-art/moments/lake-at-dawn.webp" alt="A still mirror-like mountain lake at dawn with pink sky and mist" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Lake at dawn</div><div class="moment-title">The quiet hour</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20glowing%20campfire%20in%20a%20forest%20clearing%20at%20night%2C%20surrounded%20by%20a%20circle%20of%20large%20logs%2C%20a%20thermos%20and%20tin%20cup%20beside%20the%20fire%2C%20vibrant%20orange%20firelight%20glowing%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/campfire-scene.webp" alt="A glowing campfire in a forest clearing at night with logs around it" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Campfire</div><div class="moment-title">The fire they sat around</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20sunny%20mountain%20meadow%20at%20midday%20covered%20in%20vibrant%20wildflowers%20-%20magenta%20lupines%2C%20sunshine-yellow%20daisies%2C%20deep%20blue%20cornflowers%2C%20distant%20mountain%20ridge%2C%20joyful%20summer-meadow%2C%20painterly%20impressionist&style=Impressionistic&mood=Bright%20%2F%20Uplifting&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/wildflower-meadow.webp" alt="A sunny meadow filled with vibrant wildflowers" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Wildflower meadow</div><div class="moment-title">The summer they remember</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20clear%20bubbling%20mountain%20stream%20flowing%20over%20smooth%20river%20stones%20through%20a%20sun-dappled%20forest%2C%20sparkles%20of%20light%20on%20the%20water%2C%20peaceful%20mountain-trail%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536#create">
+          <img src="/ai-art/moments/mountain-stream.webp" alt="A clear bubbling mountain stream flowing through a sun-dappled forest" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Mountain stream</div><div class="moment-title">The water they followed</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20small%20glowing%20tent%20under%20a%20vast%20night%20sky%20filled%20with%20the%20visible%20Milky%20Way%20galaxy%2C%20silhouetted%20pine%20trees%20framing%20the%20scene%2C%20awe-inspiring%20stargazing%2C%20painterly&style=Surreal%20%2F%20Dreamlike&mood=Mysterious&palette=rich%20jewel%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/starry-camping.webp" alt="A glowing tent under the vast Milky Way framed by pines" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Starry night</div><div class="moment-title">The night sky over their tent</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20dense%20pine%20forest%20in%20deep%20morning%20mist%2C%20tall%20trunks%20fading%20into%20atmospheric%20depth%2C%20soft%20cool%20light%20filtering%20through%2C%20mysterious%20foggy-forest%2C%20painterly&style=Painterly&mood=Moody%20%2F%20Atmospheric&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536#create">
+          <img src="/ai-art/moments/misty-pine-forest.webp" alt="A dense pine forest in deep morning mist" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Misty pines</div><div class="moment-title">The fog they walked through</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=Dramatic%20dark%20Irish%20basalt%20sea%20cliffs%20with%20thunderous%20white-foam%20surf%20crashing%20far%20below%2C%20deep%20teal%20stormy%20ocean%2C%20low%20moody%20overcast%20sky%2C%20atmospheric%20powerful%20seascape%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Dramatic%20%2F%20Intense&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536#create">
+          <img src="/ai-art/moments/coastal-cliffs-dramatic.webp" alt="Dramatic basalt sea cliffs with crashing surf and overcast sky" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Sea cliffs</div><div class="moment-title">The edge they stood on</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20vast%20vibrant%20desert%20canyon%20at%20sunset%20with%20deep%20red%20rock%20walls%20glowing%20in%20warm%20low%20light%2C%20layered%20atmospheric%20mesas%20receding%20into%20warm%20haze%2C%20majestic%20desert-adventure%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Dramatic%20%2F%20Intense&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/desert-sunset.webp" alt="A vibrant desert canyon at sunset with deep red rock walls glowing" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Desert canyon</div><div class="moment-title">The walls that glow</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20winding%20leaf-strewn%20forest%20path%20through%20vibrant%20autumn%20trees%20ablaze%20in%20deep%20red%2C%20warm%20orange%2C%20and%20golden%20yellow%20leaves%2C%20soft%20golden%20afternoon%20light%2C%20painterly&style=Painterly&mood=Nostalgic&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/autumn-forest-path.webp" alt="A winding leaf-strewn forest path through vibrant autumn trees" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Autumn path</div><div class="moment-title">The walk in October</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20single%20snowy%20mountain%20peak%20rising%20above%20a%20sea%20of%20clouds%20at%20dawn%2C%20soft%20pink%20and%20gold%20dawn%20light%20catching%20the%20summit%2C%20majestic%20alpine-adventure%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/snowy-peak.webp" alt="A single snowy mountain peak rising above clouds at pink dawn" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Snowy peak</div><div class="moment-title">The summit at dawn</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20hidden%20lush%20tropical%20waterfall%20cascading%20into%20a%20turquoise%20jungle%20pool%20surrounded%20by%20deep%20emerald%20palms%20and%20ferns%2C%20vibrant%20flowers%20in%20the%20foreground%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/tropical-waterfall.webp" alt="A lush tropical waterfall cascading into a turquoise jungle pool" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Hidden waterfall</div><div class="moment-title">The cascade they found</div></div>
+        </a>
+      </div>
+    </section>
+
+    <section id="seasons" class="scroll-mt-32">
+      <div class="cat-header">
+        <h2>For the seasons <span class="text-indigo-400">🎄</span></h2>
+        <span class="count">12 starting points</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+        <a class="moment-tile" href="/?prompt=A%20small%20wooden%20cabin%20in%20deep%20snowy%20pine%20woods%20at%20twilight%2C%20soft%20warm%20amber%20light%20glowing%20from%20the%20windows%2C%20gentle%20smoke%20curling%20from%20the%20chimney%2C%20cozy%20winter-cabin%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536#create">
+          <img src="/ai-art/moments/winter-cabin.webp" alt="A wooden cabin in snowy pine woods with warm window light" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Winter cabin</div><div class="moment-title">The retreat in the snow</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20charming%20white%20farmhouse%20with%20a%20wraparound%20porch%20decorated%20for%20autumn%20-%20pumpkins%20on%20the%20steps%2C%20a%20wreath%20of%20dried%20leaves%20on%20the%20door%2C%20golden%20trees%20behind%2C%20painterly&style=Painterly&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/autumn-farmhouse.webp" alt="A white farmhouse porch decorated with pumpkins and dried leaves" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Autumn farmhouse</div><div class="moment-title">October at home</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20beautifully%20decorated%20Christmas%20hearth%20with%20hanging%20stockings%2C%20a%20glowing%20fireplace%2C%20garland%20of%20fresh%20evergreens%20and%20red%20berries%20draped%20across%20the%20mantle%2C%20warm%20Christmas-morning%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/christmas-hearth.webp" alt="A decorated Christmas hearth with stockings and garland" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Christmas hearth</div><div class="moment-title">The morning by the fire</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20lush%20spring%20cottage%20garden%20in%20full%20bloom%20-%20vibrant%20pink%20cherry%20blossoms%20overhead%2C%20soft%20white%20daisies%2C%20deep%20purple%20lilacs%2C%20sunshine%20yellow%20tulips%2C%20joyful%20spring-renewal%2C%20painterly%20impressionist&style=Impressionistic&mood=Bright%20%2F%20Uplifting&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/spring-garden.webp" alt="A lush spring cottage garden in full bloom with cherry blossoms" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Spring garden</div><div class="moment-title">The bloom they waited for</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20vast%20golden%20summer%20wheat%20field%20at%20golden%20hour%20with%20vibrant%20red%20poppies%20scattered%20throughout%2C%20a%20distant%20farmhouse%20on%20the%20horizon%2C%20joyful%20summer-harvest%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=vibrant%2C%20saturated%20colors&ratio=1536x1024#create">
+          <img src="/ai-art/moments/summer-field.webp" alt="A vast golden summer wheat field with red poppies" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Summer field</div><div class="moment-title">The golden afternoon</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20wooden%20harvest%20table%20laden%20with%20autumn%20bounty%20-%20pumpkins%2C%20apples%2C%20golden%20squash%2C%20cranberries%2C%20dried%20wheat%20sheaves%2C%20warm%20afternoon%20light%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/harvest-table.webp" alt="A wooden harvest table laden with pumpkins, apples, and wheat" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Harvest table</div><div class="moment-title">The fall feast</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20dramatic%20city%20skyline%20at%20midnight%20with%20vibrant%20exploding%20fireworks%20lighting%20up%20the%20sky%20in%20magenta%2C%20gold%2C%20emerald%2C%20and%20silver%2C%20deep%20dark%20blue%20night%2C%20celebratory%20new-year%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Dramatic%20%2F%20Intense&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536#create">
+          <img src="/ai-art/moments/new-year-fireworks.webp" alt="A city skyline with vibrant fireworks lighting the sky at midnight" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">New Year's</div><div class="moment-title">The midnight you remember</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20small%20intimate%20Valentine's%20tableau%20-%20a%20vintage%20glass%20vase%20with%20deep%20red%20roses%2C%20a%20small%20heart-shaped%20chocolate%20box%20wrapped%20in%20soft%20pink%20ribbon%2C%20a%20handwritten%20letter%20beside%20it%2C%20soft%20warm%20afternoon%20light%2C%20painterly&style=Painterly&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/valentines-still-life.webp" alt="A still-life with red roses, a heart chocolate box, and a letter" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Valentine's Day</div><div class="moment-title">The love note</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20small%20Easter%20scene%20in%20a%20sunny%20garden%20-%20a%20wicker%20basket%20with%20pastel-colored%20eggs%20nestled%20in%20soft%20grass%2C%20white%20narcissus%20and%20yellow%20tulips%20blooming%20around%20it%2C%20joyful%20spring-morning%2C%20painterly%20impressionist&style=Impressionistic&mood=Whimsical%20%2F%20Playful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/easter-morning-garden.webp" alt="A wicker basket with pastel eggs in a sunny garden with daffodils" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Easter morning</div><div class="moment-title">The basket in the grass</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20charming%20pumpkin%20patch%20at%20golden%20hour%20-%20rows%20of%20pumpkins%20in%20deep%20orange%2C%20soft%20cream%2C%20and%20pale%20jade%2C%20scattered%20hay%20bales%2C%20autumn%20trees%20behind%2C%20joyful%20pumpkin-patch%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/halloween-pumpkins.webp" alt="A charming pumpkin patch at golden hour with hay bales" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Pumpkin patch</div><div class="moment-title">The October afternoon</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20long%20wooden%20farmhouse%20table%20set%20for%20Thanksgiving%20-%20a%20roasted%20turkey%20centerpiece%2C%20soft%20cream%20plates%2C%20a%20vase%20of%20autumn%20flowers%20and%20wheat%2C%20warm%20amber%20chandelier%20above%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/thanksgiving-table.webp" alt="A long farmhouse table set for Thanksgiving with a roasted turkey" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Thanksgiving</div><div class="moment-title">The table everyone gathers at</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20beautifully%20decorated%20Christmas%20tree%20on%20Christmas%20morning%20with%20vibrant%20wrapped%20presents%20in%20deep%20red%20and%20gold%20beneath%2C%20soft%20warm%20morning%20light%20streaming%20through%20nearby%20windows%2C%20magical%20Christmas-morning%2C%20painterly&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/christmas-tree-morning.webp" alt="A decorated Christmas tree with presents in warm morning light" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Christmas morning</div><div class="moment-title">The tree they decorated together</div></div>
+        </a>
       </div>
     </section>
 
