@@ -1228,7 +1228,11 @@ function tileHTML(t) {
   const href = `/?${parts.join('&')}#create`;
   return `        <a class="moment-tile" href="${href}">
           <img src="/ai-art/moments/${t.slug}.webp" alt="${esc(t.alt)}" loading="lazy">
-          <div class="moment-overlay"><div class="moment-eyebrow">${esc(t.eyebrow)}</div><div class="moment-title">${esc(t.title)}</div></div>
+          <div class="moment-overlay">
+            <div class="moment-eyebrow">${esc(t.eyebrow)}</div>
+            <div class="moment-title">${esc(t.title)}</div>
+            <div class="moment-cta">Use this idea →</div>
+          </div>
         </a>`;
 }
 
@@ -1316,10 +1320,26 @@ const page = `<!doctype html>
     .moment-tile:hover img{transform:scale(1.06);}
     .moment-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,29,.92) 0%,rgba(10,15,29,.55) 45%,rgba(10,15,29,0) 75%);display:flex;flex-direction:column;justify-content:flex-end;padding:12px 12px 14px;text-align:left;}
     .moment-eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#c7d2fe;margin-bottom:3px;}
+    /* Always-visible subtle CTA. Brightens + slides on hover so the
+       affordance reads on desktop without being noisy on the tile grid.
+       Mobile keeps it visible (no hover state) so the idea-vs-image
+       intent is still legible. */
+    .moment-cta{font-size:10px;font-weight:600;letter-spacing:.04em;color:rgba(199,210,254,.55);margin-top:6px;opacity:.85;transform:translateX(0);transition:color .2s ease,opacity .2s ease,transform .2s ease;}
+    .moment-tile:hover .moment-cta{color:#fff;opacity:1;transform:translateX(3px);}
+    @media (min-width: 768px){.moment-cta{font-size:11px;}}
     .moment-title{font-size:13px;font-weight:700;color:#fff;line-height:1.25;}
     @media (min-width: 768px){.moment-title{font-size:14px;}.moment-eyebrow{font-size:11px;}}
     @media (min-width: 1024px){.moment-title{font-size:15px;}}
 
+    /* "How gifting works" 5-step strip under the hero. Horizontal on
+       desktop, stacks on mobile. Faint numbered chips, restrained color
+       so it educates without competing with the tile grid below. */
+    .how-gifting-strip{display:grid;grid-template-columns:1fr;gap:.85rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:1rem 1.1rem;}
+    @media (min-width:768px){.how-gifting-strip{grid-template-columns:repeat(5,minmax(0,1fr));gap:1.1rem;padding:1.25rem 1.4rem;}}
+    .how-step{display:flex;align-items:flex-start;gap:.7rem;}
+    .how-num{flex:none;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:999px;background:rgba(129,140,248,.12);color:#c7d2fe;font-weight:800;font-size:.85rem;border:1px solid rgba(129,140,248,.3);}
+    .how-title{font-weight:700;font-size:.92rem;color:#e7eef8;line-height:1.25;}
+    .how-sub{font-size:.78rem;color:var(--muted);margin-top:2px;line-height:1.35;}
     .cat-header{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid rgba(255,255,255,.08);}
     .cat-header h2{font-size:clamp(1.3rem,2.2vw,1.9rem);font-weight:800;line-height:1.1;}
     .cat-header .count{font-size:.85rem;color:var(--muted);font-weight:500;}
@@ -1413,11 +1433,26 @@ const page = `<!doctype html>
     <p class="muted mt-5 max-w-2xl mx-auto text-lg leading-relaxed">
       ${TOTAL} starting points across ${CATEGORIES.length} categories. Pick the one that feels right — we'll set up the prompt, and your final piece is one of a kind.
     </p>
+    <p class="text-sm text-indigo-300/80 mt-3 max-w-xl mx-auto">
+      Tap any tile to set the starting prompt — then customize and preview before you order.
+    </p>
     <div class="flex flex-wrap items-center justify-center gap-2 mt-7">
       <span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l9-4 9 4v5c0 5-3.5 8.5-9 10-5.5-1.5-9-5-9-10V7Z"/><path d="m9 12 2 2 4-4"/></svg> Made in the USA</span>
       <span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="14" rx="1.5"/><path d="M8 9h6"/><path d="M8 13h4"/><path d="M10 18v2l2-1 2 1v-2"/></svg> Numbered Certificate of Authenticity</span>
       <span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg> Founder-reviewed before it prints</span>
       <span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7v6h6"/><path d="M21 17a8 8 0 0 0-15.3-3.3"/></svg> Ships in 5–10 business days</span>
+    </div>
+  </section>
+
+  <!-- HOW GIFTING WORKS — 5-step strip so a first-time buyer understands
+       the full flow before they start tile-shopping. -->
+  <section class="max-w-[1800px] mx-auto px-5 pb-6">
+    <div class="how-gifting-strip">
+      <div class="how-step"><span class="how-num">1</span><div><div class="how-title">Pick a gift idea</div><div class="how-sub">Browse the tiles below — each sets a starting prompt.</div></div></div>
+      <div class="how-step"><span class="how-num">2</span><div><div class="how-title">Personalize it</div><div class="how-sub">Names, places, pets, memories, or your own photos.</div></div></div>
+      <div class="how-step"><span class="how-num">3</span><div><div class="how-title">Preview the artwork</div><div class="how-sub">Generate, refine, and approve the look before paying.</div></div></div>
+      <div class="how-step"><span class="how-num">4</span><div><div class="how-title">Choose your material</div><div class="how-sub">Canvas, ChromaLuxe metal, or acrylic facemount.</div></div></div>
+      <div class="how-step"><span class="how-num">5</span><div><div class="how-title">We review, print, number &amp; ship</div><div class="how-sub">Founder-reviewed, numbered COA, ready to hang.</div></div></div>
     </div>
   </section>
 
