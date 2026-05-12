@@ -31,6 +31,14 @@
     .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#e7eef8;cursor:pointer;padding:.7rem 1rem;border-radius:.6rem;}
     .spinner{border:2px solid #333;border-top:2px solid #fff;border-radius:50%;width:20px;height:20px;animation:spin 1s linear infinite;margin:0 auto;}
     @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    /* Credit History collapsible — rotate the chevron on expand. Done in
+       hand-rolled CSS instead of Tailwind's group-open: utility because
+       the site's tailwind.min.css is pre-compiled and may not include
+       it. Also kill the default ::-webkit-details-marker triangle on
+       Safari so the chevron is the only indicator. */
+    #credits summary { list-style: none; }
+    #credits summary::-webkit-details-marker { display: none; }
+    #credits[open] summary svg { transform: rotate(180deg); }
   </style>
 <script defer src="/js/analytics.js"></script><script defer src="/js/utm.js"></script><script defer src="/js/cart.js"></script><script defer src="/js/cart-ui.js"></script><script defer src="/js/cart-sync.js"></script>
   </head>
@@ -137,16 +145,25 @@
         </div>
       </div>
 
-      <!-- Purchase History -->
-      <div id="credits" class="scroll-mt-24">
-        <h2 class="text-2xl font-bold mb-4">Credit History</h2>
-        <div id="historyContainer" class="space-y-2">
+      <!-- Credit History — collapsed by default so the per-generation -1
+           rows don't eat the whole account page. User clicks the summary
+           to expand. Mirrors the <details>/<summary> pattern from
+           /faq.html so the affordance reads the same site-wide. -->
+      <details id="credits" class="scroll-mt-24 group glass rounded-xl">
+        <summary class="flex items-center justify-between cursor-pointer p-5 list-none">
+          <div class="flex items-baseline gap-3">
+            <h2 class="text-2xl font-bold">Credit History</h2>
+            <span id="historyCount" class="text-xs text-gray-500"></span>
+          </div>
+          <svg class="w-5 h-5 opacity-60 transition-transform group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.02l3.73-3.73a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z"/></svg>
+        </summary>
+        <div id="historyContainer" class="space-y-2 px-5 pb-5">
           <div class="text-center py-8 glass rounded-xl">
             <div class="spinner"></div>
             <p class="mt-2 text-gray-400">Loading history...</p>
           </div>
         </div>
-      </div>
+      </details>
 
       <!-- Account Actions -->
       <div class="glass rounded-xl p-6">
@@ -216,6 +233,14 @@
         if (historyResp.ok) {
           const historyData = await historyResp.json();
           const historyContainer = document.getElementById('historyContainer');
+          const historyCount = document.getElementById('historyCount');
+
+          // Surface the transaction count in the collapsed summary so the
+          // user knows there's something inside without expanding.
+          if (historyCount) {
+            const n = historyData.history.length;
+            historyCount.textContent = n ? `${n} transaction${n === 1 ? '' : 's'}` : '';
+          }
 
           if (historyData.history.length === 0) {
             historyContainer.innerHTML = `
