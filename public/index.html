@@ -729,44 +729,50 @@
     <!-- Hero gallery: 6 square tiles in a 3x2 grid (on desktop) deliberately
          mixing palettes and styles — warm landscape, cool urban, painterly,
          photoreal wildlife, anime, and vibrant pop-art — so a visitor sees
-         the full range of what we can print at a glance. -->
+         the full range of what we can print at a glance.
+         Each tile is a clickable starting point: clicking deep-links back
+         to the homepage with the full set of generator params pre-filled
+         (prompt, style, mood, palette, ratio, medium, time, lighting,
+         camera, expression — same pattern /gifts tiles use), then auto-
+         scrolls to #create. The page's prefillFromQueryParams() handler
+         does the form-filling. -->
     <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-      <div class="aspect-[2/3] rounded-2xl overflow-hidden relative">
-        <img src="/ai-art/art-cyberpunk-tokyo.webp" class="w-full h-full object-cover" alt="Neon-soaked cyberpunk Tokyo street at midnight">
+      <a href="/?prompt=Neon-soaked%20cyberpunk%20Tokyo%20street%20at%20midnight%2C%20vibrant%20magenta%20and%20cyan%20signage%2C%20rain-slicked%20pavement%2C%20lone%20silhouette%20with%20umbrella%2C%20cinematic%20atmospheric&style=Cinematic%20%2F%20Editorial&mood=Moody%20%2F%20Atmospheric&palette=vibrant%2C%20saturated%20colors&ratio=1024x1536&medium=Photograph%20%2F%20Realistic&time=at%20night&lighting=Neon%20%2F%20Artificial&camera=Cinematic%20Framing#create" class="hero-tile aspect-[2/3] rounded-2xl overflow-hidden relative block group">
+        <img src="/ai-art/art-cyberpunk-tokyo.webp" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Neon-soaked cyberpunk Tokyo street at midnight">
         <div class="absolute bottom-2 left-2 right-2">
           <div class="glass rounded px-2 py-1 text-xs">"Neon Tokyo at midnight" — Canvas</div>
         </div>
-      </div>
-      <div class="aspect-[2/3] rounded-2xl overflow-hidden relative">
-        <img src="/ai-art/art-couple-beach.webp" class="w-full h-full object-cover" alt="Silhouette of a couple holding hands walking along a glassy beach at sunset">
+      </a>
+      <a href="/?prompt=Silhouette%20of%20a%20couple%20holding%20hands%20walking%20along%20a%20glassy%20wet%20beach%20at%20sunset%2C%20soft%20warm%20light%20reflecting%20on%20the%20sand%2C%20deeply%20romantic%20cinematic&style=Cinematic%20%2F%20Editorial&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536&medium=Photograph%20%2F%20Realistic&time=at%20sunset&lighting=Warm%20%2F%20Golden%20Light&camera=Wide%20Angle%20%2F%20Expansive&expression=loving%2C%20tender%20expression#create" class="hero-tile aspect-[2/3] rounded-2xl overflow-hidden relative block group">
+        <img src="/ai-art/art-couple-beach.webp" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Silhouette of a couple holding hands walking along a glassy beach at sunset">
         <div class="absolute bottom-2 left-2 right-2">
           <div class="glass rounded px-2 py-1 text-xs">"Holding hands, sunset beach" — Canvas</div>
         </div>
-      </div>
-      <div class="aspect-[2/3] rounded-2xl overflow-hidden relative">
-        <img src="/ai-art/art-wild-horses.webp" class="w-full h-full object-cover" alt="Wild horses galloping through a misty emerald-green meadow at dawn">
+      </a>
+      <a href="/?prompt=Wild%20horses%20galloping%20through%20a%20misty%20emerald-green%20meadow%20at%20dawn%2C%20golden%20light%20filtering%20through%20morning%20fog%2C%20photorealistic%20wildlife%20photography&style=Realistic%20(photo-realistic)&mood=Energetic%20%2F%20Dynamic&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536&medium=Photograph%20%2F%20Realistic&time=at%20sunrise&lighting=Natural%20%2F%20Soft%20Light&camera=Wide%20Angle%20%2F%20Expansive#create" class="hero-tile aspect-[2/3] rounded-2xl overflow-hidden relative block group">
+        <img src="/ai-art/art-wild-horses.webp" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Wild horses galloping through a misty emerald-green meadow at dawn">
         <div class="absolute bottom-2 left-2 right-2">
           <div class="glass rounded px-2 py-1 text-xs">"Wild horses, misty meadow" — Metal</div>
         </div>
-      </div>
-      <div class="aspect-[2/3] rounded-2xl overflow-hidden relative">
-        <img src="/ai-art/art-wolf-snow.webp" class="w-full h-full object-cover" alt="Photoreal portrait of a lone gray wolf in a snowy forest at golden hour">
+      </a>
+      <a href="/?prompt=Photoreal%20portrait%20of%20a%20lone%20gray%20wolf%20standing%20in%20a%20snowy%20pine%20forest%20at%20golden%20hour%2C%20soft%20warm%20light%20catching%20the%20snowflakes%20and%20fur%2C%20alert%20wildlife%20photography&style=Realistic%20(photo-realistic)&mood=Mysterious&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536&medium=Photograph%20%2F%20Realistic&time=at%20sunrise&lighting=Warm%20%2F%20Golden%20Light&camera=Portrait%20%2F%20Headshot%20Framing#create" class="hero-tile aspect-[2/3] rounded-2xl overflow-hidden relative block group">
+        <img src="/ai-art/art-wolf-snow.webp" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Photoreal portrait of a lone gray wolf in a snowy forest at golden hour">
         <div class="absolute bottom-2 left-2 right-2">
           <div class="glass rounded px-2 py-1 text-xs">"Lone wolf in golden snow" — Metal</div>
         </div>
-      </div>
-      <div class="aspect-[2/3] rounded-2xl overflow-hidden relative">
-        <img src="/ai-art/art-child-wheat.webp" class="w-full h-full object-cover" alt="Young child running joyfully through tall golden wheat at sunset, arms outstretched">
+      </a>
+      <a href="/?prompt=Young%20child%20running%20joyfully%20through%20tall%20golden%20wheat%20at%20sunset%2C%20arms%20outstretched%2C%20warm%20cinematic%20light%2C%20dreamy%20nostalgic%20photography&style=Cinematic%20%2F%20Editorial&mood=Bright%20%2F%20Uplifting&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536&medium=Photograph%20%2F%20Realistic&time=at%20sunset&lighting=Warm%20%2F%20Golden%20Light&camera=Wide%20Angle%20%2F%20Expansive&expression=joyful%2C%20smiling%2C%20warm%20expression#create" class="hero-tile aspect-[2/3] rounded-2xl overflow-hidden relative block group">
+        <img src="/ai-art/art-child-wheat.webp" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Young child running joyfully through tall golden wheat at sunset, arms outstretched">
         <div class="absolute bottom-2 left-2 right-2">
           <div class="glass rounded px-2 py-1 text-xs">"Run free, golden wheat" — Canvas</div>
         </div>
-      </div>
-      <div class="aspect-[2/3] rounded-2xl overflow-hidden relative">
-        <img src="/ai-art/art-red-umbrella-park.webp" class="w-full h-full object-cover" alt="Woman in a red coat with a red umbrella walking through a snowy Central Park at dusk">
+      </a>
+      <a href="/?prompt=Woman%20in%20a%20red%20coat%20with%20a%20red%20umbrella%20walking%20through%20a%20snowy%20Central%20Park%20at%20twilight%2C%20glowing%20streetlamps%20illuminating%20gently%20falling%20snow%2C%20romantic%20cinematic&style=Cinematic%20%2F%20Editorial&mood=Romantic&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536&medium=Photograph%20%2F%20Realistic&time=at%20twilight%2C%20blue%20hour&lighting=Warm%20%2F%20Golden%20Light&camera=Wide%20Angle%20%2F%20Expansive#create" class="hero-tile aspect-[2/3] rounded-2xl overflow-hidden relative block group">
+        <img src="/ai-art/art-red-umbrella-park.webp" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Woman in a red coat with a red umbrella walking through a snowy Central Park at dusk">
         <div class="absolute bottom-2 left-2 right-2">
           <div class="glass rounded px-2 py-1 text-xs">"Red umbrella, Central Park" — Canvas</div>
         </div>
-      </div>
+      </a>
     </div>
   </section>
 
@@ -943,6 +949,12 @@
   </section>
 
   <style>
+    /* Hero-gallery tile = clickable starting point. Mirrors the .moment-tile
+       hover language (subtle lift + indigo border) so the affordance reads
+       the same across the homepage's two tile grids. The image scale is
+       handled via Tailwind's group-hover:scale-105 on the <img> itself. */
+    .hero-tile{ cursor:pointer; border:1px solid rgba(255,255,255,.06); transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
+    .hero-tile:hover{ transform:translateY(-3px); border-color:rgba(129,140,248,.45); box-shadow:0 16px 40px -12px rgba(129,140,248,.3); }
     .moment-tile{
       position:relative; overflow:hidden; border-radius:14px;
       aspect-ratio:4/5;
