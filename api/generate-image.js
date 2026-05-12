@@ -49,6 +49,11 @@ function slugify(s) {
 // Override via env var (e.g. roll back to gemini-2.5-flash-image, or A/B another model).
 const IMAGE_MODEL = process.env.IMAGE_MODEL || 'gemini-3-pro-image-preview';
 
+// Native generation resolution sent to Gemini 3 Pro Image. '1K' | '2K' | '4K'.
+// Roll back to '1K' via IMAGE_SIZE env var if latency or cost becomes an issue.
+const IMAGE_SIZE = process.env.IMAGE_SIZE || '2K';
+const COST_PER_GEN = ({ '1K': 0.134, '2K': 0.18, '4K': 0.41 })[IMAGE_SIZE] ?? 0.18;
+
 async function generateImage({ prompt, size, apiKey, signal, referenceImages = [] }) {
   const aspectRatio = SIZE_TO_ASPECT_RATIO[size] || '1:1';
 
@@ -70,7 +75,8 @@ async function generateImage({ prompt, size, apiKey, signal, referenceImages = [
         generationConfig: {
           responseModalities: ['TEXT', 'IMAGE'],
           imageConfig: {
-            aspectRatio: aspectRatio
+            aspectRatio: aspectRatio,
+            imageSize: IMAGE_SIZE
           }
         }
       }),
@@ -262,7 +268,7 @@ export default async function handler(req, res) {
       prompt,
       previewUrl,
       size,
-      0.134, // Cost per generation — Gemini 3 Pro Image standard 1K
+      COST_PER_GEN,
       cleanUrl
     );
 

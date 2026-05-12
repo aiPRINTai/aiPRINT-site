@@ -9,7 +9,7 @@ import {
 import { getUserFromRequest, getClientIp, isTokenFresh } from '../auth/utils.js';
 
 // Configuration
-const SIGNUP_BONUS_CREDITS = 10;
+const SIGNUP_BONUS_CREDITS = 5;
 const GENERATION_COST = 1; // 1 credit per generation
 const ANONYMOUS_LIMIT = 1; // free previews allowed per IP per 24h before signup is required
 const ANONYMOUS_WINDOW_HOURS = 24;
@@ -72,7 +72,7 @@ export async function canUserGenerate(req) {
     }
     return {
       allowed: false,
-      reason: 'Sign up free to keep creating — new accounts get 10 credits.',
+      reason: 'Sign up free to keep creating — new accounts get 5 credits.',
       isAnonymous: true,
       remainingGenerations: 0,
       needsSignup: true
@@ -82,7 +82,7 @@ export async function canUserGenerate(req) {
     // Fail closed: require signup if we can't read the table
     return {
       allowed: false,
-      reason: 'Sign in to generate. New accounts get 10 free credits.',
+      reason: 'Sign in to generate. New accounts get 5 free credits.',
       isAnonymous: true,
       remainingGenerations: 0,
       needsSignup: true

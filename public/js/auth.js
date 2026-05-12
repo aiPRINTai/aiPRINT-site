@@ -332,7 +332,7 @@ class AuthManager {
           <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
         </div>
 
-        ${!isLogin ? '<p class="text-sm text-gray-400 mb-6">Get 10 free credits to start creating!</p>' : ''}
+        ${!isLogin ? '<p class="text-sm text-gray-400 mb-6">Get 5 free credits to start creating!</p>' : ''}
 
         <form id="authForm" class="space-y-4">
           <div>
@@ -351,7 +351,7 @@ class AuthManager {
           <div id="authError" class="hidden p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-sm"></div>
 
           <button type="submit" class="btn w-full">
-            ${isLogin ? 'Login' : 'Sign up & get 10 free credits'}
+            ${isLogin ? 'Login' : 'Sign up & get 5 free credits'}
           </button>
         </form>
 
@@ -434,7 +434,7 @@ class AuthManager {
         errorDiv.textContent = result.error;
         errorDiv.classList.remove('hidden');
         submitBtn.disabled = false;
-        submitBtn.textContent = isLogin ? 'Login' : 'Sign up & get 10 free credits';
+        submitBtn.textContent = isLogin ? 'Login' : 'Sign up & get 5 free credits';
       }
     });
 

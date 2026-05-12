@@ -153,9 +153,9 @@ class CreditsManager {
         messageEl.innerHTML = `
           <div class="glass rounded-xl p-4 border-2 border-yellow-500/50">
             <div class="font-bold text-yellow-400 mb-2">⚠️ Daily limit reached</div>
-            <p class="text-sm mb-3">You've used your free preview today. Sign up to keep going — 10 free credits, no card required.</p>
+            <p class="text-sm mb-3">You've used your free preview today. Sign up to keep going — 5 free credits, no card required.</p>
             <button onclick="auth.showSignupModal()" class="btn w-full">
-              Sign up for 10 free credits
+              Sign up for 5 free credits
             </button>
           </div>
         `;
@@ -165,7 +165,7 @@ class CreditsManager {
             <span class="text-gray-400">Free previews remaining today:</span>
             <span class="font-bold ml-2">${this.anonymousGenerationsRemaining}/1</span>
             <button onclick="auth.showSignupModal()" class="btn-ghost ml-3 px-3 py-1 text-xs">
-              Get 10 free credits →
+              Get 5 free credits →
             </button>
           </div>
         `;

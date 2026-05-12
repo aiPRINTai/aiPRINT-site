@@ -103,9 +103,9 @@ const SKU_PREFIX_TO_MATERIAL = {
 // 3. OTHER PER-ORDER COSTS
 // ─────────────────────────────────────────────────────────────────────────
 export const PER_ORDER_COSTS = {
-  // Google Gemini 2.5 Flash Image — per generated image. Customer typically
+  // Google Gemini 3 Pro Image @ 2K — per generated image. Customer typically
   // generates 2–4 images per order before they pick one. Conservative budget.
-  generation_avg_cents: 14,                // ~4 generations × $0.035
+  generation_avg_cents: 72,                // ~4 generations × $0.18
 
   // Stripe US card transaction fee. Same for single-item and cart checkouts.
   stripe_fee_pct: 2.9,

@@ -8,7 +8,7 @@ import { sql } from '@vercel/postgres';
 export async function createUser(email, passwordHash, { verificationToken = null, verificationExpires = null } = {}) {
   const result = await sql`
     INSERT INTO users (email, password_hash, credits_balance, email_verified, verification_token, verification_expires)
-    VALUES (${email}, ${passwordHash}, 10, FALSE, ${verificationToken}, ${verificationExpires})
+    VALUES (${email}, ${passwordHash}, 5, FALSE, ${verificationToken}, ${verificationExpires})
     RETURNING id, email, credits_balance, email_verified, created_at
   `;
   return result.rows[0];
