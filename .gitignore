@@ -64,3 +64,8 @@ positioning-summary.md
 # to the repo root since /index.html siblings are treated as static routes).
 your-todo.html
 AiPrint-Icon.png
+
+# Working artifacts from generation scripts (.backup-* are auto-saved
+# before overwrites; intermediate og-image.*.png are design iterations)..
+*.backup-*
+public/og-image.*-*.png
