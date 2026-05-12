@@ -1111,7 +1111,7 @@
       <!-- Anonymous: free-preview pitch. Logged-in copy is swapped in by
            refreshCreateIntro() below. -->
       <h2 class="h2" id="createIntroHeading">Create a preview — free</h2>
-      <p class="muted mt-3" id="createIntroSubhead">Try <span class="text-indigo-300 font-semibold">1 free preview</span> right now — no signup. Then sign up for <span class="text-indigo-300 font-semibold">5 free credits</span> (1 credit = 1 generation, just $0.20 each after that).</p>
+      <p class="muted mt-3" id="createIntroSubhead">Try <span class="text-indigo-300 font-semibold">1 free preview</span> right now — no signup. Then sign up for <span class="text-indigo-300 font-semibold">5 free credits</span> — no card required.</p>
     </div>
     <script>
       // ─────────────────────────────────────────────────────────────────
@@ -1132,18 +1132,18 @@
           if (!authed) {
             intro.setAttribute('data-auth-state', 'anonymous');
             heading.textContent = 'Create a preview — free';
-            subhead.innerHTML = 'Try <span class="text-indigo-300 font-semibold">1 free preview</span> right now — no signup. Then sign up for <span class="text-indigo-300 font-semibold">5 free credits</span> (1 credit = 1 generation, just $0.20 each after that).';
+            subhead.innerHTML = 'Try <span class="text-indigo-300 font-semibold">1 free preview</span> right now — no signup. Then sign up for <span class="text-indigo-300 font-semibold">5 free credits</span> — no card required.';
             return;
           }
           const bal = Number(window.auth?.user?.credits_balance ?? window.credits?.balance ?? 0);
           if (bal > 0) {
             intro.setAttribute('data-auth-state', 'logged-in-credits');
             heading.textContent = 'Create your next print';
-            subhead.innerHTML = `You have <span class="text-indigo-300 font-semibold">${bal} credit${bal === 1 ? '' : 's'}</span> — each generation uses 1 ($0.20 to top up). Describe your idea below.`;
+            subhead.innerHTML = `You have <span class="text-indigo-300 font-semibold">${bal} credit${bal === 1 ? '' : 's'}</span>. Describe your idea below.`;
           } else {
             intro.setAttribute('data-auth-state', 'logged-in-empty');
             heading.textContent = 'Create your next print';
-            subhead.innerHTML = `You’re out of credits — <a href="#" onclick="event.preventDefault(); window.credits && window.credits.showPurchaseModal && window.credits.showPurchaseModal();" class="text-indigo-300 font-semibold underline decoration-indigo-400/40 hover:decoration-indigo-300">grab a pack</a> to keep creating ($0.20 each).`;
+            subhead.innerHTML = `You’re out of credits — <a href="#" onclick="event.preventDefault(); window.credits && window.credits.showPurchaseModal && window.credits.showPurchaseModal();" class="text-indigo-300 font-semibold underline decoration-indigo-400/40 hover:decoration-indigo-300">grab a pack</a> to keep creating.`;
           }
         }
 
@@ -1427,7 +1427,7 @@
           <button id="genBtn" aria-label="Generate preview" class="btn-accent w-full md:w-auto px-10 py-3.5 text-base font-semibold shadow-lg shadow-indigo-500/20">Generate preview (1 credit)</button>
         </div>
       </div>
-      <p class="text-xs text-gray-500 mb-6">Each preview uses 1 credit ($0.20). New accounts get 5 free credits to start.</p>
+      <p class="text-xs text-gray-500 mb-6">Each preview uses 1 credit. New accounts get 5 free credits to start.</p>
 
       <!-- Signature toggle -->
       <div class="mb-3">

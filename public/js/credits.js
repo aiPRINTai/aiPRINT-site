@@ -108,13 +108,17 @@ class CreditsManager {
     // Load and display packages
     this.loadPackages().then(packages => {
       const container = modal.querySelector('#packagesContainer');
+      // Per-credit pricing intentionally hidden: customers buy creative
+      // credits, not API generations. Pack price + credit count is all
+      // they need. Backend still computes pricePerCredit for analytics
+      // / margin tracking but it is not displayed.
       container.innerHTML = packages.map(pkg => `
         <div class="glass rounded-xl p-5 ${pkg.popular ? 'ring-2 ring-yellow-500' : ''}">
           ${pkg.popular ? '<div class="text-xs font-bold text-yellow-500 mb-2">⭐ MOST POPULAR</div>' : ''}
           <div class="flex justify-between items-start mb-3">
             <div>
               <div class="text-2xl font-bold">${pkg.credits} Credits</div>
-              <div class="text-sm text-gray-400">$${pkg.pricePerCredit.toFixed(2)} per credit</div>
+              <div class="text-sm text-gray-400">${pkg.description || 'Create more previews. Never expires.'}</div>
             </div>
             <div class="text-right">
               <div class="text-2xl font-bold">$${pkg.price.toFixed(2)}</div>
@@ -185,7 +189,7 @@ class CreditsManager {
           <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
         </div>
 
-        <p class="mb-6 text-gray-300">You're out of credits — grab a pack to keep creating. Just $5 for 25 more generations ($0.20 each).</p>
+        <p class="mb-6 text-gray-300">You're out of credits — grab a pack to keep creating. From $5 for 25 more credits. Credits never expire.</p>
 
         <button onclick="this.closest('.fixed').remove(); credits.showPurchaseModal()" class="btn w-full">
           Buy Credits
