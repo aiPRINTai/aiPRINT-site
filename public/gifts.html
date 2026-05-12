@@ -58,15 +58,15 @@
     @media (min-width: 768px){.moment-title{font-size:14px;}.moment-eyebrow{font-size:11px;}}
     @media (min-width: 1024px){.moment-title{font-size:15px;}}
 
-    /* "How gifting works" 5-step strip under the hero. Horizontal on
-       desktop, stacks on mobile. Faint numbered chips, restrained color
-       so it educates without competing with the tile grid below. */
-    .how-gifting-strip{display:grid;grid-template-columns:1fr;gap:.85rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:1rem 1.1rem;}
-    @media (min-width:768px){.how-gifting-strip{grid-template-columns:repeat(5,minmax(0,1fr));gap:1.1rem;padding:1.25rem 1.4rem;}}
-    .how-step{display:flex;align-items:flex-start;gap:.7rem;}
-    .how-num{flex:none;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:999px;background:rgba(129,140,248,.12);color:#c7d2fe;font-weight:800;font-size:.85rem;border:1px solid rgba(129,140,248,.3);}
-    .how-title{font-weight:700;font-size:.92rem;color:#e7eef8;line-height:1.25;}
-    .how-sub{font-size:.78rem;color:var(--muted);margin-top:2px;line-height:1.35;}
+    /* "How gifting works" thin rail under the hero. Single line on
+       desktop (Pick · Personalize · Preview · Choose material · Ship),
+       wraps to 2-3 rows on mobile. Subtle so it educates without
+       competing with the tile grid. */
+    .how-gifting-strip{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.55rem 1rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:.6rem 1.1rem;max-width:fit-content;margin:0 auto;}
+    .how-step{display:inline-flex;align-items:center;gap:.5rem;white-space:nowrap;}
+    .how-num{flex:none;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:999px;background:rgba(129,140,248,.14);color:#c7d2fe;font-weight:800;font-size:.78rem;border:1px solid rgba(129,140,248,.3);}
+    .how-title{font-weight:600;font-size:.85rem;color:#e7eef8;line-height:1.2;}
+    @media (min-width:768px){.how-title{font-size:.9rem;}}
     .cat-header{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid rgba(255,255,255,.08);}
     .cat-header h2{font-size:clamp(1.3rem,2.2vw,1.9rem);font-weight:800;line-height:1.1;}
     .cat-header .count{font-size:.85rem;color:var(--muted);font-weight:500;}
@@ -95,7 +95,12 @@
         <img src="/favicon.svg" class="w-8 h-8 rounded-lg" alt="" aria-hidden="true"/>
         <span class="font-extrabold tracking-tight text-lg">aiPRINT.<span class="text-indigo-400">ai</span></span>
       </a>
-      <nav class="hidden md:flex items-center gap-6 text-base">
+      <!-- Nine nav items in one row was crashing at narrow-desktop widths
+           (logo overlap, "How it works" wrapping mid-link). Bumped from
+           md:flex (768px) to lg:flex (1024px) so cramped tablet widths
+           fall back to the hamburger drawer, and added whitespace-nowrap
+           so no link can break mid-label even when the row is tight. -->
+      <nav class="hidden lg:flex items-center gap-5 text-sm xl:text-base whitespace-nowrap">
         <a href="/" class="hover:text-white">Home</a>
         <a href="/gifts.html" class="hover:text-white font-semibold text-indigo-300">Gifts</a>
         <a href="/#how" class="hover:text-white">How it works</a>
@@ -108,8 +113,8 @@
       </nav>
       <div class="flex items-center gap-2">
         <div id="cartMount" class="flex items-center"></div>
-        <a href="/#create" class="btn-accent text-sm px-3.5 py-2 md:hidden whitespace-nowrap">Create <span aria-hidden="true">→</span></a>
-        <button id="navOpen" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10" aria-label="Open menu">
+        <a href="/#create" class="btn-accent text-sm px-3.5 py-2 lg:hidden whitespace-nowrap">Create <span aria-hidden="true">→</span></a>
+        <button id="navOpen" class="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10" aria-label="Open menu">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
           </svg>
@@ -158,10 +163,7 @@
     <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">For the people you love</div><div class="section-label-line right"></div></div>
     <h1 class="h1 max-w-4xl mx-auto">Custom <span class="gradient-text">AI art gifts</span> that mean something.</h1>
     <p class="muted mt-5 max-w-2xl mx-auto text-lg leading-relaxed">
-      336 starting points across 12 categories. Pick the one that feels right — we'll set up the prompt, and your final piece is one of a kind.
-    </p>
-    <p class="text-sm text-indigo-300/80 mt-3 max-w-xl mx-auto">
-      Tap any tile to set the starting prompt — then customize and preview before you order.
+      336 starting points across 12 categories. Each tile sets a prompt — make it yours.
     </p>
     <div class="flex flex-wrap items-center justify-center gap-2 mt-7">
       <span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l9-4 9 4v5c0 5-3.5 8.5-9 10-5.5-1.5-9-5-9-10V7Z"/><path d="m9 12 2 2 4-4"/></svg> Made in the USA</span>
@@ -171,15 +173,15 @@
     </div>
   </section>
 
-  <!-- HOW GIFTING WORKS — 5-step strip so a first-time buyer understands
-       the full flow before they start tile-shopping. -->
+  <!-- HOW GIFTING WORKS — thin 5-step rail. Titles only so it reads in
+       one scan and doesn't compete with the tile grid below. -->
   <section class="max-w-[1800px] mx-auto px-5 pb-6">
     <div class="how-gifting-strip">
-      <div class="how-step"><span class="how-num">1</span><div><div class="how-title">Pick a gift idea</div><div class="how-sub">Browse the tiles below — each sets a starting prompt.</div></div></div>
-      <div class="how-step"><span class="how-num">2</span><div><div class="how-title">Personalize it</div><div class="how-sub">Names, places, pets, memories, or your own photos.</div></div></div>
-      <div class="how-step"><span class="how-num">3</span><div><div class="how-title">Preview the artwork</div><div class="how-sub">Generate, refine, and approve the look before paying.</div></div></div>
-      <div class="how-step"><span class="how-num">4</span><div><div class="how-title">Choose your material</div><div class="how-sub">Canvas, ChromaLuxe metal, or acrylic facemount.</div></div></div>
-      <div class="how-step"><span class="how-num">5</span><div><div class="how-title">We review, print, number &amp; ship</div><div class="how-sub">Founder-reviewed, numbered COA, ready to hang.</div></div></div>
+      <div class="how-step"><span class="how-num">1</span><span class="how-title">Pick a gift idea</span></div>
+      <div class="how-step"><span class="how-num">2</span><span class="how-title">Personalize</span></div>
+      <div class="how-step"><span class="how-num">3</span><span class="how-title">Preview</span></div>
+      <div class="how-step"><span class="how-num">4</span><span class="how-title">Choose material</span></div>
+      <div class="how-step"><span class="how-num">5</span><span class="how-title">We review, print &amp; ship</span></div>
     </div>
   </section>
 
