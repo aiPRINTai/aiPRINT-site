@@ -1,7 +1,8 @@
 // scripts/build-gifts-page.mjs
 // Data-driven builder for /gifts.html. The page is a "gift card aisle"
-// of 12 categories x 12 tiles = 144 starting-point tiles, each deep-linking
-// to /index.html#create with prompt/style/mood/palette/ratio pre-filled.
+// of 12 categories x 28 tiles = 336 starting-point tiles, each deep-linking
+// to /index.html#create with prompt/style/mood/palette/ratio/medium/time/
+// lighting/camera/expression pre-filled.
 //
 // Run: node scripts/build-gifts-page.mjs
 // Writes: public/gifts.html
@@ -1271,7 +1272,7 @@ const page = `<!doctype html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Custom AI Art Gifts — 144 Ideas to Start From | aiPRINT.ai</title>
+  <title>Custom AI Art Gifts — ${TOTAL} Ideas to Start From | aiPRINT.ai</title>
   <meta name="description" content="${TOTAL} personalized AI-art gift ideas across ${CATEGORIES.length} categories — pets, couples, new parents, families, homes, travelers, milestones, hard-to-shop-for, book & coffee lovers, music lovers, nature & adventure, and the seasons. Founder-reviewed. Numbered Certificate of Authenticity. Ships in 5–10 business days." />
   <link rel="canonical" href="https://aiprint.ai/gifts.html" />
   <meta name="theme-color" content="#0a0f1d" />

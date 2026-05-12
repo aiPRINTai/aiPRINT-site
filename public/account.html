@@ -11,15 +11,15 @@
   <meta property="og:title" content="My Account | aiPRINT.ai" />
   <meta property="og:description" content="Manage your aiPRINT account: view credits, purchase more, and see your print order history." />
   <meta property="og:url" content="https://aiprint.ai/account.html" />
-  <meta property="og:image" content="https://aiprint.ai/og-image.png" />
+  <meta property="og:image" content="https://aiprint.ai/og-image.png?v=20260513d" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="My Account | aiPRINT.ai" />
-  <meta name="twitter:image" content="https://aiprint.ai/og-image.png" />
+  <meta name="twitter:image" content="https://aiprint.ai/og-image.png?v=20260513d" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/tailwind.min.css" />
 
   <style>
     :root { --bg:#0a0f1d; --ink:#e7eef8; --muted:#9fb3c8; }
@@ -429,5 +429,24 @@
       }
     };
   </script>
+
+  <footer class="border-t border-white/10 mt-20">
+    <div class="max-w-[1800px] mx-auto px-5 py-10 grid md:grid-cols-3 gap-8 text-sm">
+      <div class="flex items-center gap-2">
+        <img src="/favicon.svg" class="w-7 h-7 rounded-lg" alt="" aria-hidden="true"/>
+        <span class="font-extrabold">aiPRINT.<span class="text-indigo-400">ai</span></span>
+      </div>
+      <div class="flex flex-wrap gap-x-5 gap-y-2 text-gray-400">
+        <a href="/faq.html" class="hover:text-white transition-colors">FAQ</a>
+        <a href="/care.html" class="hover:text-white transition-colors">Print Care</a>
+        <a href="/policies.html" class="hover:text-white transition-colors">Policies</a>
+        <a href="/track.html" class="hover:text-white transition-colors">Track an order</a>
+        <a href="/contact.html" class="hover:text-white transition-colors">Contact</a>
+      </div>
+      <div class="text-gray-500 md:text-right">© <span id="footerYear"></span> aiPRINT.ai — All rights reserved.</div>
+    </div>
+  </footer>
+  <script>document.getElementById('footerYear').textContent = new Date().getFullYear();</script>
+
 </body>
 </html>

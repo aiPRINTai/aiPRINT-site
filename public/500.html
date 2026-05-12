@@ -10,10 +10,10 @@
   <meta property="og:site_name" content="aiPRINT.ai" />
   <meta property="og:title" content="Something went wrong — aiPRINT.ai" />
   <meta property="og:description" content="A temporary error occurred. Please try again in a moment." />
-  <meta property="og:image" content="https://aiprint.ai/og-image.png" />
+  <meta property="og:image" content="https://aiprint.ai/og-image.png?v=20260513d" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Something went wrong — aiPRINT.ai" />
-  <meta name="twitter:image" content="https://aiprint.ai/og-image.png" />
+  <meta name="twitter:image" content="https://aiprint.ai/og-image.png?v=20260513d" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -44,7 +44,11 @@
     .info{margin-top:2.5rem;padding:1.25rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:.75rem;font-size:.9rem;color:var(--muted);line-height:1.6;}
     .info a{color:#c7d2fe;text-decoration:none;}
     .info a:hover{text-decoration:underline;}
+    footer{border-top:1px solid rgba(255,255,255,.08);padding:1.75rem 20px;font-size:.85rem;color:var(--muted);text-align:center;}
+    footer a{color:#c7d2fe;text-decoration:none;margin:0 .5em;}
+    footer a:hover{color:#fff;}
   </style>
+  <script defer src="/js/analytics.js"></script>
 </head>
 <body>
 
@@ -73,6 +77,15 @@
     </div>
   </div>
 </main>
+
+<footer>
+  <a href="/faq.html">FAQ</a>·
+  <a href="/policies.html">Policies</a>·
+  <a href="/contact.html">Contact</a>·
+  <a href="mailto:info@aiprint.ai">info@aiprint.ai</a>
+  <div style="margin-top:.5em;color:#64748b;">© <span id="y"></span> aiPRINT.ai</div>
+</footer>
+<script>document.getElementById('y').textContent=new Date().getFullYear();</script>
 
 </body>
 </html>

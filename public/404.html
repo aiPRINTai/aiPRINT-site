@@ -10,10 +10,10 @@
   <meta property="og:site_name" content="aiPRINT.ai" />
   <meta property="og:title" content="Page not found — aiPRINT.ai" />
   <meta property="og:description" content="The page you're looking for doesn't exist. Head back to aiPRINT.ai to start creating." />
-  <meta property="og:image" content="https://aiprint.ai/og-image.png" />
+  <meta property="og:image" content="https://aiprint.ai/og-image.png?v=20260513d" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Page not found — aiPRINT.ai" />
-  <meta name="twitter:image" content="https://aiprint.ai/og-image.png" />
+  <meta name="twitter:image" content="https://aiprint.ai/og-image.png?v=20260513d" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -46,7 +46,11 @@
     .quick-links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;font-size:.95rem;}
     .quick-links a{color:#c7d2fe;text-decoration:none;padding:.35em .75em;border-radius:.4rem;transition:background .15s;}
     .quick-links a:hover{background:rgba(255,255,255,.06);color:#fff;}
+    footer{border-top:1px solid rgba(255,255,255,.08);padding:1.75rem 20px;font-size:.85rem;color:var(--muted);text-align:center;}
+    footer a{color:#c7d2fe;text-decoration:none;margin:0 .5em;}
+    footer a:hover{color:#fff;}
   </style>
+  <script defer src="/js/analytics.js"></script>
 </head>
 <body>
 
@@ -82,6 +86,15 @@
     </div>
   </div>
 </main>
+
+<footer>
+  <a href="/faq.html">FAQ</a>·
+  <a href="/policies.html">Policies</a>·
+  <a href="/contact.html">Contact</a>·
+  <a href="mailto:info@aiprint.ai">info@aiprint.ai</a>
+  <div style="margin-top:.5em;color:#64748b;">© <span id="y"></span> aiPRINT.ai</div>
+</footer>
+<script>document.getElementById('y').textContent=new Date().getFullYear();</script>
 
 </body>
 </html>
