@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Custom AI Art Gifts | aiPRINT.ai</title>
-  <meta name="description" content="Personalized AI-art prints for pets, anniversaries, weddings, new babies, housewarmings, memorials, kids' rooms, travel memories, and the people who already have everything. Founder-reviewed. Numbered Certificate of Authenticity. Ships in 5–10 business days." />
+  <title>Custom AI Art Gifts — 48 Ideas to Start From | aiPRINT.ai</title>
+  <meta name="description" content="48 personalized AI-art gift ideas for pets, couples, new parents, families, homes, travelers, milestones, and the hard-to-shop-for. Founder-reviewed. Numbered Certificate of Authenticity. Ships in 5–10 business days." />
   <link rel="canonical" href="https://aiprint.ai/gifts.html" />
   <meta name="theme-color" content="#0a0f1d" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -14,12 +14,12 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="aiPRINT.ai" />
   <meta property="og:title" content="Custom AI Art Gifts | aiPRINT.ai" />
-  <meta property="og:description" content="A gift that means something — for the pet, the anniversary, the new home, the new baby, the wedding day, or the person who already has everything. Personalized art prints, founder-reviewed, ready to hang." />
+  <meta property="og:description" content="48 gift ideas for the moments that matter. Pets, couples, new parents, families, homes, travelers, milestones, and the hard-to-shop-for." />
   <meta property="og:url" content="https://aiprint.ai/gifts.html" />
   <meta property="og:image" content="https://aiprint.ai/og-image.png?v=20260513d" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Custom AI Art Gifts | aiPRINT.ai" />
-  <meta name="twitter:description" content="Personalized art prints for the moments that matter. Founder-reviewed. Ships in 5–10 business days." />
+  <meta name="twitter:description" content="48 personalized art-print gift ideas. Founder-reviewed. Ships in 5–10 business days." />
   <meta name="twitter:image" content="https://aiprint.ai/og-image.png?v=20260513d" />
   <link rel="stylesheet" href="/css/tailwind.min.css" />
 
@@ -30,7 +30,7 @@
     body{font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;}
     .h1{font-size:clamp(2.4rem, 4.5vw, 4.5rem);font-weight:800;line-height:1.05}
     .h2{font-size:clamp(1.55rem, 2.8vw, 2.8rem);font-weight:800;line-height:1.1}
-    .h3{font-size:clamp(1.05rem, 1.6vw, 1.4rem);font-weight:700;}
+    .h3{font-size:clamp(1.15rem, 1.8vw, 1.65rem);font-weight:800;}
     .muted{color:var(--muted)}
     .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
     .btn{background:#fff;color:#000;font-weight:700;padding:.75rem 1.4rem;border-radius:.6rem;cursor:pointer;border:none;text-decoration:none;display:inline-block;transition:all .2s;}
@@ -41,7 +41,7 @@
     .btn-ghost:hover{background:rgba(255,255,255,.12);}
     .gradient-text{background:linear-gradient(135deg,#a78bfa,#818cf8,#60a5fa);-webkit-background-clip:text;background-clip:text;color:transparent;}
 
-    /* Moment tile (identical to homepage so the visual language matches) */
+    /* Tile (same visual language as the homepage Moments grid) */
     .moment-tile{
       position:relative; overflow:hidden; border-radius:14px;
       aspect-ratio:4/5;
@@ -57,16 +57,46 @@
       position:absolute; inset:0;
       background:linear-gradient(to top, rgba(10,15,29,.92) 0%, rgba(10,15,29,.55) 45%, rgba(10,15,29,0) 75%);
       display:flex; flex-direction:column; justify-content:flex-end;
-      padding:14px 14px 16px; text-align:left;
+      padding:12px 12px 14px; text-align:left;
     }
     .moment-eyebrow{
-      font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
-      color:#c7d2fe; margin-bottom:4px;
+      font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+      color:#c7d2fe; margin-bottom:3px;
     }
     .moment-title{
-      font-size:15px; font-weight:700; color:#fff; line-height:1.25;
+      font-size:13px; font-weight:700; color:#fff; line-height:1.25;
     }
-    @media (min-width: 768px){ .moment-title{ font-size:17px; } }
+    @media (min-width: 768px){ .moment-title{ font-size:14px; } .moment-eyebrow{ font-size:11px; } }
+    @media (min-width: 1024px){ .moment-title{ font-size:15px; } }
+
+    /* Category section header */
+    .cat-header{
+      display:flex; align-items:baseline; justify-content:space-between; gap:1rem;
+      flex-wrap:wrap; margin-bottom:1rem;
+      padding-bottom:.6rem; border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .cat-header h2{
+      font-size:clamp(1.3rem,2.2vw,1.9rem); font-weight:800; line-height:1.1;
+    }
+    .cat-header .count{
+      font-size:.85rem; color:var(--muted); font-weight:500;
+    }
+
+    /* Sticky category nav (jump to section) */
+    .cat-nav{
+      position:sticky; top:64px; z-index:20;
+      background:rgba(10,15,29,.85); backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .cat-nav-inner{ display:flex; gap:.4rem; overflow-x:auto; padding:.65rem 1rem; scrollbar-width:none; }
+    .cat-nav-inner::-webkit-scrollbar{ display:none; }
+    .cat-nav a{
+      flex-shrink:0; padding:.4rem .9rem; border-radius:999px;
+      font-size:.8rem; font-weight:600; color:#cbd5e1; white-space:nowrap;
+      border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.04);
+      text-decoration:none; transition:all .15s;
+    }
+    .cat-nav a:hover{ background:rgba(129,140,248,.18); color:#fff; border-color:rgba(129,140,248,.4); }
 
     .section-label{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;}
     .section-label-line{flex:0 0 28px;height:1px;background:linear-gradient(90deg,transparent,rgba(129,140,248,.5));}
@@ -79,7 +109,7 @@
 </head>
 <body>
 
-  <!-- HEADER (same shell as install.html / about.html) -->
+  <!-- HEADER -->
   <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
     <div class="max-w-[1800px] mx-auto px-5 h-16 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2.5">
@@ -88,7 +118,7 @@
       </a>
       <nav class="hidden md:flex items-center gap-6 text-base">
         <a href="/" class="hover:text-white">Home</a>
-        <a href="/gifts.html" class="hover:text-white font-semibold">Gifts</a>
+        <a href="/gifts.html" class="hover:text-white font-semibold text-indigo-300">Gifts</a>
         <a href="/#how" class="hover:text-white">How it works</a>
         <a href="/#materials" class="hover:text-white">Materials</a>
         <a href="/care.html" class="hover:text-white">Care</a>
@@ -145,16 +175,12 @@
   </div>
 
   <!-- HERO -->
-  <section class="max-w-[1800px] mx-auto px-5 pt-14 pb-10 text-center">
+  <section class="max-w-[1800px] mx-auto px-5 pt-12 pb-8 text-center">
     <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">For the people you love</div><div class="section-label-line right"></div></div>
     <h1 class="h1 max-w-4xl mx-auto">Custom <span class="gradient-text">AI art gifts</span> that mean something.</h1>
     <p class="muted mt-5 max-w-2xl mx-auto text-lg leading-relaxed">
-      For the pet, the anniversary, the new home, the new baby, the wedding day, the best friend, the place where it all began — and the person who already has everything. Pick the moment, we'll set up the rest.
+      48 starting points for the moments that matter. Pick the one that feels right and we'll set up the prompt — your final piece is one of a kind.
     </p>
-    <div class="flex flex-wrap items-center justify-center gap-3 mt-7">
-      <a href="#moments" class="btn-accent text-base">Find a moment →</a>
-      <a href="/#create" class="btn-ghost text-base">Start from scratch</a>
-    </div>
     <div class="flex flex-wrap items-center justify-center gap-2 mt-7">
       <span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l9-4 9 4v5c0 5-3.5 8.5-9 10-5.5-1.5-9-5-9-10V7Z"/><path d="m9 12 2 2 4-4"/></svg> Made in the USA</span>
       <span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="14" rx="1.5"/><path d="M8 9h6"/><path d="M8 13h4"/><path d="M10 18v2l2-1 2 1v-2"/></svg> Numbered Certificate of Authenticity</span>
@@ -163,122 +189,354 @@
     </div>
   </section>
 
-  <!-- 12 MOMENTS GRID -->
-  <section id="moments" class="max-w-[1800px] mx-auto px-5 py-14">
-    <div class="text-center mb-10">
-      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Made For Moments</div><div class="section-label-line right"></div></div>
-      <h2 class="h2">A gift that means something</h2>
-      <p class="muted mt-3 max-w-2xl mx-auto">Most of our prints aren't bought for a wall — they're bought for a <span class="text-white">person, a pet, or a memory</span>. Pick a starting point and we'll set up the prompt for you.</p>
+  <!-- Sticky category nav -->
+  <div class="cat-nav">
+    <div class="cat-nav-inner max-w-[1800px] mx-auto">
+      <a href="#pet-lovers">For pet lovers</a>
+      <a href="#couples">For couples</a>
+      <a href="#new-parents">For new parents</a>
+      <a href="#family">For family</a>
+      <a href="#home">For their home</a>
+      <a href="#travelers">For travelers</a>
+      <a href="#milestones">For milestones</a>
+      <a href="#hard-to-shop-for">Hard-to-shop-for</a>
     </div>
+  </div>
 
-    <!-- Each tile is an <a> that deep-links to /#create with the prompt + style
-         + mood + palette + ratio in the URL. A small script on the homepage
-         reads those params and prefills the create form on landing. -->
-    <div id="momentTiles" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+  <main class="max-w-[1800px] mx-auto px-5 pb-12 pt-8 space-y-12">
 
-      <a class="moment-tile" href="/?prompt=A%20regal%20oil-portrait%20of%20a%20beloved%20pet%2C%20wise%20expression%2C%20soft%20window%20light%2C%20painterly%20brushwork%2C%20gallery-museum%20quality&style=Painterly&mood=Nostalgic&palette=rich%20jewel%20tones&ratio=1024x1536#create">
-        <img src="/ai-art/moments/pet-portrait.webp" alt="Regal Dutch-master-style oil portrait of a noble golden retriever in a velvet collar" loading="lazy">
-        <div class="moment-overlay">
-          <div class="moment-eyebrow">Pet portrait</div>
-          <div class="moment-title">Make them the masterpiece</div>
-        </div>
-      </a>
+    <!-- ─── FOR PET LOVERS ───────────────────────────────────────────── -->
+    <section id="pet-lovers" class="scroll-mt-32">
+      <div class="cat-header">
+        <h2>For pet lovers <span class="text-indigo-400">🐾</span></h2>
+        <span class="count">6 starting points</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
 
-      <a class="moment-tile" href="/?prompt=Two%20silhouettes%20walking%20a%20quiet%20beach%20at%20sunset%2C%20romantic%20warmth%2C%20soft%20film%20grain%2C%20cinematic&style=Cinematic%20%2F%20Editorial&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
-        <img src="/ai-art/moments/anniversary.webp" alt="Romantic painterly silhouettes walking a sunset beach" loading="lazy">
-        <div class="moment-overlay">
-          <div class="moment-eyebrow">Anniversary</div>
-          <div class="moment-title">Their story, on the wall</div>
-        </div>
-      </a>
+        <a class="moment-tile" href="/?prompt=A%20regal%20oil-portrait%20of%20a%20beloved%20pet%2C%20wise%20expression%2C%20soft%20window%20light%2C%20painterly%20brushwork%2C%20gallery-museum%20quality&style=Painterly&mood=Nostalgic&palette=rich%20jewel%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/pet-portrait.webp" alt="Regal Dutch-master-style oil portrait of a noble golden retriever" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Pet portrait</div><div class="moment-title">Make them the masterpiece</div></div>
+        </a>
 
-      <a class="moment-tile" href="/?prompt=Whimsical%20storybook%20hot-air%20balloons%20drifting%20over%20rolling%20hills%2C%20dreamy%20clouds%2C%20soft%20pastels&style=Fantasy%20%2F%20Magical&mood=Whimsical%20%2F%20Playful&palette=soft%20pastel%20palette&ratio=1024x1024#create">
-        <img src="/ai-art/moments/kids-room.webp" alt="Whimsical pastel hot-air balloons drifting over rolling spring hills at dawn" loading="lazy">
-        <div class="moment-overlay">
-          <div class="moment-eyebrow">Kids' room</div>
-          <div class="moment-title">Magic above their bed</div>
-        </div>
-      </a>
+        <a class="moment-tile" href="/?prompt=A%20serene%20memorial%20scene%20honoring%20a%20beloved%20pet%2C%20their%20leather%20collar%20resting%20on%20a%20sun-dappled%20bench%20in%20a%20flowering%20garden%20at%20golden%20hour%2C%20peaceful%20and%20dignified%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/pet-memorial.webp" alt="A pet's collar resting on a sun-dappled bench in a flowering garden" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Pet memorial</div><div class="moment-title">In loving memory</div></div>
+        </a>
 
-      <a class="moment-tile" href="/?prompt=Mediterranean%20coastal%20village%20at%20golden%20hour%2C%20terracotta%20rooftops%2C%20sparkling%20sea%2C%20painterly%2C%20nostalgic&style=Painterly&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
-        <img src="/ai-art/moments/travel-memory.webp" alt="Painterly Mediterranean coastal village at golden hour" loading="lazy">
-        <div class="moment-overlay">
-          <div class="moment-eyebrow">Travel memory</div>
-          <div class="moment-title">The trip they'll never forget</div>
-        </div>
-      </a>
+        <a class="moment-tile" href="/?prompt=Two%20beloved%20pets%20nuzzling%20together%20at%20golden%20hour%2C%20deep%20bond%20and%20trust%2C%20painterly%20fine-art%20oil%20brushwork%2C%20warm%20sunset%20light&style=Painterly&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/two-best-friends.webp" alt="Two dogs nuzzling together at golden hour" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Two best friends</div><div class="moment-title">The pair they love</div></div>
+        </a>
 
-      <a class="moment-tile" href="/?prompt=A%20still-life%20of%20a%20warm%20coffee%20mug%2C%20open%20book%2C%20and%20golden%20window%20light%2C%20soft%20painterly%20textures%2C%20cozy%20housewarming%20feel&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=muted%2C%20earthy%20tones&ratio=1536x1024#create">
-        <img src="/ai-art/moments/housewarming.webp" alt="Cozy painterly still-life of a warm coffee mug and open book in afternoon light" loading="lazy">
-        <div class="moment-overlay">
-          <div class="moment-eyebrow">Housewarming</div>
-          <div class="moment-title">A piece that warms a room</div>
-        </div>
-      </a>
+        <a class="moment-tile" href="/?prompt=A%20small%20wide-eyed%20puppy%20curled%20in%20a%20soft%20knit%20blanket%20in%20a%20sunlit%20room%2C%20dappled%20afternoon%20window%20light%2C%20curious%20and%20tender%2C%20painterly%20watercolor&style=Impressionistic&mood=Whimsical%20%2F%20Playful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/first-day-home.webp" alt="A small puppy curled in a knit blanket in a sunlit room" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">First day home</div><div class="moment-title">The day they arrived</div></div>
+        </a>
 
-      <a class="moment-tile" href="/?prompt=An%20imagined%20dreamlike%20coastline%20that%20does%20not%20exist%2C%20ethereal%20clouds%2C%20otherworldly%20horizon%2C%20painterly&style=Surreal%20%2F%20Dreamlike&mood=Dreamlike%20%2F%20Ethereal&palette=rich%20jewel%20tones&ratio=1536x1024#create">
-        <img src="/ai-art/moments/has-everything-gift.webp" alt="Surreal dreamlike hidden lagoon glowing beneath twin pale moons" loading="lazy">
-        <div class="moment-overlay">
-          <div class="moment-eyebrow">Has-everything gift</div>
-          <div class="moment-title">Something they can't buy elsewhere</div>
-        </div>
-      </a>
+        <a class="moment-tile" href="/?prompt=A%20loyal%20rescue%20dog%20being%20welcomed%20by%20a%20faceless%20human%20hand%20reaching%20out%2C%20warm%20golden-hour%20light%20through%20an%20open%20doorway%2C%20deep%20loyalty%20and%20hope%2C%20painterly%20oils&style=Painterly&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/rescue-story.webp" alt="A faceless hand welcoming a rescue dog at golden hour" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Rescue story</div><div class="moment-title">The day you chose each other</div></div>
+        </a>
 
-      <a class="moment-tile" href="/?prompt=A%20serene%20memorial%20portrait%20of%20a%20beloved%20pet%20resting%20under%20a%20sunlit%20oak%2C%20warm%20afternoon%20light%2C%20peaceful%20and%20dignified%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
-        <img src="/ai-art/moments/in-their-honor.webp" alt="Tender serene memorial scene of a willow beside a still pond at dawn" loading="lazy">
-        <div class="moment-overlay">
-          <div class="moment-eyebrow">In their honor</div>
-          <div class="moment-title">A piece that remembers them</div>
-        </div>
-      </a>
+        <a class="moment-tile" href="/?prompt=A%20serene%20cat%20sitting%20on%20a%20sunlit%20windowsill%20watching%20rain%20fall%20outside%2C%20soft%20pastel%20light%2C%20calm%20intimate%20moment%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=muted%2C%20earthy%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/quiet-companion.webp" alt="A serene cat watching rain from a windowsill" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Quiet companion</div><div class="moment-title">Their window-side soul</div></div>
+        </a>
 
-      <a class="moment-tile" href="/?prompt=A%20favorite%20scene%20from%20a%20childhood%20home%20reimagined%20in%20soft%20watercolor%2C%20nostalgic%2C%20warm%20afternoon%20light&style=Impressionistic&mood=Nostalgic&palette=soft%20pastel%20palette&ratio=1536x1024#create">
-        <img src="/ai-art/moments/for-mom-and-dad.webp" alt="Nostalgic watercolor of a childhood-home garden in spring bloom" loading="lazy">
-        <div class="moment-overlay">
-          <div class="moment-eyebrow">For Mom &amp; Dad</div>
-          <div class="moment-title">A memory, finally framed</div>
-        </div>
-      </a>
+      </div>
+    </section>
 
-      <a class="moment-tile" href="/?prompt=A%20tender%20soft%20watercolor%20of%20a%20peacefully%20sleeping%20newborn%20baby%20under%20a%20knit%20blanket%2C%20dappled%20warm%20sunlight%2C%20pastel%20cream%20and%20rose%20palette%2C%20deeply%20gentle%20and%20protective&style=Impressionistic&mood=Calm%20%2F%20Peaceful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
-        <img src="/ai-art/moments/new-baby.webp" alt="Soft watercolor of a sleeping newborn under a knit blanket with a stuffed bunny" loading="lazy">
-        <div class="moment-overlay">
-          <div class="moment-eyebrow">New baby</div>
-          <div class="moment-title">Welcome to the world</div>
-        </div>
-      </a>
+    <!-- ─── FOR COUPLES ──────────────────────────────────────────────── -->
+    <section id="couples" class="scroll-mt-32">
+      <div class="cat-header">
+        <h2>For couples <span class="text-indigo-400">💞</span></h2>
+        <span class="count">6 starting points</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
 
-      <a class="moment-tile" href="/?prompt=A%20romantic%20painterly%20fine-art%20scene%20of%20a%20bride%20and%20groom%20holding%20hands%20at%20a%20golden-hour%20outdoor%20sunset%20wedding%2C%20faceless%20figures%20from%20behind%2C%20gentle%20flower%20petals%20in%20warm%20air%2C%20ivory%20and%20blush%20palette%2C%20cinematic%20editorial&style=Cinematic%20%2F%20Editorial&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
-        <img src="/ai-art/moments/wedding-day.webp" alt="Romantic painterly fine-art scene of a faceless bride and groom holding hands at sunset" loading="lazy">
-        <div class="moment-overlay">
-          <div class="moment-eyebrow">Wedding day</div>
-          <div class="moment-title">The day you said yes</div>
-        </div>
-      </a>
+        <a class="moment-tile" href="/?prompt=Two%20silhouettes%20walking%20a%20quiet%20beach%20at%20sunset%2C%20romantic%20warmth%2C%20soft%20film%20grain%2C%20cinematic&style=Cinematic%20%2F%20Editorial&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/anniversary.webp" alt="Romantic painterly silhouettes walking a sunset beach" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Anniversary</div><div class="moment-title">Their story, on the wall</div></div>
+        </a>
 
-      <a class="moment-tile" href="/?prompt=A%20warm%20painterly%20fine-art%20scene%20of%20two%20figures%20from%20behind%20walking%20together%20along%20a%20forest%20path%20at%20golden%20hour%2C%20autumn%20leaves%20on%20the%20path%2C%20deep%20friendship%20and%20warmth%2C%20soft%20golden%20light%20filtering%20through%20trees&style=Painterly&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
-        <img src="/ai-art/moments/best-friend.webp" alt="Two figures from behind walking together along a forest path at golden hour" loading="lazy">
-        <div class="moment-overlay">
-          <div class="moment-eyebrow">Best friend</div>
-          <div class="moment-title">The one who's always there</div>
-        </div>
-      </a>
+        <a class="moment-tile" href="/?prompt=A%20romantic%20painterly%20fine-art%20scene%20of%20a%20bride%20and%20groom%20holding%20hands%20at%20a%20golden-hour%20outdoor%20sunset%20wedding%2C%20faceless%20figures%20from%20behind%2C%20gentle%20flower%20petals%20in%20warm%20air%2C%20ivory%20and%20blush%20palette%2C%20cinematic%20editorial&style=Cinematic%20%2F%20Editorial&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/wedding-day.webp" alt="A bride and groom from behind at a golden-hour wedding" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Wedding day</div><div class="moment-title">The day you said yes</div></div>
+        </a>
 
-      <a class="moment-tile" href="/?prompt=A%20nostalgic%20painterly%20fine-art%20scene%20of%20a%20quiet%20European%20corner%20cafe%20at%20golden%20hour%2C%20a%20small%20table%20by%20a%20flower-filled%20window%20with%20two%20empty%20chairs%20facing%20each%20other%2C%20a%20steaming%20coffee%20cup%20on%20the%20table%2C%20soft%20warm%20honey-gold%20light&style=Painterly&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
-        <img src="/ai-art/moments/where-it-all-began.webp" alt="Painterly quiet European cafe at golden hour with two empty chairs at a window table" loading="lazy">
-        <div class="moment-overlay">
-          <div class="moment-eyebrow">Where it all began</div>
-          <div class="moment-title">Your meeting place</div>
-        </div>
-      </a>
+        <a class="moment-tile" href="/?prompt=A%20nostalgic%20painterly%20fine-art%20scene%20of%20a%20quiet%20European%20corner%20cafe%20at%20golden%20hour%2C%20a%20small%20table%20by%20a%20flower-filled%20window%20with%20two%20empty%20chairs%20facing%20each%20other%2C%20a%20steaming%20coffee%20cup%20on%20the%20table%2C%20soft%20warm%20honey-gold%20light&style=Painterly&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/where-it-all-began.webp" alt="A quiet European cafe with two empty chairs at a window" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Where it all began</div><div class="moment-title">Your meeting place</div></div>
+        </a>
 
-    </div>
+        <a class="moment-tile" href="/?prompt=A%20close-up%20of%20a%20couple%27s%20hands%2C%20one%20gently%20slipping%20a%20gold%20ring%20onto%20the%20other%27s%20finger%2C%20soft%20warm%20bokeh%20background%2C%20painterly%20cinematic%20romantic%20light&style=Cinematic%20%2F%20Editorial&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1024#create">
+          <img src="/ai-art/moments/engagement.webp" alt="Close-up of a hand slipping a ring onto a finger" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Engagement</div><div class="moment-title">The moment you said yes</div></div>
+        </a>
 
-    <p class="muted text-xs text-center mt-6 max-w-2xl mx-auto">Each tile sets a starting prompt — when you land on the create page you can edit it, add reference photos of your real pet or place, or swap any setting before generating.</p>
-  </section>
+        <a class="moment-tile" href="/?prompt=A%20faceless%20couple%20in%20formal%20wedding%20attire%20dancing%20alone%20together%20under%20a%20canopy%20of%20warm%20string%20lights%20at%20twilight%2C%20intimate%20first-dance%20moment%2C%20painterly%20cinematic&style=Cinematic%20%2F%20Editorial&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/first-dance.webp" alt="A couple dancing alone under string lights at twilight" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">First dance</div><div class="moment-title">Just you two, that song</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20faceless%20couple%20sitting%20on%20the%20hood%20of%20a%20vintage%20car%20watching%20the%20sunset%20over%20an%20open%20desert%20highway%2C%20road-trip%20nostalgic%2C%20painterly%20warm%20cinematic&style=Cinematic%20%2F%20Editorial&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/adventures-together.webp" alt="A couple on a vintage car hood watching a desert sunset" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Adventures together</div><div class="moment-title">All the miles you've shared</div></div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ─── FOR NEW PARENTS ─────────────────────────────────────────── -->
+    <section id="new-parents" class="scroll-mt-32">
+      <div class="cat-header">
+        <h2>For new parents <span class="text-indigo-400">👶</span></h2>
+        <span class="count">6 starting points</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+
+        <a class="moment-tile" href="/?prompt=A%20tender%20soft%20watercolor%20of%20a%20peacefully%20sleeping%20newborn%20baby%20under%20a%20knit%20blanket%2C%20dappled%20warm%20sunlight%2C%20pastel%20cream%20and%20rose%20palette%2C%20deeply%20gentle%20and%20protective&style=Impressionistic&mood=Calm%20%2F%20Peaceful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/new-baby.webp" alt="Soft watercolor of a sleeping newborn under a knit blanket" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">New baby</div><div class="moment-title">Welcome to the world</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20small%20first-birthday%20cake%20with%20a%20single%20candle%20beside%20tiny%20knit%20baby%20shoes%20on%20a%20rustic%20wooden%20table%2C%20soft%20dappled%20afternoon%20light%2C%20deeply%20gentle%20watercolor&style=Impressionistic&mood=Calm%20%2F%20Peaceful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/babys-first-year.webp" alt="A first-birthday cake beside tiny baby shoes on a wooden table" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">First year</div><div class="moment-title">One trip around the sun</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20faceless%20older%20sibling%20gently%20kissing%20the%20forehead%20of%20their%20newborn%20baby%20sibling%20wrapped%20in%20a%20cream%20knit%20blanket%2C%20soft%20warm%20window%20light%2C%20tender%20watercolor&style=Impressionistic&mood=Calm%20%2F%20Peaceful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/big-sibling.webp" alt="A young child gently kissing their newborn baby sibling" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Big sibling</div><div class="moment-title">The day the family grew</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=Two%20newborn%20babies%20curled%20together%20asleep%20on%20a%20cream%20knit%20blanket%2C%20faceless%2C%20soft%20pastel%20morning%20light%2C%20tender%20watercolor&style=Impressionistic&mood=Calm%20%2F%20Peaceful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/twins-siblings.webp" alt="Two newborn babies curled together asleep on a blanket" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Twins</div><div class="moment-title">Two of a kind</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=Whimsical%20storybook%20hot-air%20balloons%20drifting%20over%20rolling%20hills%2C%20dreamy%20clouds%2C%20soft%20pastels&style=Fantasy%20%2F%20Magical&mood=Whimsical%20%2F%20Playful&palette=soft%20pastel%20palette&ratio=1024x1024#create">
+          <img src="/ai-art/moments/kids-room.webp" alt="Whimsical pastel hot-air balloons drifting over rolling hills" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Kids' room</div><div class="moment-title">Magic above their bed</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20dreamy%20whimsical%20scene%20above%20a%20sleeping%20baby%20-%20soft%20pastel%20clouds%2C%20crescent%20moon%2C%20scattered%20stars%2C%20a%20paper%20hot-air%20balloon%2C%20fantasy%20storybook&style=Fantasy%20%2F%20Magical&mood=Whimsical%20%2F%20Playful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/nursery-dreamscape.webp" alt="A whimsical pastel dreamscape with clouds, moon, stars" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Nursery dreamscape</div><div class="moment-title">Where they dream</div></div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ─── FOR FAMILY ──────────────────────────────────────────────── -->
+    <section id="family" class="scroll-mt-32">
+      <div class="cat-header">
+        <h2>For family <span class="text-indigo-400">🤍</span></h2>
+        <span class="count">6 starting points</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+
+        <a class="moment-tile" href="/?prompt=A%20favorite%20scene%20from%20a%20childhood%20home%20reimagined%20in%20soft%20watercolor%2C%20nostalgic%2C%20warm%20afternoon%20light&style=Impressionistic&mood=Nostalgic&palette=soft%20pastel%20palette&ratio=1536x1024#create">
+          <img src="/ai-art/moments/for-mom-and-dad.webp" alt="Watercolor of a childhood-home garden in spring" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">For Mom &amp; Dad</div><div class="moment-title">A memory, finally framed</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20tender%20painterly%20watercolor%20of%20a%20mother%27s%20hands%20cradling%20her%20child%27s%20small%20hands%2C%20warm%20afternoon%20light%2C%20deeply%20tender%20mother-love%20moment%2C%20faceless%20cropped%20to%20just%20hands&style=Impressionistic&mood=Nostalgic&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/for-mom.webp" alt="Tender watercolor of a mother's hands holding a child's hands" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">For Mom</div><div class="moment-title">Everything she gave you</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20faceless%20father%20carrying%20his%20small%20child%20on%20his%20shoulders%20walking%20through%20a%20sunlit%20wheat%20meadow%20at%20golden%20hour%2C%20deep%20paternal%20warmth%2C%20painterly%20cinematic&style=Cinematic%20%2F%20Editorial&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/for-dad.webp" alt="A father carrying a child on his shoulders in a wheat meadow" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">For Dad</div><div class="moment-title">The shoulders you stood on</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=Three%20generations%20walking%20hand%20in%20hand%20along%20a%20beach%20at%20sunset%20-%20grandparent%2C%20parent%2C%20child%20-%20painterly%20warm%20nostalgic&style=Cinematic%20%2F%20Editorial&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/for-grandparents.webp" alt="Three generations walking hand-in-hand along a beach at sunset" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Grandparents</div><div class="moment-title">Three generations, one walk</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=Two%20faceless%20adult%20siblings%20arm-in-arm%20walking%20a%20country%20path%20at%20golden%20hour%20with%20autumn%20leaves%2C%20deep%20sibling%20bond%2C%20painterly%20warm%20light&style=Painterly&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/sibling-gift.webp" alt="Two siblings arm-in-arm walking a country path in autumn" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">For my sibling</div><div class="moment-title">The one who knew you first</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20majestic%20ancient%20oak%20tree%20alone%20in%20a%20golden%20meadow%20at%20sunset%2C%20wide%20branches%2C%20warm%20light%20streaming%20through%2C%20symbolic%20family%20heritage%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/family-tree.webp" alt="A majestic ancient oak tree at sunset in a golden meadow" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Family tree</div><div class="moment-title">Roots and branches</div></div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ─── FOR THEIR HOME ──────────────────────────────────────────── -->
+    <section id="home" class="scroll-mt-32">
+      <div class="cat-header">
+        <h2>For their home <span class="text-indigo-400">🏠</span></h2>
+        <span class="count">6 starting points</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+
+        <a class="moment-tile" href="/?prompt=A%20still-life%20of%20a%20warm%20coffee%20mug%2C%20open%20book%2C%20and%20golden%20window%20light%2C%20soft%20painterly%20textures%2C%20cozy%20housewarming%20feel&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=muted%2C%20earthy%20tones&ratio=1536x1024#create">
+          <img src="/ai-art/moments/housewarming.webp" alt="Cozy painterly still-life of a warm coffee mug and open book" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Housewarming</div><div class="moment-title">A piece that warms a room</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20faceless%20couple%20standing%20in%20front%20of%20their%20first%20home%20together%20at%20twilight%2C%20warm%20golden%20window-light%20glowing%20from%20inside%2C%20deeply%20emotional%20milestone%2C%20painterly&style=Cinematic%20%2F%20Editorial&mood=Bright%20%2F%20Uplifting&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/first-home-together.webp" alt="A couple in front of their first home with warm window light" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">First home together</div><div class="moment-title">The keys, the night, the start</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20dreamy%20cottage%20with%20stone%20walls%20and%20climbing%20roses%2C%20golden%20window%20light%20at%20twilight%2C%20winding%20garden%20path%2C%20painterly%20fairytale&style=Painterly&mood=Dreamlike%20%2F%20Ethereal&palette=soft%20pastel%20palette&ratio=1536x1024#create">
+          <img src="/ai-art/moments/dream-home.webp" alt="A dreamy cottage with climbing roses at twilight" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Dream home</div><div class="moment-title">The place they imagine</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20perfect%20reading%20nook%20-%20a%20worn%20leather%20armchair%2C%20warm%20throw%20blanket%2C%20glowing%20reading%20lamp%2C%20stack%20of%20books%2C%20muted%20painterly%20interior&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=muted%2C%20earthy%20tones&ratio=1536x1024#create">
+          <img src="/ai-art/moments/cozy-corner.webp" alt="A leather armchair with throw blanket beside a reading lamp" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Cozy corner</div><div class="moment-title">A spot to come home to</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20sun-dappled%20kitchen%20still-life%20-%20fresh-baked%20bread%2C%20ceramic%20mug%2C%20simple%20wildflowers%2C%20warm%20morning%20light%2C%20painterly%20fine-art&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/kitchen-art.webp" alt="A sun-dappled kitchen still-life with bread and wildflowers" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Kitchen art</div><div class="moment-title">Where they gather</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20serene%20reading%20corner%20with%20a%20rattan%20armchair%2C%20stack%20of%20vintage%20hardback%20books%2C%20warm%20floor%20lamp%20glow%2C%20soft%20painterly%20oils&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=muted%2C%20earthy%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/reading-nook-corner.webp" alt="A rattan armchair beside vintage books and a warm floor lamp" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Reading nook</div><div class="moment-title">A page-turner of a place</div></div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ─── FOR TRAVELERS ───────────────────────────────────────────── -->
+    <section id="travelers" class="scroll-mt-32">
+      <div class="cat-header">
+        <h2>For travelers <span class="text-indigo-400">✈️</span></h2>
+        <span class="count">6 starting points</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+
+        <a class="moment-tile" href="/?prompt=Mediterranean%20coastal%20village%20at%20golden%20hour%2C%20terracotta%20rooftops%2C%20sparkling%20sea%2C%20painterly%2C%20nostalgic&style=Painterly&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/travel-memory.webp" alt="Painterly Mediterranean coastal village at golden hour" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Travel memory</div><div class="moment-title">The trip they'll never forget</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20faceless%20couple%20walking%20hand%20in%20hand%20down%20a%20narrow%20Mediterranean%20village%20street%20at%20golden%20hour%2C%20terracotta%20walls%2C%20pink%20bougainvillea%2C%20warm%20cobblestones%2C%20painterly%20travel%20romance&style=Painterly&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/honeymoon.webp" alt="A couple walking a Mediterranean village street at golden hour" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Honeymoon</div><div class="moment-title">Where you said yes again</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20misty%20ancient%20mountain%20temple%20at%20dawn%2C%20rising%20out%20of%20a%20sea%20of%20clouds%2C%20atmospheric%20soft%20light%2C%20dreamlike%20travel%20painterly&style=Painterly&mood=Dreamlike%20%2F%20Ethereal&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1536x1024#create">
+          <img src="/ai-art/moments/dream-destination.webp" alt="A misty mountain temple at dawn rising above clouds" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Dream destination</div><div class="moment-title">Where they want to go</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20small-town%20main%20street%20at%20golden%20hour%2C%20soft%20nostalgic%20warm%20light%2C%20vintage%20storefronts%2C%20painterly%20Americana&style=Painterly&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/hometown.webp" alt="A nostalgic small-town main street at golden hour" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Hometown</div><div class="moment-title">Where they're from</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20vintage%20striped%20beach%20umbrella%20with%20two%20empty%20beach%20chairs%20facing%20the%20ocean%20at%20sunset%2C%20warm%20golden%20hour%20light%2C%20nostalgic%20painterly&style=Cinematic%20%2F%20Editorial&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/beach-memory.webp" alt="A striped beach umbrella over two chairs facing the sunset ocean" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Beach memory</div><div class="moment-title">That summer</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20single%20hiker%20silhouette%20on%20a%20winding%20mountain%20trail%20at%20sunset%2C%20vast%20layered%20valleys%20and%20distant%20peaks%2C%20painterly%20fine-art%20landscape&style=Cinematic%20%2F%20Editorial&mood=Calm%20%2F%20Peaceful&palette=cool%20color%20palette%2C%20blues%20and%20teals&ratio=1024x1536#create">
+          <img src="/ai-art/moments/mountain-memory.webp" alt="A hiker silhouette on a mountain trail at sunset" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Mountain memory</div><div class="moment-title">That trail, that view</div></div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ─── FOR MILESTONES ──────────────────────────────────────────── -->
+    <section id="milestones" class="scroll-mt-32">
+      <div class="cat-header">
+        <h2>For milestones <span class="text-indigo-400">🎓</span></h2>
+        <span class="count">6 starting points</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+
+        <a class="moment-tile" href="/?prompt=A%20serene%20memorial%20portrait%20of%20a%20beloved%20pet%20resting%20under%20a%20sunlit%20oak%2C%20warm%20afternoon%20light%2C%20peaceful%20and%20dignified%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/in-their-honor.webp" alt="Tender memorial scene of a willow beside a still pond at dawn" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">In their honor</div><div class="moment-title">A piece that remembers them</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20faceless%20graduate%20silhouetted%20against%20a%20golden%20sunset%2C%20mid-toss%20of%20their%20cap%2C%20triumphant%20painterly%20cinematic&style=Cinematic%20%2F%20Editorial&mood=Bright%20%2F%20Uplifting&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/graduation.webp" alt="A graduate tossing their cap against a golden sunset" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Graduation</div><div class="moment-title">The day they earned it</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20wooden%20porch%20swing%20overlooking%20a%20peaceful%20sunset%20lake%2C%20soft%20golden%20light%2C%20gentle%20nostalgic%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+          <img src="/ai-art/moments/retirement.webp" alt="A wooden porch swing overlooking a peaceful sunset lake" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Retirement</div><div class="moment-title">The next chapter</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=An%20empty%20office%20desk%20by%20a%20window%20with%20morning%20city%20light%2C%20fresh%20notebook%20and%20coffee%2C%20small%20plant%2C%20painterly%20fresh-start%20cinematic&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=muted%2C%20earthy%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/new-job.webp" alt="An empty office desk with morning city light streaming in" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">New job</div><div class="moment-title">Day one</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20single%20figure%20standing%20at%20the%20peak%20of%20a%20mountain%20at%20sunrise%2C%20arms%20raised%20in%20quiet%20triumph%2C%20vast%20misty%20peaks%20below%2C%20painterly%20cinematic&style=Cinematic%20%2F%20Editorial&mood=Dramatic%20%2F%20Intense&palette=rich%20jewel%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/achievement-summit.webp" alt="A figure at a mountain peak at sunrise with arms raised" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Achievement</div><div class="moment-title">The summit they earned</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20beautiful%20soft%20pastel%20birthday%20cake%20decorated%20with%20small%20wildflowers%20on%20a%20rustic%20wooden%20table%20at%20golden%20hour%2C%20painterly%20intimate%20celebration&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+          <img src="/ai-art/moments/birthday.webp" alt="A soft pastel birthday cake with wildflowers at golden hour" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Birthday</div><div class="moment-title">Their year</div></div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ─── HARD TO SHOP FOR ────────────────────────────────────────── -->
+    <section id="hard-to-shop-for" class="scroll-mt-32">
+      <div class="cat-header">
+        <h2>Hard-to-shop-for <span class="text-indigo-400">💡</span></h2>
+        <span class="count">6 starting points</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+
+        <a class="moment-tile" href="/?prompt=An%20imagined%20dreamlike%20coastline%20that%20does%20not%20exist%2C%20ethereal%20clouds%2C%20otherworldly%20horizon%2C%20painterly&style=Surreal%20%2F%20Dreamlike&mood=Dreamlike%20%2F%20Ethereal&palette=rich%20jewel%20tones&ratio=1536x1024#create">
+          <img src="/ai-art/moments/has-everything-gift.webp" alt="Surreal dreamlike hidden lagoon glowing beneath twin pale moons" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Has-everything</div><div class="moment-title">Something they can't buy</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20warm%20painterly%20fine-art%20scene%20of%20two%20figures%20from%20behind%20walking%20together%20along%20a%20forest%20path%20at%20golden%20hour%2C%20autumn%20leaves%2C%20deep%20friendship%2C%20soft%20golden%20light%20filtering%20through%20trees&style=Painterly&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/best-friend.webp" alt="Two figures from behind walking a forest path at golden hour" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Best friend</div><div class="moment-title">The one who's always there</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20small%20wooden%20cabin%20in%20a%20quiet%20forest%20clearing%20at%20golden%20hour%2C%20soft%20smoke%20from%20the%20chimney%2C%20pine%20trees%2C%20warm%20sunset%20light%20filtering%20through%2C%20painterly%20sanctuary&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+          <img src="/ai-art/moments/happy-place.webp" alt="A wooden cabin in a forest clearing with smoke from the chimney" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Their happy place</div><div class="moment-title">Where they feel most themselves</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=Floating%20islands%20drifting%20in%20pastel%20clouds%20at%20twilight%2C%20soft%20cascading%20waterfalls%20between%20them%2C%20deeply%20dreamlike%20fantasy%20in%20the%20spirit%20of%20Maxfield%20Parrish&style=Surreal%20%2F%20Dreamlike&mood=Dreamlike%20%2F%20Ethereal&palette=rich%20jewel%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/surreal-dream.webp" alt="Floating islands in pastel clouds at twilight" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Surreal dream</div><div class="moment-title">An impossible scene</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=Bold%20palette-knife%20oil%20painting%20with%20gestural%20strokes%20in%20warm%20gold%2C%20deep%20crimson%2C%20soft%20cream%2C%20deep%20teal%2C%20rich%20amber%20-%20energetic%20contemporary%20abstract&style=Abstract&mood=Energetic%20%2F%20Dynamic&palette=rich%20jewel%20tones&ratio=1024x1024#create">
+          <img src="/ai-art/moments/abstract-for-them.webp" alt="Bold abstract palette-knife oil painting in warm jewel tones" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Abstract for them</div><div class="moment-title">Color, made personal</div></div>
+        </a>
+
+        <a class="moment-tile" href="/?prompt=A%20vintage%20writer%27s%20wooden%20desk%20at%20dusk%20with%20a%20single%20candle%2C%20fountain%20pen%2C%20half-written%20letter%2C%20leather-bound%20journal%2C%20painterly%20intimate%20creative%20mood&style=Painterly&mood=Nostalgic&palette=muted%2C%20earthy%20tones&ratio=1024x1536#create">
+          <img src="/ai-art/moments/anything-you-describe.webp" alt="A vintage writer's desk with candle, pen, and letter at dusk" loading="lazy">
+          <div class="moment-overlay"><div class="moment-eyebrow">Anything else</div><div class="moment-title">Describe it, we'll print it</div></div>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
 
   <!-- WHY aiPRINT FOR GIFTING -->
-  <section class="max-w-[1800px] mx-auto px-5 py-14 border-t border-white/10">
+  <section class="max-w-[1800px] mx-auto px-5 py-12 border-t border-white/10">
     <div class="text-center mb-10">
       <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Why it works as a gift</div><div class="section-label-line right"></div></div>
       <h2 class="h2">A real piece of art, not just a download</h2>
@@ -290,27 +548,27 @@
           <svg class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
         </div>
         <h3 class="h3 mb-2">Founder-reviewed before it prints</h3>
-        <p class="muted text-sm leading-relaxed">Every order crosses Lawrence's desk before the press fires. If it's not something he'd hang in his own home, it doesn't ship. No assembly-line surprises.</p>
+        <p class="muted text-sm leading-relaxed">Every order crosses Lawrence's desk before the press fires. If it's not something he'd hang in his own home, it doesn't ship.</p>
       </div>
       <div class="glass rounded-2xl p-6">
         <div class="w-10 h-10 rounded-lg bg-indigo-500/15 border border-indigo-400/30 flex items-center justify-center mb-4">
           <svg class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="14" rx="1.5"/><path d="M8 9h6"/><path d="M8 13h4"/><path d="M10 18v2l2-1 2 1v-2"/></svg>
         </div>
         <h3 class="h3 mb-2">Numbered Certificate of Authenticity</h3>
-        <p class="muted text-sm leading-relaxed">Every print ships with a hand-numbered COA documenting the title, medium, dimensions, edition number, and unique generation tied to your order. We never resell your purchased artwork.</p>
+        <p class="muted text-sm leading-relaxed">Every print ships with a hand-numbered COA documenting the unique generation tied to your order. We never resell your purchased artwork.</p>
       </div>
       <div class="glass rounded-2xl p-6">
         <div class="w-10 h-10 rounded-lg bg-indigo-500/15 border border-indigo-400/30 flex items-center justify-center mb-4">
           <svg class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18"/><path d="M3 17h18"/><path d="m6 7 6 5 6-5"/><path d="m6 17 6-5 6 5"/></svg>
         </div>
-        <h3 class="h3 mb-2">Museum-grade materials, ready to hang</h3>
-        <p class="muted text-sm leading-relaxed">Archival canvas, ChromaLuxe metal, or acrylic facemount. Every print includes French-cleat hardware — most hang in under 10 minutes, no framing shop required.</p>
+        <h3 class="h3 mb-2">Museum-grade, ready to hang</h3>
+        <p class="muted text-sm leading-relaxed">Archival canvas, ChromaLuxe metal, or acrylic facemount. French-cleat hardware included — most hang in under 10 minutes.</p>
       </div>
     </div>
   </section>
 
   <!-- GIFT CARDS PLACEHOLDER -->
-  <section class="max-w-[1800px] mx-auto px-5 py-14 border-t border-white/10">
+  <section class="max-w-[1800px] mx-auto px-5 py-12 border-t border-white/10">
     <div class="glass rounded-2xl p-8 md:p-10 max-w-4xl mx-auto text-center">
       <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Coming Soon</div><div class="section-label-line right"></div></div>
       <h2 class="h2 mt-3">Gift the aiPRINT experience</h2>
@@ -323,11 +581,11 @@
   </section>
 
   <!-- BOTTOM CTA -->
-  <section class="max-w-[1800px] mx-auto px-5 py-14 border-t border-white/10 text-center">
-    <h2 class="h2 max-w-3xl mx-auto">Find the moment that matches yours.</h2>
+  <section class="max-w-[1800px] mx-auto px-5 py-12 border-t border-white/10 text-center">
+    <h2 class="h2 max-w-3xl mx-auto">Found one that fits?</h2>
     <p class="muted mt-4 max-w-2xl mx-auto leading-relaxed">From $45. Ships in 5–10 business days. Numbered Certificate of Authenticity. Optional artist signature on every print.</p>
     <div class="flex flex-wrap items-center justify-center gap-3 mt-7">
-      <a href="#moments" class="btn-accent text-base">Browse moments ↑</a>
+      <a href="#pet-lovers" class="btn-accent text-base">Back to the aisle ↑</a>
       <a href="/#create" class="btn text-base">Or start blank →</a>
     </div>
   </section>
@@ -350,7 +608,7 @@
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Mobile nav drawer (same pattern as install.html / about.html)
+    // Mobile nav drawer
     (() => {
       const sheet = document.getElementById('navSheet');
       const drawer = document.getElementById('navDrawer');
@@ -358,7 +616,6 @@
       const openBtn = document.getElementById('navOpen');
       const closeBtn = document.getElementById('navClose');
       if (!sheet || !drawer || !backdrop || !openBtn || !closeBtn) return;
-
       const openSheet = () => {
         sheet.classList.remove('hidden');
         requestAnimationFrame(() => {
@@ -375,7 +632,6 @@
           document.body.classList.remove('overflow-hidden');
         }, 250);
       };
-
       openBtn.addEventListener('click', openSheet);
       closeBtn.addEventListener('click', closeSheet);
       backdrop.addEventListener('click', closeSheet);
