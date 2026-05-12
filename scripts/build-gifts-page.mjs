@@ -541,7 +541,7 @@ function categoryHTML(cat) {
         <h2>${esc(cat.label)} <span class="text-indigo-400">${cat.emoji}</span></h2>
         <span class="count">12 starting points</span>
       </div>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
 ${cat.tiles.map(tileHTML).join('\n\n')}
       </div>
     </section>`;
