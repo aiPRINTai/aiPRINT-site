@@ -46,20 +46,19 @@ function slugify(s) {
     .slice(0, 60) || 'image';
 }
 
+// Override via env var (e.g. roll back to gemini-2.5-flash-image, or A/B another model).
+const IMAGE_MODEL = process.env.IMAGE_MODEL || 'gemini-3-pro-image-preview';
+
 async function generateImage({ prompt, size, apiKey, signal, referenceImages = [] }) {
   const aspectRatio = SIZE_TO_ASPECT_RATIO[size] || '1:1';
 
-  // Build the request parts array: text prompt first, then any reference
-  // images as inlineData parts. Gemini 2.5 Flash Image (Nano Banana) supports
-  // multi-image input natively in a single request.
-  // Named `reqParts` to avoid colliding with the response `parts` below.
   const reqParts = [{ text: prompt }];
   for (const ref of referenceImages) {
     reqParts.push({ inlineData: { mimeType: ref.mimeType, data: ref.data } });
   }
 
   const resp = await fetch(
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent',
+    `https://generativelanguage.googleapis.com/v1beta/models/${IMAGE_MODEL}:generateContent`,
     {
       method: 'POST',
       headers: {
@@ -134,10 +133,11 @@ export default async function handler(req, res) {
       error: 'Please confirm the reference-image consent checkbox before generating.'
     });
   }
-  // Lightly augment the prompt so the model treats the inputs as references
-  // rather than as the canvas to edit.
+  // Instruct the model to PRESERVE the subject's identity, not just take inspiration from it.
+  // For a pet/portrait/memorial product, the customer's whole purpose is "make art of THIS
+  // dog / THIS person" — telling the model to deviate from the reference defeats the product.
   const enhancedPrompt = referenceImages.length > 0
-    ? `${prompt}\n\n[The attached image(s) are visual references — use the people, pets, objects, or styles shown as inspiration in this new scene. Do not copy them verbatim; produce an original artwork based on the description.]`
+    ? `${prompt}\n\n[The attached image(s) show the actual subject(s) to portray in this artwork. Preserve each subject's identity exactly: facial structure, body proportions, eye color, skin tone, hair or fur color and markings, breed-specific features, age, and any distinguishing characteristics. Render these same subject(s) — not similar-looking ones — in the scene described above. Treat the reference as the source of truth for who or what is in the image; treat the prompt text as the scene, style, mood, and composition around them.]`
     : prompt;
 
   // Check if user can generate (has credits or within anonymous limit)
@@ -158,10 +158,10 @@ export default async function handler(req, res) {
   const size = ALLOWED_SIZES.has(rawSize) ? rawSize : '1024x1024';
   const [w, h] = size.split('x').map(n => parseInt(n, 10));
 
-  // Timeout + retry (2 tries). Multi-image input requests can be slower, so
-  // give the upstream a longer window when references are attached.
+  // Timeout + retry (2 tries). Gemini 3 Pro Image ("thinking mode") is noticeably
+  // slower than 2.5 Flash, especially with reference images attached; give it room.
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), referenceImages.length > 0 ? 55000 : 45000);
+  const timer = setTimeout(() => ctrl.abort(), referenceImages.length > 0 ? 90000 : 75000);
 
   let buffer;
   try {
@@ -225,7 +225,7 @@ export default async function handler(req, res) {
 
     // ── 3. Save metadata json (helpful for ad-hoc inspection) ──
     const metadata = {
-      model: 'gemini-2.5-flash-image',
+      model: IMAGE_MODEL,
       prompt,
       size,
       width: w,
@@ -262,7 +262,7 @@ export default async function handler(req, res) {
       prompt,
       previewUrl,
       size,
-      0.035, // Cost per generation
+      0.134, // Cost per generation — Gemini 3 Pro Image standard 1K
       cleanUrl
     );
 
