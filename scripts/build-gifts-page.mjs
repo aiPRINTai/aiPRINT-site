@@ -69,6 +69,18 @@ const CATEGORIES = [
       { slug:'pet-cozy-sweater', eyebrow:'Cozy season', title:'Wrapped for autumn', alt:'A fluffy cat in a knit scarf next to a steaming mug',
         prompt:'A fluffy cat curled up wearing a tiny knit scarf next to a steaming mug of tea on a soft blanket by a window with autumn leaves outside, cozy autumn',
         style:'Painterly', mood:'Calm / Peaceful', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'pet-studio-portrait', eyebrow:'Studio portrait', title:'Their best portrait', alt:'A studio portrait of a noble golden retriever against charcoal',
+        prompt:'A hyperrealistic studio portrait photograph of a noble golden retriever against a charcoal background, sharp focus, soft studio light, real editorial pet photography',
+        style:'Realistic (photo-realistic)', mood:'Moody / Atmospheric', palette:'muted, earthy tones', ratio:'1024x1536' },
+      { slug:'cat-eye-macro', eyebrow:'Macro eye', title:'Look into their world', alt:'An extreme close-up of a cat\'s eye',
+        prompt:'A hyperrealistic macro photograph of a cat\'s eye in razor-sharp detail, iris pattern and surrounding fur sharp, soft natural window light, real macro photography',
+        style:'Realistic (photo-realistic)', mood:'Mysterious', palette:'high contrast bold colors', ratio:'1024x1536' },
+      { slug:'dog-beach-action', eyebrow:'Beach run', title:'Caught mid-joy', alt:'A golden retriever running on a wet beach at golden hour',
+        prompt:'A hyperrealistic action photograph of a happy golden retriever mid-run on a wet beach at golden hour, water splashing, motion blur on legs, sharp focus on the dog, real sports photography',
+        style:'Realistic (photo-realistic)', mood:'Bright / Uplifting', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'pet-sunbeam', eyebrow:'Sunbeam nap', title:'Their favorite hour', alt:'A tabby cat sleeping in a sunbeam on a wood floor',
+        prompt:'A hyperrealistic lifestyle photograph of a sleeping tabby cat curled on a wood floor in a single shaft of warm afternoon sunbeam through a window, dust motes visible, real lifestyle photography',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
     ]
   },
   {
@@ -122,6 +134,18 @@ const CATEGORIES = [
       { slug:'wine-country-couple', eyebrow:'Wine country', title:'The day you toasted the view', alt:'A couple at a bistro table on a vineyard terrace at golden hour with red wine',
         prompt:'A faceless couple at a small bistro table on a vineyard terrace at golden hour, two glasses of red wine, rows of vines stretching to a Tuscan villa, romantic wine-country, painterly',
         style:'Painterly', mood:'Romantic', palette:'warm color palette, reds and oranges', ratio:'1536x1024' },
+      { slug:'couple-hands-goldenhour', eyebrow:'Hands at sunset', title:'What forever feels like', alt:'Close-up of intertwined hands on linen at golden hour',
+        prompt:'A hyperrealistic photograph extreme close-up of two intertwined hands resting on cream linen in warm golden-hour light, every skin texture and wedding-band detail sharp, real editorial photography',
+        style:'Realistic (photo-realistic)', mood:'Romantic', palette:'warm color palette, reds and oranges', ratio:'1024x1024' },
+      { slug:'candlelit-dinner', eyebrow:'Candlelit dinner', title:'Their table for two', alt:'A candlelit dining table set for two with wine',
+        prompt:'A hyperrealistic photograph of a candlelit dining table set for two with a glass of red wine, a ceramic plate with a fresh meal, warm candle glow, real restaurant photography',
+        style:'Realistic (photo-realistic)', mood:'Romantic', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'forehead-kiss', eyebrow:'Forehead to forehead', title:'The quietest love', alt:'A tender close-up of foreheads pressed together',
+        prompt:'A hyperrealistic photograph close-up of two faceless people forehead-to-forehead, faces cropped out of frame above the eyebrows, soft warm window light, real documentary photography',
+        style:'Realistic (photo-realistic)', mood:'Romantic', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'couple-wildflowers', eyebrow:'Through the meadow', title:'Their summer walk', alt:'A couple walking through a real wildflower meadow at golden hour',
+        prompt:'A hyperrealistic lifestyle photograph of a faceless couple walking hand in hand through a real wildflower meadow at golden hour, lupines and daisies brushing past their hands, real photography',
+        style:'Realistic (photo-realistic)', mood:'Bright / Uplifting', palette:'vibrant, saturated colors', ratio:'1024x1536' },
     ]
   },
   {
@@ -175,6 +199,18 @@ const CATEGORIES = [
       { slug:'baby-with-grandparent', eyebrow:'Three generations', title:'Held by hands that held you', alt:'A grandparent aged hands cradling a newborn baby in a knit blanket',
         prompt:'A grandparent aged hands carefully cradling a tiny sleeping newborn baby wrapped in a soft cream blanket, soft warm afternoon window light, tender three-generation, watercolor',
         style:'Impressionistic', mood:'Calm / Peaceful', palette:'soft pastel palette', ratio:'1024x1536' },
+      { slug:'newborn-feet', eyebrow:'Tiny feet', title:'Ten perfect toes', alt:'Close-up of newborn baby feet on a knit blanket',
+        prompt:'A hyperrealistic close-up photograph of tiny newborn baby feet on a soft cream knit blanket, every wrinkle and skin detail sharp, soft warm window light, real newborn editorial photography',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'soft pastel palette', ratio:'1024x1536' },
+      { slug:'mom-and-baby-window', eyebrow:'Held close', title:'Their first window light', alt:'A mother holding her newborn by a window',
+        prompt:'A hyperrealistic lifestyle photograph of a faceless mother in soft cream linen holding her newborn baby against her chest by a tall window with cool morning light, real photography',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'crib-morning-light', eyebrow:'Morning crib', title:'Their first golden hour', alt:'A wooden crib with a sleeping baby in morning sun',
+        prompt:'A hyperrealistic photograph of a wooden crib with cream linen sheets and a tiny sleeping baby curled inside, warm golden morning light through a nearby window, real lifestyle photography',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'hand-holding-foot', eyebrow:'Tiny foot', title:'The hand that holds them', alt:'A parent\'s hand cradling a newborn foot',
+        prompt:'A hyperrealistic photograph close-up of a parent\'s hand gently cradling a tiny newborn baby foot, soft warm window light catching the skin texture and tiny toes, real intimate photography',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'soft pastel palette', ratio:'1024x1536' },
     ]
   },
   {
@@ -228,6 +264,18 @@ const CATEGORIES = [
       { slug:'family-photo-album', eyebrow:'Photo album', title:'The years, all in one place', alt:'A vintage open leather photo album with Polaroid-style family memories',
         prompt:'A vintage open leather photo album on a wooden table, scattered Polaroid-style photos of family memories with faces blurred, soft afternoon window light, nostalgic family-history, painterly',
         style:'Painterly', mood:'Nostalgic', palette:'muted, earthy tones', ratio:'1024x1536' },
+      { slug:'family-beach-photo', eyebrow:'Beach walk', title:'The four of you', alt:'A family walking hand-in-hand on a wet beach at golden hour',
+        prompt:'A hyperrealistic lifestyle photograph of a faceless family of four walking hand in hand along a wet beach at golden hour, all seen from behind, footprints in wet sand, real beach photography',
+        style:'Realistic (photo-realistic)', mood:'Bright / Uplifting', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'family-cooking', eyebrow:'Kitchen hands', title:'What you made together', alt:'Family hands kneading dough together at the counter',
+        prompt:'A hyperrealistic lifestyle photograph of a kitchen scene with a parent\'s hands kneading dough on a wooden counter and a small child\'s hands beside helping, flour on the surface, warm afternoon light, real documentary photography',
+        style:'Realistic (photo-realistic)', mood:'Bright / Uplifting', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'three-gen-hands', eyebrow:'Three hands', title:'The family line', alt:'Three generations of hands stacked on a wooden table',
+        prompt:'A hyperrealistic photograph of a stack of three hands on a wooden table - a child\'s tiny hand on bottom, an adult\'s hand on top of it, an aged grandparent\'s wrinkled hand on top, soft warm window light, real photography',
+        style:'Realistic (photo-realistic)', mood:'Nostalgic', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'family-couch-laugh', eyebrow:'Laughing on the couch', title:'Their best afternoon', alt:'A family laughing together on a sofa in afternoon light',
+        prompt:'A hyperrealistic lifestyle photograph of a faceless family lounging together on a cream sofa with a soft throw blanket, candid moment, soft warm afternoon light, real documentary photography',
+        style:'Realistic (photo-realistic)', mood:'Bright / Uplifting', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
     ]
   },
   {
@@ -281,6 +329,18 @@ const CATEGORIES = [
       { slug:'mid-century-living-room', eyebrow:'Mid-century', title:'Their style, in a room', alt:'A mid-century modern living room with deep teal velvet sofa and walnut credenza',
         prompt:'A sophisticated mid-century modern living room with a deep teal velvet sofa, vintage walnut credenza, sculptural floor lamp, round wall mirror, warm afternoon light, retro-design, painterly',
         style:'Painterly', mood:'Calm / Peaceful', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'home-exterior-dusk', eyebrow:'Home at dusk', title:'The lights they leave on', alt:'A modern Scandinavian home exterior at twilight with warm windows',
+        prompt:'A hyperrealistic architectural photograph of a modern Scandinavian-style home exterior at twilight with warm amber lights glowing from inside, lush garden, deep blue dusk sky, real architectural photography',
+        style:'Realistic (photo-realistic)', mood:'Moody / Atmospheric', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'kitchen-morning-real', eyebrow:'Morning kitchen', title:'Where their day begins', alt:'A real kitchen with morning light, marble counter, coffee, sourdough',
+        prompt:'A hyperrealistic lifestyle photograph of a modern kitchen morning scene with sunlight through tall windows, marble countertop, a single steaming pour-over coffee, fresh sourdough on a wooden board, real editorial photography',
+        style:'Realistic (photo-realistic)', mood:'Bright / Uplifting', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'bedroom-real-linen', eyebrow:'Linen bed', title:'The unmade morning', alt:'A bedroom with rumpled linen sheets in warm morning light',
+        prompt:'A hyperrealistic interior photograph of a bedroom with rumpled soft cream linen sheets on an unmade bed, warm morning sunlight streaming across, an open book and mug on the bedside table, real editorial home photography',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'backyard-hammock', eyebrow:'Hammock day', title:'Their quiet afternoon', alt:'A striped hammock between two trees with an open book',
+        prompt:'A hyperrealistic lifestyle photograph of a backyard scene with a striped fabric hammock strung between two trees, an open paperback book on the hammock, dappled afternoon sun, lush green grass, real outdoor lifestyle photography',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'vibrant, saturated colors', ratio:'1024x1536' },
     ]
   },
   {
@@ -334,6 +394,18 @@ const CATEGORIES = [
       { slug:'swiss-train-window', eyebrow:'Train window', title:'The view from the rails', alt:'The view through a vintage train window of Swiss Alps meadows and peaks',
         prompt:'The view through a vintage train window of vibrant green Swiss Alps meadows, distant snow-capped peaks, a tiny chalet below, warm afternoon light, nostalgic classic-train-travel, painterly',
         style:'Painterly', mood:'Calm / Peaceful', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'paris-real', eyebrow:'Paris (photo)', title:'The Eiffel at golden hour', alt:'A real photographic view of the Eiffel Tower from a Paris side street at golden hour',
+        prompt:'A hyperrealistic travel photograph of the Eiffel Tower seen from a quiet Paris side street at golden hour, soft pink sky, Haussmann buildings framing the view, real travel editorial photography',
+        style:'Realistic (photo-realistic)', mood:'Romantic', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'iceland-real-landscape', eyebrow:'Iceland (photo)', title:'The waterfall they stood beside', alt:'A real photograph of Iceland\'s Skogafoss waterfall in soft overcast light',
+        prompt:'A hyperrealistic landscape photograph of Iceland\'s dramatic Skogafoss waterfall plunging into a basalt valley, mist rising, soft overcast light, real National-Geographic-style landscape photography',
+        style:'Realistic (photo-realistic)', mood:'Dramatic / Intense', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'kyoto-cherry-blossoms', eyebrow:'Kyoto (photo)', title:'The morning the petals fell', alt:'A real photograph of a Kyoto path beneath cherry blossom trees in full bloom',
+        prompt:'A hyperrealistic travel photograph of a path through a tunnel of cherry blossom trees in full bloom in Kyoto at soft early morning light, petals scattered on the path, real travel editorial photography',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'soft pastel palette', ratio:'1024x1536' },
+      { slug:'serengeti-elephant', eyebrow:'Safari (photo)', title:'The plain they crossed', alt:'A real wildlife photograph of an African elephant walking the Serengeti at golden hour',
+        prompt:'A hyperrealistic wildlife photograph of a single magnificent African elephant walking across the Serengeti plain at golden hour, acacia trees in the distance, soft warm light, real wildlife photography',
+        style:'Realistic (photo-realistic)', mood:'Dramatic / Intense', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
     ]
   },
   {
@@ -387,6 +459,18 @@ const CATEGORIES = [
       { slug:'finish-line', eyebrow:'Finish line', title:'The race they finished', alt:'A runner silhouette crossing a finish line with arms raised',
         prompt:'A faceless runner silhouette crossing a finish-line banner with arms raised in triumph, warm golden-hour light, joyful athletic-achievement, painterly cinematic',
         style:'Cinematic / Editorial', mood:'Dramatic / Intense', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'grad-cap-toss-real', eyebrow:'Graduation (photo)', title:'The cap mid-air', alt:'A real photograph of a graduation cap frozen mid-toss against a golden sky',
+        prompt:'A hyperrealistic photograph of a graduation cap mid-toss frozen in the air against a vibrant golden-hour sky, gold tassel flying, real sports/event editorial photography',
+        style:'Realistic (photo-realistic)', mood:'Bright / Uplifting', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'rings-on-book', eyebrow:'Wedding (photo)', title:'The rings on the page', alt:'A real photograph of two gold wedding bands resting on an open vintage book',
+        prompt:'A hyperrealistic photograph of a pair of gold wedding bands resting on an open vintage hardback book, soft warm window light catching the gold and pages, real photographic still-life',
+        style:'Realistic (photo-realistic)', mood:'Romantic', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'moving-boxes-real', eyebrow:'First home (photo)', title:'The day the boxes arrived', alt:'A real photograph of moving boxes stacked in a sunlit empty apartment',
+        prompt:'A hyperrealistic lifestyle photograph of stacked cardboard moving boxes in an empty sunlit apartment, bare hardwood floors, a single set of keys on top, tall windows letting in warm morning light, real editorial photography',
+        style:'Realistic (photo-realistic)', mood:'Bright / Uplifting', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'finish-line-real', eyebrow:'Finish line (photo)', title:'The moment they crossed it', alt:'A real photograph of a marathon runner crossing the finish line tape',
+        prompt:'A hyperrealistic sports photograph of a marathon runner mid-stride crossing a real finish line tape, arms raised in triumph, motion blur on the background, sharp focus on the runner, real athletic editorial photography',
+        style:'Realistic (photo-realistic)', mood:'Energetic / Dynamic', palette:'vibrant, saturated colors', ratio:'1024x1536' },
     ]
   },
   {
@@ -440,6 +524,18 @@ const CATEGORIES = [
       { slug:'watercolor-abstract', eyebrow:'Watercolor abstract', title:'Soft, like a sunset cloud', alt:'Gentle flowing watercolor washes of pink, sage, lavender, and gold',
         prompt:'A soft painterly watercolor abstract of gentle flowing washes of dusty pink, sage green, pale lavender, and gentle gold bleeding into each other like a sunset cloud, soothing meditative',
         style:'Abstract', mood:'Calm / Peaceful', palette:'soft pastel palette', ratio:'1024x1536' },
+      { slug:'mountain-reflection-real', eyebrow:'Alpine (photo)', title:'The lake that mirrored the peaks', alt:'A real photograph of a mirror-still alpine lake reflecting snowy peaks at golden hour',
+        prompt:'A hyperrealistic landscape photograph of a mirror-perfect alpine lake reflecting jagged snowy peaks at golden hour, deep teal water, real National-Geographic-style landscape photography',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'ocean-wave-real', eyebrow:'Ocean (photo)', title:'The wave they\'ll never forget', alt:'A real photograph of an ocean wave caught mid-curl with sunlight through the water',
+        prompt:'A hyperrealistic photograph of a powerful ocean wave caught mid-curl with bright sunlight illuminating the translucent water, foam at the crest, deep teal and turquoise, real surf/ocean photography',
+        style:'Realistic (photo-realistic)', mood:'Dramatic / Intense', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'dewdrops-macro', eyebrow:'Macro (photo)', title:'Detail, perfectly captured', alt:'A real macro photograph of dewdrops on green grass at sunrise',
+        prompt:'A hyperrealistic macro photograph of extreme close-up dewdrops on green grass blades at sunrise, each droplet refracting the warm light, razor-sharp focus, real macro nature photography',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'city-skyline-night', eyebrow:'City (photo)', title:'The skyline they live under', alt:'A real photograph of a city skyline at blue hour with reflections in water',
+        prompt:'A hyperrealistic night photograph of a major city skyline at deep blue hour with thousands of warm window lights glowing, smooth water reflection in the foreground, real long-exposure cityscape photography',
+        style:'Realistic (photo-realistic)', mood:'Moody / Atmospheric', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
     ]
   },
   // ─── NEW CATEGORIES ─────────────────────────────────────────────────
@@ -494,6 +590,18 @@ const CATEGORIES = [
       { slug:'library-window-seat', eyebrow:'Window seat', title:'The corner they hide in', alt:'A library window seat with books, tea, and an open book',
         prompt:'A deep upholstered library window seat with a cream cushion, a stack of three hardback books, a steaming mug of tea, an open book against the windowsill, soft cool afternoon light, calm reader-sanctuary, painterly',
         style:'Painterly', mood:'Calm / Peaceful', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'espresso-pour', eyebrow:'Espresso (photo)', title:'The pour they wait for', alt:'A real photograph of espresso pouring into a glass cup with crema swirling',
+        prompt:'A hyperrealistic photograph of a beautiful pour of espresso into a small glass cup, crema swirling, steam visible, sharp focus on the falling stream, deep glossy black coffee, real food/beverage editorial photography',
+        style:'Realistic (photo-realistic)', mood:'Bright / Uplifting', palette:'muted, earthy tones', ratio:'1024x1536' },
+      { slug:'library-architecture-real', eyebrow:'Grand library (photo)', title:'The library they dream of', alt:'A real architectural photograph of a grand library with oak shelves and a spiral staircase',
+        prompt:'A hyperrealistic architectural photograph of a grand library interior with floor-to-ceiling oak bookshelves, a tall ladder, an ornate spiral staircase visible, warm afternoon light, real architectural editorial photography',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'open-book-macro', eyebrow:'Pressed flower (photo)', title:'The page that kept it', alt:'A real macro photograph of an open vintage book with a faint pressed flower on the page',
+        prompt:'A hyperrealistic macro photograph of an open vintage hardback book showing the texture of yellowed pages and a faint pressed flower between them, soft warm window light, real photographic detail',
+        style:'Realistic (photo-realistic)', mood:'Nostalgic', palette:'muted, earthy tones', ratio:'1024x1536' },
+      { slug:'latte-topdown-real', eyebrow:'Latte (photo)', title:'Their morning, from above', alt:'A real top-down photograph of a rosetta latte-art coffee with a biscotti',
+        prompt:'A hyperrealistic food photograph of a top-down view of a perfect rosetta latte-art coffee on a white ceramic saucer with a tiny spoon and a small almond biscotti beside it, soft natural light, real food editorial photography',
+        style:'Realistic (photo-realistic)', mood:'Bright / Uplifting', palette:'muted, earthy tones', ratio:'1024x1536' },
     ]
   },
   {
@@ -547,6 +655,18 @@ const CATEGORIES = [
       { slug:'dj-booth-lights', eyebrow:'DJ booth', title:'The set that lit up the room', alt:'A DJ silhouetted behind a booth with vibrant club lights and crowd',
         prompt:'A moody DJ booth from behind with the DJ silhouetted, vibrant club lights beaming magenta, cyan, gold, and emerald onto the crowd silhouettes, energetic nightlife, cinematic painterly',
         style:'Cinematic / Editorial', mood:'Energetic / Dynamic', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'turntable-real', eyebrow:'Turntable (photo)', title:'The record, spinning', alt:'A real photograph of a vintage turntable spinning vinyl in warm tungsten light',
+        prompt:'A hyperrealistic photograph of a vintage turntable spinning a vinyl record close-up, soft warm tungsten light catching the chrome tonearm, real product/lifestyle photography',
+        style:'Realistic (photo-realistic)', mood:'Nostalgic', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'piano-keys-hands', eyebrow:'Piano (photo)', title:'The hands at the keys', alt:'A real photograph of an adult\'s hands playing a grand piano keyboard',
+        prompt:'A hyperrealistic photograph of a close-up of an adult\'s hands playing a black grand piano keyboard, faceless cropped to just hands and forearms, soft warm side light, real editorial music photography',
+        style:'Realistic (photo-realistic)', mood:'Moody / Atmospheric', palette:'muted, earthy tones', ratio:'1024x1536' },
+      { slug:'guitar-strings-macro', eyebrow:'Strings (photo)', title:'The chord, mid-strum', alt:'A real macro photograph of guitar strings mid-strum with fingers in soft focus',
+        prompt:'A hyperrealistic macro photograph of an extreme close-up of guitar strings vibrating mid-strum, fingers cropped just visible in soft focus at the edge, sharp detail on the strings, real music photography',
+        style:'Realistic (photo-realistic)', mood:'Moody / Atmospheric', palette:'muted, earthy tones', ratio:'1024x1536' },
+      { slug:'studio-mic-real', eyebrow:'Studio mic (photo)', title:'The mic they recorded into', alt:'A real photograph of a vintage chrome studio microphone with blurred acoustic foam behind',
+        prompt:'A hyperrealistic photograph of a vintage chrome studio microphone on a stand in a recording booth, soft warm tungsten key light, blurred acoustic foam panels behind, real product photography',
+        style:'Realistic (photo-realistic)', mood:'Moody / Atmospheric', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
     ]
   },
   {
@@ -600,6 +720,18 @@ const CATEGORIES = [
       { slug:'forest-treehouse', eyebrow:'Treehouse', title:'The hideaway in the canopy', alt:'A wooden treehouse high in an old oak with warm window glow',
         prompt:'A charming wooden treehouse nestled high in the canopy of an old oak tree, soft warm window light glowing from inside, deep emerald leaves around, joyful fantasy-childhood, painterly',
         style:'Fantasy / Magical', mood:'Whimsical / Playful', palette:'muted, earthy tones', ratio:'1024x1536' },
+      { slug:'aurora-real', eyebrow:'Aurora (photo)', title:'The night the sky danced', alt:'A real long-exposure photograph of aurora borealis over an Iceland landscape',
+        prompt:'A hyperrealistic landscape photograph, a real long-exposure photograph of vivid green and violet aurora borealis dancing over a snowy Iceland landscape, with a tiny silhouetted lone figure on the horizon, real night-sky photography',
+        style:'Realistic (photo-realistic)', mood:'Mysterious', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'deer-forest-real', eyebrow:'Wildlife (photo)', title:'The deer at dawn', alt:'A real wildlife photograph of a deer in a misty pine forest at dawn',
+        prompt:'A hyperrealistic wildlife photograph of a single elegant deer standing alert in a misty pine forest at dawn, warm shafts of sunlight cutting through the trees, sharp focus on the deer, real wildlife editorial photography',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'muted, earthy tones', ratio:'1024x1536' },
+      { slug:'waterfall-real', eyebrow:'Waterfall (photo)', title:'The cascade in the moss', alt:'A real long-exposure photograph of a waterfall cascading down moss-covered rocks',
+        prompt:'A hyperrealistic landscape photograph of a powerful waterfall cascading down lush green moss-covered rocks in a Pacific Northwest forest, long-exposure silky water, mist rising, real landscape photography',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'patagonia-real', eyebrow:'Patagonia (photo)', title:'The peaks at sunrise', alt:'A real photograph of Patagonia\'s Torres del Paine reflected in a still lake at sunrise',
+        prompt:'A hyperrealistic landscape photograph of Patagonia\'s dramatic Torres del Paine peaks at sunrise reflected in a perfectly still lake, real National-Geographic-style landscape photography',
+        style:'Realistic (photo-realistic)', mood:'Dramatic / Intense', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
     ]
   },
   {
@@ -653,19 +785,31 @@ const CATEGORIES = [
       { slug:'fall-foliage-drive', eyebrow:'Fall drive', title:'The road that changed colors', alt:'A winding country road through vibrant autumn trees ablaze in red and gold',
         prompt:'A winding country road cutting through vibrant autumn trees ablaze in deep red, warm orange, and golden yellow leaves, soft golden afternoon light, nostalgic autumn-drive, painterly',
         style:'Painterly', mood:'Nostalgic', palette:'vibrant, saturated colors', ratio:'1536x1024' },
+      { slug:'snowy-forest-real', eyebrow:'Winter (photo)', title:'The path at first light', alt:'A real photograph of a path winding through a snow-covered pine forest at sunrise',
+        prompt:'A hyperrealistic landscape photograph of a quiet path winding through a snow-covered pine forest at sunrise, soft pink and gold dawn light catching the snow, real winter landscape photography',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'soft pastel palette', ratio:'1024x1536' },
+      { slug:'autumn-leaves-real', eyebrow:'Autumn (photo)', title:'The leaves on wet pavement', alt:'A real photograph of fallen autumn leaves on wet pavement in vivid red and gold',
+        prompt:'A hyperrealistic photograph of a close-up of fallen autumn leaves on wet pavement in vivid red, orange, and yellow, soft afternoon light catching the leaf veins, real seasonal photography',
+        style:'Realistic (photo-realistic)', mood:'Nostalgic', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'cherry-tree-real', eyebrow:'Spring (photo)', title:'The tree in full bloom', alt:'A real photograph of a cherry blossom tree in full bloom with petals falling',
+        prompt:'A hyperrealistic photograph of a real flowering cherry blossom tree in full pink bloom against a soft blue sky, scattered petals falling, real spring travel photography',
+        style:'Realistic (photo-realistic)', mood:'Bright / Uplifting', palette:'soft pastel palette', ratio:'1024x1536' },
+      { slug:'summer-beach-real', eyebrow:'Summer (photo)', title:'The beach at sunset', alt:'A real photograph of a summer beach at sunset with wet sand reflecting the sky',
+        prompt:'A hyperrealistic landscape photograph of a real summer beach scene at sunset with smooth wet sand reflecting a vibrant orange and pink sky, gentle low waves rolling in, real travel landscape photography',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
     ]
   },
 ];
 
-// Sanity check: every category should have 16 tiles.
+// Sanity check: every category should have 20 tiles.
 for (const cat of CATEGORIES) {
-  if (cat.tiles.length !== 16) {
-    console.error(`[!] Category ${cat.id} has ${cat.tiles.length} tiles (expected 16).`);
+  if (cat.tiles.length !== 20) {
+    console.error(`[!] Category ${cat.id} has ${cat.tiles.length} tiles (expected 20).`);
     process.exit(1);
   }
 }
 const TOTAL = CATEGORIES.reduce((n,c) => n + c.tiles.length, 0);
-console.log(`Building gifts.html with ${CATEGORIES.length} categories x 16 tiles = ${TOTAL} tiles.`);
+console.log(`Building gifts.html with ${CATEGORIES.length} categories x 20 tiles = ${TOTAL} tiles.`);
 
 // ─── HTML helpers ─────────────────────────────────────────────────────────
 function enc(s) { return encodeURIComponent(s); }
@@ -683,7 +827,7 @@ function categoryHTML(cat) {
   return `    <section id="${cat.id}" class="scroll-mt-32">
       <div class="cat-header">
         <h2>${esc(cat.label)} <span class="text-indigo-400">${cat.emoji}</span></h2>
-        <span class="count">16 starting points</span>
+        <span class="count">20 starting points</span>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
 ${cat.tiles.map(tileHTML).join('\n\n')}
