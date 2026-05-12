@@ -656,9 +656,14 @@
         <span class="font-extrabold tracking-tight text-lg">aiPRINT.<span class="text-indigo-400">ai</span></span>
       </a>
       <nav class="hidden lg:flex items-center gap-5 text-sm whitespace-nowrap lg:ml-6">
-        <a href="/gifts.html" class="text-indigo-300 hover:text-white">Gifts</a>
-        <a href="#gallery">Gallery</a>
-        <a href="#how">How it works</a>
+        <!-- Gifts is the primary commercial entry point — promoted to a
+             filled pill so it visually leads the nav rather than reading
+             like just another section anchor. Gallery dropped (still
+             scrollable in-page) to declutter and keep the nav focused on
+             the gift-shopping intent. "How it works" → "Process" for
+             scannability. -->
+        <a href="/gifts.html" class="inline-flex items-center px-3 py-1 rounded-full bg-indigo-500/25 hover:bg-indigo-500/40 border border-indigo-400/40 text-white font-semibold">Gifts</a>
+        <a href="#how">Process</a>
         <a href="#materials">Materials</a>
         <a href="/care.html">Care</a>
         <a href="/install.html">Install</a>
@@ -685,9 +690,8 @@
       <nav class="max-w-[1800px] mx-auto px-5 py-3 flex flex-col gap-1 text-sm" onclick="(function(){document.getElementById('mobileMenu').classList.add('hidden');document.getElementById('mobileMenuBtn').innerHTML='☰';document.getElementById('mobileMenuBtn').setAttribute('aria-expanded','false');})()">
         <div id="mobileAuthButton" class="mb-2"></div>
         <a href="#create" class="btn-accent text-center mb-2">Create a print →</a>
-        <a href="/gifts.html" class="px-3 py-2.5 rounded-lg hover:bg-white/5 text-indigo-300">Gifts</a>
-        <a href="#gallery" class="px-3 py-2.5 rounded-lg hover:bg-white/5">Gallery</a>
-        <a href="#how" class="px-3 py-2.5 rounded-lg hover:bg-white/5">How it works</a>
+        <a href="/gifts.html" class="px-3 py-2.5 rounded-lg bg-indigo-500/25 hover:bg-indigo-500/40 border border-indigo-400/40 text-white font-semibold">Gifts</a>
+        <a href="#how" class="px-3 py-2.5 rounded-lg hover:bg-white/5">Process</a>
         <a href="#materials" class="px-3 py-2.5 rounded-lg hover:bg-white/5">Materials</a>
         <a href="/care.html" class="px-3 py-2.5 rounded-lg hover:bg-white/5">Print Care</a>
         <a href="/install.html" class="px-3 py-2.5 rounded-lg hover:bg-white/5">Install</a>
