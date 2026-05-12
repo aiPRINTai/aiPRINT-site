@@ -57,6 +57,18 @@ const CATEGORIES = [
       { slug:'pet-by-fireplace', eyebrow:'Hearthside', title:'Their cozy spot', alt:'A sleeping dog by a glowing stone fireplace',
         prompt:'A sleeping pet curled on a soft sheepskin rug in front of a glowing stone fireplace, warm firelight catching the fur, deeply peaceful winter-evening, painterly',
         style:'Painterly', mood:'Calm / Peaceful', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'pet-hiking', eyebrow:'Trail buddy', title:'Where they explore together', alt:'A husky watching sunrise at a mountain overlook with their owner',
+        prompt:'An adventurous dog sitting with its owner at a mountain overlook at sunrise, photographic adventure-buddy mood, cool dawn palette',
+        style:'Realistic (photo-realistic)', mood:'Calm / Peaceful', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'pet-bw-portrait', eyebrow:'B&W portrait', title:'Dignified, in black & white', alt:'A dramatic black-and-white close-up portrait of a dignified dog',
+        prompt:'A dramatic close-up black-and-white portrait of a dignified pet in classic Ansel-Adams high-contrast style, soft window light catching the eyes, monochrome',
+        style:'Cinematic / Editorial', mood:'Moody / Atmospheric', palette:'monochrome black and white', ratio:'1024x1536' },
+      { slug:'pet-in-costume', eyebrow:'In costume', title:'Their playful side', alt:'A happy small dog wearing a tiny rainbow knit sweater',
+        prompt:'A playful pet wearing a tiny rainbow knit sweater sitting on a cream rug in warm afternoon light, joyful playful mood, painterly',
+        style:'Painterly', mood:'Whimsical / Playful', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'pet-cozy-sweater', eyebrow:'Cozy season', title:'Wrapped for autumn', alt:'A fluffy cat in a knit scarf next to a steaming mug',
+        prompt:'A fluffy cat curled up wearing a tiny knit scarf next to a steaming mug of tea on a soft blanket by a window with autumn leaves outside, cozy autumn',
+        style:'Painterly', mood:'Calm / Peaceful', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
     ]
   },
   {
@@ -98,6 +110,18 @@ const CATEGORIES = [
       { slug:'reading-together', eyebrow:'Reading together', title:'Their evenings, side by side', alt:'Two armchairs facing each other with open books and warm lamp light',
         prompt:'Two empty armchairs facing each other in a warm-lit reading corner with two open hardback books resting on them, soft amber lamp glow, painterly cozy',
         style:'Painterly', mood:'Calm / Peaceful', palette:'muted, earthy tones', ratio:'1024x1536' },
+      { slug:'long-distance-call', eyebrow:'Long distance', title:'The miles between you', alt:'A glowing phone screen on a table at night with reaching hands',
+        prompt:'A small glowing phone screen on a wooden table at night showing two silhouetted hands reaching toward each other, a steaming mug and journal beside it, tender long-distance, painterly',
+        style:'Cinematic / Editorial', mood:'Nostalgic', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'couple-fireworks', eyebrow:'Fireworks night', title:'The sky you watched together', alt:'A couple on a rooftop watching fireworks light the sky',
+        prompt:'A faceless couple on a rooftop watching vibrant exploding fireworks light up the sky in magenta, gold, and emerald, joyful celebratory romantic, painterly',
+        style:'Cinematic / Editorial', mood:'Dramatic / Intense', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'snow-day-couple', eyebrow:'Snow day', title:'The first snow you walked through', alt:'A couple in scarves walking a snow-covered tree-lined street at twilight',
+        prompt:'A faceless couple in wool scarves and beanies walking hand in hand down a snow-covered tree-lined street at twilight, soft streetlamp glow, gentle falling snow, tender winter-walk, painterly',
+        style:'Painterly', mood:'Calm / Peaceful', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'wine-country-couple', eyebrow:'Wine country', title:'The day you toasted the view', alt:'A couple at a bistro table on a vineyard terrace at golden hour with red wine',
+        prompt:'A faceless couple at a small bistro table on a vineyard terrace at golden hour, two glasses of red wine, rows of vines stretching to a Tuscan villa, romantic wine-country, painterly',
+        style:'Painterly', mood:'Romantic', palette:'warm color palette, reds and oranges', ratio:'1536x1024' },
     ]
   },
   {
@@ -139,6 +163,18 @@ const CATEGORIES = [
       { slug:'first-haircut', eyebrow:'First haircut', title:'The lock they kept', alt:'Tiny scissors beside a soft baby curl on cream paper',
         prompt:'A tiny pair of silver scissors beside a small lock of soft baby curl resting on a piece of cream paper on a wooden table, soft warm afternoon window light, painterly',
         style:'Painterly', mood:'Nostalgic', palette:'soft pastel palette', ratio:'1024x1536' },
+      { slug:'pregnancy-announcement', eyebrow:'Announcement', title:'Coming soon', alt:'A chalkboard sign with tiny baby shoes and pastel flowers',
+        prompt:'A small chalkboard sign on a wooden bench beside tiny cream knit baby shoes and a bouquet of soft pastel flowers, soft warm afternoon light, joyful pregnancy-announcement, watercolor',
+        style:'Impressionistic', mood:'Bright / Uplifting', palette:'soft pastel palette', ratio:'1024x1536' },
+      { slug:'baby-monogram', eyebrow:'Their initial', title:'Their name, illustrated', alt:'An ornate decorative single capital letter surrounded by pastel flowers and baby blocks',
+        prompt:'An ornate decorative single capital initial letter surrounded by gentle pastel flowers, baby blocks, and a tiny knit bunny, soft warm window light, tender nursery, watercolor',
+        style:'Impressionistic', mood:'Whimsical / Playful', palette:'soft pastel palette', ratio:'1024x1536' },
+      { slug:'baby-hand-in-parent', eyebrow:'First grasp', title:'The first hand they held', alt:'Close-up of a newborn hand wrapped around a parent finger',
+        prompt:'An extreme close-up of a tiny newborn baby hand wrapped around a parent finger, soft warm window light, tender first-bond, painterly',
+        style:'Painterly', mood:'Calm / Peaceful', palette:'soft pastel palette', ratio:'1024x1536' },
+      { slug:'baby-with-grandparent', eyebrow:'Three generations', title:'Held by hands that held you', alt:'A grandparent aged hands cradling a newborn baby in a knit blanket',
+        prompt:'A grandparent aged hands carefully cradling a tiny sleeping newborn baby wrapped in a soft cream blanket, soft warm afternoon window light, tender three-generation, watercolor',
+        style:'Impressionistic', mood:'Calm / Peaceful', palette:'soft pastel palette', ratio:'1024x1536' },
     ]
   },
   {
@@ -180,6 +216,18 @@ const CATEGORIES = [
       { slug:'mountain-hike-family', eyebrow:'Family hike', title:'The view you found together', alt:'A faceless family of four hiking a mountain trail at golden hour',
         prompt:'A faceless family of four hiking together along a mountain trail at golden hour, vast cool blue valley behind, adventurous family bond, painterly',
         style:'Cinematic / Editorial', mood:'Bright / Uplifting', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'family-silhouette', eyebrow:'Family on a hill', title:'The full picture', alt:'A family silhouette on a hilltop watching a vibrant sunset',
+        prompt:'A faceless family silhouette (two adults, two children, a dog) on a hilltop watching a vibrant sunset, tender family-portrait, painterly cinematic',
+        style:'Cinematic / Editorial', mood:'Romantic', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'family-picnic', eyebrow:'Park picnic', title:'The Saturday afternoon', alt:'A sunny park picnic spread on a checkered blanket with fruit and lemonade',
+        prompt:'A sunny park picnic spread on a checkered red-and-white blanket with a basket of fresh fruit, sandwiches in paper, glass jars of lemonade, scattered wildflowers, joyful family-picnic, painterly',
+        style:'Painterly', mood:'Bright / Uplifting', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'family-roadtrip', eyebrow:'Roadtrip', title:'The summer everyone remembers', alt:'A vintage station wagon at a desert overlook at golden hour',
+        prompt:'A vintage station wagon with luggage on the roof rack parked at a desert overlook at golden hour, vast canyons ahead, joyful family-roadtrip, painterly',
+        style:'Painterly', mood:'Nostalgic', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'family-photo-album', eyebrow:'Photo album', title:'The years, all in one place', alt:'A vintage open leather photo album with Polaroid-style family memories',
+        prompt:'A vintage open leather photo album on a wooden table, scattered Polaroid-style photos of family memories with faces blurred, soft afternoon window light, nostalgic family-history, painterly',
+        style:'Painterly', mood:'Nostalgic', palette:'muted, earthy tones', ratio:'1024x1536' },
     ]
   },
   {
@@ -220,6 +268,18 @@ const CATEGORIES = [
         style:'Impressionistic', mood:'Bright / Uplifting', palette:'vibrant, saturated colors', ratio:'1024x1536' },
       { slug:'bath-spa-retreat', eyebrow:'Spa retreat', title:'Their place to breathe', alt:'A freestanding tub by a tall window overlooking a misty forest',
         prompt:'A freestanding soaking tub by a tall window overlooking a misty forest, folded white towels and a glass vase with eucalyptus, peaceful spa-retreat, painterly',
+        style:'Painterly', mood:'Calm / Peaceful', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'porch-swing', eyebrow:'Porch swing', title:'Where they wave hello', alt:'A classic white wooden porch swing with striped cushions at golden hour',
+        prompt:'A classic white wooden porch swing with soft striped cushions hanging from chains on a wraparound porch at golden hour, a glass of lemonade on a side table, peaceful Americana, painterly',
+        style:'Painterly', mood:'Calm / Peaceful', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'gallery-wall', eyebrow:'Gallery wall', title:'Their curated story', alt:'A stylish hallway gallery wall display with coordinating frames',
+        prompt:'A stylish hallway gallery wall display with various art pieces in coordinating gold and walnut frames against a soft cream wall, warm pendant light, curated design-lover, painterly',
+        style:'Painterly', mood:'Bright / Uplifting', palette:'muted, earthy tones', ratio:'1024x1536' },
+      { slug:'sunlit-dining-nook', eyebrow:'Dining nook', title:'Their breakfast spot', alt:'A cozy breakfast nook with tulips and oranges in morning sun',
+        prompt:'A cozy breakfast nook with a small round wooden table beside a tall window, a ceramic vase with fresh tulips, a bowl of bright oranges, warm morning sun, joyful morning, impressionist painterly',
+        style:'Impressionistic', mood:'Bright / Uplifting', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'mid-century-living-room', eyebrow:'Mid-century', title:'Their style, in a room', alt:'A mid-century modern living room with deep teal velvet sofa and walnut credenza',
+        prompt:'A sophisticated mid-century modern living room with a deep teal velvet sofa, vintage walnut credenza, sculptural floor lamp, round wall mirror, warm afternoon light, retro-design, painterly',
         style:'Painterly', mood:'Calm / Peaceful', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
     ]
   },
@@ -262,6 +322,18 @@ const CATEGORIES = [
       { slug:'safari-savanna', eyebrow:'Safari', title:'The day they saw the elephants', alt:'African savanna at sunset with silhouetted elephants',
         prompt:'A vast African savanna at sunset with silhouetted acacia trees and a distant herd of elephants walking peacefully, majestic safari-travel, painterly',
         style:'Painterly', mood:'Dramatic / Intense', palette:'warm color palette, reds and oranges', ratio:'1536x1024' },
+      { slug:'greek-santorini', eyebrow:'Santorini', title:'Where the sea meets the sky', alt:'Whitewashed Santorini houses with blue domes cascading to the Aegean sea',
+        prompt:'Classic Santorini Greek-island whitewashed houses with vibrant blue domed roofs cascading down a cliffside to the deep Aegean sea, warm Mediterranean sun, joyful travel-destination, painterly',
+        style:'Painterly', mood:'Bright / Uplifting', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'northern-lights-cabin', eyebrow:'Northern Lights', title:'The night they watched it dance', alt:'A cabin in snow under emerald and violet aurora borealis',
+        prompt:'A small wooden cabin in deep snowy woods at night under a vibrant emerald and violet aurora borealis across the navy starry sky, warm amber cabin window glow, magical Northern-Lights-trip, painterly',
+        style:'Painterly', mood:'Dramatic / Intense', palette:'rich jewel tones', ratio:'1024x1536' },
+      { slug:'african-market', eyebrow:'Spice market', title:'The colors they walked through', alt:'A bustling Moroccan outdoor market with vibrant spices and textiles',
+        prompt:'A bustling Moroccan outdoor market alley with stalls of vibrant woven baskets, mounds of colorful spices in red, yellow, and orange, hanging textiles, warm afternoon sun, joyful travel-discovery, impressionist painterly',
+        style:'Impressionistic', mood:'Energetic / Dynamic', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'swiss-train-window', eyebrow:'Train window', title:'The view from the rails', alt:'The view through a vintage train window of Swiss Alps meadows and peaks',
+        prompt:'The view through a vintage train window of vibrant green Swiss Alps meadows, distant snow-capped peaks, a tiny chalet below, warm afternoon light, nostalgic classic-train-travel, painterly',
+        style:'Painterly', mood:'Calm / Peaceful', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
     ]
   },
   {
@@ -303,6 +375,18 @@ const CATEGORIES = [
       { slug:'fresh-start-dawn', eyebrow:'New chapter', title:'The first morning of after', alt:'A figure on a cliff facing a pink-gold dawn sky over the ocean',
         prompt:'A single faceless figure standing on a high cliff facing a vibrant cool pink and gold dawn sky over a misty ocean, hopeful new-chapter, painterly',
         style:'Cinematic / Editorial', mood:'Bright / Uplifting', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'golden-anniversary', eyebrow:'50 years', title:'Half a century, still gold', alt:'A pair of worn gold wedding bands on cream lace beside a dried rose',
+        prompt:'A pair of worn gold wedding bands resting on cream lace beside a single dried rose, soft warm afternoon light, tender 50-year-anniversary, painterly',
+        style:'Painterly', mood:'Nostalgic', palette:'warm color palette, reds and oranges', ratio:'1024x1024' },
+      { slug:'first-car-keys', eyebrow:'First car', title:'The day they drove off', alt:'Shiny car keys on a sunlit driveway with a first car silhouette behind',
+        prompt:'A single set of shiny car keys with a small keychain on a sunlit empty driveway pavement, silhouette of a first car blurred behind, warm morning light, joyful first-car milestone, painterly',
+        style:'Painterly', mood:'Bright / Uplifting', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'book-launch', eyebrow:'Book launch', title:'The day it was finally a book', alt:'A hardback book with a fountain pen and celebratory wine on a wooden table',
+        prompt:'A single hardback book with a soft cream dust jacket on a wooden table beside a fountain pen and a glass of celebratory wine, warm afternoon library light, tender author milestone, painterly',
+        style:'Painterly', mood:'Calm / Peaceful', palette:'muted, earthy tones', ratio:'1024x1536' },
+      { slug:'finish-line', eyebrow:'Finish line', title:'The race they finished', alt:'A runner silhouette crossing a finish line with arms raised',
+        prompt:'A faceless runner silhouette crossing a finish-line banner with arms raised in triumph, warm golden-hour light, joyful athletic-achievement, painterly cinematic',
+        style:'Cinematic / Editorial', mood:'Dramatic / Intense', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
     ]
   },
   {
@@ -344,6 +428,18 @@ const CATEGORIES = [
       { slug:'surreal-portrait', eyebrow:'Surreal portrait', title:'A face from a dream', alt:'A surreal figure with clouds emerging from where their head would be',
         prompt:'A faceless figure standing in an open meadow with a giant moon and floating clouds emerging from where their head would be, dreamlike surreal in the spirit of Magritte, painterly',
         style:'Surreal / Dreamlike', mood:'Dreamlike / Ethereal', palette:'soft pastel palette', ratio:'1024x1536' },
+      { slug:'vaporwave', eyebrow:'Vaporwave', title:'A piece of the future-past', alt:'A retro vaporwave low-poly crystal mountain reflecting in a pink lagoon',
+        prompt:'A retro vaporwave aesthetic with a low-poly geometric crystal mountain reflecting in a still pink lagoon under a giant magenta gradient sun, retro 80s synthwave, vibrant',
+        style:'Surreal / Dreamlike', mood:'Dreamlike / Ethereal', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'scandi-minimal', eyebrow:'Scandi minimal', title:'The art of less', alt:'A dried eucalyptus branch in a slim ceramic vase against a cream wall',
+        prompt:'An ultra-clean Scandinavian-minimalist still-life of a single dried eucalyptus branch in a tall slim ceramic vase against a soft cream wall, gentle morning shadow, calm minimalist, painterly',
+        style:'Minimalist', mood:'Calm / Peaceful', palette:'muted, earthy tones', ratio:'1024x1536' },
+      { slug:'typography-quote', eyebrow:'Letterpress', title:'Words, made art', alt:'A letterpressed cream paper with ornamental flourishes framed by lavender and a pen',
+        prompt:'A piece of letterpressed cream paper with elegant ornamental flourishes framed by a sprig of dried lavender and a fountain pen, soft warm window light, contemplative literary, painterly',
+        style:'Vintage / Retro', mood:'Calm / Peaceful', palette:'muted, earthy tones', ratio:'1024x1536' },
+      { slug:'watercolor-abstract', eyebrow:'Watercolor abstract', title:'Soft, like a sunset cloud', alt:'Gentle flowing watercolor washes of pink, sage, lavender, and gold',
+        prompt:'A soft painterly watercolor abstract of gentle flowing washes of dusty pink, sage green, pale lavender, and gentle gold bleeding into each other like a sunset cloud, soothing meditative',
+        style:'Abstract', mood:'Calm / Peaceful', palette:'soft pastel palette', ratio:'1024x1536' },
     ]
   },
   // ─── NEW CATEGORIES ─────────────────────────────────────────────────
@@ -386,6 +482,18 @@ const CATEGORIES = [
       { slug:'garden-tea-party', eyebrow:'Garden tea party', title:'A spring afternoon', alt:'A wrought-iron garden table set for tea in a sunlit flower garden',
         prompt:'A wrought-iron garden table set for tea in a sunlit cottage flower garden - porcelain teacups, a tiered cake stand with pastries, vibrant fresh flowers in a vase, warm afternoon sun, painterly impressionist',
         style:'Impressionistic', mood:'Bright / Uplifting', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'italian-espresso', eyebrow:'Italian espresso', title:'Their cup in Italy', alt:'An Italian piazza espresso bar with a demitasse on marble at golden hour',
+        prompt:'A small Italian piazza espresso bar at golden hour with a tiny porcelain demitasse of espresso on a marble counter, cobblestones through an open doorway, joyful Italian-travel-coffee, painterly',
+        style:'Painterly', mood:'Bright / Uplifting', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'antique-typewriter', eyebrow:'Typewriter', title:'The page they typed', alt:'An antique brass typewriter with paper and tea on a wooden desk',
+        prompt:'An antique brass typewriter on a worn wooden desk with a half-typed cream page in the carriage, a steaming mug of tea, a single rose, soft warm afternoon window light, nostalgic writer, painterly',
+        style:'Vintage / Retro', mood:'Nostalgic', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'open-book-rose', eyebrow:"A reader's romance", title:'The book they returned to', alt:'An open book with rose petals scattered across the pages',
+        prompt:'An open hardback book lying flat on a wooden table with scattered soft pink rose petals across the pages, a full rose laid across the spine, soft warm window light, tender romantic-reader, painterly',
+        style:'Painterly', mood:'Romantic', palette:'soft pastel palette', ratio:'1024x1536' },
+      { slug:'library-window-seat', eyebrow:'Window seat', title:'The corner they hide in', alt:'A library window seat with books, tea, and an open book',
+        prompt:'A deep upholstered library window seat with a cream cushion, a stack of three hardback books, a steaming mug of tea, an open book against the windowsill, soft cool afternoon light, calm reader-sanctuary, painterly',
+        style:'Painterly', mood:'Calm / Peaceful', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
     ]
   },
   {
@@ -427,6 +535,18 @@ const CATEGORIES = [
       { slug:'studio-session', eyebrow:'Studio session', title:'The mic they recorded into', alt:'A quiet home recording studio with vintage microphone and guitar',
         prompt:'A quiet home recording studio - a vintage microphone in the foreground, a wooden chair, an acoustic guitar leaning against the wall, soft warm window light, painterly',
         style:'Painterly', mood:'Calm / Peaceful', palette:'muted, earthy tones', ratio:'1024x1536' },
+      { slug:'festival-sunset', eyebrow:'Festival sunset', title:'The night the music was right', alt:'A sunset music festival crowd from behind with raised hands silhouetted',
+        prompt:'A sunset music festival crowd from behind with raised hands silhouetted against a vibrant pink and orange sunset sky, distant stage lights, joyful festival, cinematic painterly',
+        style:'Cinematic / Editorial', mood:'Energetic / Dynamic', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'cello-window', eyebrow:'Cello', title:'The strings they tuned', alt:'A wooden cello against a tall window in cool morning light',
+        prompt:'A beautiful wooden cello resting against a tall window with cool morning blue-gray light, polished bow beside it, sheet music on a stand, elegant classical-music, painterly',
+        style:'Painterly', mood:'Calm / Peaceful', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'retro-boombox', eyebrow:'Boombox', title:'The decade they grew up with', alt:'A vintage 1980s boombox with vinyl records on a pastel wall',
+        prompt:'A vintage 1980s boombox stereo with chunky buttons and large speakers, on a sunny pastel-painted wall corner with scattered vinyl records, retro 80s playful, pop-art painterly',
+        style:'Pop Art / Graphic', mood:'Whimsical / Playful', palette:'soft pastel palette', ratio:'1024x1536' },
+      { slug:'dj-booth-lights', eyebrow:'DJ booth', title:'The set that lit up the room', alt:'A DJ silhouetted behind a booth with vibrant club lights and crowd',
+        prompt:'A moody DJ booth from behind with the DJ silhouetted, vibrant club lights beaming magenta, cyan, gold, and emerald onto the crowd silhouettes, energetic nightlife, cinematic painterly',
+        style:'Cinematic / Editorial', mood:'Energetic / Dynamic', palette:'vibrant, saturated colors', ratio:'1024x1536' },
     ]
   },
   {
@@ -468,6 +588,18 @@ const CATEGORIES = [
       { slug:'tropical-waterfall', eyebrow:'Hidden waterfall', title:'The cascade they found', alt:'A lush tropical waterfall cascading into a turquoise jungle pool',
         prompt:'A hidden lush tropical waterfall cascading into a turquoise jungle pool surrounded by deep emerald palms and ferns, vibrant flowers in the foreground, painterly',
         style:'Painterly', mood:'Bright / Uplifting', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'surfer-dawn', eyebrow:'Dawn surfer', title:'The wave they paddled to', alt:'A surfer silhouetted paddling out into glassy dawn waves',
+        prompt:'A single faceless surfer silhouetted from behind paddling out into glassy dawn waves, soft warm pink-and-gold dawn sky, meditative surfer-life, painterly cinematic',
+        style:'Cinematic / Editorial', mood:'Calm / Peaceful', palette:'soft pastel palette', ratio:'1024x1536' },
+      { slug:'whales-breaching', eyebrow:'Whales', title:'The day they breached', alt:'Two humpback whales breaching out of a deep cobalt ocean at sunset',
+        prompt:'Two majestic humpback whales breaching together out of a deep cobalt ocean at sunset, vibrant warm coral and amber sky, awe-inspiring wildlife, painterly',
+        style:'Cinematic / Editorial', mood:'Dramatic / Intense', palette:'rich jewel tones', ratio:'1024x1536' },
+      { slug:'hot-air-balloon', eyebrow:'Hot air balloon', title:'The morning they floated', alt:'A colorful striped hot-air balloon drifting over a vast canyon at golden hour',
+        prompt:'A single colorful striped hot-air balloon drifting over a vast canyon at golden hour, layers of warm red rock walls below, joyful adventure, painterly',
+        style:'Painterly', mood:'Bright / Uplifting', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'forest-treehouse', eyebrow:'Treehouse', title:'The hideaway in the canopy', alt:'A wooden treehouse high in an old oak with warm window glow',
+        prompt:'A charming wooden treehouse nestled high in the canopy of an old oak tree, soft warm window light glowing from inside, deep emerald leaves around, joyful fantasy-childhood, painterly',
+        style:'Fantasy / Magical', mood:'Whimsical / Playful', palette:'muted, earthy tones', ratio:'1024x1536' },
     ]
   },
   {
@@ -509,19 +641,31 @@ const CATEGORIES = [
       { slug:'christmas-tree-morning', eyebrow:'Christmas morning', title:'The tree they decorated together', alt:'A decorated Christmas tree with presents in warm morning light',
         prompt:'A beautifully decorated Christmas tree on Christmas morning with vibrant wrapped presents in deep red and gold beneath, soft warm morning light streaming through nearby windows, magical Christmas-morning, painterly',
         style:'Painterly', mood:'Bright / Uplifting', palette:'warm color palette, reds and oranges', ratio:'1024x1536' },
+      { slug:'spring-blossom-branch', eyebrow:'Spring branch', title:'The first bloom of the year', alt:'A single cherry blossom branch in a slim ceramic vase against a pale wall',
+        prompt:'A single delicate cherry blossom branch in a tall slim ceramic vase against a soft pale wall, gentle warm afternoon light casting soft shadow, calm minimalist spring, painterly',
+        style:'Minimalist', mood:'Calm / Peaceful', palette:'soft pastel palette', ratio:'1024x1536' },
+      { slug:'summer-lemonade', eyebrow:'Lemonade', title:'The thirsty afternoon', alt:'A pitcher of fresh lemonade with lemons and blueberries on a picnic table',
+        prompt:'A sweating glass pitcher of fresh lemonade with lemon slices and mint, beside a small bowl of fresh blueberries on a sunlit picnic table, joyful summer, impressionist painterly',
+        style:'Impressionistic', mood:'Bright / Uplifting', palette:'vibrant, saturated colors', ratio:'1024x1536' },
+      { slug:'first-snowfall', eyebrow:'First snowfall', title:'The night the snow first fell', alt:'A snowy tree-lined street at twilight with streetlamps and a glowing window',
+        prompt:'A quiet snow-covered tree-lined street at twilight with soft warm streetlamp light casting a glow on gently falling snowflakes, a single window glowing warm in the background, tender first-snowfall, painterly',
+        style:'Painterly', mood:'Calm / Peaceful', palette:'cool color palette, blues and teals', ratio:'1024x1536' },
+      { slug:'fall-foliage-drive', eyebrow:'Fall drive', title:'The road that changed colors', alt:'A winding country road through vibrant autumn trees ablaze in red and gold',
+        prompt:'A winding country road cutting through vibrant autumn trees ablaze in deep red, warm orange, and golden yellow leaves, soft golden afternoon light, nostalgic autumn-drive, painterly',
+        style:'Painterly', mood:'Nostalgic', palette:'vibrant, saturated colors', ratio:'1536x1024' },
     ]
   },
 ];
 
-// Sanity check: every category should have 12 tiles.
+// Sanity check: every category should have 16 tiles.
 for (const cat of CATEGORIES) {
-  if (cat.tiles.length !== 12) {
-    console.error(`[!] Category ${cat.id} has ${cat.tiles.length} tiles (expected 12).`);
+  if (cat.tiles.length !== 16) {
+    console.error(`[!] Category ${cat.id} has ${cat.tiles.length} tiles (expected 16).`);
     process.exit(1);
   }
 }
 const TOTAL = CATEGORIES.reduce((n,c) => n + c.tiles.length, 0);
-console.log(`Building gifts.html with ${CATEGORIES.length} categories x 12 tiles = ${TOTAL} tiles.`);
+console.log(`Building gifts.html with ${CATEGORIES.length} categories x 16 tiles = ${TOTAL} tiles.`);
 
 // ─── HTML helpers ─────────────────────────────────────────────────────────
 function enc(s) { return encodeURIComponent(s); }
@@ -539,7 +683,7 @@ function categoryHTML(cat) {
   return `    <section id="${cat.id}" class="scroll-mt-32">
       <div class="cat-header">
         <h2>${esc(cat.label)} <span class="text-indigo-400">${cat.emoji}</span></h2>
-        <span class="count">12 starting points</span>
+        <span class="count">16 starting points</span>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
 ${cat.tiles.map(tileHTML).join('\n\n')}
