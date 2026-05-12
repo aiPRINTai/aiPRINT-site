@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Custom AI Art Gifts | aiPRINT.ai</title>
+  <meta name="description" content="Personalized AI-art prints for pets, anniversaries, weddings, new babies, housewarmings, memorials, kids' rooms, travel memories, and the people who already have everything. Founder-reviewed. Numbered Certificate of Authenticity. Ships in 5–10 business days." />
+  <link rel="canonical" href="https://aiprint.ai/gifts.html" />
+  <meta name="theme-color" content="#0a0f1d" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="aiPRINT.ai" />
+  <meta property="og:title" content="Custom AI Art Gifts | aiPRINT.ai" />
+  <meta property="og:description" content="A gift that means something — for the pet, the anniversary, the new home, the new baby, the wedding day, or the person who already has everything. Personalized art prints, founder-reviewed, ready to hang." />
+  <meta property="og:url" content="https://aiprint.ai/gifts.html" />
+  <meta property="og:image" content="https://aiprint.ai/og-image.png?v=20260513d" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Custom AI Art Gifts | aiPRINT.ai" />
+  <meta name="twitter:description" content="Personalized art prints for the moments that matter. Founder-reviewed. Ships in 5–10 business days." />
+  <meta name="twitter:image" content="https://aiprint.ai/og-image.png?v=20260513d" />
+  <link rel="stylesheet" href="/css/tailwind.min.css" />
+
+  <style>
+    :root { --bg:#0a0f1d; --ink:#e7eef8; --muted:#9fb3c8; }
+    html,body{background:var(--bg);color:var(--ink);}
+    html{font-size:clamp(16px, 0.85vw + 12px, 20px);}
+    body{font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;}
+    .h1{font-size:clamp(2.4rem, 4.5vw, 4.5rem);font-weight:800;line-height:1.05}
+    .h2{font-size:clamp(1.55rem, 2.8vw, 2.8rem);font-weight:800;line-height:1.1}
+    .h3{font-size:clamp(1.05rem, 1.6vw, 1.4rem);font-weight:700;}
+    .muted{color:var(--muted)}
+    .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px)}
+    .btn{background:#fff;color:#000;font-weight:700;padding:.75rem 1.4rem;border-radius:.6rem;cursor:pointer;border:none;text-decoration:none;display:inline-block;transition:all .2s;}
+    .btn:hover{background:#e8eef8;transform:translateY(-1px);}
+    .btn-accent{background:linear-gradient(135deg,#818cf8,#6366f1);color:#fff;font-weight:700;padding:.75rem 1.4rem;border-radius:.6rem;cursor:pointer;border:none;text-decoration:none;display:inline-block;transition:all .2s;}
+    .btn-accent:hover{opacity:.92;transform:translateY(-1px);}
+    .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#e7eef8;cursor:pointer;padding:.75rem 1.4rem;border-radius:.6rem;display:inline-block;text-decoration:none;transition:all .2s;}
+    .btn-ghost:hover{background:rgba(255,255,255,.12);}
+    .gradient-text{background:linear-gradient(135deg,#a78bfa,#818cf8,#60a5fa);-webkit-background-clip:text;background-clip:text;color:transparent;}
+
+    /* Moment tile (identical to homepage so the visual language matches) */
+    .moment-tile{
+      position:relative; overflow:hidden; border-radius:14px;
+      aspect-ratio:4/5;
+      border:1px solid rgba(255,255,255,.08);
+      background:#11151f; cursor:pointer; padding:0;
+      transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+      text-decoration:none; color:inherit; display:block;
+    }
+    .moment-tile:hover{ transform:translateY(-3px); border-color:rgba(129,140,248,.45); box-shadow:0 16px 40px -12px rgba(129,140,248,.3); }
+    .moment-tile img{ width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
+    .moment-tile:hover img{ transform:scale(1.06); }
+    .moment-overlay{
+      position:absolute; inset:0;
+      background:linear-gradient(to top, rgba(10,15,29,.92) 0%, rgba(10,15,29,.55) 45%, rgba(10,15,29,0) 75%);
+      display:flex; flex-direction:column; justify-content:flex-end;
+      padding:14px 14px 16px; text-align:left;
+    }
+    .moment-eyebrow{
+      font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+      color:#c7d2fe; margin-bottom:4px;
+    }
+    .moment-title{
+      font-size:15px; font-weight:700; color:#fff; line-height:1.25;
+    }
+    @media (min-width: 768px){ .moment-title{ font-size:17px; } }
+
+    .section-label{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;}
+    .section-label-line{flex:0 0 28px;height:1px;background:linear-gradient(90deg,transparent,rgba(129,140,248,.5));}
+    .section-label-line.right{background:linear-gradient(90deg,rgba(129,140,248,.5),transparent);}
+
+    .trust-pill{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .9rem;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);font-size:.85rem;color:#cbd5e1;}
+    .trust-pill svg{width:14px;height:14px;color:#a5b4fc;}
+  </style>
+  <script defer src="/js/analytics.js"></script><script defer src="/js/utm.js"></script><script defer src="/js/cart.js"></script><script defer src="/js/cart-ui.js"></script><script defer src="/js/cart-sync.js"></script>
+</head>
+<body>
+
+  <!-- HEADER (same shell as install.html / about.html) -->
+  <header class="sticky top-0 z-50 bg-[#0b1020]/85 backdrop-blur border-b border-white/10">
+    <div class="max-w-[1800px] mx-auto px-5 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2.5">
+        <img src="/favicon.svg" class="w-8 h-8 rounded-lg" alt="" aria-hidden="true"/>
+        <span class="font-extrabold tracking-tight text-lg">aiPRINT.<span class="text-indigo-400">ai</span></span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-base">
+        <a href="/" class="hover:text-white">Home</a>
+        <a href="/gifts.html" class="hover:text-white font-semibold">Gifts</a>
+        <a href="/#how" class="hover:text-white">How it works</a>
+        <a href="/#materials" class="hover:text-white">Materials</a>
+        <a href="/care.html" class="hover:text-white">Care</a>
+        <a href="/install.html" class="hover:text-white">Install</a>
+        <a href="/about.html" class="hover:text-white">About</a>
+        <a href="/faq.html" class="hover:text-white">FAQ</a>
+        <a href="/contact.html" class="hover:text-white">Contact</a>
+      </nav>
+      <div class="flex items-center gap-2">
+        <div id="cartMount" class="flex items-center"></div>
+        <a href="/#create" class="btn-accent text-sm px-3.5 py-2 md:hidden whitespace-nowrap">Create <span aria-hidden="true">→</span></a>
+        <button id="navOpen" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 text-white/90 hover:bg-white/10" aria-label="Open menu">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile nav drawer -->
+  <div id="navSheet" class="fixed inset-0 z-[100] hidden">
+    <div id="navBackdrop" class="absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-200"></div>
+    <aside id="navDrawer" class="absolute right-0 top-0 h-full w-80 max-w-[88vw] bg-[#0b1020] border-l border-white/10 translate-x-full transition-transform duration-300">
+      <div class="h-14 px-4 border-b border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <img src="/favicon.svg" class="w-8 h-8 rounded-lg" alt="" aria-hidden="true"/>
+          <span class="font-extrabold tracking-tight text-lg">aiPRINT.<span class="text-indigo-400">ai</span></span>
+        </div>
+        <button id="navClose" class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-white/15 hover:bg-white/10" aria-label="Close menu">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <nav class="px-4 py-4">
+        <ul class="space-y-2 text-white/90 text-base">
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/">Home</a></li>
+          <li><a class="block rounded-lg px-3 py-2 bg-white/10 font-semibold" href="/gifts.html">Gifts</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/#how">How it works</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/#materials">Materials</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/care.html">Print Care</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/install.html">Install</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/about.html">About</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/faq.html">FAQ</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/policies.html">Policies</a></li>
+          <li><a class="block rounded-lg px-3 py-2 hover:bg-white/10" href="/contact.html">Contact</a></li>
+        </ul>
+        <div class="mt-6 space-y-2">
+          <a href="/#create" class="block w-full text-center rounded-lg px-4 py-2 font-semibold bg-white text-black">Create a preview</a>
+        </div>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- HERO -->
+  <section class="max-w-[1800px] mx-auto px-5 pt-14 pb-10 text-center">
+    <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">For the people you love</div><div class="section-label-line right"></div></div>
+    <h1 class="h1 max-w-4xl mx-auto">Custom <span class="gradient-text">AI art gifts</span> that mean something.</h1>
+    <p class="muted mt-5 max-w-2xl mx-auto text-lg leading-relaxed">
+      For the pet, the anniversary, the new home, the new baby, the wedding day, the best friend, the place where it all began — and the person who already has everything. Pick the moment, we'll set up the rest.
+    </p>
+    <div class="flex flex-wrap items-center justify-center gap-3 mt-7">
+      <a href="#moments" class="btn-accent text-base">Find a moment →</a>
+      <a href="/#create" class="btn-ghost text-base">Start from scratch</a>
+    </div>
+    <div class="flex flex-wrap items-center justify-center gap-2 mt-7">
+      <span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l9-4 9 4v5c0 5-3.5 8.5-9 10-5.5-1.5-9-5-9-10V7Z"/><path d="m9 12 2 2 4-4"/></svg> Made in the USA</span>
+      <span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="14" rx="1.5"/><path d="M8 9h6"/><path d="M8 13h4"/><path d="M10 18v2l2-1 2 1v-2"/></svg> Numbered Certificate of Authenticity</span>
+      <span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg> Founder-reviewed before it prints</span>
+      <span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7v6h6"/><path d="M21 17a8 8 0 0 0-15.3-3.3"/></svg> Ships in 5–10 business days</span>
+    </div>
+  </section>
+
+  <!-- 12 MOMENTS GRID -->
+  <section id="moments" class="max-w-[1800px] mx-auto px-5 py-14">
+    <div class="text-center mb-10">
+      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Made For Moments</div><div class="section-label-line right"></div></div>
+      <h2 class="h2">A gift that means something</h2>
+      <p class="muted mt-3 max-w-2xl mx-auto">Most of our prints aren't bought for a wall — they're bought for a <span class="text-white">person, a pet, or a memory</span>. Pick a starting point and we'll set up the prompt for you.</p>
+    </div>
+
+    <!-- Each tile is an <a> that deep-links to /#create with the prompt + style
+         + mood + palette + ratio in the URL. A small script on the homepage
+         reads those params and prefills the create form on landing. -->
+    <div id="momentTiles" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+
+      <a class="moment-tile" href="/?prompt=A%20regal%20oil-portrait%20of%20a%20beloved%20pet%2C%20wise%20expression%2C%20soft%20window%20light%2C%20painterly%20brushwork%2C%20gallery-museum%20quality&style=Painterly&mood=Nostalgic&palette=rich%20jewel%20tones&ratio=1024x1536#create">
+        <img src="/ai-art/moments/pet-portrait.webp" alt="Regal Dutch-master-style oil portrait of a noble golden retriever in a velvet collar" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">Pet portrait</div>
+          <div class="moment-title">Make them the masterpiece</div>
+        </div>
+      </a>
+
+      <a class="moment-tile" href="/?prompt=Two%20silhouettes%20walking%20a%20quiet%20beach%20at%20sunset%2C%20romantic%20warmth%2C%20soft%20film%20grain%2C%20cinematic&style=Cinematic%20%2F%20Editorial&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+        <img src="/ai-art/moments/anniversary.webp" alt="Romantic painterly silhouettes walking a sunset beach" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">Anniversary</div>
+          <div class="moment-title">Their story, on the wall</div>
+        </div>
+      </a>
+
+      <a class="moment-tile" href="/?prompt=Whimsical%20storybook%20hot-air%20balloons%20drifting%20over%20rolling%20hills%2C%20dreamy%20clouds%2C%20soft%20pastels&style=Fantasy%20%2F%20Magical&mood=Whimsical%20%2F%20Playful&palette=soft%20pastel%20palette&ratio=1024x1024#create">
+        <img src="/ai-art/moments/kids-room.webp" alt="Whimsical pastel hot-air balloons drifting over rolling spring hills at dawn" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">Kids' room</div>
+          <div class="moment-title">Magic above their bed</div>
+        </div>
+      </a>
+
+      <a class="moment-tile" href="/?prompt=Mediterranean%20coastal%20village%20at%20golden%20hour%2C%20terracotta%20rooftops%2C%20sparkling%20sea%2C%20painterly%2C%20nostalgic&style=Painterly&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1536x1024#create">
+        <img src="/ai-art/moments/travel-memory.webp" alt="Painterly Mediterranean coastal village at golden hour" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">Travel memory</div>
+          <div class="moment-title">The trip they'll never forget</div>
+        </div>
+      </a>
+
+      <a class="moment-tile" href="/?prompt=A%20still-life%20of%20a%20warm%20coffee%20mug%2C%20open%20book%2C%20and%20golden%20window%20light%2C%20soft%20painterly%20textures%2C%20cozy%20housewarming%20feel&style=Painterly&mood=Bright%20%2F%20Uplifting&palette=muted%2C%20earthy%20tones&ratio=1536x1024#create">
+        <img src="/ai-art/moments/housewarming.webp" alt="Cozy painterly still-life of a warm coffee mug and open book in afternoon light" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">Housewarming</div>
+          <div class="moment-title">A piece that warms a room</div>
+        </div>
+      </a>
+
+      <a class="moment-tile" href="/?prompt=An%20imagined%20dreamlike%20coastline%20that%20does%20not%20exist%2C%20ethereal%20clouds%2C%20otherworldly%20horizon%2C%20painterly&style=Surreal%20%2F%20Dreamlike&mood=Dreamlike%20%2F%20Ethereal&palette=rich%20jewel%20tones&ratio=1536x1024#create">
+        <img src="/ai-art/moments/has-everything-gift.webp" alt="Surreal dreamlike hidden lagoon glowing beneath twin pale moons" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">Has-everything gift</div>
+          <div class="moment-title">Something they can't buy elsewhere</div>
+        </div>
+      </a>
+
+      <a class="moment-tile" href="/?prompt=A%20serene%20memorial%20portrait%20of%20a%20beloved%20pet%20resting%20under%20a%20sunlit%20oak%2C%20warm%20afternoon%20light%2C%20peaceful%20and%20dignified%2C%20painterly&style=Painterly&mood=Calm%20%2F%20Peaceful&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+        <img src="/ai-art/moments/in-their-honor.webp" alt="Tender serene memorial scene of a willow beside a still pond at dawn" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">In their honor</div>
+          <div class="moment-title">A piece that remembers them</div>
+        </div>
+      </a>
+
+      <a class="moment-tile" href="/?prompt=A%20favorite%20scene%20from%20a%20childhood%20home%20reimagined%20in%20soft%20watercolor%2C%20nostalgic%2C%20warm%20afternoon%20light&style=Impressionistic&mood=Nostalgic&palette=soft%20pastel%20palette&ratio=1536x1024#create">
+        <img src="/ai-art/moments/for-mom-and-dad.webp" alt="Nostalgic watercolor of a childhood-home garden in spring bloom" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">For Mom &amp; Dad</div>
+          <div class="moment-title">A memory, finally framed</div>
+        </div>
+      </a>
+
+      <a class="moment-tile" href="/?prompt=A%20tender%20soft%20watercolor%20of%20a%20peacefully%20sleeping%20newborn%20baby%20under%20a%20knit%20blanket%2C%20dappled%20warm%20sunlight%2C%20pastel%20cream%20and%20rose%20palette%2C%20deeply%20gentle%20and%20protective&style=Impressionistic&mood=Calm%20%2F%20Peaceful&palette=soft%20pastel%20palette&ratio=1024x1536#create">
+        <img src="/ai-art/moments/new-baby.webp" alt="Soft watercolor of a sleeping newborn under a knit blanket with a stuffed bunny" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">New baby</div>
+          <div class="moment-title">Welcome to the world</div>
+        </div>
+      </a>
+
+      <a class="moment-tile" href="/?prompt=A%20romantic%20painterly%20fine-art%20scene%20of%20a%20bride%20and%20groom%20holding%20hands%20at%20a%20golden-hour%20outdoor%20sunset%20wedding%2C%20faceless%20figures%20from%20behind%2C%20gentle%20flower%20petals%20in%20warm%20air%2C%20ivory%20and%20blush%20palette%2C%20cinematic%20editorial&style=Cinematic%20%2F%20Editorial&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+        <img src="/ai-art/moments/wedding-day.webp" alt="Romantic painterly fine-art scene of a faceless bride and groom holding hands at sunset" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">Wedding day</div>
+          <div class="moment-title">The day you said yes</div>
+        </div>
+      </a>
+
+      <a class="moment-tile" href="/?prompt=A%20warm%20painterly%20fine-art%20scene%20of%20two%20figures%20from%20behind%20walking%20together%20along%20a%20forest%20path%20at%20golden%20hour%2C%20autumn%20leaves%20on%20the%20path%2C%20deep%20friendship%20and%20warmth%2C%20soft%20golden%20light%20filtering%20through%20trees&style=Painterly&mood=Nostalgic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+        <img src="/ai-art/moments/best-friend.webp" alt="Two figures from behind walking together along a forest path at golden hour" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">Best friend</div>
+          <div class="moment-title">The one who's always there</div>
+        </div>
+      </a>
+
+      <a class="moment-tile" href="/?prompt=A%20nostalgic%20painterly%20fine-art%20scene%20of%20a%20quiet%20European%20corner%20cafe%20at%20golden%20hour%2C%20a%20small%20table%20by%20a%20flower-filled%20window%20with%20two%20empty%20chairs%20facing%20each%20other%2C%20a%20steaming%20coffee%20cup%20on%20the%20table%2C%20soft%20warm%20honey-gold%20light&style=Painterly&mood=Romantic&palette=warm%20color%20palette%2C%20reds%20and%20oranges&ratio=1024x1536#create">
+        <img src="/ai-art/moments/where-it-all-began.webp" alt="Painterly quiet European cafe at golden hour with two empty chairs at a window table" loading="lazy">
+        <div class="moment-overlay">
+          <div class="moment-eyebrow">Where it all began</div>
+          <div class="moment-title">Your meeting place</div>
+        </div>
+      </a>
+
+    </div>
+
+    <p class="muted text-xs text-center mt-6 max-w-2xl mx-auto">Each tile sets a starting prompt — when you land on the create page you can edit it, add reference photos of your real pet or place, or swap any setting before generating.</p>
+  </section>
+
+  <!-- WHY aiPRINT FOR GIFTING -->
+  <section class="max-w-[1800px] mx-auto px-5 py-14 border-t border-white/10">
+    <div class="text-center mb-10">
+      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Why it works as a gift</div><div class="section-label-line right"></div></div>
+      <h2 class="h2">A real piece of art, not just a download</h2>
+      <p class="muted mt-3 max-w-2xl mx-auto">Anyone can generate an AI image. What makes a gift is the part that comes after.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-5 max-w-5xl mx-auto">
+      <div class="glass rounded-2xl p-6">
+        <div class="w-10 h-10 rounded-lg bg-indigo-500/15 border border-indigo-400/30 flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <h3 class="h3 mb-2">Founder-reviewed before it prints</h3>
+        <p class="muted text-sm leading-relaxed">Every order crosses Lawrence's desk before the press fires. If it's not something he'd hang in his own home, it doesn't ship. No assembly-line surprises.</p>
+      </div>
+      <div class="glass rounded-2xl p-6">
+        <div class="w-10 h-10 rounded-lg bg-indigo-500/15 border border-indigo-400/30 flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="14" rx="1.5"/><path d="M8 9h6"/><path d="M8 13h4"/><path d="M10 18v2l2-1 2 1v-2"/></svg>
+        </div>
+        <h3 class="h3 mb-2">Numbered Certificate of Authenticity</h3>
+        <p class="muted text-sm leading-relaxed">Every print ships with a hand-numbered COA documenting the title, medium, dimensions, edition number, and unique generation tied to your order. We never resell your purchased artwork.</p>
+      </div>
+      <div class="glass rounded-2xl p-6">
+        <div class="w-10 h-10 rounded-lg bg-indigo-500/15 border border-indigo-400/30 flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18"/><path d="M3 17h18"/><path d="m6 7 6 5 6-5"/><path d="m6 17 6-5 6 5"/></svg>
+        </div>
+        <h3 class="h3 mb-2">Museum-grade materials, ready to hang</h3>
+        <p class="muted text-sm leading-relaxed">Archival canvas, ChromaLuxe metal, or acrylic facemount. Every print includes French-cleat hardware — most hang in under 10 minutes, no framing shop required.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GIFT CARDS PLACEHOLDER -->
+  <section class="max-w-[1800px] mx-auto px-5 py-14 border-t border-white/10">
+    <div class="glass rounded-2xl p-8 md:p-10 max-w-4xl mx-auto text-center">
+      <div class="section-label"><div class="section-label-line"></div><div class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Coming Soon</div><div class="section-label-line right"></div></div>
+      <h2 class="h2 mt-3">Gift the aiPRINT experience</h2>
+      <p class="muted mt-4 max-w-2xl mx-auto leading-relaxed">Not sure exactly what they'd love? Let them choose. Gift cards are launching shortly — recipients pick the moment, the style, and the material themselves, then it ships ready to hang.</p>
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <a href="/contact.html?topic=gift-cards" class="btn-ghost text-sm">Notify me when gift cards launch</a>
+        <a href="/#create" class="btn-accent text-sm">Or create one for them now →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOTTOM CTA -->
+  <section class="max-w-[1800px] mx-auto px-5 py-14 border-t border-white/10 text-center">
+    <h2 class="h2 max-w-3xl mx-auto">Find the moment that matches yours.</h2>
+    <p class="muted mt-4 max-w-2xl mx-auto leading-relaxed">From $45. Ships in 5–10 business days. Numbered Certificate of Authenticity. Optional artist signature on every print.</p>
+    <div class="flex flex-wrap items-center justify-center gap-3 mt-7">
+      <a href="#moments" class="btn-accent text-base">Browse moments ↑</a>
+      <a href="/#create" class="btn text-base">Or start blank →</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/10 py-10 mt-10">
+    <div class="max-w-[1800px] mx-auto px-5 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-sm text-gray-400">© <span id="y">2026</span> aiPRINT.ai. Made in Florida, USA.</div>
+      <div class="flex flex-wrap justify-center gap-5 text-sm">
+        <a href="/gifts.html" class="text-gray-400 hover:text-white">Gifts</a>
+        <a href="/care.html" class="text-gray-400 hover:text-white">Care</a>
+        <a href="/install.html" class="text-gray-400 hover:text-white">Install</a>
+        <a href="/faq.html" class="text-gray-400 hover:text-white">FAQ</a>
+        <a href="/policies.html" class="text-gray-400 hover:text-white">Policies</a>
+        <a href="/contact.html" class="text-gray-400 hover:text-white">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Mobile nav drawer (same pattern as install.html / about.html)
+    (() => {
+      const sheet = document.getElementById('navSheet');
+      const drawer = document.getElementById('navDrawer');
+      const backdrop = document.getElementById('navBackdrop');
+      const openBtn = document.getElementById('navOpen');
+      const closeBtn = document.getElementById('navClose');
+      if (!sheet || !drawer || !backdrop || !openBtn || !closeBtn) return;
+
+      const openSheet = () => {
+        sheet.classList.remove('hidden');
+        requestAnimationFrame(() => {
+          drawer.classList.remove('translate-x-full');
+          backdrop.classList.remove('opacity-0');
+          document.body.classList.add('overflow-hidden');
+        });
+      };
+      const closeSheet = () => {
+        drawer.classList.add('translate-x-full');
+        backdrop.classList.add('opacity-0');
+        setTimeout(() => {
+          sheet.classList.add('hidden');
+          document.body.classList.remove('overflow-hidden');
+        }, 250);
+      };
+
+      openBtn.addEventListener('click', openSheet);
+      closeBtn.addEventListener('click', closeSheet);
+      backdrop.addEventListener('click', closeSheet);
+      sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSheet));
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !sheet.classList.contains('hidden')) closeSheet();
+      });
+    })();
+  </script>
+
+</body>
+</html>

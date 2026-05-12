@@ -165,24 +165,40 @@
       height:1px;
       max-width:1280px;
       margin:0 auto;
-      background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,.10) 25%, rgba(255,255,255,.10) 75%, transparent 100%);
+      background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,.22) 25%, rgba(255,255,255,.22) 75%, transparent 100%);
     }
     .section-divider.with-dot{
       position:relative;
-      background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,.08) 30%, rgba(255,255,255,.08) 70%, transparent 100%);
+      background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,.18) 30%, rgba(255,255,255,.18) 70%, transparent 100%);
     }
     .section-divider.with-dot::after{
       content:"";
       position:absolute;
       top:50%; left:50%;
-      width:6px; height:6px; border-radius:50%;
+      width:9px; height:9px; border-radius:50%;
       background:linear-gradient(135deg,#818cf8,#6366f1);
       transform:translate(-50%,-50%);
-      box-shadow:0 0 0 4px #0a0f1d, 0 0 16px rgba(129,140,248,.5);
+      box-shadow:0 0 0 5px #0a0f1d, 0 0 28px rgba(129,140,248,.75);
     }
     /* Subtle alternating section tint */
     .section-tint{
       background:rgba(255,255,255,.015);
+    }
+
+    /* Create + Order "step" shell — the generator is the single most
+       important conversion surface on the page, so it gets its own visual
+       container: subtle indigo wash, indigo top/bottom borders, and a soft
+       glow halo. Visually pairs Step 1 (Create) + Step 2 (Order) as one
+       primary action. */
+    .create-order-shell {
+      position: relative;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(129,140,248,0.10), transparent 70%),
+        radial-gradient(ellipse 80% 50% at 50% 100%, rgba(99,102,241,0.08), transparent 70%),
+        linear-gradient(180deg, rgba(99,102,241,0.05), rgba(99,102,241,0.02) 50%, rgba(99,102,241,0.05));
+      border-top: 1px solid rgba(129,140,248,0.28);
+      border-bottom: 1px solid rgba(129,140,248,0.28);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 0 80px rgba(129,140,248,0.08);
     }
 
     /* Section label decoration */
@@ -640,6 +656,7 @@
         <span class="font-extrabold tracking-tight text-lg">aiPRINT.<span class="text-indigo-400">ai</span></span>
       </a>
       <nav class="hidden lg:flex items-center gap-6 text-sm">
+        <a href="/gifts.html" class="text-indigo-300 hover:text-white">Gifts</a>
         <a href="#gallery">Gallery</a>
         <a href="#how">How it works</a>
         <a href="#materials">Materials</a>
@@ -647,7 +664,6 @@
         <a href="/install.html">Install</a>
         <a href="/about.html">About</a>
         <a href="/faq.html">FAQ</a>
-        <a href="/policies.html">Policies</a>
         <a href="/contact.html">Contact</a>
       </nav>
       <div class="flex items-center gap-2">
@@ -669,6 +685,7 @@
       <nav class="max-w-[1800px] mx-auto px-5 py-3 flex flex-col gap-1 text-sm" onclick="(function(){document.getElementById('mobileMenu').classList.add('hidden');document.getElementById('mobileMenuBtn').innerHTML='☰';document.getElementById('mobileMenuBtn').setAttribute('aria-expanded','false');})()">
         <div id="mobileAuthButton" class="mb-2"></div>
         <a href="#create" class="btn-accent text-center mb-2">Create a print →</a>
+        <a href="/gifts.html" class="px-3 py-2.5 rounded-lg hover:bg-white/5 text-indigo-300">Gifts</a>
         <a href="#gallery" class="px-3 py-2.5 rounded-lg hover:bg-white/5">Gallery</a>
         <a href="#how" class="px-3 py-2.5 rounded-lg hover:bg-white/5">How it works</a>
         <a href="#materials" class="px-3 py-2.5 rounded-lg hover:bg-white/5">Materials</a>
@@ -977,9 +994,70 @@
         });
       });
     })();
+
+    // ─────────────────────────────────────────────────────────────────────
+    // Prefill from URL params — lets /gifts.html (or any other deep link)
+    // route a buyer into the create form already filled out. We accept the
+    // same 5 keys the Moments tiles use: ?prompt=...&style=...&mood=...
+    // &palette=...&ratio=...  with #create as the hash so we also auto-scroll.
+    // Runs once on load; silently no-ops if the homepage was opened without
+    // any of those params.
+    // ─────────────────────────────────────────────────────────────────────
+    (function prefillFromQueryParams(){
+      const params = new URLSearchParams(window.location.search);
+      const prompt  = params.get('prompt');
+      const style   = params.get('style');
+      const mood    = params.get('mood');
+      const palette = params.get('palette');
+      const ratio   = params.get('ratio');
+      if (!prompt && !style && !mood && !palette && !ratio) return;
+
+      // Wait until DOM + select options are populated.
+      const apply = () => {
+        const promptEl = document.getElementById('promptInput');
+        const styleEl  = document.getElementById('styleSelect');
+        const moodEl   = document.getElementById('moodSelect');
+        const palEl    = document.getElementById('paletteSelect');
+        const ratioEl  = document.getElementById('ratioSel');
+        if (!promptEl) return;
+
+        if (prompt) promptEl.value = prompt;
+        const setSelect = (el, val) => {
+          if (!el || !val) return;
+          const opt = Array.from(el.options).find(o => o.value === val);
+          if (opt) { el.value = val; el.dispatchEvent(new Event('change', { bubbles:true })); }
+        };
+        setSelect(styleEl, style);
+        setSelect(moodEl,  mood);
+        setSelect(palEl,   palette);
+        setSelect(ratioEl, ratio);
+
+        // Brief visual confirmation so the buyer can see the form was filled.
+        if (prompt) {
+          promptEl.classList.add('ring-2','ring-indigo-400/60');
+          setTimeout(() => promptEl.classList.remove('ring-2','ring-indigo-400/60'), 1800);
+        }
+
+        // Clean up the URL so the params don't stick on refresh / share.
+        // Keep the #create hash for the browser's scroll-to-anchor behavior.
+        try {
+          history.replaceState({}, '', '/' + (window.location.hash || '#create'));
+        } catch (_) { /* old browsers: no-op */ }
+      };
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', apply, { once:true });
+      } else {
+        apply();
+      }
+    })();
   </script>
 
-  <div class="section-divider with-dot"></div>
+  <!-- CREATE + ORDER (Step 1 + Step 2 wrapped in an indigo-glow shell so the
+       generator + checkout read as one primary conversion surface rather than
+       blending into the other content sections). The shell provides its own
+       top + bottom borders, so the section-divider that used to live here was
+       removed as redundant. -->
+  <div class="create-order-shell">
 
   <!-- CREATE -->
   <section id="create" class="max-w-[1800px] mx-auto px-5 py-20">
@@ -1513,8 +1591,7 @@
     </div>
     <p class="mt-2 text-[11px] text-gray-500">No credit-card data ever touches our servers — Stripe handles payment directly.</p>
   </section>
-
-  <div class="section-divider with-dot"></div>
+  </div><!-- /create-order-shell -->
 
   <!-- GALLERY -->
   <section id="gallery" class="max-w-[1800px] mx-auto px-5 py-20">
